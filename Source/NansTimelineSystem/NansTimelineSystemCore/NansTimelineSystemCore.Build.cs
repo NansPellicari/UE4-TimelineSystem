@@ -2,6 +2,10 @@
 
 using UnrealBuildTool;
 
+
+/**
+ * \defgroup Core A label
+ */
 public class NansTimelineSystemCore : ModuleRules
 {
 	public NansTimelineSystemCore(ReadOnlyTargetRules Target) : base(Target)
@@ -35,9 +39,6 @@ public class NansTimelineSystemCore : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+/**
+ * @addtogroup UE4
+ */
 class FNansTimelineSystemModuleUE4 : public IModuleInterface
 {
 public:
-
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+    /** IModuleInterface implementation */
+    virtual void StartupModule() override;
+    virtual void ShutdownModule() override;
 };
