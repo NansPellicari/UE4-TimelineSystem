@@ -72,7 +72,7 @@ protected:
 	 * Is should be used internally,
 	 * a timeline should manage its duration itself.
 	 */
-	void Reset();
+	void Clear();
 
 private:
 	/**

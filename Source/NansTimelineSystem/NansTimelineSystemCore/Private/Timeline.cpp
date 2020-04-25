@@ -12,8 +12,11 @@ NTimeline::NTimeline(NTimelineManagerAbstract* TimelineTimer)
 
 NTimeline::~NTimeline()
 {
-	Reset();
-	TimerManager.Reset();
+	Clear();
+	if (TimerManager.IsValid())
+	{
+		TimerManager.Reset();
+	}
 }
 
 const TArray<NTimeline::FEventTuple> NTimeline::GetEvents() const
@@ -99,7 +102,7 @@ float NTimeline::GetCurrentTime()
 	return CurrentTime;
 }
 
-void NTimeline::Reset()
+void NTimeline::Clear()
 {
 	Events.Empty();
 	CurrentTime = 0;

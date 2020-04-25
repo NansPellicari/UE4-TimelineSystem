@@ -8,10 +8,10 @@
 /**
  * @addtogroup UE4
  */
-class FNansTimelineSystemModuleUE4 : public IModuleInterface
+class FNansTimelineSystemUE4Module : public IModuleInterface
 {
 public:
-    /** IModuleInterface implementation */
-    virtual void StartupModule() override;
-    virtual void ShutdownModule() override;
+	/** IModuleInterface implementation */
+	virtual void StartupModule() override;
+	virtual void ShutdownModule() override;
 };

@@ -13,12 +13,24 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
+	"EnabledByDefault": false,
 	"Installed": false,
 	"Modules": [
 		{
 			"Name": "NansTimelineSystemCore",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansTimelineSystemUE4",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "NansUE4TestsHelpers",
+			"Enabled": true
 		}
 	]
 }
