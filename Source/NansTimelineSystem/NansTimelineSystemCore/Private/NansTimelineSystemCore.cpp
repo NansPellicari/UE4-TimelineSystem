@@ -16,5 +16,5 @@ void FNansTimelineSystemCoreModule::ShutdownModule()
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+
 IMPLEMENT_MODULE(FNansTimelineSystemCoreModule, NansTimelineSystemCore)

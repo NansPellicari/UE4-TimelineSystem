@@ -1,106 +1,106 @@
 #include "Timeline.h"
 
 #include "TimelineEventBase.h"
-#include "TimelineTimerManagerAbstract.h"
+#include "TimelineManagerAbstract.h"
 
-NTimeline::NTimeline(NTimelineTimerManagerAbstract* TimelineTimer)
+NTimeline::NTimeline(NTimelineManagerAbstract* TimelineTimer)
 {
-    TimelineTimer->SetTimeline(this);
-    TimelineTimer->SetTickInterval(GetTickInterval());
-    TimerManager = MakeShareable(TimelineTimer);
+	TimelineTimer->SetTimeline(this);
+	TimelineTimer->SetTickInterval(GetTickInterval());
+	TimerManager = MakeShareable(TimelineTimer);
 }
 
 NTimeline::~NTimeline()
 {
-    Reset();
-    TimerManager.Reset();
+	Reset();
+	TimerManager.Reset();
 }
 
 const TArray<NTimeline::FEventTuple> NTimeline::GetEvents() const
 {
-    return Events;
+	return Events;
 }
 
 void NTimeline::Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection)
 {
-    for (auto Event : EventsCollection)
-    {
-        Attached(Event);
-    }
+	for (auto Event : EventsCollection)
+	{
+		Attached(Event);
+	}
 }
 
 void NTimeline::Attached(TSharedPtr<NTimelineEventBase> Event)
 {
-    if (Event->GetDelay() <= 0.f)
-    {
-        Event->Start(CurrentTime);
-    }
+	if (Event->GetDelay() <= 0.f)
+	{
+		Event->Start(CurrentTime);
+	}
 
-    bool bCanAttached = BeforeOnAttached(Event, CurrentTime);
-    if (bCanAttached)
-    {
-        Events.Add(FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f));
-        AfterOnAttached(Event, CurrentTime);
-    }
+	bool bCanAttached = BeforeOnAttached(Event, CurrentTime);
+	if (bCanAttached)
+	{
+		Events.Add(FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f));
+		AfterOnAttached(Event, CurrentTime);
+	}
 }
 
 void NTimeline::NotifyTick()
 {
-    CurrentTime += GetTickInterval();
+	CurrentTime += GetTickInterval();
 
-    for (FEventTuple& EventTuple : Events)
-    {
-        TSharedPtr<NTimelineEventBase> Event = EventTuple.Get<0>();
+	for (FEventTuple& EventTuple : Events)
+	{
+		TSharedPtr<NTimelineEventBase> Event = EventTuple.Get<0>();
 
-        if (!Event.IsValid())
-        {
-            continue;
-        }
+		if (!Event.IsValid())
+		{
+			continue;
+		}
 
-        // This allow to manage expiration elsewhere
-        if (Event->IsExpired())
-        {
-            OnExpired(Event, CurrentTime);
-            EventTuple.Get<5>() = CurrentTime;
-            Event.Reset();
-            EventTuple.Get<0>().Reset();
-            continue;
-        }
+		// This allow to manage expiration elsewhere
+		if (Event->IsExpired())
+		{
+			OnExpired(Event, CurrentTime);
+			EventTuple.Get<5>() = CurrentTime;
+			Event.Reset();
+			EventTuple.Get<0>().Reset();
+			continue;
+		}
 
-        float AttachedAt = EventTuple.Get<1>();
-        float IntervalAttachedAt = CurrentTime - AttachedAt;
+		float AttachedAt = EventTuple.Get<1>();
+		float IntervalAttachedAt = CurrentTime - AttachedAt;
 
-        if (Event->GetDelay() > 0 && Event->GetDelay() >= IntervalAttachedAt)
-        {
-            continue;
-        }
+		if (Event->GetDelay() > 0 && Event->GetDelay() >= IntervalAttachedAt)
+		{
+			continue;
+		}
 
-        if (Event->GetStartedAt() < 0.f)
-        {
-            Event->Start(CurrentTime);
-        }
+		if (Event->GetStartedAt() < 0.f)
+		{
+			Event->Start(CurrentTime);
+		}
 
-        // TODO should be an idea to have a possiblity to add a time relative to the timeline...
-        // float IntervalFromLastNotification = CurrentTime - Event->GetLocalTime();
-        Event->NotifyAddTime(GetTickInterval());
+		// TODO should be an idea to have a possiblity to add a time relative to the timeline...
+		// float IntervalFromLastNotification = CurrentTime - Event->GetLocalTime();
+		Event->NotifyAddTime(GetTickInterval());
 
-        if (Event->IsExpired())
-        {
-            OnExpired(Event, CurrentTime);
-            EventTuple.Get<5>() = CurrentTime;
-            Event.Reset();
-            EventTuple.Get<0>().Reset();
-        }
-    }
+		if (Event->IsExpired())
+		{
+			OnExpired(Event, CurrentTime);
+			EventTuple.Get<5>() = CurrentTime;
+			Event.Reset();
+			EventTuple.Get<0>().Reset();
+		}
+	}
 }
 
 float NTimeline::GetCurrentTime()
 {
-    return CurrentTime;
+	return CurrentTime;
 }
 
 void NTimeline::Reset()
 {
-    Events.Empty();
-    CurrentTime = 0;
+	Events.Empty();
+	CurrentTime = 0;
 }
