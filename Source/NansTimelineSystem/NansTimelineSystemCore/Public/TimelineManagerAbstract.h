@@ -45,8 +45,7 @@ protected:
 	 * This to force their connection in derived class of NTimeline.
 	 */
 	void SetTimeline(NTimeline* _Timeline);
-	// TODO resolve this: Why because It is used in destructor it can't be pure virtual? It is not considered as Abstract class?
-	virtual void Clear() {}
+	virtual void Clear();
 	virtual void onValidateTimelineTick() {}
 	virtual void onNotifyTimelineTickBefore() {}
 	virtual void onNotifyTimelineTickAfter() {}

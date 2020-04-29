@@ -17,7 +17,7 @@
 
 /**
  * For an unknown reason, I can't create a Spec with World ticking,
- * frame doesn't increase. But a SIMPLE_AUTOMATION_TEST works.
+ * frame doesn't increase. But a SIMPLE_AUTOMATION_TEST works... o.O
  */
 // clang-format off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestCounterIncrease,
@@ -30,8 +30,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
-	World->GetTimerManager().SetTimer(
-		TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -54,6 +53,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	}
 	// End test
 
+	TimerManager.ClearTimer(TimelineManager->TimerHandle);
 	NTestWorld::Destroy(World);
 	TimelineManager = nullptr;
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
@@ -70,8 +70,7 @@ bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
-	World->GetTimerManager().SetTimer(
-		TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -93,6 +92,7 @@ bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 	}
 	// End test
 
+	TimerManager.ClearTimer(TimelineManager->TimerHandle);
 	NTestWorld::Destroy(World);
 	TimelineManager = nullptr;
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
@@ -110,8 +110,7 @@ bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
-	World->GetTimerManager().SetTimer(
-		TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -133,6 +132,7 @@ bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 	}
 	// End test
 
+	TimerManager.ClearTimer(TimelineManager->TimerHandle);
 	NTestWorld::Destroy(World);
 	TimelineManager = nullptr;
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
@@ -150,6 +150,7 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	UGameInstance* GI = World->GetGameInstance();
 	TimelineManagerTickableOnPauseFake* TimelineManager = new TimelineManagerTickableOnPauseFake(World);
+	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
 	MockObject->SetMyWorld(World);
 
@@ -193,6 +194,7 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	FTimerManager& TimerManager = World->GetTimerManager();
 
+	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
 	MockObject->SetMyWorld(World);
 	APlayerController* PC = World->GetFirstPlayerController();
@@ -226,6 +228,7 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 	}
 	// End test
 
+	TimerManager.ClearTimer(TimelineManager->TimerHandle);
 	MockObject->ClearFlags(EObjectFlags::RF_Transient);
 	MockObject->RemoveFromRoot();
 	NTestWorld::Destroy(World);

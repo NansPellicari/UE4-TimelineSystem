@@ -1,18 +1,18 @@
 {
-    "name": "nansdifficultysystem",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "doc": "npm run doc:image && npm run doc:doxygen",
-        "doc:image": "node generate-image.js",
-        "doc:doxygen": "doxygen Doxyfile && moxygen --html-anchors --output Docs/Api-%s.md doxygen/xml"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@mermaid-js/mermaid-cli": "^8.4.8",
-        "chalk": "^4.0.0",
-        "moxygen": "^0.8.0"
-    }
+	"name": "nansdifficultysystem",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"doc": "npm run doc:image && npm run doc:doxygen",
+		"doc:image": "node generate-image.js",
+		"doc:doxygen": "doxygen Doxyfile && moxygen --html-anchors --output Docs/Api.md doxygen/xml"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@mermaid-js/mermaid-cli": "^8.4.8",
+		"chalk": "^4.0.0",
+		"moxygen": "^0.8.0"
+	}
 }

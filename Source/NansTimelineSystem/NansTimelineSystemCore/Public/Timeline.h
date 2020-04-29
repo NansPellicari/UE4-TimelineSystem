@@ -7,6 +7,7 @@ class NTimelineManagerAbstract;
 
 /**
  * \ingroup Core
+ * Its goal is to saved events and place them in time.
  */
 class NANSTIMELINESYSTEMCORE_API NTimeline
 {

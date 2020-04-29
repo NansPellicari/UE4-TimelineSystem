@@ -21,7 +21,7 @@ public:
 		World = _World;
 	}
 
-	virtual bool IsTickableWhenPaused() const
+	virtual bool IsTickableWhenPaused() const override
 	{
 		return true;
 	}
@@ -51,7 +51,7 @@ public:
 		RETURN_QUICK_DECLARE_CYCLE_STAT(TimelineManagerTickableOnPauseFake, STATGROUP_Tickables);
 	}
 
-	virtual UWorld* GetTickableGameObjectWorld() const
+	virtual UWorld* GetTickableGameObjectWorld() const override
 	{
 		return World;
 	}

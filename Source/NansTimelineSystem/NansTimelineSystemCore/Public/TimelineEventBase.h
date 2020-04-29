@@ -2,6 +2,9 @@
 
 #include "CoreMinimal.h"
 
+/**
+ * An absctract class to manage events which can be attached to a timeline.
+ */
 class NANSTIMELINESYSTEMCORE_API NTimelineEventBase
 {
 public:

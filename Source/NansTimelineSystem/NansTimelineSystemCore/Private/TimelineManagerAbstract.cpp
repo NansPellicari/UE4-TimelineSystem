@@ -10,10 +10,7 @@ NTimelineManagerAbstract::NTimelineManagerAbstract()
 NTimelineManagerAbstract::~NTimelineManagerAbstract()
 {
 	Clear();
-	if (Timeline.IsValid())
-	{
-		Timeline.Reset();
-	}
+	Timeline.Reset();
 }
 
 void NTimelineManagerAbstract::TimerTick()
@@ -66,7 +63,6 @@ void NTimelineManagerAbstract::Stop()
 {
 	// No reason for a timer to stop without a timeline created
 	check(Timeline.IsValid());
-	Timeline->Clear();
 	Clear();
 	State = ENTimelineTimerState::Stopped;
 }
@@ -79,4 +75,12 @@ void NTimelineManagerAbstract::SetTimeline(NTimeline* _Timeline)
 ENTimelineTimerState NTimelineManagerAbstract::GetState()
 {
 	return State;
+}
+
+void NTimelineManagerAbstract::Clear()
+{
+	if (Timeline.IsValid())
+	{
+		Timeline->Clear();
+	}
 }

@@ -13,10 +13,7 @@ NTimeline::NTimeline(NTimelineManagerAbstract* TimelineTimer)
 NTimeline::~NTimeline()
 {
 	Clear();
-	if (TimerManager.IsValid())
-	{
-		TimerManager.Reset();
-	}
+	TimerManager.Reset();
 }
 
 const TArray<NTimeline::FEventTuple> NTimeline::GetEvents() const
