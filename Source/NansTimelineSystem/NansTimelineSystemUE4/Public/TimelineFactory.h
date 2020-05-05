@@ -15,25 +15,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameLifeTimelineManager.h"
-#include "TimelineManagerBase.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
-#include "LevelLifeTimelineManager.generated.h"
+#include "TimelineFactory.generated.h"
 
-UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager : public UNGameLifeTimelineManager
+class UNTimelineManagerBase;
+
+/**
+ *
+ */
+UCLASS()
+class NANSTIMELINESYSTEMUE4_API UTimelineFactory : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	virtual void Init() override;
-	void OnLevelRemoved(ULevel* Level, UWorld* World);
-	void OnLevelAdded(ULevel* Level, UWorld* World);
-	void OnLevelChanged();
-	void Clear();
-
-protected:
-	UNLevelLifeTimelineManager();
-	void SaveDataAndClear();
-
-private:
+	// clang-format off
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Timeline", Keywords = "Timeline create"), Category = "TimelineSystem")
+	static UNTimelineManagerBase* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBase> Class, FName Name);
+	// clang-format on
 };

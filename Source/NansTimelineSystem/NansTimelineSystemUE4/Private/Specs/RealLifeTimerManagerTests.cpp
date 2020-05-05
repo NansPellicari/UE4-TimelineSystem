@@ -1,3 +1,17 @@
+// Copyright 2020-present Nans Pellicari (nans.pellicari@gmail.com).
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "CoreMinimal.h"
 #include "Engine/DebugCameraController.h"
 #include "Engine/Engine.h"
@@ -49,11 +63,16 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 			TimelineManager->Counter,
 			2.f);
 		TimelineManager->Play();
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"), TimelineManager->Counter, 3.f);
 		UGameplayStatics::SetGamePaused(MockObject, true);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 6"), TimelineManager->Counter, 6.f);
 	}

@@ -12,28 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "TimelineFactory.h"
 
-#include "CoreMinimal.h"
-#include "GameLifeTimelineManager.h"
-#include "TimelineManagerBase.h"
+#include "Manager/TimelineManagerBase.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
 
-#include "LevelLifeTimelineManager.generated.h"
-
-UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager : public UNGameLifeTimelineManager
+UNTimelineManagerBase* UTimelineFactory::CreateNewTimeline(
+	UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBase> Class, FName Name)
 {
-	GENERATED_BODY()
-public:
-	virtual void Init() override;
-	void OnLevelRemoved(ULevel* Level, UWorld* World);
-	void OnLevelAdded(ULevel* Level, UWorld* World);
-	void OnLevelChanged();
-	void Clear();
-
-protected:
-	UNLevelLifeTimelineManager();
-	void SaveDataAndClear();
-
-private:
-};
+	UNTimelineManagerBase* Object = UNTimelineManagerBase::CreateObject<UNTimelineManagerBase>(WorldContextObject, Class);
+	if (Object->GetTimeline().IsValid())
+	{
+		Object->GetTimeline()->SetLabel(Name);
+	}
+	return Object;
+}
