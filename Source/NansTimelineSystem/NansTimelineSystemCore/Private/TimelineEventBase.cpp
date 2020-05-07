@@ -48,3 +48,8 @@ float NTimelineEventBase::GetDelay() const
 {
 	return Delay;
 }
+
+const FName NTimelineEventBase::GetEventLabel() const
+{
+	return Label;
+}

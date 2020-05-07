@@ -19,29 +19,51 @@
 
 #include "TimelineManagerBase.generated.h"
 
+class NTimelineEventAdapter;
+
 /**
  * TODO Add Serialisation (FArchive) + Save user stats
  */
-UCLASS(Abstract)
+UCLASS(Abstract, ConversionRoot, Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBase : public UObject, public NTimelineManagerAbstract
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "NansTimeline|Manager")
 	float Counter = 0;
+
+	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
+	TSubclassOf<UNTimelineEventAdapter> DefaultClassForEvent;
+
 #if WITH_EDITOR
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
 #endif
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetTimelineTime();
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Pause() override;
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Play() override;
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	FName GetLabel() const;
+
+	/**
+	 * Add an event to the timeline object
+	 * @param Event - An object you want to saved to the associated timeline.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	virtual void AddEvent(UNTimelineEventAdapter* Event);
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	virtual const TArray<UNTimelineEventAdapter*> GetEvents();
 
 	template <typename T>
 	static T* CreateObject(UObject* Outer, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
@@ -59,3 +81,4 @@ protected:
 
 private:
 };
+

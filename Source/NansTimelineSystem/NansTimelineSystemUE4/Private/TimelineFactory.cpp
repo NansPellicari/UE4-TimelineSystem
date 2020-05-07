@@ -14,6 +14,7 @@
 
 #include "TimelineFactory.h"
 
+#include "Event/TimelineEventAdapter.h"
 #include "Manager/TimelineManagerBase.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 
@@ -25,5 +26,14 @@ UNTimelineManagerBase* UTimelineFactory::CreateNewTimeline(
 	{
 		Object->GetTimeline()->SetLabel(Name);
 	}
+	return Object;
+}
+
+UNTimelineEventAdapter* UTimelineFactory::CreateNewEvent(
+	UObject* WorldContextObject, TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Delay)
+{
+	UNTimelineEventAdapter* Object = UNTimelineEventAdapter::CreateObject<UNTimelineEventAdapter>(WorldContextObject, Class, Name);
+	Object->SetDelay(Delay);
+
 	return Object;
 }

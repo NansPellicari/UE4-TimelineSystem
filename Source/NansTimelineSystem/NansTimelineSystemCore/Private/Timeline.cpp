@@ -123,3 +123,13 @@ void NTimeline::SetLabel(FName _Label)
 {
 	Label = _Label;
 }
+
+const TArray<NTimeline::FEventTuple> NTimeline::GetEvents()
+{
+	return Events;
+}
+
+FName NTimeline::GetLabel() const
+{
+	return Label;
+}

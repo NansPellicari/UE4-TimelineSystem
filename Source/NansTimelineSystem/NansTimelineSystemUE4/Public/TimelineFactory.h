@@ -20,6 +20,7 @@
 #include "TimelineFactory.generated.h"
 
 class UNTimelineManagerBase;
+class UNTimelineEventAdapter;
 
 /**
  *
@@ -32,5 +33,7 @@ public:
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Timeline", Keywords = "Timeline create"), Category = "TimelineSystem")
 	static UNTimelineManagerBase* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBase> Class, FName Name);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Event for timeline", Keywords = "Event create"), Category = "TimelineSystem")
+	static UNTimelineEventAdapter* CreateNewEvent(UObject* WorldContextObject, TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Delay = 0);
 	// clang-format on
 };

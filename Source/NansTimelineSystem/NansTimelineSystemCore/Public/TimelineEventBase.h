@@ -22,6 +22,8 @@
 class NANSTIMELINESYSTEMCORE_API NTimelineEventBase
 {
 public:
+	NTimelineEventBase() {}
+	NTimelineEventBase(FName _Label) : Label(_Label) {}
 	virtual bool IsExpired() const;
 
 	/** Should be great to have a doc */
@@ -31,8 +33,9 @@ public:
 	virtual void Start(float StartTime);
 	virtual void NotifyAddTime(float NewTime);
 	virtual float GetDelay() const;
-	virtual const FName GetEventLabel() const = 0;
+	virtual const FName GetEventLabel() const;
 
+	FName Label = NAME_None;
 	float LocalTime = 0.f;
 	float StartedAt = -1.f;
 	float Duration = 0.f;

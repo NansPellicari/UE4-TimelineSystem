@@ -14,8 +14,10 @@
 
 #include "Manager/TimelineManagerBase.h"
 
+#include "Event/TimelineEventAdapter.h"
 #include "Manager/GameLifeTimelineManager.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
+#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
 #include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
 #include "TimerManager.h"
 
@@ -77,4 +79,33 @@ void UNTimelineManagerBase::Play()
 void UNTimelineManagerBase::Stop()
 {
 	NTimelineManagerAbstract::Stop();
+}
+
+void UNTimelineManagerBase::AddEvent(UNTimelineEventAdapter* Event)
+{
+	check(Timeline.IsValid());
+	Timeline->Attached(Event->GetEvent());
+}
+
+const TArray<UNTimelineEventAdapter*> UNTimelineManagerBase::GetEvents()
+{
+	const TArray<NTimeline::FEventTuple> Events = Timeline->GetEvents();
+	TArray<UNTimelineEventAdapter*> EventAdapters;
+
+	for (const NTimeline::FEventTuple Event : Events)
+	{
+		if (Event.Get<0>().IsValid())
+		{
+			const TSharedPtr<NTimelineEventBase> SharedEvent = Event.Get<0>();
+			EventAdapters.Add(
+				UNTimelineEventAdapter::CreateObjectFromEvent<UNTimelineEventAdapter>(this, SharedEvent, DefaultClassForEvent));
+		}
+	}
+
+	return EventAdapters;
+}
+
+FName UNTimelineManagerBase::GetLabel() const
+{
+	return Timeline->GetLabel();
 }
