@@ -5,13 +5,12 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-/**
- * @addtogroup UE4
- */
+/** Required to create a UE4 module */
 class FNansTimelineSystemUE4Module : public IModuleInterface
 {
 public:
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
+	/** IModuleInterface implementation */
 	virtual void ShutdownModule() override;
 };

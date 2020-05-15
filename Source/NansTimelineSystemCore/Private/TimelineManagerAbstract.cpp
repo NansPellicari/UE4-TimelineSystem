@@ -79,11 +79,6 @@ void NTimelineManagerAbstract::Stop()
 	State = ENTimelineTimerState::Stopped;
 }
 
-void NTimelineManagerAbstract::SetTimeline(NTimeline* _Timeline)
-{
-	Timeline = MakeShareable<NTimeline>(_Timeline);
-}
-
 ENTimelineTimerState NTimelineManagerAbstract::GetState()
 {
 	return State;

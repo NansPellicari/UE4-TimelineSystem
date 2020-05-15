@@ -23,7 +23,6 @@
 
 UNTimelineManagerBaseAdapter::UNTimelineManagerBaseAdapter()
 {
-	check(GetOuter());
 	MyTimeline = CreateDefaultSubobject<UNTimelineAdapter>(FName(TEXT("MyTimeline")));
 	MyTimeline->Init(this);
 	Timeline = MyTimeline->GetTimeline();

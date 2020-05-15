@@ -39,8 +39,6 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineEventAdapter : public UObject, public 
 
 	GENERATED_BODY()
 public:
-	UNTimelineEventAdapter() {}
-
 	template <typename T>
 	static T* CreateObject(UObject* Outer,
 		const TSubclassOf<UNTimelineEventAdapter> Class,
@@ -104,4 +102,7 @@ protected:
 	 * It shoulds be instanciate on a ctor or a dedicated init function
 	 * */
 	TSharedPtr<NTimelineEventBase> Event;
+
+	/** Default ctor for the engine */
+	UNTimelineEventAdapter() {}
 };

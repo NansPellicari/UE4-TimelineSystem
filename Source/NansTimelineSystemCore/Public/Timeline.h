@@ -20,11 +20,10 @@
 class NTimelineManagerAbstract;
 
 /**
- * \ingroup Core
  * Its goal is to saved events and place them in time.
  * It works as a Time & Event container.
- * On the Engine side, it should be dedicated to be serialized & save data.
  * The NTimelineManagerAbstract class is dedicated to handle it.
+ *
  * @see ./TimelineManagerAbstract.h
  */
 class NANSTIMELINESYSTEMCORE_API NTimeline
@@ -53,17 +52,39 @@ public:
 	 */
 	NTimeline(NTimelineManagerAbstract* TimerManager, FName _Label = NAME_None);
 
+	/** Calls Clear() */
 	virtual ~NTimeline();
+
+	/** It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
+	 * and AfterOnAttached() for any custom usages
+	 *
+	 * @param Event - The event you want to put in the timeline stream
+	 */
 	virtual void Attached(TSharedPtr<NTimelineEventBase> Event);
+
+	/**
+	 * Same as Attached(TSharedPtr<NTimelineEventBase> Event) but for a collection of objects.
+	 */
 	virtual void Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection);
 
 	/**
 	 * This method is mainly used for savegame serialization
 	 */
 	virtual void SetCurrentTime(float _CurrentTime);
+
+	/** Get CurrentTime */
 	virtual float GetCurrentTime();
+
+	/** Returns the FEventTuple collection */
 	const TArray<NTimeline::FEventTuple> GetEvents() const;
+
+	/**
+	 * Give a name to this timeline
+	 * @param _Label - The name
+	 */
 	virtual void SetLabel(FName _Label);
+
+	/** Return the actual name */
 	virtual FName GetLabel() const;
 
 	/**

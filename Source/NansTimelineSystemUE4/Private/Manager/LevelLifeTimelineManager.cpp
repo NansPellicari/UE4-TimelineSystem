@@ -19,9 +19,12 @@
 #include "TimerManager.h"
 
 UNLevelLifeTimelineManager::UNLevelLifeTimelineManager() {}
+
 void UNLevelLifeTimelineManager::Init(FName _Label)
 {
 	Super::Init(_Label);
+
+	// Save it here cause we clear all datas when level events are triggered.
 	Label = _Label;
 	GetWorld()->OnSelectedLevelsChanged().AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
 	// FWorldDelegates::LevelAddedToWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
@@ -36,6 +39,7 @@ void UNLevelLifeTimelineManager::OnLevelChanged()
 	SaveDataAndClear();
 	Init(Label);
 }
+
 void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
 {
 #if WITH_EDITOR
@@ -51,29 +55,25 @@ void UNLevelLifeTimelineManager::SaveDataAndClear()
 	Clear();
 }
 
-// void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
-// {
-// 	// UE_LOG(LogTemp, Warning, TEXT("%s ----------------"), ANSI_TO_TCHAR(__FUNCTION__));
-// 	// UE_LOG(LogTemp, Warning, TEXT("GetWorld() %i"), GetWorld() != nullptr);
-// 	// if (Ar.IsSaving() && GetWorld() != nullptr)
-// 	// {
-// 	// 	LevelName = GetWorld()->GetName();
-// 	// }
+void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
+{
+	if (Ar.IsSaving() && GetWorld() != nullptr)
+	{
+		LevelName = GetWorld()->GetName();
+	}
 
-// 	// Ar << LevelName;
-// 	// UE_LOG(LogTemp, Warning, TEXT("LevelName %s"), *LevelName);
-// 	// if (Ar.IsLoading())
-// 	// {
-// 	// 	// this is just a safety check, but it should never happens
-// 	// 	// The savegame should associated the level (UWorld) AND this timeline
-// 	// 	if (LevelName.IsEmpty()) return;
-// 	// 	if (GetWorld() == nullptr) return;
-// 	// 	if (GetWorld()->GetName() != LevelName) return;
-// 	// }
-// 	// UE_LOG(LogTemp, Warning, TEXT("%s serialize parent"), ANSI_TO_TCHAR(__FUNCTION__));
-// 	Super::Serialize(Ar);
-// 	// UE_LOG(LogTemp, Warning, TEXT("%s +++++++++++++++"), ANSI_TO_TCHAR(__FUNCTION__));
-// }
+	Ar << LevelName;
+	if (Ar.IsLoading())
+	{
+		// This is just a safety check, but it shoulds never happens.
+		// The savegame shoulds associate the level (UWorld) AND this timeline
+		if (LevelName.IsEmpty()) return;
+		if (GetWorld() == nullptr) return;
+		if (GetWorld()->GetName() != LevelName) return;
+	}
+
+	Super::Serialize(Ar);
+}
 
 void UNLevelLifeTimelineManager::Clear()
 {

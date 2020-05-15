@@ -20,26 +20,58 @@
 
 #include "LevelLifeTimelineManager.generated.h"
 
+/**
+ * It tracks game session but refreshes when level changed.
+ *
+ * It could be usefull for level bonus/malus attribution during a level session, or create a sheduled event.
+ *
+ * For example:
+ * - a player character take drugs and his capacities are altered for an amount of time
+ * - player init a bomb and it should explosed in a determined time.
+ */
 UCLASS(Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager : public UNGameLifeTimelineManager
 {
 	GENERATED_BODY()
 public:
+	/**
+	 * Attaches event on level changes
+	 * @copydoc UNGameLifeTimelineManager::Init()
+	 */
 	virtual void Init(FName _Label = NAME_None) override;
+
+	/** This method to clear and reload timeline when level changed */
 	void OnLevelRemoved(ULevel* Level, UWorld* World);
+
+	/** @copydoc OnLevelRemoved */
 	void OnLevelAdded(ULevel* Level, UWorld* World);
+
+	/** @copydoc OnLevelRemoved */
 	void OnLevelChanged();
-	void Clear();
-	// virtual void Serialize(FArchive& Ar) override;
+
+	/**
+	 * Removes all attached events
+	 * @copydoc UNGameLifeTimelineManager::Clear()
+	 */
+	virtual void Clear() override;
+
+	/** This only saves level name and checks */
+	virtual void Serialize(FArchive& Ar) override;
 
 protected:
+	/** Default ctor */
 	UNLevelLifeTimelineManager();
+
+	/** WIP */
 	void SaveDataAndClear();
 
+	/** Used for savegame */
 	UPROPERTY()
 	FName Label;
-	// UPROPERTY()
-	// FString LevelName;
+
+	/** Used for savegame to make a sanity check (verify if current world is the same as the load game) */
+	UPROPERTY()
+	FString LevelName;
 
 private:
 };

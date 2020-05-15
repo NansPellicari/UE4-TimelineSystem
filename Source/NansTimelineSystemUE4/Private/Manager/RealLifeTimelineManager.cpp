@@ -29,21 +29,24 @@ void UNRealLifeTimelineManager::Init(FName _Label)
 		CreationTime = FDateTime::Now();
 	}
 	LastTimeTick = TotalLifeTime;
+	LastPlayTime = FDateTime::Now();
 }
 
 void UNRealLifeTimelineManager::Tick(float DeltaTime)
 {
-	TotalLifeTime += DeltaTime;
+	// this ensure to always get the real time delta (in case of slowmo).
+	float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
+	TotalLifeTime += RealDelta;
 	if (TotalLifeTime - LastTimeTick >= GetTickInterval())
 	{
 		LastTimeTick += GetTickInterval();
 		TimerTick();
 	}
+	LastPlayTime = FDateTime::Now();
 }
 
 bool UNRealLifeTimelineManager::IsTickable() const
 {
-	// Always true 'cause it can be paused or stopped
 	return true;
 }
 
@@ -84,21 +87,4 @@ void UNRealLifeTimelineManager::Serialize(FArchive& Ar)
 			MissingLifeTime -= SliceTime;
 		}
 	}
-}
-
-void UNRealLifeTimelineManager::Pause()
-{
-	// Excepts in our deepest dreams, no pause exists in real life!!
-	return;
-}
-
-void UNRealLifeTimelineManager::Play()
-{
-	return;
-}
-
-void UNRealLifeTimelineManager::Stop()
-{
-	// Excepts in our deepest dreams, no stop exists in real life!!
-	return;
 }

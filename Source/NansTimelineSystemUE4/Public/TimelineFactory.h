@@ -31,9 +31,10 @@ class NANSTIMELINESYSTEMUE4_API UTimelineFactory : public UBlueprintFunctionLibr
 	GENERATED_BODY()
 public:
 	/**
+	 * It allows you to create a new timeline manager with its embeded timeline.
 	 *
 	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerBaseAdapter instanciation, it is implicitly
-	 * provided by kismet library
+	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
 	 * @param Class - The class you want to instanciate
 	 * @param Name - The name of your timeline
 	 */

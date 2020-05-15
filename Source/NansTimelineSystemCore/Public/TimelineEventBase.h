@@ -17,23 +17,45 @@
 #include "CoreMinimal.h"
 
 /**
- * An absctract class to manage events which can be attached to a timeline.
+ * An abstract class to manage events which can be attached to a timeline.
  */
 class NANSTIMELINESYSTEMCORE_API NTimelineEventBase
 {
 public:
+	/** Default ctor */
 	NTimelineEventBase() {}
+
+	/** Ctor to gives directly a name for this event. */
 	NTimelineEventBase(FName _Label) : Label(_Label) {}
+
+	/** It computes with Duration and LocalTime */
 	virtual bool IsExpired() const;
 
-	/** Should be great to have a doc */
+	/** Getter for LocalTime */
 	virtual const float GetLocalTime() const;
+
+	/** Getter for StartedAt */
 	virtual const float GetStartedAt() const;
+
+	/** Getter for Duration */
 	virtual float GetDuration() const;
+
+	/** A setter for StartedAt */
 	virtual void Start(float StartTime);
+
+	/**
+	 * Increments LocalTime
+	 * @param NewTime - in Millisecs
+	 */
 	virtual void NotifyAddTime(float NewTime);
+
+	/** Increments LocalTime */
 	virtual float GetDelay() const;
+
+	/** Getter for Label */
 	virtual const FName GetEventLabel() const;
+
+	/** Reset all default data */
 	virtual void Clear();
 
 	FName Label = NAME_None;

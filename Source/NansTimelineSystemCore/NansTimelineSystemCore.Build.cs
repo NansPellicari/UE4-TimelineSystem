@@ -15,9 +15,6 @@
 using UnrealBuildTool;
 
 
-/**
- * \defgroup Core A label
- */
 public class NansTimelineSystemCore : ModuleRules
 {
 	public NansTimelineSystemCore(ReadOnlyTargetRules Target) : base(Target)
