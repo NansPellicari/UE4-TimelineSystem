@@ -17,6 +17,8 @@
 #include "CoreMinimal.h"
 #include "TimelineEventBase.h"
 
+DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventBase>, const float&, const int32&);
+
 class NTimelineManagerAbstract;
 
 /**
@@ -55,12 +57,15 @@ public:
 	/** Calls Clear() */
 	virtual ~NTimeline();
 
+	/** @see OnExpired() */
+	FTimelineEventDelegate EventExpired;
+
 	/** It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
 	 * and AfterOnAttached() for any custom usages
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual void Attached(TSharedPtr<NTimelineEventBase> Event);
+	virtual bool Attached(TSharedPtr<NTimelineEventBase> Event);
 
 	/**
 	 * Same as Attached(TSharedPtr<NTimelineEventBase> Event) but for a collection of objects.
@@ -147,7 +152,7 @@ protected:
 	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
 	 * @warning the Event should be used internally only to avoid nullptr reference
 	 */
-	virtual void OnExpired(TSharedPtr<NTimelineEventBase> Event, const float AttachedTime) {}
+	virtual void OnExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index);
 
 private:
 	/**

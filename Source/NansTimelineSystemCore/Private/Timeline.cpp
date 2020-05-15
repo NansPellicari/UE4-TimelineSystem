@@ -40,7 +40,7 @@ void NTimeline::Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection
 	}
 }
 
-void NTimeline::Attached(TSharedPtr<NTimelineEventBase> Event)
+bool NTimeline::Attached(TSharedPtr<NTimelineEventBase> Event)
 {
 	if (Event->GetDelay() <= 0.f)
 	{
@@ -53,14 +53,17 @@ void NTimeline::Attached(TSharedPtr<NTimelineEventBase> Event)
 		SetTuple(FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f));
 		AfterOnAttached(Event, CurrentTime);
 	}
+	return bCanAttached;
 }
 
 void NTimeline::NotifyTick()
 {
 	CurrentTime += GetTickInterval();
 
-	for (FEventTuple& EventTuple : Events)
+	int32 Index = 0;
+	for (Index; Index < Events.Num(); ++Index)
 	{
+		FEventTuple& EventTuple = Events[Index];
 		TSharedPtr<NTimelineEventBase> Event = EventTuple.Get<0>();
 
 		if (!Event.IsValid())
@@ -71,8 +74,8 @@ void NTimeline::NotifyTick()
 		// This allow to manage expiration elsewhere
 		if (Event->IsExpired())
 		{
-			OnExpired(Event, CurrentTime);
 			EventTuple.Get<5>() = CurrentTime;
+			OnExpired(Event, CurrentTime, Index);
 			Event.Reset();
 			EventTuple.Get<0>().Reset();
 			continue;
@@ -97,12 +100,17 @@ void NTimeline::NotifyTick()
 
 		if (Event->IsExpired())
 		{
-			OnExpired(Event, CurrentTime);
 			EventTuple.Get<5>() = CurrentTime;
+			OnExpired(Event, CurrentTime, Index);
 			Event.Reset();
 			EventTuple.Get<0>().Reset();
 		}
 	}
+}
+
+void NTimeline::OnExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index)
+{
+	EventExpired.ExecuteIfBound(Event, ExpiredTime, Index);
 }
 
 void NTimeline::SetCurrentTime(float _CurrentTime)

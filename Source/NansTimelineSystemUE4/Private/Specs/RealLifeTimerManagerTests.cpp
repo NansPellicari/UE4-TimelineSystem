@@ -23,6 +23,7 @@
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformProcess.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "TimerManager.h"
@@ -48,28 +49,28 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 
 	// Begin test
 	{
-		TimelineManager->Play();
-		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
+		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetTimelineTime(), 1.f);
+		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
 		TimelineManager->Pause();
-		NTestWorld::Tick(World);
-		NTestWorld::Tick(World);
-		NTestWorld::Tick(World);
+		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager should never be paused means continue increment"),
 			TimelineManager->GetTimelineTime(),
-			6.f);
-		TimelineManager->Play();
-		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 7"), TimelineManager->GetTimelineTime(), 7.f);
-		UGameplayStatics::SetGamePaused(MockObject, true);
+			3.f);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 10"), TimelineManager->GetTimelineTime(), 10.f);
+		NTestWorld::Tick(World);
+		NTestWorld::Tick(World);
+		NTestWorld::Tick(World);
+		NTestWorld::Tick(World);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Should not be influenced by ticking if realtime doesn't increase"),
+			TimelineManager->GetTimelineTime(),
+			3.f);
 	}
 	// End test
 

@@ -26,7 +26,7 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 
 	/** The UNTimelineEventAdapter object */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	UNTimelineEventAdapter* Event;
+	UNTimelineEventAdapter* Event = nullptr;
 	/** The time it as been attached to the timeline in secs (differ to UNTimelineEventAdapter::StartedAt) */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float AttachedTime;
@@ -45,6 +45,9 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 	/** This is used only for serialization, it allow to re-instance the object on load */
 	UPROPERTY(SkipSerialization)
 	UClass* EventClass = nullptr;
+	/** A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass */
+	UPROPERTY(SkipSerialization)
+	bool HasClass = false;
 
 	/** It manages Event object saving and loading */
 	void Serialize(FArchive& Ar, UNTimelineAdapter* Timeline);
@@ -52,12 +55,25 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 	/** Just save basic data, see FNEventRecord::Serialize() to see how Event object is managed */
 	friend FArchive& operator<<(FArchive& Ar, FNEventRecord& Record)
 	{
-		if (Ar.IsSaving() && Record.Event != nullptr)
+		if (Ar.IsSaving())
 		{
-			Record.EventClass = Record.Event->GetClass();
+			if (Record.Event != nullptr)
+			{
+				Record.EventClass = Record.Event->GetClass();
+				Record.HasClass = true;
+			}
+			else
+			{
+				Record.EventClass = nullptr;
+				Record.HasClass = false;
+			}
 		}
 
-		Ar << Record.EventClass;
+		Ar << Record.HasClass;
+		if (Record.HasClass == true)
+		{
+			Ar << Record.EventClass;
+		}
 		Ar << Record.AttachedTime;
 		Ar << Record.Delay;
 		Ar << Record.Duration;
@@ -102,9 +118,10 @@ public:
 	 * This method is reserved for core objects.
 	 * @see UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
 	 */
-	virtual void Attached(TSharedPtr<NTimelineEventBase> Event) override
+	virtual bool Attached(TSharedPtr<NTimelineEventBase> Event) override
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("You should use UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event) instead!"));
+		return false;
 	}
 
 	/**
@@ -129,13 +146,23 @@ public:
 	 * It will save data in the EventStore array for serialization and save game.
 	 * @param Event - The adapter event
 	 */
-	virtual void Attached(UNTimelineEventAdapter* Event);
+	virtual bool Attached(UNTimelineEventAdapter* Event);
 
 	/** This retrieve the EventStore */
 	const TArray<FNEventRecord> GetAdaptedEvents() const;
 
 	/** It is used to convert data for core NTimeline object */
 	static NTimeline::FEventTuple ConvertRecordToTuple(FNEventRecord const Record);
+
+	/**
+	 * A delegate attached to NTimeline::EventExpired.
+	 * It controls the EventStore data refreshing.
+	 *
+	 * @param Event - The native Event which will be killed
+	 * @param ExpiredTime - The time when this event expires
+	 * @param Index - The index of the NTimeline::Events array
+	 */
+	void OnEventExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index);
 
 	/**
 	 * It used to save all events state in the EventStore,
@@ -159,6 +186,15 @@ public:
 protected:
 	/** The embeded object */
 	TSharedPtr<NTimeline> Timeline;
+
+	/**
+	 * This goal is to synchronize a NTimeline::FEventTuple with is associated FNEventRecord.
+	 * It checks coherence with Tuple Event and Record Event before doing it.
+	 *
+	 * @param Index - The index of the NTimeline::Events array
+	 * @param Record - The record you want to synchronize.
+	 */
+	virtual void RefreshRecordData(const int32& Index);
 
 private:
 	/**

@@ -20,6 +20,7 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
 void UNTimelineAdapter::Init(UNTimelineManagerBaseAdapter* TimelineManager, FName _Label)
 {
 	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerAbstract*>(TimelineManager), _Label));
+	Timeline->EventExpired.BindUObject(this, &UNTimelineAdapter::OnEventExpired);
 }
 
 void UNTimelineAdapter::Clear()
@@ -57,21 +58,22 @@ void UNTimelineAdapter::NotifyTick()
 	Timeline->NotifyTick();
 }
 
-void UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
+bool UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
 {
 	check(Timeline.IsValid());
-	FNEventRecord Record;
-	Record.Event = Event;
-	Timeline->Attached(Event->GetEvent());
-	const FEventTuple& Tuple = Timeline->GetEvents().Last();
-
-	Record.AttachedTime = Tuple.Get<1>();
-	Record.Delay = Tuple.Get<2>();
-	Record.Duration = Tuple.Get<3>();
-	Record.Label = Tuple.Get<4>();
-	Record.ExpiredTime = Tuple.Get<5>();
-
-	EventStore.Add(Record);
+	bool bIsAttached = Timeline->Attached(Event->GetEvent());
+	if (bIsAttached)
+	{
+		FNEventRecord Record;
+		Record.Event = Event;
+		UE_LOG(LogTemp, Warning, TEXT("Attached"));
+		int32 Last = Timeline->GetEvents().Num() - 1;
+		Last = Last > 0 ? Last : 0;
+		EventStore.Insert(Record, Last);
+		// refresh data from the last Timeline->GetEvents() entry
+		RefreshRecordData(Last);
+	}
+	return bIsAttached;
 }
 
 const TArray<FNEventRecord> UNTimelineAdapter::GetAdaptedEvents() const
@@ -87,6 +89,37 @@ NTimeline::FEventTuple UNTimelineAdapter::ConvertRecordToTuple(FNEventRecord con
 		Event = Record.Event->GetEvent();
 	}
 	return NTimeline::FEventTuple(Event, Record.AttachedTime, Record.Delay, Record.Duration, Record.Label, Record.ExpiredTime);
+}
+
+void UNTimelineAdapter::RefreshRecordData(const int32& Index)
+{
+	const FEventTuple& Tuple = Timeline->GetEvents()[Index];
+	FNEventRecord& Record = EventStore[Index];
+
+	if (Index > 0 && Record.Event->GetEvent() != Tuple.Get<0>())
+	{
+		UE_LOG(LogTemp,
+			Error,
+			TEXT("%s and its adapter are not synchronized (for Index %d),"
+				 "I prefer stopping here rather making dirty things."
+				 "Please check your EventStore population."),
+			*Timeline->GetLabel().ToString(),
+			Index);
+		return;
+	}
+
+	Record.AttachedTime = Tuple.Get<1>();
+	Record.Delay = Tuple.Get<2>();
+	Record.Duration = Tuple.Get<3>();
+	Record.Label = Tuple.Get<4>();
+	Record.ExpiredTime = Tuple.Get<5>();
+}
+
+void UNTimelineAdapter::OnEventExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index)
+{
+	RefreshRecordData(Index);
+	FNEventRecord& Record = EventStore[Index];
+	Record.Event = nullptr;
 }
 
 float UNTimelineAdapter::GetCurrentTime()
@@ -125,7 +158,7 @@ void UNTimelineAdapter::Serialize(FArchive& Ar)
 	{
 		CurrentTime = Timeline->GetCurrentTime();
 		Label = Timeline->GetLabel();
-		for (int i = 0; i < Timeline->GetEvents().Num(); i++)
+		for (int32 i = 0; i < Timeline->GetEvents().Num(); i++)
 		{
 			const NTimeline::FEventTuple& Tuple = Timeline->GetEvents()[i];
 			FNEventRecord& Record = EventStore[i];

@@ -116,16 +116,17 @@ Its goal is to saved events and place them in time. It works as a Time & Event c
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`public FTimelineEventDelegate `[`EventExpired`](#classNTimeline_1a7eca090412c8d34e3c598d7769173040) | **See also**: [OnExpired()](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)
 `public  `[`NTimeline`](#classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec)`(`[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract)` * TimerManager,FName _Label)` | A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
 `public virtual  `[`~NTimeline`](#classNTimeline_1adffcefb7fc7f2768021994f8730eb356)`()` | Calls [Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
-`public virtual void `[`Attached`](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a427fef6206ba24c609a56884de4167e5) for any custom usages
-`public virtual void `[`Attached`](#classNTimeline_1a404dbb01b58fff5746568ceac1226a0c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b) but for a collection of objects.
+`public virtual bool `[`Attached`](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a427fef6206ba24c609a56884de4167e5) for any custom usages
+`public virtual void `[`Attached`](#classNTimeline_1a404dbb01b58fff5746568ceac1226a0c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) but for a collection of objects.
 `public virtual void `[`SetCurrentTime`](#classNTimeline_1a0411bf651e453dd5446074b11829654d)`(float _CurrentTime)` | This method is mainly used for savegame serialization
 `public virtual float `[`GetCurrentTime`](#classNTimeline_1acd18d17b5b93782aaebdf03a0a94daf1)`()` | Get CurrentTime
 `public const TArray< `[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` > `[`GetEvents`](#classNTimeline_1abf7ab8d1d90f06c80097ef760ed1d5b6)`() const` | Returns the FEventTuple collection
 `public virtual void `[`SetLabel`](#classNTimeline_1a059eca9a31a3ad6abd9e9b9b057ac153)`(FName _Label)` | Give a name to this timeline 
 `public virtual FName `[`GetLabel`](#classNTimeline_1a8516a8cac69ee9f96ad1c9ea4864ea25)`() const` | Return the actual name
-`public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` Tuple)` | This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b) methods to set data during runtime.
+`public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` Tuple)` | This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) methods to set data during runtime.
 `public virtual void `[`Clear`](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)`()` | This completely reset every events. It should be used with caution.
 `public virtual void `[`NotifyTick`](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
 `protected FName `[`Label`](#classNTimeline_1a008f3afba683e14f05887e4df108c260) | The name of this timeline
@@ -134,10 +135,14 @@ Its goal is to saved events and place them in time. It works as a Time & Event c
 `protected inline virtual bool `[`BeforeOnAttached`](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` | In case of specialisation needs to avoid the attach process in some cases
 `protected inline virtual void `[`AfterOnAttached`](#classNTimeline_1a427fef6206ba24c609a56884de4167e5)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` | If needed to make some stats, analytics, trigger error,...
 `protected inline virtual const float & `[`GetTickInterval`](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3)`() const` | This is the value required by a timer to know the tick frequency for this timeline. The NotifyTick use this method to add time on CurrentTime at each call.
-`protected inline virtual void `[`OnExpired`](#classNTimeline_1abed3baa8327f67401459bcc1997f3a0d)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` | Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
+`protected virtual void `[`OnExpired`](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float & ExpiredTime,const int32 & Index)` | Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
 `typedef `[`FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) | An event tuple is an event representation, it allows to keep important details trace in memory. 0: Event object 1: attached time 2: delay 3: duration 4: label 5: expired time
 
 ## Members
+
+#### `public FTimelineEventDelegate `[`EventExpired`](#classNTimeline_1a7eca090412c8d34e3c598d7769173040) <a id="classNTimeline_1a7eca090412c8d34e3c598d7769173040"></a>
+
+**See also**: [OnExpired()](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)
 
 #### `public  `[`NTimeline`](#classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec)`(`[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract)` * TimerManager,FName _Label)` <a id="classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec"></a>
 
@@ -152,7 +157,7 @@ A Timeline can't exists with a manager. This contructor garanties the necessary 
 
 Calls [Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 
-#### `public virtual void `[`Attached`](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` <a id="classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b"></a>
+#### `public virtual bool `[`Attached`](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` <a id="classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6"></a>
 
 It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a427fef6206ba24c609a56884de4167e5) for any custom usages
 
@@ -161,7 +166,7 @@ It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf
 
 #### `public virtual void `[`Attached`](#classNTimeline_1a404dbb01b58fff5746568ceac1226a0c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` <a id="classNTimeline_1a404dbb01b58fff5746568ceac1226a0c"></a>
 
-Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b) but for a collection of objects.
+Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) but for a collection of objects.
 
 #### `public virtual void `[`SetCurrentTime`](#classNTimeline_1a0411bf651e453dd5446074b11829654d)`(float _CurrentTime)` <a id="classNTimeline_1a0411bf651e453dd5446074b11829654d"></a>
 
@@ -187,7 +192,7 @@ Return the actual name
 
 #### `public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` Tuple)` <a id="classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec"></a>
 
-This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1ab10f9963ad4c5f8fea38f4be5b37428b) methods to set data during runtime.
+This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) methods to set data during runtime.
 
 #### Parameters
 * `Tuple` - Data which will be added to the Events TArray
@@ -224,7 +229,7 @@ If needed to make some stats, analytics, trigger error,...
 
 This is the value required by a timer to know the tick frequency for this timeline. The NotifyTick use this method to add time on CurrentTime at each call.
 
-#### `protected inline virtual void `[`OnExpired`](#classNTimeline_1abed3baa8327f67401459bcc1997f3a0d)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` <a id="classNTimeline_1abed3baa8327f67401459bcc1997f3a0d"></a>
+#### `protected virtual void `[`OnExpired`](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float & ExpiredTime,const int32 & Index)` <a id="classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905"></a>
 
 Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
 
@@ -773,15 +778,17 @@ It manages:
 `public virtual void `[`SetLabel`](#classUNTimelineAdapter_1a4109af151689d0f04397dfc8bf213621)`(FName _Label)` | Give a name to this timeline 
 `public virtual FName `[`GetLabel`](#classUNTimelineAdapter_1afd1f915332e3df9c3aafdae4e3300495)`() const` | Return the actual name
 `public virtual void `[`NotifyTick`](#classUNTimelineAdapter_1a30f47f32c8382b94541f96938e592009)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
-`public inline virtual void `[`Attached`](#classUNTimelineAdapter_1a3394f659f3fdcd046c9045f5272752c8)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | This object should works only with Adapters. This method is reserved for core objects. 
+`public inline virtual bool `[`Attached`](#classUNTimelineAdapter_1a6243471ebd042f4ce5e46d0f40e315a0)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | This object should works only with Adapters. This method is reserved for core objects. 
 `public inline virtual void `[`Attached`](#classUNTimelineAdapter_1a491f5f752b4f22cf2d9642ba9755986c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | This object should works only with Adapters. This method is reserved for core objects. 
 `public virtual void `[`BeginDestroy`](#classUNTimelineAdapter_1ad17b756d4b6c52c999cf91cb1a473483)`()` | 
 `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classUNTimelineAdapter_1a99ff82b5d7046ecb96880bd9f5bc2174)`() const` | 
-`public virtual void `[`Attached`](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` | This method is made to work with adapters object. It will save data in the EventStore array for serialization and save game. 
+`public virtual bool `[`Attached`](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` | This method is made to work with adapters object. It will save data in the EventStore array for serialization and save game. 
 `public const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetAdaptedEvents`](#classUNTimelineAdapter_1a82e3c75c4a8da9468aeb760c7949dea9)`() const` | This retrieve the EventStore
+`public void `[`OnEventExpired`](#classUNTimelineAdapter_1a81584d67d7a6bdee974c9fcf46b6b1d5)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float & ExpiredTime,const int32 & Index)` | A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a7eca090412c8d34e3c598d7769173040). It controls the EventStore data refreshing.
 `public virtual void `[`Serialize`](#classUNTimelineAdapter_1aad49188cf7383fb6bf6cf9cf9a26700f)`(FArchive & Ar)` | It used to save all events state in the EventStore, and reload them correclty.
 `public `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * `[`CreateNewEvent`](#classUNTimelineAdapter_1acba2a168a61528541570ed3b28f37d2f)`(TSubclassOf< `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` > Class,FName Name,float Duration,float Delay)` | Creates a new Event and use this timeline as the outer for this new object.
 `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineAdapter_1a8d571050be62d2ece357c4997bbbd9a3) | The embeded object
+`protected virtual void `[`RefreshRecordData`](#classUNTimelineAdapter_1a63c8311fb81eb1c175ed26bcbbafe6eb)`(const int32 & Index)` | This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) with is associated [FNEventRecord](#structFNEventRecord). It checks coherence with Tuple Event and Record Event before doing it.
 
 ## Members
 
@@ -821,21 +828,21 @@ Return the actual name
 
 This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
 
-#### `public inline virtual void `[`Attached`](#classUNTimelineAdapter_1a3394f659f3fdcd046c9045f5272752c8)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` <a id="classUNTimelineAdapter_1a3394f659f3fdcd046c9045f5272752c8"></a>
+#### `public inline virtual bool `[`Attached`](#classUNTimelineAdapter_1a6243471ebd042f4ce5e46d0f40e315a0)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` <a id="classUNTimelineAdapter_1a6243471ebd042f4ce5e46d0f40e315a0"></a>
 
 This object should works only with Adapters. This method is reserved for core objects. 
-**See also**: [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)
+**See also**: [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)
 
 #### `public inline virtual void `[`Attached`](#classUNTimelineAdapter_1a491f5f752b4f22cf2d9642ba9755986c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` <a id="classUNTimelineAdapter_1a491f5f752b4f22cf2d9642ba9755986c"></a>
 
 This object should works only with Adapters. This method is reserved for core objects. 
-**See also**: [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)
+**See also**: [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)
 
 #### `public virtual void `[`BeginDestroy`](#classUNTimelineAdapter_1ad17b756d4b6c52c999cf91cb1a473483)`()` <a id="classUNTimelineAdapter_1ad17b756d4b6c52c999cf91cb1a473483"></a>
 
 #### `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classUNTimelineAdapter_1a99ff82b5d7046ecb96880bd9f5bc2174)`() const` <a id="classUNTimelineAdapter_1a99ff82b5d7046ecb96880bd9f5bc2174"></a>
 
-#### `public virtual void `[`Attached`](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` <a id="classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc"></a>
+#### `public virtual bool `[`Attached`](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` <a id="classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f"></a>
 
 This method is made to work with adapters object. It will save data in the EventStore array for serialization and save game. 
 #### Parameters
@@ -844,6 +851,17 @@ This method is made to work with adapters object. It will save data in the Event
 #### `public const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetAdaptedEvents`](#classUNTimelineAdapter_1a82e3c75c4a8da9468aeb760c7949dea9)`() const` <a id="classUNTimelineAdapter_1a82e3c75c4a8da9468aeb760c7949dea9"></a>
 
 This retrieve the EventStore
+
+#### `public void `[`OnEventExpired`](#classUNTimelineAdapter_1a81584d67d7a6bdee974c9fcf46b6b1d5)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float & ExpiredTime,const int32 & Index)` <a id="classUNTimelineAdapter_1a81584d67d7a6bdee974c9fcf46b6b1d5"></a>
+
+A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a7eca090412c8d34e3c598d7769173040). It controls the EventStore data refreshing.
+
+#### Parameters
+* `Event` - The native Event which will be killed 
+
+* `ExpiredTime` - The time when this event expires 
+
+* `Index` - The index of the NTimeline::Events array
 
 #### `public virtual void `[`Serialize`](#classUNTimelineAdapter_1aad49188cf7383fb6bf6cf9cf9a26700f)`(FArchive & Ar)` <a id="classUNTimelineAdapter_1aad49188cf7383fb6bf6cf9cf9a26700f"></a>
 
@@ -868,6 +886,15 @@ Creates a new Event and use this timeline as the outer for this new object.
 #### `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineAdapter_1a8d571050be62d2ece357c4997bbbd9a3) <a id="classUNTimelineAdapter_1a8d571050be62d2ece357c4997bbbd9a3"></a>
 
 The embeded object
+
+#### `protected virtual void `[`RefreshRecordData`](#classUNTimelineAdapter_1a63c8311fb81eb1c175ed26bcbbafe6eb)`(const int32 & Index)` <a id="classUNTimelineAdapter_1a63c8311fb81eb1c175ed26bcbbafe6eb"></a>
+
+This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) with is associated [FNEventRecord](#structFNEventRecord). It checks coherence with Tuple Event and Record Event before doing it.
+
+#### Parameters
+* `Index` - The index of the NTimeline::Events array 
+
+* `Record` - The record you want to synchronize.
 
 # class `UNTimelineEventAdapter` <a id="classUNTimelineEventAdapter"></a>
 
@@ -959,7 +986,7 @@ This is where the Core object is instanciated. You should override this to insta
 #### `public TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > `[`GetEvent`](#classUNTimelineEventAdapter_1a973ca8f2607f42407d87316786061000)`()` <a id="classUNTimelineEventAdapter_1a973ca8f2607f42407d87316786061000"></a>
 
 This is used by other adapters which need to pass the core object to their own. 
-**See also**: [UNTimelineAdapter::Attached()](#classUNTimelineAdapter_1a3394f659f3fdcd046c9045f5272752c8)
+**See also**: [UNTimelineAdapter::Attached()](#classUNTimelineAdapter_1a6243471ebd042f4ce5e46d0f40e315a0)
 
 #### `protected TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > `[`Event`](#classUNTimelineEventAdapter_1a9308593395993b79ad1ecb8bbe5ec446) <a id="classUNTimelineEventAdapter_1a9308593395993b79ad1ecb8bbe5ec446"></a>
 
@@ -1000,7 +1027,7 @@ To ease blueprint usages, most of the [UNTimelineAdapter](#classUNTimelineAdapte
 `public virtual void `[`BeginDestroy`](#classUNTimelineManagerBaseAdapter_1addc22251c326e4749a1556f570fc152f)`()` | This call the [UNTimelineAdapter::BeginDestroy()](#classUNTimelineAdapter_1ad17b756d4b6c52c999cf91cb1a473483) too.
 `public FName `[`GetLabel`](#classUNTimelineManagerBaseAdapter_1a892ced4f4e11f8ac1c76c48c96fe2631)`() const` | A pass-through for the embeded [UNTimelineAdapter::GetLabel()](#classUNTimelineAdapter_1afd1f915332e3df9c3aafdae4e3300495)
 `public virtual void `[`Clear`](#classUNTimelineManagerBaseAdapter_1a8a395d8909138fc37508920dd50a80d0)`()` | It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
-`public virtual void `[`AddEvent`](#classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` | Adds an event to the timeline object, it works as a pass-through for [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)
+`public virtual void `[`AddEvent`](#classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` | Adds an event to the timeline object, it works as a pass-through for [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)
 `public `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * `[`CreateNewEvent`](#classUNTimelineManagerBaseAdapter_1a0b423106760f004651ce2683dcd84090)`(TSubclassOf< `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineAdapter::CreateNewEvent()](#classUNTimelineAdapter_1acba2a168a61528541570ed3b28f37d2f): Creates a new Event and use this timeline as the outer for this new object.
 `public `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerBaseAdapter_1accf8cc57c0dc5247c60b87729649b6ee)`(TSubclassOf< `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineAdapter::CreateNewEvent()](#classUNTimelineAdapter_1acba2a168a61528541570ed3b28f37d2f): Creates a new Event and use this timeline as the outer for this new object.
 `protected `[`UNTimelineAdapter`](#classUNTimelineAdapter)` * `[`MyTimeline`](#classUNTimelineManagerBaseAdapter_1aac02c9c645fca4bc75afccc4c7946239) | the timeline associated to this manager.
@@ -1053,7 +1080,7 @@ It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbst
 
 #### `public virtual void `[`AddEvent`](#classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` <a id="classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b"></a>
 
-Adds an event to the timeline object, it works as a pass-through for [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1af5992ce7fd611d4d1f9bc206759b27dc)
+Adds an event to the timeline object, it works as a pass-through for [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)
 
 #### Parameters
 * `Event` - An Event object you want to saved to the associated timeline.
@@ -1125,6 +1152,7 @@ This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_
 `public FName `[`Label`](#structFNEventRecord_1a87eae2eb09b8c2163a8394431ed2abf5) | The name of the event
 `public float `[`ExpiredTime`](#structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d) | Expiration time of this event in secs (0 means can't expired))
 `public UClass * `[`EventClass`](#structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683) | This is used only for serialization, it allow to re-instance the object on load
+`public bool `[`HasClass`](#structFNEventRecord_1aae27194057daf580226255b5266a7d32) | A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass
 `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` | 
 `public inline  `[`FNEventRecord`](#structFNEventRecord_1ac73fc2cb4bd8bb046b456a04337112fb)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * _Event,float _AttachedTime,float _Delay,float _Duration,FName _Label,float _ExpiredTime)` | 
 `public void `[`Serialize`](#structFNEventRecord_1a0205d63d21092bc352c8836d29a51d23)`(FArchive & Ar,`[`UNTimelineAdapter`](#classUNTimelineAdapter)` * Timeline)` | It manages Event object saving and loading
@@ -1158,6 +1186,10 @@ Expiration time of this event in secs (0 means can't expired))
 #### `public UClass * `[`EventClass`](#structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683) <a id="structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683"></a>
 
 This is used only for serialization, it allow to re-instance the object on load
+
+#### `public bool `[`HasClass`](#structFNEventRecord_1aae27194057daf580226255b5266a7d32) <a id="structFNEventRecord_1aae27194057daf580226255b5266a7d32"></a>
+
+A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass
 
 #### `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` <a id="structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d"></a>
 
