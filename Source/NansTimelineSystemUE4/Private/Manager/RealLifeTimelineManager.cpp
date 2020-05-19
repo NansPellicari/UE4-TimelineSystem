@@ -14,7 +14,7 @@
 
 #include "Manager/RealLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "TimerManager.h"
 
 UNRealLifeTimelineManager::UNRealLifeTimelineManager() {}

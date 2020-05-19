@@ -22,7 +22,7 @@
 #include "Misc/AutomationTest.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformProcess.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
@@ -44,10 +44,10 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -90,10 +90,10 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -132,10 +132,10 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -148,7 +148,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		TimelineManager->ConditionalBeginDestroy();
 		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-			MockObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+			FakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(
@@ -185,10 +185,10 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -204,7 +204,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 		// clang-format off
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("1st event should have an automatic name"),TimelineManager->GetEvents()[0].Event->GetEventLabel(), FName("EventAdapter_1"));
+		TEST_TRUE(TEST_TEXT_FN_DETAILS("1st event should have an automatic name"),FRegexMatcher(FRegexPattern("^EventAdapter_[0-9]+"), TimelineManager->GetEvents()[0].Event->GetEventLabel().ToString()).FindNext());
 		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event should have a choosen name"), TimelineManager->GetEvents()[1].Event->GetEventLabel(), FName("Ev2"));
 		TEST_EQ(TEST_TEXT_FN_DETAILS("1st event live since 2 secs"), TimelineManager->GetEvents()[0].Event->GetLocalTime(), 2.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event live since 1 sec"), TimelineManager->GetEvents()[1].Event->GetLocalTime(), 1.f);
@@ -219,7 +219,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 
 		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNRealLifeTimelineManager>(
-			MockObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+			FakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);

@@ -18,7 +18,7 @@
 #include "Manager/GameLifeTimelineManager.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "TimerManager.h"
 
 UNTimelineManagerBaseAdapter::UNTimelineManagerBaseAdapter()

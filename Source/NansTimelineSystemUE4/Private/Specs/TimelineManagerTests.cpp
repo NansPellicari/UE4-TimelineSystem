@@ -21,7 +21,7 @@
 #include "Misc/AutomationTest.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Runtime/Engine/Public/Tickable.h"
@@ -165,8 +165,8 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 	UGameInstance* GI = World->GetGameInstance();
 	TimelineManagerTickableOnPauseFake* TimelineManager = new TimelineManagerTickableOnPauseFake(World);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 
 	// Begin test
 	{
@@ -175,12 +175,12 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->Counter, 1.f);
-		UGameplayStatics::SetGamePaused(MockObject, true);
+		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->Counter, 2.f);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->Counter, 3.f);
-		UGameplayStatics::SetGamePaused(MockObject, false);
+		UGameplayStatics::SetGamePaused(FakeObject, false);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 4"), TimelineManager->Counter, 4.f);
 		TimelineManager->Pause();
@@ -190,8 +190,8 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 	// End test
 
 	NTestWorld::Destroy(World);
-	MockObject->ClearFlags(EObjectFlags::RF_Transient);
-	MockObject->RemoveFromRoot();
+	FakeObject->ClearFlags(EObjectFlags::RF_Transient);
+	FakeObject->RemoveFromRoot();
 	TimelineManager = nullptr;
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
 	return true;
@@ -209,8 +209,8 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 	FTimerManager& TimerManager = World->GetTimerManager();
 
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	APlayerController* PC = World->GetFirstPlayerController();
 
 	if (PC == nullptr)
@@ -230,21 +230,21 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->Counter, 1.f);
-		UGameplayStatics::SetGamePaused(MockObject, true);
+		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager Should stick to 1 count after making game paused"),
 			TimelineManager->Counter,
 			1.f);
-		UGameplayStatics::SetGamePaused(MockObject, false);
+		UGameplayStatics::SetGamePaused(FakeObject, false);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager tick once more after stopping game paused"), TimelineManager->Counter, 2.f);
 	}
 	// End test
 
 	TimerManager.ClearTimer(TimelineManager->TimerHandle);
-	MockObject->ClearFlags(EObjectFlags::RF_Transient);
-	MockObject->RemoveFromRoot();
+	FakeObject->ClearFlags(EObjectFlags::RF_Transient);
+	FakeObject->RemoveFromRoot();
 	NTestWorld::Destroy(World);
 	TimelineManager = nullptr;
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);

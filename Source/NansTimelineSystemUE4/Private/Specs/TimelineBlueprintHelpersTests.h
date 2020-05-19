@@ -22,7 +22,7 @@
 #include "Misc/AutomationTest.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformProcess.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
@@ -44,13 +44,13 @@ bool FTimelineFactoryTest::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 
 	// Begin test
 	{
 		UNTimelineManagerBaseAdapter* TimelineManager = UNTimelineBlueprintHelpers::CreateNewTimeline(
-			MockObject, UNRealLifeTimelineManager::StaticClass(), FName("TempTimeline"));
+			FakeObject, UNRealLifeTimelineManager::StaticClass(), FName("TempTimeline"));
 		TEST_NOT_NULL(TEST_TEXT_FN_DETAILS("Should not be null"), TimelineManager);
 		UNRealLifeTimelineManager* RealTimelineManager = Cast<UNRealLifeTimelineManager>(TimelineManager);
 		TEST_NOT_NULL(TEST_TEXT_FN_DETAILS("Should not be null"), RealTimelineManager);

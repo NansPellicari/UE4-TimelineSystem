@@ -22,9 +22,10 @@
 #include "Misc/AutomationTest.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
+#include "Specs/TimelineEventAdapterFake.h"
 #include "TimerManager.h"
 
 /**
@@ -41,10 +42,10 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	NTestWorld::CreateAndOpenNewLevel(World);
 
 	// Begin test
@@ -68,7 +69,7 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"), TimelineManager->GetTimelineTime(), 3.f);
-		UGameplayStatics::SetGamePaused(MockObject, true);
+		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
@@ -96,10 +97,10 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
-	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
-	MockObject->SetMyWorld(World);
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
 	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
-		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
 	// Begin test
@@ -109,6 +110,8 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+
+		// Save in memory
 		FBufferArchive ToBinary;
 		TimelineManager->Serialize(ToBinary);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
@@ -116,6 +119,8 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetTimelineTime(), 3.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
+
+		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
 		TimelineManager->Serialize(FromBinary);
@@ -123,6 +128,55 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"), TimelineManager->GetLabel(), FName("TestTimeline"));
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"), TimelineManager->GetTimelineTime(), 2.f);
+	}
+	// End test
+
+	NTestWorld::Destroy(World);
+	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
+	return true;
+}
+
+// clang-format off
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerSerializationWithEventsTest,
+"Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanNotLoadEventsFromDifferentWorld", EAutomationTestFlags::EditorContext |
+EAutomationTestFlags::EngineFilter)
+// clang-format on
+bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString& Parameters)
+{
+	const double StartTime = FPlatformTime::Seconds();
+	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
+	// RF_MarkAsRootSet to avoid deletion when GC passes
+	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+	FakeObject->SetMyWorld(World);
+	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+	TimelineManager->Play();
+
+	// Begin test
+	{
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
+
+		// Save in memory
+		FBufferArchive ToBinary;
+		TimelineManager->Serialize(ToBinary);
+
+		GEngine->Exec(World, TEXT("Exit"));
+		NTestWorld::Destroy(World);
+		UWorld* NewWorld = NTestWorld::CreateAndPlay(EWorldType::Game, true, FName("ANewWorld"));
+
+		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+		NewFakeObject->SetMyWorld(NewWorld);
+		UNLevelLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+			NewFakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+
+		// Load from memory
+		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
+		FromBinary.Seek(0);
+		NewTimelineManager->Serialize(FromBinary);
+		TEST_LE(TEST_TEXT_FN_DETAILS("There is 0 Events in collection"), NewTimelineManager->GetEvents().Num(), 0);
 	}
 	// End test
 

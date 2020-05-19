@@ -14,7 +14,7 @@
 
 #include "Manager/LevelLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/MockObject.h"
+#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "TimerManager.h"
 
