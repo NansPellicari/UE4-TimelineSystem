@@ -85,3 +85,48 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
 	return true;
 }
+
+// clang-format off
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerSerializationSameObjTest,
+"Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanSerializeWithTheSameObjectInstance", EAutomationTestFlags::EditorContext |
+EAutomationTestFlags::EngineFilter)
+// clang-format on
+bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Parameters)
+{
+	const double StartTime = FPlatformTime::Seconds();
+	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
+	// RF_MarkAsRootSet to avoid deletion when GC passes
+	UMockObject* MockObject = NewObject<UMockObject>(World, FName("MyMockObject"), EObjectFlags::RF_MarkAsRootSet);
+	MockObject->SetMyWorld(World);
+	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+		MockObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+	TimelineManager->Play();
+
+	// Begin test
+	{
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
+		NTestWorld::Tick(World);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
+		NTestWorld::Tick(World);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+		FBufferArchive ToBinary;
+		TimelineManager->Serialize(ToBinary);
+		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
+		NTestWorld::Tick(World);
+		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetTimelineTime(), 3.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
+		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
+		FromBinary.Seek(0);
+		TimelineManager->Serialize(FromBinary);
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"), TimelineManager->GetLabel(), FName("TestTimeline"));
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"), TimelineManager->GetTimelineTime(), 2.f);
+	}
+	// End test
+
+	NTestWorld::Destroy(World);
+	UE_LOG(LogTemp, Display, TEXT("2- Test run on %f ms"), (FPlatformTime::Seconds() - StartTime) * 1000.f);
+	return true;
+}
