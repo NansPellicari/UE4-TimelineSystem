@@ -16,6 +16,7 @@
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
 `class `[`UNTimelineAdapter`](#classUNTimelineAdapter) | The adapter for [NTimeline](#classNTimeline) object.
 `class `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter) | Base abstract class to create [NTimelineEventBase](#classNTimelineEventBase) adapters (Blueprint or c++).
+`class `[`UNTimelineEventAdapterFake`](#classUNTimelineEventAdapterFake) | This class is used for tests only
 `class `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter) | This is the abstract adapter that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
 `class `[`UTimelineFactory`](#classUTimelineFactory) | A simple Blueprint Library class to manage Timeline creation.
 `struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) and a record object used for savegame.
@@ -996,6 +997,22 @@ The actual adapter is for this object. It shoulds be instanciate on a ctor or a 
 
 Default ctor for the engine
 
+# class `UNTimelineEventAdapterFake` <a id="classUNTimelineEventAdapterFake"></a>
+
+```
+class UNTimelineEventAdapterFake
+  : public UNTimelineEventAdapter
+```  
+
+This class is used for tests only
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
 # class `UNTimelineManagerBaseAdapter` <a id="classUNTimelineManagerBaseAdapter"></a>
 
 ```
@@ -1151,8 +1168,7 @@ This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_
 `public float `[`Duration`](#structFNEventRecord_1a1678e0c5820aff90fc32e45bad7a2afe) | The duration this event lives in secs (0 means inderterminate)
 `public FName `[`Label`](#structFNEventRecord_1a87eae2eb09b8c2163a8394431ed2abf5) | The name of the event
 `public float `[`ExpiredTime`](#structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d) | Expiration time of this event in secs (0 means can't expired))
-`public UClass * `[`EventClass`](#structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683) | This is used only for serialization, it allow to re-instance the object on load
-`public bool `[`HasClass`](#structFNEventRecord_1aae27194057daf580226255b5266a7d32) | A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass
+`public FString `[`EventClassName`](#structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93) | This is used only for serialization, it allow to re-instance the object on load
 `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` | 
 `public inline  `[`FNEventRecord`](#structFNEventRecord_1ac73fc2cb4bd8bb046b456a04337112fb)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * _Event,float _AttachedTime,float _Delay,float _Duration,FName _Label,float _ExpiredTime)` | 
 `public void `[`Serialize`](#structFNEventRecord_1a0205d63d21092bc352c8836d29a51d23)`(FArchive & Ar,`[`UNTimelineAdapter`](#classUNTimelineAdapter)` * Timeline)` | It manages Event object saving and loading
@@ -1183,13 +1199,9 @@ The name of the event
 
 Expiration time of this event in secs (0 means can't expired))
 
-#### `public UClass * `[`EventClass`](#structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683) <a id="structFNEventRecord_1a4b079bc35a6e2bf9da811d1fe9426683"></a>
+#### `public FString `[`EventClassName`](#structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93) <a id="structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93"></a>
 
 This is used only for serialization, it allow to re-instance the object on load
-
-#### `public bool `[`HasClass`](#structFNEventRecord_1aae27194057daf580226255b5266a7d32) <a id="structFNEventRecord_1aae27194057daf580226255b5266a7d32"></a>
-
-A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass
 
 #### `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` <a id="structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d"></a>
 

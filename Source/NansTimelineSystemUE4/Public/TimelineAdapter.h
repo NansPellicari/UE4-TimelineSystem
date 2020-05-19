@@ -44,10 +44,7 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 	float ExpiredTime;
 	/** This is used only for serialization, it allow to re-instance the object on load */
 	UPROPERTY(SkipSerialization)
-	UClass* EventClass = nullptr;
-	/** A simple boolean val to avoid a warning on serialization when trying to load nullptr EventClass */
-	UPROPERTY(SkipSerialization)
-	bool HasClass = false;
+	FString EventClassName = FString("");
 
 	/** It manages Event object saving and loading */
 	void Serialize(FArchive& Ar, UNTimelineAdapter* Timeline);
@@ -57,23 +54,10 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 	{
 		if (Ar.IsSaving())
 		{
-			if (Record.Event != nullptr)
-			{
-				Record.EventClass = Record.Event->GetClass();
-				Record.HasClass = true;
-			}
-			else
-			{
-				Record.EventClass = nullptr;
-				Record.HasClass = false;
-			}
+			Record.EventClassName = Record.Event != nullptr ? Record.Event->GetClass()->GetPathName() : FString("");
 		}
 
-		Ar << Record.HasClass;
-		if (Record.HasClass == true)
-		{
-			Ar << Record.EventClass;
-		}
+		Ar << Record.EventClassName;
 		Ar << Record.AttachedTime;
 		Ar << Record.Delay;
 		Ar << Record.Duration;

@@ -10,9 +10,10 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
 	{
 		Event->Serialize(Ar);
 	}
-	if (Ar.IsLoading() && EventClass != nullptr)
+	if (Ar.IsLoading() && EventClassName != FString(""))
 	{
-		Event = Timeline->CreateNewEvent(EventClass, Label);
+		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *EventClassName);
+		Event = Timeline->CreateNewEvent(Class, Label);
 		Event->Serialize(Ar);
 	}
 }
@@ -66,7 +67,6 @@ bool UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
 	{
 		FNEventRecord Record;
 		Record.Event = Event;
-		UE_LOG(LogTemp, Warning, TEXT("Attached"));
 		int32 Last = Timeline->GetEvents().Num() - 1;
 		Last = Last > 0 ? Last : 0;
 		EventStore.Insert(Record, Last);
@@ -153,7 +153,6 @@ UNTimelineEventAdapter* UNTimelineAdapter::CreateNewEvent(
 void UNTimelineAdapter::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
-
 	if (Ar.IsSaving())
 	{
 		CurrentTime = Timeline->GetCurrentTime();
@@ -178,7 +177,6 @@ void UNTimelineAdapter::Serialize(FArchive& Ar)
 	Ar << Label;
 	Ar << CurrentTime;
 	Ar << EventStore;
-
 	if (Ar.IsLoading())
 	{
 		Timeline->Clear();

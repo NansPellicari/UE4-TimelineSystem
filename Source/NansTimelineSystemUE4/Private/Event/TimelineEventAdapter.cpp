@@ -131,7 +131,7 @@ T* UNTimelineEventAdapter::CreateObject(
 	static int32 Counter;
 	if (Name == NAME_None)
 	{
-		FString EvtLabel = FString::Format(TEXT("EventAdapter_{0}"), {Counter++});
+		FString EvtLabel = FString::Format(TEXT("EventAdapter_{0}"), {++Counter});
 		Name = FName(*EvtLabel);
 	}
 
