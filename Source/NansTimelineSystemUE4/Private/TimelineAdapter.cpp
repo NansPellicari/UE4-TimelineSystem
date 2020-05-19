@@ -177,6 +177,7 @@ void UNTimelineAdapter::Serialize(FArchive& Ar)
 	Ar << Label;
 	Ar << CurrentTime;
 	Ar << EventStore;
+
 	if (Ar.IsLoading())
 	{
 		Timeline->Clear();
