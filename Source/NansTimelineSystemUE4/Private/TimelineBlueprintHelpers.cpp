@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "TimelineFactory.h"
+#include "TimelineBlueprintHelpers.h"
 
 #include "Event/TimelineEventAdapter.h"
 #include "Manager/TimelineManagerBaseAdapter.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 
-UNTimelineManagerBaseAdapter* UTimelineFactory::CreateNewTimeline(
+UNTimelineManagerBaseAdapter* UNTimelineBlueprintHelpers::CreateNewTimeline(
 	UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseAdapter> Class, FName Name)
 {
 	UNTimelineManagerBaseAdapter* Object =

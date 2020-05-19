@@ -57,17 +57,17 @@ float UNTimelineManagerBaseAdapter::GetTimelineTime()
 
 void UNTimelineManagerBaseAdapter::Pause()
 {
-	NTimelineManagerAbstract::Pause();
+	NTimelineManagerBase::Pause();
 }
 
 void UNTimelineManagerBaseAdapter::Play()
 {
-	NTimelineManagerAbstract::Play();
+	NTimelineManagerBase::Play();
 }
 
 void UNTimelineManagerBaseAdapter::Stop()
 {
-	NTimelineManagerAbstract::Stop();
+	NTimelineManagerBase::Stop();
 }
 
 const TArray<FNEventRecord> UNTimelineManagerBaseAdapter::GetEvents()

@@ -85,7 +85,7 @@ public:
 
 	/**
 	 * this method is used to instanciate the embeded NTimeline
-	 * @param TimelineManager - The Adapter which provide the NTimelineManagerAbstract object.
+	 * @param TimelineManager - The Adapter which provide the NTimelineManagerBase object.
 	 */
 	virtual void Init(UNTimelineManagerBaseAdapter* TimelineManager, FName _Label = NAME_None);
 

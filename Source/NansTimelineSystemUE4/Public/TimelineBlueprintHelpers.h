@@ -17,7 +17,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
-#include "TimelineFactory.generated.h"
+#include "TimelineBlueprintHelpers.generated.h"
 
 class UNTimelineManagerBaseAdapter;
 class UNTimelineEventAdapter;
@@ -26,7 +26,7 @@ class UNTimelineEventAdapter;
  * A simple Blueprint Library class to manage Timeline creation.
  */
 UCLASS()
-class NANSTIMELINESYSTEMUE4_API UTimelineFactory : public UBlueprintFunctionLibrary
+class NANSTIMELINESYSTEMUE4_API UNTimelineBlueprintHelpers : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:

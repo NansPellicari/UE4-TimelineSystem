@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerAbstract.h"
+#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
 #include "TimelineAdapter.h"
 
 #include "TimelineManagerBaseAdapter.generated.h"
@@ -27,7 +27,7 @@ class NTimelineEventAdapter;
  * This is the abstract adapter that every Timeline manager shoulds override.
  * It brings all core functionnalities for blueprint or c++.
  *
- * As the close relation between NTimelineManagerAbstract and NTimeline classes (core lib),
+ * As the close relation between NTimelineManagerBase and NTimeline classes (core lib),
  * This class is coupled with UNTimelineAdapter.
  * @see UNTimelineAdapter
  *
@@ -37,7 +37,7 @@ class NTimelineEventAdapter;
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
  */
 UCLASS(Abstract, ConversionRoot, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBaseAdapter : public UObject, public NTimelineManagerAbstract
+class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBaseAdapter : public UObject, public NTimelineManagerBase
 {
 	GENERATED_BODY()
 public:
@@ -111,7 +111,7 @@ public:
 	static T* CreateObject(
 		UObject* Outer, const UClass* Class, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
-	/** It is called by the parent NTimelineManagerAbstract on dtor */
+	/** It is called by the parent NTimelineManagerBase on dtor */
 	virtual void Clear() override;
 
 	/**

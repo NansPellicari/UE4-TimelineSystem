@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/EngineTypes.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerAbstract.h"
+#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Runtime/Engine/Public/Tickable.h"
 #include "Specs/TimelineManagerFake.h"
@@ -11,7 +11,7 @@
 /**
  * This class is used for tests only
  */
-class TimelineManagerTickableOnPauseFake : public NTimelineManagerAbstract, public FTickableGameObject
+class TimelineManagerTickableOnPauseFake : public NTimelineManagerBase, public FTickableGameObject
 {
 public:
 	float Counter = 0;

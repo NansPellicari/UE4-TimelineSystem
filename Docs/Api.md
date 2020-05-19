@@ -6,19 +6,19 @@
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
 `class `[`NansTimelineSystemUE4`](#classNansTimelineSystemUE4) | 
-`class `[`NTimeline`](#classNTimeline) | Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerAbstract](#classNTimelineManagerAbstract) class is dedicated to handle it.
+`class `[`NTimeline`](#classNTimeline) | Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerBase](#classNTimelineManagerBase) class is dedicated to handle it.
 `class `[`NTimelineEventBase`](#classNTimelineEventBase) | An abstract class to manage events which can be attached to a timeline.
-`class `[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract) | This class is the client for the [NTimeline](#classNTimeline) object. Its goal is to decoupled client interface with timeline management.
+`class `[`NTimelineManagerBase`](#classNTimelineManagerBase) | This class is the client for the [NTimeline](#classNTimeline) object. Its goal is to decoupled client interface with timeline management.
 `class `[`NTimelineManagerFake`](#classNTimelineManagerFake) | This class is used for tests only
 `class `[`TimelineManagerTickableOnPauseFake`](#classTimelineManagerTickableOnPauseFake) | This class is used for tests only
 `class `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager) | This adapter is fitted to track time when player plays since the game is launched.
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
 `class `[`UNTimelineAdapter`](#classUNTimelineAdapter) | The adapter for [NTimeline](#classNTimeline) object.
+`class `[`UNTimelineBlueprintHelpers`](#classUNTimelineBlueprintHelpers) | A simple Blueprint Library class to manage Timeline creation.
 `class `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter) | Base abstract class to create [NTimelineEventBase](#classNTimelineEventBase) adapters (Blueprint or c++).
 `class `[`UNTimelineEventAdapterFake`](#classUNTimelineEventAdapterFake) | This class is used for tests only
 `class `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter) | This is the abstract adapter that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
-`class `[`UTimelineFactory`](#classUTimelineFactory) | A simple Blueprint Library class to manage Timeline creation.
 `struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) and a record object used for savegame.
 
 # class `FNansTimelineSystemCoreModule` <a id="classFNansTimelineSystemCoreModule"></a>
@@ -109,16 +109,16 @@ class NansTimelineSystemUE4
 
 # class `NTimeline` <a id="classNTimeline"></a>
 
-Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerAbstract](#classNTimelineManagerAbstract) class is dedicated to handle it.
+Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerBase](#classNTimelineManagerBase) class is dedicated to handle it.
 
-**See also**: ./TimelineManagerAbstract.h
+**See also**: ./TimelineManagerBase.h
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public FTimelineEventDelegate `[`EventExpired`](#classNTimeline_1a7eca090412c8d34e3c598d7769173040) | **See also**: [OnExpired()](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)
-`public  `[`NTimeline`](#classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec)`(`[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract)` * TimerManager,FName _Label)` | A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
+`public  `[`NTimeline`](#classNTimeline_1a6f3d9119691eb4e6534ca495e85f9ea0)`(`[`NTimelineManagerBase`](#classNTimelineManagerBase)` * TimerManager,FName _Label)` | A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
 `public virtual  `[`~NTimeline`](#classNTimeline_1adffcefb7fc7f2768021994f8730eb356)`()` | Calls [Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 `public virtual bool `[`Attached`](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a427fef6206ba24c609a56884de4167e5) for any custom usages
 `public virtual void `[`Attached`](#classNTimeline_1a404dbb01b58fff5746568ceac1226a0c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) but for a collection of objects.
@@ -145,7 +145,7 @@ Its goal is to saved events and place them in time. It works as a Time & Event c
 
 **See also**: [OnExpired()](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)
 
-#### `public  `[`NTimeline`](#classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec)`(`[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract)` * TimerManager,FName _Label)` <a id="classNTimeline_1a2ee5a8f8b02c595697bac1ccf1b4a8ec"></a>
+#### `public  `[`NTimeline`](#classNTimeline_1a6f3d9119691eb4e6534ca495e85f9ea0)`(`[`NTimelineManagerBase`](#classNTimelineManagerBase)` * TimerManager,FName _Label)` <a id="classNTimeline_1a6f3d9119691eb4e6534ca495e85f9ea0"></a>
 
 A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
 
@@ -321,13 +321,13 @@ Getter for Label
 
 Reset all default data
 
-# class `NTimelineManagerAbstract` <a id="classNTimelineManagerAbstract"></a>
+# class `NTimelineManagerBase` <a id="classNTimelineManagerBase"></a>
 
 This class is the client for the [NTimeline](#classNTimeline) object. Its goal is to decoupled client interface with timeline management.
 
 * [NTimeline](#classNTimeline) manages time computation, notify events accordingly and save all states
 
-* [NTimelineManagerAbstract](#classNTimelineManagerAbstract) manages client controls.
+* [NTimelineManagerBase](#classNTimelineManagerBase) manages client controls.
 
 **See also**: [NTimeline](#classNTimeline)
 
@@ -335,96 +335,96 @@ This class is the client for the [NTimeline](#classNTimeline) object. Its goal i
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public  `[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract_1a30f8dd6940ac9d737459b6350af66c18)`()` | Calls the [Init()](#classNTimelineManagerAbstract_1a0b5df27635c307db9446f886625b3ae8) method.
-`public virtual  `[`~NTimelineManagerAbstract`](#classNTimelineManagerAbstract_1abb0862056cfa1a64bcd1b5c578999759)`()` | Calls [Clear()](#classNTimelineManagerAbstract_1ab323e4f8010cd069c2f552c3090a6c22) and release Timeline TSharedPtr
-`public virtual void `[`Init`](#classNTimelineManagerAbstract_1a0b5df27635c307db9446f886625b3ae8)`(FName _Label)` | Instanciate the embeded [NTimeline](#classNTimeline)
-`public virtual void `[`Pause`](#classNTimelineManagerAbstract_1a34805f4276d9822523da52d9024f289e)`()` | This pause the timeline ticking
-`public virtual void `[`Play`](#classNTimelineManagerAbstract_1abdaf296d2ceb763d849f6eb105e4b8ee)`()` | This (re)start the timeline ticking
-`public virtual void `[`Stop`](#classNTimelineManagerAbstract_1aefac2b98cdfef661b3cae1f23307340a)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
-`public virtual void `[`TimerTick`](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312)`()` | This checks the actual play state (ENTimelineTimerState) and tick the [NTimeline](#classNTimeline) accordingly.
-`public `[`ENTimelineTimerState`](#TimelineManagerAbstract_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerAbstract_1adffd4b5802191a53b1ec56ba805452fa)`()` | Get the actual state.
-`public float `[`GetTickInterval`](#classNTimelineManagerAbstract_1a7731bb76e0d825549aa2de4e0c5a7134)`()` | Get the tick interval which a timermanager should use to process
-`public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerAbstract_1a84214201973cab98e133771cefae4a79)`()` | Get the coupled [NTimeline](#classNTimeline)
-`protected float `[`TickInterval`](#classNTimelineManagerAbstract_1a87ce2db0bdebeb720e225e108e03e834) | The interval retrieve from the timeline.
-`protected `[`ENTimelineTimerState`](#TimelineManagerAbstract_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerAbstract_1a392fd7b1cfa2912371319654696fcf3b) | The actual state
-`protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classNTimelineManagerAbstract_1aac08a37523d483d332b29c719eca8f7f) | The coupled timeline
-`protected virtual void `[`Clear`](#classNTimelineManagerAbstract_1ab323e4f8010cd069c2f552c3090a6c22)`()` | Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
-`protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManagerAbstract_1a422e418461055365e453bd2658b9bf02)`()` | This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
-`protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManagerAbstract_1aab5134d2f7a3085a03fe953aeed63c2f)`()` | This method is call immediately before ticking
-`protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerAbstract_1a20f494c68375c29f8af7b904bf7f0e8c)`()` | This method is call immediately after ticking
-`protected void `[`SetTickInterval`](#classNTimelineManagerAbstract_1aa6779de08ab323b5e3db96ffee6e983d)`(const float _TickInterval)` | It is used by [NTimeline](#classNTimeline) to set its desired ticking interval TODO not a good idea, should be updatable by client for its needs
+`public  `[`NTimelineManagerBase`](#classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d)`()` | Calls the [Init()](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35) method.
+`public virtual  `[`~NTimelineManagerBase`](#classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32)`()` | Calls [Clear()](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054) and release Timeline TSharedPtr
+`public virtual void `[`Init`](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35)`(FName _Label)` | Instanciate the embeded [NTimeline](#classNTimeline)
+`public virtual void `[`Pause`](#classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab)`()` | This pause the timeline ticking
+`public virtual void `[`Play`](#classNTimelineManagerBase_1a460e6b974a885f32e75c39c5d8fd2f50)`()` | This (re)start the timeline ticking
+`public virtual void `[`Stop`](#classNTimelineManagerBase_1a996371baf5dc0e51a32c14325c1c1091)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
+`public virtual void `[`TimerTick`](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)`()` | This checks the actual play state (ENTimelineTimerState) and tick the [NTimeline](#classNTimeline) accordingly.
+`public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001)`()` | Get the actual state.
+`public float `[`GetTickInterval`](#classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9)`()` | Get the tick interval which a timermanager should use to process
+`public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530)`()` | Get the coupled [NTimeline](#classNTimeline)
+`protected float `[`TickInterval`](#classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d) | The interval retrieve from the timeline.
+`protected `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a) | The actual state
+`protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classNTimelineManagerBase_1a1edf40f8bb3b300a8f3d6cb14e539c74) | The coupled timeline
+`protected virtual void `[`Clear`](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054)`()` | Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
+`protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManagerBase_1a14d64e5d6ed18abaf85d24f8c5f1a598)`()` | This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
+`protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManagerBase_1a34257aba82c08f245f2e2465a24d2071)`()` | This method is call immediately before ticking
+`protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7)`()` | This method is call immediately after ticking
+`protected void `[`SetTickInterval`](#classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2)`(const float _TickInterval)` | It is used by [NTimeline](#classNTimeline) to set its desired ticking interval TODO not a good idea, should be updatable by client for its needs
 
 ## Members
 
-#### `public  `[`NTimelineManagerAbstract`](#classNTimelineManagerAbstract_1a30f8dd6940ac9d737459b6350af66c18)`()` <a id="classNTimelineManagerAbstract_1a30f8dd6940ac9d737459b6350af66c18"></a>
+#### `public  `[`NTimelineManagerBase`](#classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d)`()` <a id="classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d"></a>
 
-Calls the [Init()](#classNTimelineManagerAbstract_1a0b5df27635c307db9446f886625b3ae8) method.
+Calls the [Init()](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35) method.
 
-#### `public virtual  `[`~NTimelineManagerAbstract`](#classNTimelineManagerAbstract_1abb0862056cfa1a64bcd1b5c578999759)`()` <a id="classNTimelineManagerAbstract_1abb0862056cfa1a64bcd1b5c578999759"></a>
+#### `public virtual  `[`~NTimelineManagerBase`](#classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32)`()` <a id="classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32"></a>
 
-Calls [Clear()](#classNTimelineManagerAbstract_1ab323e4f8010cd069c2f552c3090a6c22) and release Timeline TSharedPtr
+Calls [Clear()](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054) and release Timeline TSharedPtr
 
-#### `public virtual void `[`Init`](#classNTimelineManagerAbstract_1a0b5df27635c307db9446f886625b3ae8)`(FName _Label)` <a id="classNTimelineManagerAbstract_1a0b5df27635c307db9446f886625b3ae8"></a>
+#### `public virtual void `[`Init`](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35)`(FName _Label)` <a id="classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35"></a>
 
 Instanciate the embeded [NTimeline](#classNTimeline)
 
-#### `public virtual void `[`Pause`](#classNTimelineManagerAbstract_1a34805f4276d9822523da52d9024f289e)`()` <a id="classNTimelineManagerAbstract_1a34805f4276d9822523da52d9024f289e"></a>
+#### `public virtual void `[`Pause`](#classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab)`()` <a id="classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab"></a>
 
 This pause the timeline ticking
 
-#### `public virtual void `[`Play`](#classNTimelineManagerAbstract_1abdaf296d2ceb763d849f6eb105e4b8ee)`()` <a id="classNTimelineManagerAbstract_1abdaf296d2ceb763d849f6eb105e4b8ee"></a>
+#### `public virtual void `[`Play`](#classNTimelineManagerBase_1a460e6b974a885f32e75c39c5d8fd2f50)`()` <a id="classNTimelineManagerBase_1a460e6b974a885f32e75c39c5d8fd2f50"></a>
 
 This (re)start the timeline ticking
 
-#### `public virtual void `[`Stop`](#classNTimelineManagerAbstract_1aefac2b98cdfef661b3cae1f23307340a)`()` <a id="classNTimelineManagerAbstract_1aefac2b98cdfef661b3cae1f23307340a"></a>
+#### `public virtual void `[`Stop`](#classNTimelineManagerBase_1a996371baf5dc0e51a32c14325c1c1091)`()` <a id="classNTimelineManagerBase_1a996371baf5dc0e51a32c14325c1c1091"></a>
 
 This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
 
-#### `public virtual void `[`TimerTick`](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312)`()` <a id="classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312"></a>
+#### `public virtual void `[`TimerTick`](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)`()` <a id="classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865"></a>
 
 This checks the actual play state (ENTimelineTimerState) and tick the [NTimeline](#classNTimeline) accordingly.
 
-#### `public `[`ENTimelineTimerState`](#TimelineManagerAbstract_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerAbstract_1adffd4b5802191a53b1ec56ba805452fa)`()` <a id="classNTimelineManagerAbstract_1adffd4b5802191a53b1ec56ba805452fa"></a>
+#### `public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001)`()` <a id="classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001"></a>
 
 Get the actual state.
 
-#### `public float `[`GetTickInterval`](#classNTimelineManagerAbstract_1a7731bb76e0d825549aa2de4e0c5a7134)`()` <a id="classNTimelineManagerAbstract_1a7731bb76e0d825549aa2de4e0c5a7134"></a>
+#### `public float `[`GetTickInterval`](#classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9)`()` <a id="classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9"></a>
 
 Get the tick interval which a timermanager should use to process
 
-#### `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerAbstract_1a84214201973cab98e133771cefae4a79)`()` <a id="classNTimelineManagerAbstract_1a84214201973cab98e133771cefae4a79"></a>
+#### `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530)`()` <a id="classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530"></a>
 
 Get the coupled [NTimeline](#classNTimeline)
 
-#### `protected float `[`TickInterval`](#classNTimelineManagerAbstract_1a87ce2db0bdebeb720e225e108e03e834) <a id="classNTimelineManagerAbstract_1a87ce2db0bdebeb720e225e108e03e834"></a>
+#### `protected float `[`TickInterval`](#classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d) <a id="classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d"></a>
 
 The interval retrieve from the timeline.
 
-#### `protected `[`ENTimelineTimerState`](#TimelineManagerAbstract_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerAbstract_1a392fd7b1cfa2912371319654696fcf3b) <a id="classNTimelineManagerAbstract_1a392fd7b1cfa2912371319654696fcf3b"></a>
+#### `protected `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a) <a id="classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a"></a>
 
 The actual state
 
-#### `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classNTimelineManagerAbstract_1aac08a37523d483d332b29c719eca8f7f) <a id="classNTimelineManagerAbstract_1aac08a37523d483d332b29c719eca8f7f"></a>
+#### `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classNTimelineManagerBase_1a1edf40f8bb3b300a8f3d6cb14e539c74) <a id="classNTimelineManagerBase_1a1edf40f8bb3b300a8f3d6cb14e539c74"></a>
 
 The coupled timeline
 
-#### `protected virtual void `[`Clear`](#classNTimelineManagerAbstract_1ab323e4f8010cd069c2f552c3090a6c22)`()` <a id="classNTimelineManagerAbstract_1ab323e4f8010cd069c2f552c3090a6c22"></a>
+#### `protected virtual void `[`Clear`](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054)`()` <a id="classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054"></a>
 
 Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 
-#### `protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManagerAbstract_1a422e418461055365e453bd2658b9bf02)`()` <a id="classNTimelineManagerAbstract_1a422e418461055365e453bd2658b9bf02"></a>
+#### `protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManagerBase_1a14d64e5d6ed18abaf85d24f8c5f1a598)`()` <a id="classNTimelineManagerBase_1a14d64e5d6ed18abaf85d24f8c5f1a598"></a>
 
 This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
 
-#### `protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManagerAbstract_1aab5134d2f7a3085a03fe953aeed63c2f)`()` <a id="classNTimelineManagerAbstract_1aab5134d2f7a3085a03fe953aeed63c2f"></a>
+#### `protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManagerBase_1a34257aba82c08f245f2e2465a24d2071)`()` <a id="classNTimelineManagerBase_1a34257aba82c08f245f2e2465a24d2071"></a>
 
 This method is call immediately before ticking
 
-#### `protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerAbstract_1a20f494c68375c29f8af7b904bf7f0e8c)`()` <a id="classNTimelineManagerAbstract_1a20f494c68375c29f8af7b904bf7f0e8c"></a>
+#### `protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7)`()` <a id="classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7"></a>
 
 This method is call immediately after ticking
 
-#### `protected void `[`SetTickInterval`](#classNTimelineManagerAbstract_1aa6779de08ab323b5e3db96ffee6e983d)`(const float _TickInterval)` <a id="classNTimelineManagerAbstract_1aa6779de08ab323b5e3db96ffee6e983d"></a>
+#### `protected void `[`SetTickInterval`](#classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2)`(const float _TickInterval)` <a id="classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2"></a>
 
 It is used by [NTimeline](#classNTimeline) to set its desired ticking interval TODO not a good idea, should be updatable by client for its needs
 
@@ -432,7 +432,7 @@ It is used by [NTimeline](#classNTimeline) to set its desired ticking interval T
 
 ```
 class NTimelineManagerFake
-  : public NTimelineManagerAbstract
+  : public NTimelineManagerBase
 ```  
 
 This class is used for tests only
@@ -470,7 +470,7 @@ Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 
 ```
 class TimelineManagerTickableOnPauseFake
-  : public NTimelineManagerAbstract
+  : public NTimelineManagerBase
   : public FTickableGameObject
 ```  
 
@@ -536,9 +536,9 @@ For example: Player makes a very benevolent actions which gives him a health bon
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public FTimerHandle `[`TimerHandle`](#classUNGameLifeTimelineManager_1ab3212791e62e45a2ae67a307007addab) | Created by the FTimerManager
-`public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) | Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312)
+`public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) | Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)
 `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6)`(FName _Label)` | It creates the timer with a FTimerManager and attached TimerDelegate to it. 
-`public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` | clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+`public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` | clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `protected float `[`SaveTime`](#classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4) | This is only used for savegame to keep time between sessions
 `protected  `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager_1abe6ebaa8f9f8601a5e97f6ae3c8a8f4b)`()` | A default ctor for engine system
 
@@ -550,7 +550,7 @@ Created by the FTimerManager
 
 #### `public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) <a id="classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61"></a>
 
-Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312)
+Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)
 
 #### `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6)`(FName _Label)` <a id="classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6"></a>
 
@@ -560,7 +560,7 @@ It creates the timer with a FTimerManager and attached TimerDelegate to it.
 
 #### `public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` <a id="classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8"></a>
 
-clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 
 #### `protected float `[`SaveTime`](#classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4) <a id="classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4"></a>
 
@@ -595,7 +595,7 @@ For example:
 `public void `[`OnLevelRemoved`](#classUNLevelLifeTimelineManager_1a3c1cd7121203fc49d09d54dc73c86632)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
 `public void `[`OnLevelAdded`](#classUNLevelLifeTimelineManager_1a377ebe035faf84250cb3ac5416ae1fb7)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
 `public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a5f3077625f452d2d0d0c58f436a36c75)`()` | This method to clear and reload timeline when level changed
-`public virtual void `[`Clear`](#classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897)`()` | Removes all attached events clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+`public virtual void `[`Clear`](#classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897)`()` | Removes all attached events clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `public virtual void `[`Serialize`](#classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f)`(FArchive & Ar)` | This only saves level name and checks
 `protected FName `[`Label`](#classUNLevelLifeTimelineManager_1ab995fbe611974a32f0d09fcd2aec2513) | Used for savegame
 `protected FString `[`LevelName`](#classUNLevelLifeTimelineManager_1a8141bcb7087a653bf7fa32509d12eab2) | Used for savegame to make a sanity check (verify if current world is the same as the load game)
@@ -624,7 +624,7 @@ This method to clear and reload timeline when level changed
 
 #### `public virtual void `[`Clear`](#classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897)`()` <a id="classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897"></a>
 
-Removes all attached events clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+Removes all attached events clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 
 #### `public virtual void `[`Serialize`](#classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f)`(FArchive & Ar)` <a id="classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f"></a>
 
@@ -671,7 +671,7 @@ For example: A promo code which gives a market discount for 2 days.
 `public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a8408abf299f82de536717ac1e4018125)`(FName _Label)` | This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 `public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1)`() const` | Always returns true 'cause it can be paused or stopped
 `public virtual bool `[`IsTickable`](#classUNRealLifeTimelineManager_1aed1bad81ebfc134232dfc15757deae65)`() const` | Always returns true 'cause it can be paused or stopped
-`public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` | This override methods allows to tick [UNTimelineManagerBaseAdapter::TimerTick()](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312) and to increment times vars.
+`public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` | This override methods allows to tick [UNTimelineManagerBaseAdapter::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865) and to increment times vars.
 `public inline virtual TStatId `[`GetStatId`](#classUNRealLifeTimelineManager_1aa1dff71195c394b61f7719770199ae25)`() const` | Required by FTickableGameObject.
 `public virtual UWorld * `[`GetTickableGameObjectWorld`](#classUNRealLifeTimelineManager_1ac053af39134594df8788cd546952c060)`() const` | 
 `public virtual void `[`Serialize`](#classUNRealLifeTimelineManager_1a530e89eb20a2a984e5d532c7532aae76)`(FArchive & Ar)` | Used for save to retrieve last datetime and save it, for load to compute missing time during last saves and ticks accordingly.
@@ -716,7 +716,7 @@ Always returns true 'cause it can be paused or stopped
 
 #### `public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` <a id="classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e"></a>
 
-This override methods allows to tick [UNTimelineManagerBaseAdapter::TimerTick()](#classNTimelineManagerAbstract_1a54c4169699a7b352e151d42e72205312) and to increment times vars.
+This override methods allows to tick [UNTimelineManagerBaseAdapter::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865) and to increment times vars.
 
 #### Parameters
 * `DeltaTime` - It is not used here, it used FDateTime::Now() - LastPlayTime to compute the real life delta time
@@ -801,7 +801,7 @@ Just a default ctor for UObject paradigme
 
 this method is used to instanciate the embeded [NTimeline](#classNTimeline)
 #### Parameters
-* `TimelineManager` - The Adapter which provide the [NTimelineManagerAbstract](#classNTimelineManagerAbstract) object.
+* `TimelineManager` - The Adapter which provide the [NTimelineManagerBase](#classNTimelineManagerBase) object.
 
 #### `public virtual void `[`Clear`](#classUNTimelineAdapter_1af2a938dd80ceb1bda0d7bdf024438ad0)`()` <a id="classUNTimelineAdapter_1af2a938dd80ceb1bda0d7bdf024438ad0"></a>
 
@@ -896,6 +896,22 @@ This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a632c875
 * `Index` - The index of the NTimeline::Events array 
 
 * `Record` - The record you want to synchronize.
+
+# class `UNTimelineBlueprintHelpers` <a id="classUNTimelineBlueprintHelpers"></a>
+
+```
+class UNTimelineBlueprintHelpers
+  : public UBlueprintFunctionLibrary
+```  
+
+A simple Blueprint Library class to manage Timeline creation.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
 
 # class `UNTimelineEventAdapter` <a id="classUNTimelineEventAdapter"></a>
 
@@ -1018,12 +1034,12 @@ This class is used for tests only
 ```
 class UNTimelineManagerBaseAdapter
   : public UObject
-  : public NTimelineManagerAbstract
+  : public NTimelineManagerBase
 ```  
 
 This is the abstract adapter that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
 
-As the close relation between [NTimelineManagerAbstract](#classNTimelineManagerAbstract) and [NTimeline](#classNTimeline) classes (core lib), This class is coupled with [UNTimelineAdapter](#classUNTimelineAdapter). 
+As the close relation between [NTimelineManagerBase](#classNTimelineManagerBase) and [NTimeline](#classNTimeline) classes (core lib), This class is coupled with [UNTimelineAdapter](#classUNTimelineAdapter). 
 **See also**: [UNTimelineAdapter](#classUNTimelineAdapter)
 
 To ease blueprint usages, most of the [UNTimelineAdapter](#classUNTimelineAdapter) public functionnalities are accessible here. This class works as a pass-through too for [UNTimelineAdapter](#classUNTimelineAdapter).
@@ -1043,7 +1059,7 @@ To ease blueprint usages, most of the [UNTimelineAdapter](#classUNTimelineAdapte
 `public virtual void `[`Serialize`](#classUNTimelineManagerBaseAdapter_1af1e0474d3149d21daae82845e20b1538)`(FArchive & Ar)` | It's the starting link of serialization chain for all embeded adapters. This calls [UNTimelineAdapter::Serialize()](#classUNTimelineAdapter_1aad49188cf7383fb6bf6cf9cf9a26700f).
 `public virtual void `[`BeginDestroy`](#classUNTimelineManagerBaseAdapter_1addc22251c326e4749a1556f570fc152f)`()` | This call the [UNTimelineAdapter::BeginDestroy()](#classUNTimelineAdapter_1ad17b756d4b6c52c999cf91cb1a473483) too.
 `public FName `[`GetLabel`](#classUNTimelineManagerBaseAdapter_1a892ced4f4e11f8ac1c76c48c96fe2631)`() const` | A pass-through for the embeded [UNTimelineAdapter::GetLabel()](#classUNTimelineAdapter_1afd1f915332e3df9c3aafdae4e3300495)
-`public virtual void `[`Clear`](#classUNTimelineManagerBaseAdapter_1a8a395d8909138fc37508920dd50a80d0)`()` | It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+`public virtual void `[`Clear`](#classUNTimelineManagerBaseAdapter_1a8a395d8909138fc37508920dd50a80d0)`()` | It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `public virtual void `[`AddEvent`](#classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` | Adds an event to the timeline object, it works as a pass-through for [UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)](#classUNTimelineAdapter_1a4722e92203b76813619f2f406cfd303f)
 `public `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * `[`CreateNewEvent`](#classUNTimelineManagerBaseAdapter_1a0b423106760f004651ce2683dcd84090)`(TSubclassOf< `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineAdapter::CreateNewEvent()](#classUNTimelineAdapter_1acba2a168a61528541570ed3b28f37d2f): Creates a new Event and use this timeline as the outer for this new object.
 `public `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerBaseAdapter_1accf8cc57c0dc5247c60b87729649b6ee)`(TSubclassOf< `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineAdapter::CreateNewEvent()](#classUNTimelineAdapter_1acba2a168a61528541570ed3b28f37d2f): Creates a new Event and use this timeline as the outer for this new object.
@@ -1093,7 +1109,7 @@ A pass-through for the embeded [UNTimelineAdapter::GetLabel()](#classUNTimelineA
 
 #### `public virtual void `[`Clear`](#classUNTimelineManagerBaseAdapter_1a8a395d8909138fc37508920dd50a80d0)`()` <a id="classUNTimelineManagerBaseAdapter_1a8a395d8909138fc37508920dd50a80d0"></a>
 
-It is called by the parent [NTimelineManagerAbstract](#classNTimelineManagerAbstract) on dtor
+It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 
 #### `public virtual void `[`AddEvent`](#classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b)`(`[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter)` * Event)` <a id="classUNTimelineManagerBaseAdapter_1a3d58277f64f267d26d5aa6d063b8e18b"></a>
 
@@ -1137,22 +1153,6 @@ the timeline associated to this manager.
 Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseAdapter_1a1179cbca2e3f193f1db66b0a53c9c6c0) methods (factory methods).
 
 It instanciates the embeded timeline with CreateDefaultSubobject().
-
-# class `UTimelineFactory` <a id="classUTimelineFactory"></a>
-
-```
-class UTimelineFactory
-  : public UBlueprintFunctionLibrary
-```  
-
-A simple Blueprint Library class to manage Timeline creation.
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-
-## Members
 
 # struct `FNEventRecord` <a id="structFNEventRecord"></a>
 

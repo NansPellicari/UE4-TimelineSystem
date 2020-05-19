@@ -19,18 +19,18 @@
 
 DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventBase>, const float&, const int32&);
 
-class NTimelineManagerAbstract;
+class NTimelineManagerBase;
 
 /**
  * Its goal is to saved events and place them in time.
  * It works as a Time & Event container.
- * The NTimelineManagerAbstract class is dedicated to handle it.
+ * The NTimelineManagerBase class is dedicated to handle it.
  *
- * @see ./TimelineManagerAbstract.h
+ * @see ./TimelineManagerBase.h
  */
 class NANSTIMELINESYSTEMCORE_API NTimeline
 {
-	friend class NTimelineManagerAbstract;
+	friend class NTimelineManagerBase;
 
 public:
 	/**
@@ -52,7 +52,7 @@ public:
 	 * @param TimerManager - Timer which manage all time behavior (tick, pause, stop, play,...)
 	 * @param _Label - (optionnal) The name of this timeline. If not provided it creates a name with a static incremented value.
 	 */
-	NTimeline(NTimelineManagerAbstract* TimerManager, FName _Label = NAME_None);
+	NTimeline(NTimelineManagerBase* TimerManager, FName _Label = NAME_None);
 
 	/** Calls Clear() */
 	virtual ~NTimeline();

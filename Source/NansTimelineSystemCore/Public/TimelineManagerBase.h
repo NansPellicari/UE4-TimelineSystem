@@ -18,7 +18,7 @@
 
 class NTimeline;
 
-/** Enum for the NTimelineManagerAbstract::State */
+/** Enum for the NTimelineManagerBase::State */
 enum class ENTimelineTimerState : uint8
 {
 	Played,
@@ -31,20 +31,20 @@ enum class ENTimelineTimerState : uint8
  * Its goal is to decoupled client interface with timeline management.
  *
  * - NTimeline manages time computation, notify events accordingly and save all states
- * - NTimelineManagerAbstract manages client controls.
+ * - NTimelineManagerBase manages client controls.
  *
  * @see NTimeline
  */
-class NANSTIMELINESYSTEMCORE_API NTimelineManagerAbstract
+class NANSTIMELINESYSTEMCORE_API NTimelineManagerBase
 {
 	friend class NTimeline;
 
 public:
 	/** Calls the Init() method. */
-	NTimelineManagerAbstract();
+	NTimelineManagerBase();
 
 	/** Calls Clear() and release Timeline TSharedPtr */
-	virtual ~NTimelineManagerAbstract();
+	virtual ~NTimelineManagerBase();
 
 	/** Instanciate the embeded NTimeline */
 	virtual void Init(FName _Label = NAME_None);

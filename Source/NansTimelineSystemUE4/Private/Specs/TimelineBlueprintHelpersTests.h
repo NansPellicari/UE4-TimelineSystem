@@ -49,8 +49,8 @@ bool FTimelineFactoryTest::RunTest(const FString& Parameters)
 
 	// Begin test
 	{
-		UNTimelineManagerBaseAdapter* TimelineManager =
-			UTimelineFactory::CreateNewTimeline(MockObject, UNRealLifeTimelineManager::StaticClass(), FName("TempTimeline"));
+		UNTimelineManagerBaseAdapter* TimelineManager = UNTimelineBlueprintHelpers::CreateNewTimeline(
+			MockObject, UNRealLifeTimelineManager::StaticClass(), FName("TempTimeline"));
 		TEST_NOT_NULL(TEST_TEXT_FN_DETAILS("Should not be null"), TimelineManager);
 		UNRealLifeTimelineManager* RealTimelineManager = Cast<UNRealLifeTimelineManager>(TimelineManager);
 		TEST_NOT_NULL(TEST_TEXT_FN_DETAILS("Should not be null"), RealTimelineManager);

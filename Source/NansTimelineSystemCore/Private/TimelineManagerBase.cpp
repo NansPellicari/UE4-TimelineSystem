@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "TimelineManagerAbstract.h"
+#include "TimelineManagerBase.h"
 
 #include "Timeline.h"
 
-NTimelineManagerAbstract::NTimelineManagerAbstract()
+NTimelineManagerBase::NTimelineManagerBase()
 {
 	Init();
 }
 
-NTimelineManagerAbstract::~NTimelineManagerAbstract()
+NTimelineManagerBase::~NTimelineManagerBase()
 {
 	Clear();
 	Timeline.Reset();
 }
 
-void NTimelineManagerAbstract::TimerTick()
+void NTimelineManagerBase::TimerTick()
 {
 	// No reason for a timer to tick without a timeline created
 	check(Timeline.IsValid());
@@ -41,50 +41,50 @@ void NTimelineManagerAbstract::TimerTick()
 	}
 }
 
-TSharedPtr<NTimeline> NTimelineManagerAbstract::GetTimeline()
+TSharedPtr<NTimeline> NTimelineManagerBase::GetTimeline()
 {
 	return Timeline;
 }
 
-float NTimelineManagerAbstract::GetTickInterval()
+float NTimelineManagerBase::GetTickInterval()
 {
 	return TickInterval;
 }
 
-void NTimelineManagerAbstract::SetTickInterval(const float _TickInterval)
+void NTimelineManagerBase::SetTickInterval(const float _TickInterval)
 {
 	TickInterval = _TickInterval;
 }
 
-void NTimelineManagerAbstract::Init(FName _Label)
+void NTimelineManagerBase::Init(FName _Label)
 {
 	Timeline = MakeShareable(new NTimeline(this, _Label));
 }
 
-void NTimelineManagerAbstract::Play()
+void NTimelineManagerBase::Play()
 {
 	// No reason for a timer to play without a timeline created
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Played;
 }
-void NTimelineManagerAbstract::Pause()
+void NTimelineManagerBase::Pause()
 {
 	// No reason for a timer to pause without a timeline created
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Paused;
 }
-void NTimelineManagerAbstract::Stop()
+void NTimelineManagerBase::Stop()
 {
 	Clear();
 	State = ENTimelineTimerState::Stopped;
 }
 
-ENTimelineTimerState NTimelineManagerAbstract::GetState()
+ENTimelineTimerState NTimelineManagerBase::GetState()
 {
 	return State;
 }
 
-void NTimelineManagerAbstract::Clear()
+void NTimelineManagerBase::Clear()
 {
 	if (Timeline.IsValid())
 	{

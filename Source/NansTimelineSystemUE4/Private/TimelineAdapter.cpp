@@ -2,7 +2,7 @@
 
 #include "Manager/TimelineManagerBaseAdapter.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerAbstract.h"
+#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
 
 void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
 {
@@ -20,7 +20,7 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
 
 void UNTimelineAdapter::Init(UNTimelineManagerBaseAdapter* TimelineManager, FName _Label)
 {
-	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerAbstract*>(TimelineManager), _Label));
+	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerBase*>(TimelineManager), _Label));
 	Timeline->EventExpired.BindUObject(this, &UNTimelineAdapter::OnEventExpired);
 }
 

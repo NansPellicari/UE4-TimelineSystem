@@ -14,9 +14,9 @@
 
 #include "Timeline.h"
 
-#include "TimelineManagerAbstract.h"
+#include "TimelineManagerBase.h"
 
-NTimeline::NTimeline(NTimelineManagerAbstract* TimelineTimer, FName _Label)
+NTimeline::NTimeline(NTimelineManagerBase* TimelineTimer, FName _Label)
 {
 	static int32 Counter;
 	TimelineTimer->SetTickInterval(GetTickInterval());
