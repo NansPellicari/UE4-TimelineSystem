@@ -93,7 +93,7 @@ public:
 	 * This method is a factory method to create a derived UNTimelineManagerBaseAdapter.
 	 *
 	 * @param Outer - The outer of the new object.
-	 * @param _Label - The name of this new Object (is the internal name used by NewObject()).
+	 * @param _Label - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>
@@ -104,7 +104,7 @@ public:
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param Class - The specific class we want our object will be.
-	 * @param _Label - The name of this new Object (is the internal name used by NewObject()).
+	 * @param _Label - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>

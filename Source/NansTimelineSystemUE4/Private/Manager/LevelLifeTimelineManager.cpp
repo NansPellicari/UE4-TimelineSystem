@@ -63,16 +63,27 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 	}
 
 	Ar << LevelName;
+
+	bool bShouldBeCleared = false;
+
 	if (Ar.IsLoading())
 	{
 		// This is just a safety check, but it shoulds never happens.
 		// The savegame shoulds associate the level (UWorld) AND this timeline
-		if (LevelName.IsEmpty()) return;
-		if (GetWorld() == nullptr) return;
-		if (GetWorld()->GetName() != LevelName) return;
+		if (LevelName.IsEmpty()) bShouldBeCleared = true;
+		if (GetWorld() == nullptr) bShouldBeCleared = true;
+		if (GetWorld() != nullptr && GetWorld()->GetName() != LevelName) bShouldBeCleared = true;
 	}
 
+	// This have to be serialized even if wrong data has been retrieved
+	// (IsLoading() conditions above) to avoid a binary shift on unserialization.
 	Super::Serialize(Ar);
+
+	if (bShouldBeCleared)
+	{
+		Clear();
+		Init(Label);
+	}
 }
 
 void UNLevelLifeTimelineManager::Clear()
