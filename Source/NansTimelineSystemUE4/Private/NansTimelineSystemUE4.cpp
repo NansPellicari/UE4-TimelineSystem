@@ -2,11 +2,16 @@
 
 #include "NansTimelineSystemUE4.h"
 
+#include "TimelinePinFactory.h"
+
 #define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
 
 void FNansTimelineSystemUE4Module::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+	// create your factory and shared pointer to it.
+	TSharedPtr<FTimelinePinFactory> Factory = MakeShareable(new FTimelinePinFactory());
+	// and now register it.
+	FEdGraphUtilities::RegisterVisualPinFactory(Factory);
 }
 
 void FNansTimelineSystemUE4Module::ShutdownModule()

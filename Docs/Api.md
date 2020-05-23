@@ -4,21 +4,26 @@
 --------------------------------|---------------------------------------------
 `class `[`FNansTimelineSystemCoreModule`](#classFNansTimelineSystemCoreModule) | Required to create a UE4 module
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
+`class `[`FTimelinePinFactory`](#classFTimelinePinFactory) | It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
 `class `[`NansTimelineSystemUE4`](#classNansTimelineSystemUE4) | 
 `class `[`NTimeline`](#classNTimeline) | Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerBase](#classNTimelineManagerBase) class is dedicated to handle it.
 `class `[`NTimelineEventBase`](#classNTimelineEventBase) | An abstract class to manage events which can be attached to a timeline.
 `class `[`NTimelineManagerBase`](#classNTimelineManagerBase) | This class is the client for the [NTimeline](#classNTimeline) object. Its goal is to decoupled client interface with timeline management.
 `class `[`NTimelineManagerFake`](#classNTimelineManagerFake) | This class is used for tests only
+`class `[`SConfiguredTimelinePin`](#classSConfiguredTimelinePin) | This class allows to create a dedicated pin to get names from [UNTimelineConfig](#classUNTimelineConfig).
 `class `[`TimelineManagerTickableOnPauseFake`](#classTimelineManagerTickableOnPauseFake) | This class is used for tests only
 `class `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager) | This adapter is fitted to track time when player plays since the game is launched.
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
 `class `[`UNTimelineAdapter`](#classUNTimelineAdapter) | The adapter for [NTimeline](#classNTimeline) object.
 `class `[`UNTimelineBlueprintHelpers`](#classUNTimelineBlueprintHelpers) | A simple Blueprint Library class to manage Timeline creation.
+`class `[`UNTimelineConfig`](#classUNTimelineConfig) | A simple configuration to ease timeline instanciation for developpers.
 `class `[`UNTimelineEventAdapter`](#classUNTimelineEventAdapter) | Base abstract class to create [NTimelineEventBase](#classNTimelineEventBase) adapters (Blueprint or c++).
 `class `[`UNTimelineEventAdapterFake`](#classUNTimelineEventAdapterFake) | This class is used for tests only
+`class `[`UNTimelineGameInstance`](#classUNTimelineGameInstance) | This is a based class which need to be instanciated to get all the timeline configuration system works.
 `class `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter) | This is the abstract adapter that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
+`struct `[`FConfiguredTimeline`](#structFConfiguredTimeline) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
 `struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) and a record object used for savegame.
 
 # class `FNansTimelineSystemCoreModule` <a id="classFNansTimelineSystemCoreModule"></a>
@@ -72,6 +77,24 @@ IModuleInterface implementation
 #### `public virtual void `[`ShutdownModule`](#classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363)`()` <a id="classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363"></a>
 
 IModuleInterface implementation
+
+# class `FTimelinePinFactory` <a id="classFTimelinePinFactory"></a>
+
+```
+class FTimelinePinFactory
+  : public FGraphPanelPinFactory
+```  
+
+It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
+
+**See also**: [FNansTimelineSystemUE4Module::StartupModule()](#classFNansTimelineSystemUE4Module_1adc3a6e71ae3b124d441fc4f75effd235)
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
 
 # class `NansTimelineSystemCore` <a id="classNansTimelineSystemCore"></a>
 
@@ -465,6 +488,64 @@ This method is call immediately before ticking
 #### `public inline virtual void `[`Clear`](#classNTimelineManagerFake_1a2d2f36ba2e92f7568093868d184e3ef6)`()` <a id="classNTimelineManagerFake_1a2d2f36ba2e92f7568093868d184e3ef6"></a>
 
 Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
+
+# class `SConfiguredTimelinePin` <a id="classSConfiguredTimelinePin"></a>
+
+```
+class SConfiguredTimelinePin
+  : public SGraphPin
+```  
+
+This class allows to create a dedicated pin to get names from [UNTimelineConfig](#classUNTimelineConfig).
+
+**See also**: [UNTimelineConfig](#classUNTimelineConfig)
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`SLATE_BEGIN_ARGS`](#classSConfiguredTimelinePin_1a664953bacc3ddafa43b7e2cdd54dba45)`(`[`SConfiguredTimelinePin`](#classSConfiguredTimelinePin)`)` | 
+`public void `[`Construct`](#classSConfiguredTimelinePin_1af56dc553ef07101c38d8b60365abd51e)`(const FArguments & InArgs,UEdGraphPin * InGraphPinObj)` | 
+`protected virtual TSharedRef< SWidget > `[`GetDefaultValueWidget`](#classSConfiguredTimelinePin_1a5ca27fd0e2ce94e5a368c23373d6dd5a)`()` | 
+`protected void `[`OnAttributeSelected`](#classSConfiguredTimelinePin_1ae05fe1b5c765e7b90aae22f9b5525ee6)`(TSharedPtr< FName > ItemSelected,ESelectInfo::Type SelectInfo)` | It is called by the combobox SNameComboBox::OnSelectionChanged() event. It checks selected data and saved it to the node.
+`protected void `[`OnComboBoxOpening`](#classSConfiguredTimelinePin_1a226aa24934d74e20f8702f1d589eed14)`()` | It is called by the combobox SNameComboBox::OnComboBoxOpening() event. It checks if data selected is valid and set a the selected item for the combobox.
+`protected TSharedPtr< FName > `[`GetSelectedName`](#classSConfiguredTimelinePin_1a2f71066ddab874e65cafc8fa1bfdb0b1)`() const` | Get the previous selected or default name from Names.
+`protected void `[`SetPropertyWithName`](#classSConfiguredTimelinePin_1a6f0033e7fc6dc96ee5d47ec42ef9c61f)`(const FName & Name)` | It is called by [OnAttributeSelected()](#classSConfiguredTimelinePin_1ae05fe1b5c765e7b90aae22f9b5525ee6) only. It saves the selected name in the blueprint node.
+`protected void `[`GetPropertyAsName`](#classSConfiguredTimelinePin_1ae4bfa613e83b6c32d079b5e3fe2058ec)`(FName & OutName) const` | It is called by [GetSelectedName()](#classSConfiguredTimelinePin_1a2f71066ddab874e65cafc8fa1bfdb0b1) only. Try to retrieve property from the GraphPin Object. 
+
+## Members
+
+#### `public inline  `[`SLATE_BEGIN_ARGS`](#classSConfiguredTimelinePin_1a664953bacc3ddafa43b7e2cdd54dba45)`(`[`SConfiguredTimelinePin`](#classSConfiguredTimelinePin)`)` <a id="classSConfiguredTimelinePin_1a664953bacc3ddafa43b7e2cdd54dba45"></a>
+
+#### `public void `[`Construct`](#classSConfiguredTimelinePin_1af56dc553ef07101c38d8b60365abd51e)`(const FArguments & InArgs,UEdGraphPin * InGraphPinObj)` <a id="classSConfiguredTimelinePin_1af56dc553ef07101c38d8b60365abd51e"></a>
+
+#### `protected virtual TSharedRef< SWidget > `[`GetDefaultValueWidget`](#classSConfiguredTimelinePin_1a5ca27fd0e2ce94e5a368c23373d6dd5a)`()` <a id="classSConfiguredTimelinePin_1a5ca27fd0e2ce94e5a368c23373d6dd5a"></a>
+
+#### `protected void `[`OnAttributeSelected`](#classSConfiguredTimelinePin_1ae05fe1b5c765e7b90aae22f9b5525ee6)`(TSharedPtr< FName > ItemSelected,ESelectInfo::Type SelectInfo)` <a id="classSConfiguredTimelinePin_1ae05fe1b5c765e7b90aae22f9b5525ee6"></a>
+
+It is called by the combobox SNameComboBox::OnSelectionChanged() event. It checks selected data and saved it to the node.
+
+#### `protected void `[`OnComboBoxOpening`](#classSConfiguredTimelinePin_1a226aa24934d74e20f8702f1d589eed14)`()` <a id="classSConfiguredTimelinePin_1a226aa24934d74e20f8702f1d589eed14"></a>
+
+It is called by the combobox SNameComboBox::OnComboBoxOpening() event. It checks if data selected is valid and set a the selected item for the combobox.
+
+#### `protected TSharedPtr< FName > `[`GetSelectedName`](#classSConfiguredTimelinePin_1a2f71066ddab874e65cafc8fa1bfdb0b1)`() const` <a id="classSConfiguredTimelinePin_1a2f71066ddab874e65cafc8fa1bfdb0b1"></a>
+
+Get the previous selected or default name from Names.
+
+#### `protected void `[`SetPropertyWithName`](#classSConfiguredTimelinePin_1a6f0033e7fc6dc96ee5d47ec42ef9c61f)`(const FName & Name)` <a id="classSConfiguredTimelinePin_1a6f0033e7fc6dc96ee5d47ec42ef9c61f"></a>
+
+It is called by [OnAttributeSelected()](#classSConfiguredTimelinePin_1ae05fe1b5c765e7b90aae22f9b5525ee6) only. It saves the selected name in the blueprint node.
+
+* 
+#### Parameters
+* `Name` - A FName reference which saved retrieved or default value.
+
+#### `protected void `[`GetPropertyAsName`](#classSConfiguredTimelinePin_1ae4bfa613e83b6c32d079b5e3fe2058ec)`(FName & OutName) const` <a id="classSConfiguredTimelinePin_1ae4bfa613e83b6c32d079b5e3fe2058ec"></a>
+
+It is called by [GetSelectedName()](#classSConfiguredTimelinePin_1a2f71066ddab874e65cafc8fa1bfdb0b1) only. Try to retrieve property from the GraphPin Object. 
+#### Parameters
+* `Name` - A FName reference which saved retrieved value.
 
 # class `TimelineManagerTickableOnPauseFake` <a id="classTimelineManagerTickableOnPauseFake"></a>
 
@@ -913,6 +994,25 @@ A simple Blueprint Library class to manage Timeline creation.
 
 ## Members
 
+# class `UNTimelineConfig` <a id="classUNTimelineConfig"></a>
+
+```
+class UNTimelineConfig
+  : public UDeveloperSettings
+```  
+
+A simple configuration to ease timeline instanciation for developpers.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TArray< `[`FConfiguredTimeline`](#structFConfiguredTimeline)` > `[`ConfiguredTimeline`](#classUNTimelineConfig_1a774b18fcf703d79e6f13839986b849b2) | 
+
+## Members
+
+#### `public TArray< `[`FConfiguredTimeline`](#structFConfiguredTimeline)` > `[`ConfiguredTimeline`](#classUNTimelineConfig_1a774b18fcf703d79e6f13839986b849b2) <a id="classUNTimelineConfig_1a774b18fcf703d79e6f13839986b849b2"></a>
+
 # class `UNTimelineEventAdapter` <a id="classUNTimelineEventAdapter"></a>
 
 ```
@@ -1028,6 +1128,74 @@ This class is used for tests only
 --------------------------------|---------------------------------------------
 
 ## Members
+
+# class `UNTimelineGameInstance` <a id="classUNTimelineGameInstance"></a>
+
+```
+class UNTimelineGameInstance
+  : public UGameInstance
+```  
+
+This is a based class which need to be instanciated to get all the timeline configuration system works.
+
+This is the main client which instances Configured Timeline ([UNTimelineConfig](#classUNTimelineConfig)) and [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba) used.
+
+**See also**: [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba). 
+
+**See also**: [UNTimelineConfig](#classUNTimelineConfig) to get more details on the configuration. 
+
+**See also**: [FConfiguredTimeline](#structFConfiguredTimeline) to see how to use Configured Timeline as blueprint pins. 
+
+**See also**:
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`UNTimelineGameInstance`](#classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3)`()` | 
+`public virtual void `[`Init`](#classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db)`()` | 
+`public `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * `[`GetTimeline`](#classUNTimelineGameInstance_1afb3e6a9414f1690c7620811b0d81be53)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for GetTimeline(FName Name).
+`public `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a66c32d7df097c894dc3e23ec2c6a3aaf)`(FName Name) const` | Get the timeline from TimelinesCollection by its name.
+`public virtual void `[`Serialize`](#classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474)`(FArchive & Ar)` | It used to save all timelines in the EventStore, and reload them correctly.
+`protected TMap< FName, `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * > `[`TimelinesCollection`](#classUNTimelineGameInstance_1a621b37e844575551fc13863e32106cb0) | Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)
+`protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)`()` | This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+
+## Members
+
+#### `public  `[`UNTimelineGameInstance`](#classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3)`()` <a id="classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3"></a>
+
+#### `public virtual void `[`Init`](#classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db)`()` <a id="classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db"></a>
+
+#### `public `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * `[`GetTimeline`](#classUNTimelineGameInstance_1afb3e6a9414f1690c7620811b0d81be53)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classUNTimelineGameInstance_1afb3e6a9414f1690c7620811b0d81be53"></a>
+
+A blueprint pass-through for GetTimeline(FName Name).
+
+#### Parameters
+* `Config` - To allow having a combobox of configured timeline
+
+#### `public `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a66c32d7df097c894dc3e23ec2c6a3aaf)`(FName Name) const` <a id="classUNTimelineGameInstance_1a66c32d7df097c894dc3e23ec2c6a3aaf"></a>
+
+Get the timeline from TimelinesCollection by its name.
+
+#### Parameters
+* `Name` - The name of the timeline
+
+#### `public virtual void `[`Serialize`](#classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474)`(FArchive & Ar)` <a id="classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474"></a>
+
+It used to save all timelines in the EventStore, and reload them correctly.
+
+#### Parameters
+* `Ar` - Archive for save and load
+
+#### `protected TMap< FName, `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` * > `[`TimelinesCollection`](#classUNTimelineGameInstance_1a621b37e844575551fc13863e32106cb0) <a id="classUNTimelineGameInstance_1a621b37e844575551fc13863e32106cb0"></a>
+
+Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)
+
+#### `protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)`()` <a id="classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8"></a>
+
+This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+
+**See also**: [FConfiguredTimeline](#structFConfiguredTimeline)
 
 # class `UNTimelineManagerBaseAdapter` <a id="classUNTimelineManagerBaseAdapter"></a>
 
@@ -1153,6 +1321,27 @@ the timeline associated to this manager.
 Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseAdapter_1a1179cbca2e3f193f1db66b0a53c9c6c0) methods (factory methods).
 
 It instanciates the embeded timeline with CreateDefaultSubobject().
+
+# struct `FConfiguredTimeline` <a id="structFConfiguredTimeline"></a>
+
+This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public FName `[`Name`](#structFConfiguredTimeline_1a47f13a6768b6cf144550a0a3cfb1e6b6) | This allows to retrieve easily a timeline. This is used by the [SConfiguredTimelinePin](#classSConfiguredTimelinePin) as a combobox.
+`public TSubclassOf< `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` > `[`TimelineClass`](#structFConfiguredTimeline_1a9906cfb09dd5d0c48f9ea8cbe1cb18c5) | The Configured Timeline class
+
+## Members
+
+#### `public FName `[`Name`](#structFConfiguredTimeline_1a47f13a6768b6cf144550a0a3cfb1e6b6) <a id="structFConfiguredTimeline_1a47f13a6768b6cf144550a0a3cfb1e6b6"></a>
+
+This allows to retrieve easily a timeline. This is used by the [SConfiguredTimelinePin](#classSConfiguredTimelinePin) as a combobox.
+
+#### `public TSubclassOf< `[`UNTimelineManagerBaseAdapter`](#classUNTimelineManagerBaseAdapter)` > `[`TimelineClass`](#structFConfiguredTimeline_1a9906cfb09dd5d0c48f9ea8cbe1cb18c5) <a id="structFConfiguredTimeline_1a9906cfb09dd5d0c48f9ea8cbe1cb18c5"></a>
+
+The Configured Timeline class
 
 # struct `FNEventRecord` <a id="structFNEventRecord"></a>
 

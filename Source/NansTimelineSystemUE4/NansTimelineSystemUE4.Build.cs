@@ -34,8 +34,15 @@ public class NansTimelineSystemUE4 : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
+				"UnrealEd",
+				"BlueprintGraph",
+				"GraphEditor",
+				"PropertyEditor",
 				"Slate",
 				"SlateCore",
+				"EditorStyle",
+				"Kismet",
+				"KismetCompiler",
 				"NansTimelineSystemCore",
 				"NansUE4TestsHelpers"
 			}

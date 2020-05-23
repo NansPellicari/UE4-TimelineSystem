@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "Attribute/ConfiguredTimeline.h"
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
@@ -41,5 +42,10 @@ public:
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Timeline", Keywords = "Timeline create"), Category = "NansTimeline")
 	static UNTimelineManagerBaseAdapter* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseAdapter> Class, FName Name);
+	// clang-format on
+
+	// clang-format off
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create an attach new Event", Keywords = "Timeline Event create attach"), Category = "NansTimeline")
+	static void CreateAndAttachedEvent(UObject* WorldContextObject, FConfiguredTimeline Timeline);
 	// clang-format on
 };

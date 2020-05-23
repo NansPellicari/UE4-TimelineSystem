@@ -17,6 +17,7 @@
 #include "Event/TimelineEventAdapter.h"
 #include "Manager/TimelineManagerBaseAdapter.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
+#include "TimelineGameInstance.h"
 
 UNTimelineManagerBaseAdapter* UNTimelineBlueprintHelpers::CreateNewTimeline(
 	UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseAdapter> Class, FName Name)
@@ -24,4 +25,19 @@ UNTimelineManagerBaseAdapter* UNTimelineBlueprintHelpers::CreateNewTimeline(
 	UNTimelineManagerBaseAdapter* Object =
 		UNTimelineManagerBaseAdapter::CreateObject<UNTimelineManagerBaseAdapter>(WorldContextObject, Class, Name);
 	return Object;
+}
+
+void UNTimelineBlueprintHelpers::CreateAndAttachedEvent(UObject* WorldContextObject, FConfiguredTimeline Timeline)
+{
+	UNTimelineGameInstance* GI = Cast<UNTimelineGameInstance>(WorldContextObject->GetWorld()->GetGameInstance());
+	checkf(GI != nullptr, TEXT("Game instance should derived from UNTimelineGameInstance class."));
+	UNTimelineManagerBaseAdapter* TimelineObj = GI->GetTimeline(Timeline.Name);
+	checkf(TimelineObj != nullptr, TEXT("A problem occured in timeline configuration."));
+
+	UE_LOG(LogTemp,
+		Display,
+		TEXT("%s classname %s objectpath %s"),
+		ANSI_TO_TCHAR(__FUNCTION__),
+		*Timeline.TimelineClass->GetFullName(),
+		*TimelineObj->GetFullName());
 }
