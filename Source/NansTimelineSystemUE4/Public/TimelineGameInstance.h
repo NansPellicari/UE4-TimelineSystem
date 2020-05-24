@@ -31,9 +31,8 @@ class UNTimelineManagerBaseDecorator;
  * @see UNTimelineBlueprintHelpers::CreateAndAttachedEvent().
  * @see UNTimelineConfig to get more details on the configuration.
  * @see FConfiguredTimeline to see how to use Configured Timeline as blueprint pins.
- * @see
  */
-UCLASS(Blueprintable, Category = "NansTimeline")
+UCLASS(Abstract, Blueprintable, Category = "NansTimeline")
 class NANSTIMELINESYSTEMUE4_API UNTimelineGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
