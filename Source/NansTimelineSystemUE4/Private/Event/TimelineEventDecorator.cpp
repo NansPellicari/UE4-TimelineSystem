@@ -12,84 +12,84 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event/TimelineEventAdapter.h"
+#include "Event/TimelineEventDecorator.h"
 
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseAdapter.h"
+#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseDecorator.h"
 
-bool UNTimelineEventAdapter::IsExpired() const
+bool UNTimelineEventDecorator::IsExpired() const
 {
 	if (!Event.IsValid()) return true;
 	return Event->IsExpired();
 }
 
-const float UNTimelineEventAdapter::GetLocalTime() const
+const float UNTimelineEventDecorator::GetLocalTime() const
 {
 	if (!Event.IsValid()) return LocalTime;
 	return Event->GetLocalTime();
 }
 
-const float UNTimelineEventAdapter::GetStartedAt() const
+const float UNTimelineEventDecorator::GetStartedAt() const
 {
 	if (!Event.IsValid()) return StartedAt;
 	return Event->GetStartedAt();
 }
 
-float UNTimelineEventAdapter::GetDuration() const
+float UNTimelineEventDecorator::GetDuration() const
 {
 	if (!Event.IsValid()) return Duration;
 	return Event->GetDuration();
 }
 
-void UNTimelineEventAdapter::Start(float StartTime)
+void UNTimelineEventDecorator::Start(float StartTime)
 {
 	if (!Event.IsValid()) return;
 	Event->Start(StartTime);
 }
 
-void UNTimelineEventAdapter::NotifyAddTime(float NewTime)
+void UNTimelineEventDecorator::NotifyAddTime(float NewTime)
 {
 	if (!Event.IsValid()) return;
 	Event->NotifyAddTime(NewTime);
 }
 
-float UNTimelineEventAdapter::GetDelay() const
+float UNTimelineEventDecorator::GetDelay() const
 {
 	if (!Event.IsValid()) return Delay;
 	return Event->GetDelay();
 }
 
-const FName UNTimelineEventAdapter::GetEventLabel() const
+const FName UNTimelineEventDecorator::GetEventLabel() const
 {
 	if (!Event.IsValid()) return Label;
 	return Event->GetEventLabel();
 }
 
-TSharedPtr<NTimelineEventBase> UNTimelineEventAdapter::GetEvent()
+TSharedPtr<NTimelineEventBase> UNTimelineEventDecorator::GetEvent()
 {
 	return Event;
 }
 
-void UNTimelineEventAdapter::SetDelay(float _Delay)
+void UNTimelineEventDecorator::SetDelay(float _Delay)
 {
 	Event->Delay = _Delay;
 }
-void UNTimelineEventAdapter::SetDuration(float _Duration)
+void UNTimelineEventDecorator::SetDuration(float _Duration)
 {
 	Event->Duration = _Duration;
 }
 
-void UNTimelineEventAdapter::Init(FName _Label)
+void UNTimelineEventDecorator::Init(FName _Label)
 {
 	Event = MakeShareable(new NTimelineEventBase(_Label));
 }
-void UNTimelineEventAdapter::BeginDestroy()
+void UNTimelineEventDecorator::BeginDestroy()
 {
 	Super::BeginDestroy();
 	Event.Reset();
 }
 
-void UNTimelineEventAdapter::Serialize(FArchive& Ar)
+void UNTimelineEventDecorator::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
@@ -125,13 +125,13 @@ void UNTimelineEventAdapter::Serialize(FArchive& Ar)
 }
 
 template <typename T>
-T* UNTimelineEventAdapter::CreateObject(
-	UObject* Outer, const TSubclassOf<UNTimelineEventAdapter> Class, FName Name, EObjectFlags Flags)
+T* UNTimelineEventDecorator::CreateObject(
+	UObject* Outer, const TSubclassOf<UNTimelineEventDecorator> Class, FName Name, EObjectFlags Flags)
 {
 	static int32 Counter;
 	if (Name == NAME_None)
 	{
-		FString EvtLabel = FString::Format(TEXT("EventAdapter_{0}"), {++Counter});
+		FString EvtLabel = FString::Format(TEXT("EventDecorator_{0}"), {++Counter});
 		Name = FName(*EvtLabel);
 	}
 
@@ -141,9 +141,9 @@ T* UNTimelineEventAdapter::CreateObject(
 }
 
 template <typename T>
-T* UNTimelineEventAdapter::CreateObjectFromEvent(UObject* Outer,
+T* UNTimelineEventDecorator::CreateObjectFromEvent(UObject* Outer,
 	const TSharedPtr<NTimelineEventBase> Object,
-	const TSubclassOf<UNTimelineEventAdapter> Class,
+	const TSubclassOf<UNTimelineEventDecorator> Class,
 	EObjectFlags Flags)
 {
 	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);

@@ -1,10 +1,24 @@
-#include "TimelineAdapter.h"
+// Copyright 2020-present Nans Pellicari (nans.pellicari@gmail.com).
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include "Manager/TimelineManagerBaseAdapter.h"
+#include "TimelineDecorator.h"
+
+#include "Manager/TimelineManagerBaseDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
 
-void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
+void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
 {
 	if (Ar.IsSaving() && Event != nullptr)
 	{
@@ -18,13 +32,13 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineAdapter* Timeline)
 	}
 }
 
-void UNTimelineAdapter::Init(UNTimelineManagerBaseAdapter* TimelineManager, FName _Label)
+void UNTimelineDecorator::Init(UNTimelineManagerBaseDecorator* TimelineManager, FName _Label)
 {
 	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerBase*>(TimelineManager), _Label));
-	Timeline->EventExpired.BindUObject(this, &UNTimelineAdapter::OnEventExpired);
+	Timeline->EventExpired.BindUObject(this, &UNTimelineDecorator::OnEventExpired);
 }
 
-void UNTimelineAdapter::Clear()
+void UNTimelineDecorator::Clear()
 {
 	EventStore.Empty();
 	if (Timeline.IsValid())
@@ -33,33 +47,33 @@ void UNTimelineAdapter::Clear()
 	}
 }
 
-void UNTimelineAdapter::SetCurrentTime(float _CurrentTime)
+void UNTimelineDecorator::SetCurrentTime(float _CurrentTime)
 {
 	NTimeline::SetCurrentTime(_CurrentTime);
 	if (!Timeline.IsValid()) return;
 	Timeline->SetCurrentTime(_CurrentTime);
 }
 
-void UNTimelineAdapter::SetLabel(FName _Label)
+void UNTimelineDecorator::SetLabel(FName _Label)
 {
 	NTimeline::SetLabel(_Label);
 	if (!Timeline.IsValid()) return;
 	Timeline->SetLabel(_Label);
 }
 
-TSharedPtr<NTimeline> UNTimelineAdapter::GetTimeline() const
+TSharedPtr<NTimeline> UNTimelineDecorator::GetTimeline() const
 {
 	return Timeline;
 }
 
-void UNTimelineAdapter::NotifyTick()
+void UNTimelineDecorator::NotifyTick()
 {
 	if (!Timeline.IsValid()) return;
 
 	Timeline->NotifyTick();
 }
 
-bool UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
+bool UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)
 {
 	check(Timeline.IsValid());
 	bool bIsAttached = Timeline->Attached(Event->GetEvent());
@@ -76,12 +90,12 @@ bool UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
 	return bIsAttached;
 }
 
-const TArray<FNEventRecord> UNTimelineAdapter::GetAdaptedEvents() const
+const TArray<FNEventRecord> UNTimelineDecorator::GetAdaptedEvents() const
 {
 	return EventStore;
 }
 
-NTimeline::FEventTuple UNTimelineAdapter::ConvertRecordToTuple(FNEventRecord const Record)
+NTimeline::FEventTuple UNTimelineDecorator::ConvertRecordToTuple(FNEventRecord const Record)
 {
 	TSharedPtr<NTimelineEventBase> Event;
 	if (Record.Event != nullptr)
@@ -91,7 +105,7 @@ NTimeline::FEventTuple UNTimelineAdapter::ConvertRecordToTuple(FNEventRecord con
 	return NTimeline::FEventTuple(Event, Record.AttachedTime, Record.Delay, Record.Duration, Record.Label, Record.ExpiredTime);
 }
 
-void UNTimelineAdapter::RefreshRecordData(const int32& Index)
+void UNTimelineDecorator::RefreshRecordData(const int32& Index)
 {
 	const FEventTuple& Tuple = Timeline->GetEvents()[Index];
 	FNEventRecord& Record = EventStore[Index];
@@ -100,7 +114,7 @@ void UNTimelineAdapter::RefreshRecordData(const int32& Index)
 	{
 		UE_LOG(LogTemp,
 			Error,
-			TEXT("%s and its adapter are not synchronized (for Index %d),"
+			TEXT("%s and its decorator are not synchronized (for Index %d),"
 				 "I prefer stopping here rather making dirty things."
 				 "Please check your EventStore population."),
 			*Timeline->GetLabel().ToString(),
@@ -115,29 +129,29 @@ void UNTimelineAdapter::RefreshRecordData(const int32& Index)
 	Record.ExpiredTime = Tuple.Get<5>();
 }
 
-void UNTimelineAdapter::OnEventExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index)
+void UNTimelineDecorator::OnEventExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index)
 {
 	RefreshRecordData(Index);
 	FNEventRecord& Record = EventStore[Index];
 	Record.Event = nullptr;
 }
 
-float UNTimelineAdapter::GetCurrentTime()
+float UNTimelineDecorator::GetCurrentTime()
 {
 	check(Timeline.IsValid());
 	return Timeline->GetCurrentTime();
 }
 
-FName UNTimelineAdapter::GetLabel() const
+FName UNTimelineDecorator::GetLabel() const
 {
 	check(Timeline.IsValid());
 	return Timeline->GetLabel();
 }
 
-UNTimelineEventAdapter* UNTimelineAdapter::CreateNewEvent(
-	TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Duration, float Delay)
+UNTimelineEventDecorator* UNTimelineDecorator::CreateNewEvent(
+	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
 {
-	UNTimelineEventAdapter* Object = UNTimelineEventAdapter::CreateObject<UNTimelineEventAdapter>(this, Class, Name);
+	UNTimelineEventDecorator* Object = UNTimelineEventDecorator::CreateObject<UNTimelineEventDecorator>(this, Class, Name);
 	if (Duration > 0)
 	{
 		Object->SetDuration(Duration);
@@ -150,7 +164,7 @@ UNTimelineEventAdapter* UNTimelineAdapter::CreateNewEvent(
 	return Object;
 }
 
-void UNTimelineAdapter::Serialize(FArchive& Ar)
+void UNTimelineDecorator::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 	if (Ar.IsSaving())
@@ -192,13 +206,13 @@ void UNTimelineAdapter::Serialize(FArchive& Ar)
 			Record.Serialize(Ar, this);
 			if (Ar.IsLoading())
 			{
-				Timeline->SetTuple(UNTimelineAdapter::ConvertRecordToTuple(Record));
+				Timeline->SetTuple(UNTimelineDecorator::ConvertRecordToTuple(Record));
 			}
 		}
 	}
 }
 
-void UNTimelineAdapter::BeginDestroy()
+void UNTimelineDecorator::BeginDestroy()
 {
 	Super::BeginDestroy();
 	Clear();

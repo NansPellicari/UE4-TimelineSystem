@@ -15,28 +15,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Engine/EngineTypes.h"
+#include "Event/TimelineEventDecorator.h"
+#include "TimerManager.h"
 
-#include "ConfiguredTimeline.generated.h"
+#include "TimelineEventDecoratorFake.generated.h"
 
 /**
- * This struct to create Configured Timeline and ease Timeline instanciation.
- * This allows to associated a Timeline Name to a class.
+ * This class is used for tests only
  */
-USTRUCT(BlueprintType)
-struct NANSTIMELINESYSTEMUE4_API FConfiguredTimeline
+UCLASS()
+class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecoratorFake : public UNTimelineEventDecorator
 {
 	GENERATED_BODY()
-
-public:
-	/**
-	 * This allows to retrieve easily a timeline.
-	 * This is used by the SConfiguredTimelinePin as a combobox.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
-	FName Name;
-
-	/** The Configured Timeline class */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
-	TSubclassOf<UNTimelineManagerBaseDecorator> TimelineClass;
 };

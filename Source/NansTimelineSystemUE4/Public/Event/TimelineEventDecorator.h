@@ -17,10 +17,10 @@
 #include "CoreMinimal.h"
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
 
-#include "TimelineEventAdapter.generated.h"
+#include "TimelineEventDecorator.generated.h"
 
 /**
- * Base abstract class to create NTimelineEventBase adapters (Blueprint or c++).
+ * Base abstract class to create NTimelineEventBase decorators (Blueprint or c++).
  *
  * For a simple usage with blueprint:
  * you can derived blueprint base on this.
@@ -32,22 +32,22 @@
  * (serialization, blueprint's specifics functionnalities, etc...)
  * - NTimelineEventBase's derivation: all your core functionnalities
  */
-UCLASS(Abstract)
-class NANSTIMELINESYSTEMUE4_API UNTimelineEventAdapter : public UObject, public NTimelineEventBase
+UCLASS(Abstract, Blueprintable)
+class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventBase
 {
-	friend class UNTimelineManagerBaseAdapter;
+	friend class UNTimelineManagerBaseDecorator;
 
 	GENERATED_BODY()
 public:
 	template <typename T>
 	static T* CreateObject(UObject* Outer,
-		const TSubclassOf<UNTimelineEventAdapter> Class,
+		const TSubclassOf<UNTimelineEventDecorator> Class,
 		FName Name = NAME_None,
 		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 	template <typename T>
 	static T* CreateObjectFromEvent(UObject* Outer,
 		const TSharedPtr<NTimelineEventBase> Object,
-		const TSubclassOf<UNTimelineEventAdapter> Class,
+		const TSubclassOf<UNTimelineEventDecorator> Class,
 		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	// BEGIN NTimelineEventBase overrides
@@ -91,18 +91,18 @@ public:
 	virtual void Init(FName _Label);
 
 	/**
-	 * This is used by other adapters which need to pass the core object to their own.
-	 * @see UNTimelineAdapter::Attached()
+	 * This is used by other decorators which need to pass the core object to their own.
+	 * @see UNTimelineDecorator::Attached()
 	 */
 	TSharedPtr<NTimelineEventBase> GetEvent();
 
 protected:
 	/**
-	 * The actual adapter is for this object.
+	 * The actual decorator is for this object.
 	 * It shoulds be instanciate on a ctor or a dedicated init function
 	 * */
 	TSharedPtr<NTimelineEventBase> Event;
 
 	/** Default ctor for the engine */
-	UNTimelineEventAdapter() {}
+	UNTimelineEventDecorator() {}
 };

@@ -14,7 +14,7 @@
 
 #include "TimelineGameInstance.h"
 
-#include "Manager/TimelineManagerBaseAdapter.h"
+#include "Manager/TimelineManagerBaseDecorator.h"
 
 UNTimelineGameInstance::UNTimelineGameInstance() {}
 
@@ -31,20 +31,20 @@ void UNTimelineGameInstance::InstanciateTimelinesFromConfig()
 
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerBaseAdapter* Timeline =
-			UNTimelineManagerBaseAdapter::CreateObject<UNTimelineManagerBaseAdapter>(this, Conf.TimelineClass, Conf.Name);
+		UNTimelineManagerBaseDecorator* Timeline =
+			UNTimelineManagerBaseDecorator::CreateObject<UNTimelineManagerBaseDecorator>(this, Conf.TimelineClass, Conf.Name);
 		Timeline->Play();
 
 		TimelinesCollection.Add(Conf.Name, Timeline);
 	}
 }
 
-UNTimelineManagerBaseAdapter* UNTimelineGameInstance::GetTimeline(FConfiguredTimeline Config) const
+UNTimelineManagerBaseDecorator* UNTimelineGameInstance::GetTimeline(FConfiguredTimeline Config) const
 {
 	return GetTimeline(Config.Name);
 }
 
-UNTimelineManagerBaseAdapter* UNTimelineGameInstance::GetTimeline(FName Name) const
+UNTimelineManagerBaseDecorator* UNTimelineGameInstance::GetTimeline(FName Name) const
 {
 	if (!TimelinesCollection.Contains(Name))
 	{
@@ -78,7 +78,7 @@ void UNTimelineGameInstance::Serialize(FArchive& Ar)
 
 	for (auto& Name : SaveNamesOrder)
 	{
-		UNTimelineManagerBaseAdapter* Timeline = GetTimeline(Name);
+		UNTimelineManagerBaseDecorator* Timeline = GetTimeline(Name);
 		if (Timeline == nullptr)
 		{
 			UE_LOG(LogTemp,

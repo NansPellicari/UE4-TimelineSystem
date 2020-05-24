@@ -25,7 +25,7 @@
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
-#include "Specs/TimelineEventAdapterFake.h"
+#include "Specs/TimelineEventDecoratorFake.h"
 #include "TimerManager.h"
 
 /**
@@ -44,7 +44,7 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
 		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	NTestWorld::CreateAndOpenNewLevel(World);
 
@@ -99,7 +99,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
 		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
@@ -148,15 +148,15 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
 		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventAdapterFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
 
 		// Save in memory
@@ -169,7 +169,7 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 
 		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 		NewFakeObject->SetMyWorld(NewWorld);
-		UNLevelLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseAdapter::CreateObject<UNLevelLifeTimelineManager>(
+		UNLevelLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
 			NewFakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory

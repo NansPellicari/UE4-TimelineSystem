@@ -1,12 +1,26 @@
+// Copyright 2020-present Nans Pellicari (nans.pellicari@gmail.com).
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Event/TimelineEventAdapter.h"
+#include "Event/TimelineEventDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 
-#include "TimelineAdapter.generated.h"
+#include "TimelineDecorator.generated.h"
 
-class UNTimelineManagerBaseAdapter;
+class UNTimelineManagerBaseDecorator;
 
 /**
  * This struct is both a pass-through for NTimeline::FEventTuple
@@ -19,15 +33,15 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 
 	FNEventRecord() {}
 	FNEventRecord(
-		UNTimelineEventAdapter* _Event, float _AttachedTime, float _Delay, float _Duration, FName _Label, float _ExpiredTime)
+		UNTimelineEventDecorator* _Event, float _AttachedTime, float _Delay, float _Duration, FName _Label, float _ExpiredTime)
 		: Event(_Event), AttachedTime(_AttachedTime), Delay(_Delay), Duration(_Duration), Label(_Label), ExpiredTime(_ExpiredTime)
 	{
 	}
 
-	/** The UNTimelineEventAdapter object */
+	/** The UNTimelineEventDecorator object */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	UNTimelineEventAdapter* Event = nullptr;
-	/** The time it as been attached to the timeline in secs (differ to UNTimelineEventAdapter::StartedAt) */
+	UNTimelineEventDecorator* Event = nullptr;
+	/** The time it as been attached to the timeline in secs (differ to UNTimelineEventDecorator::StartedAt) */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float AttachedTime;
 	/** The delay before starting in secs */
@@ -47,7 +61,7 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 	FString EventClassName = FString("");
 
 	/** It manages Event object saving and loading */
-	void Serialize(FArchive& Ar, UNTimelineAdapter* Timeline);
+	void Serialize(FArchive& Ar, UNTimelineDecorator* Timeline);
 
 	/** Just save basic data, see FNEventRecord::Serialize() to see how Event object is managed */
 	friend FArchive& operator<<(FArchive& Ar, FNEventRecord& Record)
@@ -69,25 +83,25 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 };
 
 /**
- * The adapter for NTimeline object.
+ * The decorator for NTimeline object.
  *
  * It manages:
  * - serialization
- * - attachment of UNTimelineEventAdapter object to the embeded NTimeline
+ * - attachment of UNTimelineEventDecorator object to the embeded NTimeline
  */
 UCLASS()
-class NANSTIMELINESYSTEMUE4_API UNTimelineAdapter : public UObject, public NTimeline
+class NANSTIMELINESYSTEMUE4_API UNTimelineDecorator : public UObject, public NTimeline
 {
 	GENERATED_BODY()
 public:
 	/** Just a default ctor for UObject paradigme */
-	UNTimelineAdapter(){};
+	UNTimelineDecorator(){};
 
 	/**
 	 * this method is used to instanciate the embeded NTimeline
-	 * @param TimelineManager - The Adapter which provide the NTimelineManagerBase object.
+	 * @param TimelineManager - The Decorator which provide the NTimelineManagerBase object.
 	 */
-	virtual void Init(UNTimelineManagerBaseAdapter* TimelineManager, FName _Label = NAME_None);
+	virtual void Init(UNTimelineManagerBaseDecorator* TimelineManager, FName _Label = NAME_None);
 
 	// BEGIN NTimeline overrides
 	virtual void Clear() override;
@@ -98,24 +112,24 @@ public:
 	virtual void NotifyTick() override;
 
 	/**
-	 * This object should works only with Adapters.
+	 * This object should works only with Decorators.
 	 * This method is reserved for core objects.
-	 * @see UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
+	 * @see UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)
 	 */
 	virtual bool Attached(TSharedPtr<NTimelineEventBase> Event) override
 	{
-		UE_LOG(LogTemp, Fatal, TEXT("You should use UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event) instead!"));
+		UE_LOG(LogTemp, Fatal, TEXT("You should use UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event) instead!"));
 		return false;
 	}
 
 	/**
-	 * This object should works only with Adapters.
+	 * This object should works only with Decorators.
 	 * This method is reserved for core objects.
-	 * @see UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
+	 * @see UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)
 	 */
 	virtual void Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection) override
 	{
-		UE_LOG(LogTemp, Fatal, TEXT("You should use UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event) instead!"));
+		UE_LOG(LogTemp, Fatal, TEXT("You should use UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event) instead!"));
 	}
 	// END NTimeline overrides
 
@@ -126,11 +140,11 @@ public:
 	TSharedPtr<NTimeline> GetTimeline() const;
 
 	/**
-	 * This method is made to work with adapters object.
+	 * This method is made to work with decorators object.
 	 * It will save data in the EventStore array for serialization and save game.
-	 * @param Event - The adapter event
+	 * @param Event - The decorator event
 	 */
-	virtual bool Attached(UNTimelineEventAdapter* Event);
+	virtual bool Attached(UNTimelineEventDecorator* Event);
 
 	/** This retrieve the EventStore */
 	const TArray<FNEventRecord> GetAdaptedEvents() const;
@@ -164,8 +178,8 @@ public:
 	 * @param Duration - The time this event is active, 0 to almost INFINI (0 means undeterminated time)
 	 * @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 	 */
-	UNTimelineEventAdapter* CreateNewEvent(
-		TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Duration = 0.f, float Delay = 0.f);
+	UNTimelineEventDecorator* CreateNewEvent(
+		TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration = 0.f, float Delay = 0.f);
 
 protected:
 	/** The embeded object */
@@ -183,7 +197,7 @@ protected:
 private:
 	/**
 	 * It is a pass-through for NTimeline NTimeline::FEventTuple
-	 * and allows to save UNTimelineEventAdapter's specializations data.
+	 * and allows to save UNTimelineEventDecorator's specializations data.
 	 */
 	UPROPERTY(SaveGame)
 	TArray<FNEventRecord> EventStore;

@@ -17,27 +17,27 @@
 #include "CoreMinimal.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
-#include "TimelineAdapter.h"
+#include "TimelineDecorator.h"
 
-#include "TimelineManagerBaseAdapter.generated.h"
+#include "TimelineManagerBaseDecorator.generated.h"
 
-class NTimelineEventAdapter;
+class NTimelineEventDecorator;
 
 /**
- * This is the abstract adapter that every Timeline manager shoulds override.
+ * This is the abstract decorator that every Timeline manager shoulds override.
  * It brings all core functionnalities for blueprint or c++.
  *
  * As the close relation between NTimelineManagerBase and NTimeline classes (core lib),
- * This class is coupled with UNTimelineAdapter.
- * @see UNTimelineAdapter
+ * This class is coupled with UNTimelineDecorator.
+ * @see UNTimelineDecorator
  *
- * To ease blueprint usages, most of the UNTimelineAdapter public functionnalities
- * are accessible here. This class works as a pass-through too for UNTimelineAdapter.
+ * To ease blueprint usages, most of the UNTimelineDecorator public functionnalities
+ * are accessible here. This class works as a pass-through too for UNTimelineDecorator.
  *
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
  */
 UCLASS(Abstract, ConversionRoot, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBaseAdapter : public UObject, public NTimelineManagerBase
+class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBaseDecorator : public UObject, public NTimelineManagerBase
 {
 	GENERATED_BODY()
 public:
@@ -62,7 +62,7 @@ public:
 	/**
 	 * The embeded timeline is created as subobject in the ctor.
 	 * So this just gives the Label to the timeline.
-	 * @see UNTimelineManagerBaseAdapter()
+	 * @see UNTimelineManagerBaseDecorator()
 	 *
 	 * @param _Label - Name of the Timeline.
 	 */
@@ -74,23 +74,23 @@ public:
 
 	// BEGIN UObject overrides
 	/**
-	 * It's the starting link of serialization chain for all embeded adapters.
-	 * This calls UNTimelineAdapter::Serialize().
+	 * It's the starting link of serialization chain for all embeded decorators.
+	 * This calls UNTimelineDecorator::Serialize().
 	 *
 	 * @param Ar - the FArchive used for serialization as usual.
 	 */
 	virtual void Serialize(FArchive& Ar) override;
 
-	/** This call the UNTimelineAdapter::BeginDestroy() too. */
+	/** This call the UNTimelineDecorator::BeginDestroy() too. */
 	virtual void BeginDestroy() override;
 	// END UObject overrides
 
-	/** A pass-through for the embeded UNTimelineAdapter::GetLabel() */
+	/** A pass-through for the embeded UNTimelineDecorator::GetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
 
 	/**
-	 * This method is a factory method to create a derived UNTimelineManagerBaseAdapter.
+	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param _Label - The name of this new Timeline
@@ -100,7 +100,7 @@ public:
 	static T* CreateObject(UObject* Outer, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	/**
-	 * This method is a factory method to create a derived UNTimelineManagerBaseAdapter with a specific UClass.
+	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator with a specific UClass.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param Class - The specific class we want our object will be.
@@ -116,44 +116,44 @@ public:
 
 	/**
 	 * Adds an event to the timeline object,
-	 * it works as a pass-through for UNTimelineAdapter::Attached(UNTimelineEventAdapter* Event)
+	 * it works as a pass-through for UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)
 	 *
 	 * @param Event - An Event object you want to saved to the associated timeline.
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add an Event to the timeline", Keywords = "Event add"), Category = "NansTimeline|Manager")
-	virtual void AddEvent(UNTimelineEventAdapter* Event);
+	virtual void AddEvent(UNTimelineEventDecorator* Event);
 	// clang-format on
 
 	/**
-	 * A pass-through for UNTimelineAdapter::CreateNewEvent():
-	 * @copydoc UNTimelineAdapter::CreateNewEvent()
+	 * A pass-through for UNTimelineDecorator::CreateNewEvent():
+	 * @copydoc UNTimelineDecorator::CreateNewEvent()
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create a New Event for the timeline", Keywords = "Event create"), Category = "NansTimeline|Manager")
-	UNTimelineEventAdapter* CreateNewEvent(TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Duration = 0, float Delay = 0);
+	UNTimelineEventDecorator* CreateNewEvent(TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
 	// clang-format on
 
 	/**
 	 * Attaches the event to the timeline stream +
-	 * @copydoc UNTimelineManagerBaseAdapter::CreateNewEvent()
+	 * @copydoc UNTimelineManagerBaseDecorator::CreateNewEvent()
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the timeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNTimelineEventAdapter* CreateAndAddNewEvent(TSubclassOf<UNTimelineEventAdapter> Class, FName Name, float Duration = 0, float Delay = 0);
+	UNTimelineEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
 	// clang-format on
 
 protected:
 	/** the timeline associated to this manager. */
 	UPROPERTY(SkipSerialization)
-	UNTimelineAdapter* MyTimeline;
+	UNTimelineDecorator* MyTimeline;
 
 	/**
 	 * Protected ctor to force instanciation with CreateObject() methods (factory methods).
 	 *
 	 * It instanciates the embeded timeline with CreateDefaultSubobject().
 	 */
-	UNTimelineManagerBaseAdapter();
+	UNTimelineManagerBaseDecorator();
 
 private:
 };

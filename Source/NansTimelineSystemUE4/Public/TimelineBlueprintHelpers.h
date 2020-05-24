@@ -20,8 +20,8 @@
 
 #include "TimelineBlueprintHelpers.generated.h"
 
-class UNTimelineManagerBaseAdapter;
-class UNTimelineEventAdapter;
+class UNTimelineManagerBaseDecorator;
+class UNTimelineEventDecorator;
 
 /**
  * A simple Blueprint Library class to manage Timeline creation.
@@ -34,14 +34,14 @@ public:
 	/**
 	 * It allows you to create a new timeline manager with its embeded timeline.
 	 *
-	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerBaseAdapter instanciation, it is implicitly
+	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerBaseDecorator instanciation, it is implicitly
 	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
 	 * @param Class - The class you want to instanciate
 	 * @param Name - The name of your timeline
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Timeline", Keywords = "Timeline create"), Category = "NansTimeline")
-	static UNTimelineManagerBaseAdapter* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseAdapter> Class, FName Name);
+	static UNTimelineManagerBaseDecorator* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseDecorator> Class, FName Name);
 	// clang-format on
 
 	// clang-format off
