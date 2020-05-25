@@ -14,74 +14,38 @@
 
 #pragma once
 
-#include "Config/TimelineConfig.h"
+#include "Attribute/ConfiguredTimeline.h"
 #include "CoreMinimal.h"
-#include "Engine/GameInstance.h"
+#include "UObject/Interface.h"
 
 #include "TimelineGameInstance.generated.h"
 
+class UNTimelineClient;
 class UNTimelineManagerBaseDecorator;
 
-/**
- * This is a based class which need to be instanciated to get all the timeline configuration system works.
- *
- * This is the main client which instances Configured Timeline (UNTimelineConfig)
- * and UNTimelineBlueprintHelpers::CreateAndAttachedEvent() used.
- *
- * @see UNTimelineBlueprintHelpers::CreateAndAttachedEvent().
- * @see UNTimelineConfig to get more details on the configuration.
- * @see FConfiguredTimeline to see how to use Configured Timeline as blueprint pins.
- */
-UCLASS(Abstract, Blueprintable, Category = "NansTimeline")
-class NANSTIMELINESYSTEMUE4_API UNTimelineGameInstance : public UGameInstance
+/** @see INTimelineGameInstance */
+UINTERFACE(MinimalAPI, BlueprintType)
+class UNTimelineGameInstance : public UInterface
 {
 	GENERATED_BODY()
+};
+
+/**
+ * This interface should be implemented by your GameInstance class or blueprint object.
+ * See README.md in step by step guide to see how to implements it.
+ */
+class NANSTIMELINESYSTEMUE4_API INTimelineGameInstance
+{
+	GENERATED_BODY()
+
 public:
-	UNTimelineGameInstance();
-	virtual void Init() override;
-
 	/**
-	 * A blueprint pass-through for GetTimeline(FName Name).
+	 * A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
 	 *
-	 * @param Config - To allow having a combobox of configured timeline
+	 * @param Timeline - To allow having a combobox of configured timelines
 	 */
-	UFUNCTION(BlueprintCallable, Category = "NansTimeline")
-	UNTimelineManagerBaseDecorator* GetTimeline(FConfiguredTimeline Config) const;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NansTimeline")
+	UNTimelineManagerBaseDecorator* GetTimeline(FConfiguredTimeline Timeline) const;
 
-	/**
-	 * Get the timeline from TimelinesCollection by its name.
-	 *
-	 * @param Name - The name of the timeline
-	 */
-	UNTimelineManagerBaseDecorator* GetTimeline(FName Name) const;
-
-	/**
-	 * It used to save all timelines in the EventStore,
-	 * and reload them correctly.
-	 *
-	 * @param Ar - Archive for save and load
-	 */
-	virtual void Serialize(FArchive& Ar) override;
-
-protected:
-	/**
-	 * This method allows to instanciate all Timeline from the config: FConfiguredTimeline.
-	 *
-	 * @see FConfiguredTimeline
-	 */
-	void InstanciateTimelinesFromConfig();
-
-	/**
-	 * Collection of timelines instanciated by InstanciateTimelinesFromConfig()
-	 */
-	UPROPERTY(SkipSerialization)
-	TMap<FName, UNTimelineManagerBaseDecorator*> TimelinesCollection;
-
-private:
-	/**
-	 * This is just an helper for the savegame.
-	 * Thanks to this we can check if there is a delta between save and load then alert client.
-	 */
-	UPROPERTY(SkipSerialization)
-	TArray<FName> SaveNamesOrder;
+	virtual UNTimelineClient* GetClient() const;
 };

@@ -69,6 +69,10 @@ public:
 	virtual void Init(FName _Label = NAME_None) override;
 	// END NTimeline overrides
 
+	/**
+	 * Get the events list.
+	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNTimelineEventDecorator> parameter
+	 */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual const TArray<FNEventRecord> GetEvents();
 

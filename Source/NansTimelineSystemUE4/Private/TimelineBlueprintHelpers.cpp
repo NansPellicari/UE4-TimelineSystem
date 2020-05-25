@@ -29,9 +29,9 @@ UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::CreateNewTimeline(
 
 void UNTimelineBlueprintHelpers::CreateAndAttachedEvent(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {
-	UNTimelineGameInstance* GI = Cast<UNTimelineGameInstance>(WorldContextObject->GetWorld()->GetGameInstance());
-	checkf(GI != nullptr, TEXT("Game instance should derived from UNTimelineGameInstance class."));
-	UNTimelineManagerBaseDecorator* TimelineObj = GI->GetTimeline(Timeline.Name);
+	INTimelineGameInstance* GI = Cast<INTimelineGameInstance>(WorldContextObject->GetWorld()->GetGameInstance());
+	checkf(GI != nullptr, TEXT("Game instance should derived from UNTimelineClient class."));
+	UNTimelineManagerBaseDecorator* TimelineObj = GI->GetTimeline(Timeline);
 	checkf(TimelineObj != nullptr, TEXT("A problem occured in timeline configuration."));
 
 	UE_LOG(LogTemp,

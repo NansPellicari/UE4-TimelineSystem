@@ -5,6 +5,7 @@
 `class `[`FNansTimelineSystemCoreModule`](#classFNansTimelineSystemCoreModule) | Required to create a UE4 module
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
 `class `[`FTimelinePinFactory`](#classFTimelinePinFactory) | It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
+`class `[`INTimelineGameInstance`](#classINTimelineGameInstance) | This interface should be implemented by your GameInstance class or blueprint object. See README.md in step by step guide to see how to implements it.
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
 `class `[`NansTimelineSystemUE4`](#classNansTimelineSystemUE4) | 
 `class `[`NTimeline`](#classNTimeline) | Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManagerBase](#classNTimelineManagerBase) class is dedicated to handle it.
@@ -17,11 +18,12 @@
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
 `class `[`UNTimelineBlueprintHelpers`](#classUNTimelineBlueprintHelpers) | A simple Blueprint Library class to manage Timeline creation.
+`class `[`UNTimelineClient`](#classUNTimelineClient) | This class should be used by your GameInstance object. This object is the glue for all the timeline configuration and blueprint helpers.
 `class `[`UNTimelineConfig`](#classUNTimelineConfig) | A simple configuration to ease timeline instanciation for developpers.
 `class `[`UNTimelineDecorator`](#classUNTimelineDecorator) | The decorator for [NTimeline](#classNTimeline) object.
 `class `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator) | Base abstract class to create [NTimelineEventBase](#classNTimelineEventBase) decorators (Blueprint or c++).
 `class `[`UNTimelineEventDecoratorFake`](#classUNTimelineEventDecoratorFake) | This class is used for tests only
-`class `[`UNTimelineGameInstance`](#classUNTimelineGameInstance) | This is a based class which need to be instanciated to get all the timeline configuration system works.
+`class `[`UNTimelineGameInstance`](#classUNTimelineGameInstance) | **See also**: [INTimelineGameInstance](#classINTimelineGameInstance)
 `class `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator) | This is the abstract decorator that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
 `struct `[`FConfiguredTimeline`](#structFConfiguredTimeline) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
 `struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) and a record object used for savegame.
@@ -95,6 +97,28 @@ It is fully dedicated to make our custom Pin available for the Unreal Editor Gra
 --------------------------------|---------------------------------------------
 
 ## Members
+
+# class `INTimelineGameInstance` <a id="classINTimelineGameInstance"></a>
+
+This interface should be implemented by your GameInstance class or blueprint object. See README.md in step by step guide to see how to implements it.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+`public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` | 
+
+## Members
+
+#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58"></a>
+
+A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+
+#### Parameters
+* `Config` - To allow having a combobox of configured timeline
+
+#### `public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` <a id="classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad"></a>
 
 # class `NansTimelineSystemCore` <a id="classNansTimelineSystemCore"></a>
 
@@ -848,6 +872,74 @@ A simple Blueprint Library class to manage Timeline creation.
 
 ## Members
 
+# class `UNTimelineClient` <a id="classUNTimelineClient"></a>
+
+```
+class UNTimelineClient
+  : public UObject
+```  
+
+This class should be used by your GameInstance object. This object is the glue for all the timeline configuration and blueprint helpers.
+
+This is the main client which instances timelines from your settings (using [UNTimelineConfig](#classUNTimelineConfig)) and uses by blueprint helpers lib [UNTimelineBlueprintHelpers](#classUNTimelineBlueprintHelpers).
+
+**See also**: [INTimelineGameInstance](#classINTimelineGameInstance). 
+
+**See also**: [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba). 
+
+**See also**: [UNTimelineConfig](#classUNTimelineConfig) to get more details on the configuration. 
+
+**See also**: [FConfiguredTimeline](#structFConfiguredTimeline) to see how to use Configured Timeline as blueprint pins.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`UNTimelineClient`](#classUNTimelineClient_1a5681002cd61186d942306798fd0140fa)`()` | 
+`public virtual void `[`Init`](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)`()` | This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1a105a6c22f912366f331690d368b4b92f)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for GetTimeline(FName Name).
+`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1ac1bb7f33b8359066db9ea0c9d249776b)`(FName Name) const` | Get the timeline from TimelinesCollection by its name.
+`public virtual void `[`Serialize`](#classUNTimelineClient_1aef09f534dcf7de683bfe5aea7b184e27)`(FArchive & Ar)` | It used to save all timelines in the EventStore, and reload them correctly.
+`protected TMap< FName, `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * > `[`TimelinesCollection`](#classUNTimelineClient_1a0e9b8211804b16c9832684fac8947943) | Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)
+`protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)`()` | 
+
+## Members
+
+#### `public  `[`UNTimelineClient`](#classUNTimelineClient_1a5681002cd61186d942306798fd0140fa)`()` <a id="classUNTimelineClient_1a5681002cd61186d942306798fd0140fa"></a>
+
+#### `public virtual void `[`Init`](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)`()` <a id="classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615"></a>
+
+This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+
+**See also**: [FConfiguredTimeline](#structFConfiguredTimeline)
+
+#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1a105a6c22f912366f331690d368b4b92f)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classUNTimelineClient_1a105a6c22f912366f331690d368b4b92f"></a>
+
+A blueprint pass-through for GetTimeline(FName Name).
+
+#### Parameters
+* `Config` - To allow having a combobox of configured timeline
+
+#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1ac1bb7f33b8359066db9ea0c9d249776b)`(FName Name) const` <a id="classUNTimelineClient_1ac1bb7f33b8359066db9ea0c9d249776b"></a>
+
+Get the timeline from TimelinesCollection by its name.
+
+#### Parameters
+* `Name` - The name of the timeline
+
+#### `public virtual void `[`Serialize`](#classUNTimelineClient_1aef09f534dcf7de683bfe5aea7b184e27)`(FArchive & Ar)` <a id="classUNTimelineClient_1aef09f534dcf7de683bfe5aea7b184e27"></a>
+
+It used to save all timelines in the EventStore, and reload them correctly.
+
+#### Parameters
+* `Ar` - Archive for save and load
+
+#### `protected TMap< FName, `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * > `[`TimelinesCollection`](#classUNTimelineClient_1a0e9b8211804b16c9832684fac8947943) <a id="classUNTimelineClient_1a0e9b8211804b16c9832684fac8947943"></a>
+
+Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)
+
+#### `protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)`()` <a id="classUNTimelineClient_1a975de7e3dace38650ce072a999f21866"></a>
+
 # class `UNTimelineConfig` <a id="classUNTimelineConfig"></a>
 
 ```
@@ -1133,69 +1225,17 @@ This class is used for tests only
 
 ```
 class UNTimelineGameInstance
-  : public UGameInstance
+  : public UInterface
 ```  
 
-This is a based class which need to be instanciated to get all the timeline configuration system works.
-
-This is the main client which instances Configured Timeline ([UNTimelineConfig](#classUNTimelineConfig)) and [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba) used.
-
-**See also**: [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba). 
-
-**See also**: [UNTimelineConfig](#classUNTimelineConfig) to get more details on the configuration. 
-
-**See also**: [FConfiguredTimeline](#structFConfiguredTimeline) to see how to use Configured Timeline as blueprint pins. 
-
-**See also**:
+**See also**: [INTimelineGameInstance](#classINTimelineGameInstance)
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public  `[`UNTimelineGameInstance`](#classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3)`()` | 
-`public virtual void `[`Init`](#classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db)`()` | 
-`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a7ad20b6fef8c52770b2c7945706f5285)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for GetTimeline(FName Name).
-`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a983c7c9eb04550736de874cc0c46f9c0)`(FName Name) const` | Get the timeline from TimelinesCollection by its name.
-`public virtual void `[`Serialize`](#classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474)`(FArchive & Ar)` | It used to save all timelines in the EventStore, and reload them correctly.
-`protected TMap< FName, `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * > `[`TimelinesCollection`](#classUNTimelineGameInstance_1afbf0bcd523f2b64fc422395cd309f814) | Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)
-`protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)`()` | This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
 
 ## Members
-
-#### `public  `[`UNTimelineGameInstance`](#classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3)`()` <a id="classUNTimelineGameInstance_1a17798fb14e8987739ea8ed59c7280ed3"></a>
-
-#### `public virtual void `[`Init`](#classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db)`()` <a id="classUNTimelineGameInstance_1a018b557362d4743c76f702f098d5c9db"></a>
-
-#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a7ad20b6fef8c52770b2c7945706f5285)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classUNTimelineGameInstance_1a7ad20b6fef8c52770b2c7945706f5285"></a>
-
-A blueprint pass-through for GetTimeline(FName Name).
-
-#### Parameters
-* `Config` - To allow having a combobox of configured timeline
-
-#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classUNTimelineGameInstance_1a983c7c9eb04550736de874cc0c46f9c0)`(FName Name) const` <a id="classUNTimelineGameInstance_1a983c7c9eb04550736de874cc0c46f9c0"></a>
-
-Get the timeline from TimelinesCollection by its name.
-
-#### Parameters
-* `Name` - The name of the timeline
-
-#### `public virtual void `[`Serialize`](#classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474)`(FArchive & Ar)` <a id="classUNTimelineGameInstance_1a391fee3c32abfabece1aea48370f3474"></a>
-
-It used to save all timelines in the EventStore, and reload them correctly.
-
-#### Parameters
-* `Ar` - Archive for save and load
-
-#### `protected TMap< FName, `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * > `[`TimelinesCollection`](#classUNTimelineGameInstance_1afbf0bcd523f2b64fc422395cd309f814) <a id="classUNTimelineGameInstance_1afbf0bcd523f2b64fc422395cd309f814"></a>
-
-Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)
-
-#### `protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8)`()` <a id="classUNTimelineGameInstance_1a32162d7c7503f2d9365665676ed55df8"></a>
-
-This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
-
-**See also**: [FConfiguredTimeline](#structFConfiguredTimeline)
 
 # class `UNTimelineManagerBaseDecorator` <a id="classUNTimelineManagerBaseDecorator"></a>
 
