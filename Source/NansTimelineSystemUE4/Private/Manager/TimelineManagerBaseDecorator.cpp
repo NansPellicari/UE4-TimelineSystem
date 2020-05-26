@@ -49,7 +49,7 @@ T* UNTimelineManagerBaseDecorator::CreateObject(UObject* Outer, const UClass* Cl
 	return Obj;
 }
 
-float UNTimelineManagerBaseDecorator::GetTimelineTime()
+float UNTimelineManagerBaseDecorator::GetCurrentTime() const
 {
 	if (MyTimeline == nullptr) return 0;
 	return MyTimeline->GetCurrentTime();
@@ -70,7 +70,7 @@ void UNTimelineManagerBaseDecorator::Stop()
 	NTimelineManagerBase::Stop();
 }
 
-const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents()
+const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents() const
 {
 	return MyTimeline->GetAdaptedEvents();
 }

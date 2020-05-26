@@ -106,17 +106,17 @@ This interface should be implemented by your GameInstance class or blueprint obj
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+`public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1af7a387e593548557ebe60ae30b643924)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
 `public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` | 
 
 ## Members
 
-#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classINTimelineGameInstance_1a98ab4bfa89f9763958cca2249e906f58"></a>
+#### `public `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1af7a387e593548557ebe60ae30b643924)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` <a id="classINTimelineGameInstance_1af7a387e593548557ebe60ae30b643924"></a>
 
 A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
 
 #### Parameters
-* `Config` - To allow having a combobox of configured timeline
+* `Timeline` - To allow having a combobox of configured timelines
 
 #### `public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` <a id="classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad"></a>
 
@@ -885,8 +885,6 @@ This is the main client which instances timelines from your settings (using [UNT
 
 **See also**: [INTimelineGameInstance](#classINTimelineGameInstance). 
 
-**See also**: [UNTimelineBlueprintHelpers::CreateAndAttachedEvent()](#classUNTimelineBlueprintHelpers_1a2bb5aa6b0a319b571d70c95b42b290ba). 
-
 **See also**: [UNTimelineConfig](#classUNTimelineConfig) to get more details on the configuration. 
 
 **See also**: [FConfiguredTimeline](#structFConfiguredTimeline) to see how to use Configured Timeline as blueprint pins.
@@ -1258,16 +1256,16 @@ To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDeco
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public float `[`GetTimelineTime`](#classUNTimelineManagerBaseDecorator_1abf29461818964fa7fa2b02d072ae34ba)`()` | 
 `public virtual void `[`Pause`](#classUNTimelineManagerBaseDecorator_1a9abb209019d5b48f98b25eb9781168c2)`()` | This pause the timeline ticking
 `public virtual void `[`Play`](#classUNTimelineManagerBaseDecorator_1a2f2f9aa7c7dd2d4bf67ce27495b0c6b2)`()` | This (re)start the timeline ticking
 `public virtual void `[`Stop`](#classUNTimelineManagerBaseDecorator_1adbf456c7877d96747d3587aba50cf7a6)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
 `public virtual void `[`Init`](#classUNTimelineManagerBaseDecorator_1a4158d01f1d2fcb3a3e6abfe3029033a4)`(FName _Label)` | The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
-`public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerBaseDecorator_1aa7f2e5c1e49300288d6c7ad9f2389f75)`()` | 
+`public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` | It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `public virtual void `[`Serialize`](#classUNTimelineManagerBaseDecorator_1a2157f4309709b2f3cb3aa145cce7624b)`(FArchive & Ar)` | It's the starting link of serialization chain for all embeded decorators. This calls [UNTimelineDecorator::Serialize()](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9).
 `public virtual void `[`BeginDestroy`](#classUNTimelineManagerBaseDecorator_1a969904b7e92bc8252ef540e5bb97909b)`()` | This call the [UNTimelineDecorator::BeginDestroy()](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3) too.
+`public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerBaseDecorator_1a22f5c3b5d0b9e4f3dc099098a03aabdc)`() const` | Get the events list. TODO should be great to have a type filter possibility with a TSubclassOf<UNTimelineEventDecorator> parameter
+`public float `[`GetCurrentTime`](#classUNTimelineManagerBaseDecorator_1a72af9f0d56fd516331eea4b260746c8b)`() const` | 
 `public FName `[`GetLabel`](#classUNTimelineManagerBaseDecorator_1aa0e8960938aa54e96aef73b3780486b8)`() const` | A pass-through for the embeded [UNTimelineDecorator::GetLabel()](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)
-`public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` | It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `public virtual void `[`AddEvent`](#classUNTimelineManagerBaseDecorator_1ae02c91bae037a13209ac0d434567bf99)`(`[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * Event)` | Adds an event to the timeline object, it works as a pass-through for [UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)](#classUNTimelineDecorator_1ad75f00d59b60404ae053f15dc9db8db9)
 `public `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineManagerBaseDecorator_1a67a63b68e9e6bac3824e0e1baab31313)`(TSubclassOf< `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1a60e54308538c299ed44bbabe46a9f54a): Creates a new Event and use this timeline as the outer for this new object.
 `public `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerBaseDecorator_1adeb6a64d741a09925443d7cfd559214c)`(TSubclassOf< `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1a60e54308538c299ed44bbabe46a9f54a): Creates a new Event and use this timeline as the outer for this new object.
@@ -1275,8 +1273,6 @@ To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDeco
 `protected  `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)`()` | Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseDecorator_1a2388cb8330e146ad0e00a5d31420c9c5) methods (factory methods).
 
 ## Members
-
-#### `public float `[`GetTimelineTime`](#classUNTimelineManagerBaseDecorator_1abf29461818964fa7fa2b02d072ae34ba)`()` <a id="classUNTimelineManagerBaseDecorator_1abf29461818964fa7fa2b02d072ae34ba"></a>
 
 #### `public virtual void `[`Pause`](#classUNTimelineManagerBaseDecorator_1a9abb209019d5b48f98b25eb9781168c2)`()` <a id="classUNTimelineManagerBaseDecorator_1a9abb209019d5b48f98b25eb9781168c2"></a>
 
@@ -1298,7 +1294,9 @@ The embeded timeline is created as subobject in the ctor. So this just gives the
 #### Parameters
 * `_Label` - Name of the Timeline.
 
-#### `public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerBaseDecorator_1aa7f2e5c1e49300288d6c7ad9f2389f75)`()` <a id="classUNTimelineManagerBaseDecorator_1aa7f2e5c1e49300288d6c7ad9f2389f75"></a>
+#### `public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` <a id="classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1"></a>
+
+It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 
 #### `public virtual void `[`Serialize`](#classUNTimelineManagerBaseDecorator_1a2157f4309709b2f3cb3aa145cce7624b)`(FArchive & Ar)` <a id="classUNTimelineManagerBaseDecorator_1a2157f4309709b2f3cb3aa145cce7624b"></a>
 
@@ -1311,13 +1309,15 @@ It's the starting link of serialization chain for all embeded decorators. This c
 
 This call the [UNTimelineDecorator::BeginDestroy()](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3) too.
 
+#### `public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerBaseDecorator_1a22f5c3b5d0b9e4f3dc099098a03aabdc)`() const` <a id="classUNTimelineManagerBaseDecorator_1a22f5c3b5d0b9e4f3dc099098a03aabdc"></a>
+
+Get the events list. TODO should be great to have a type filter possibility with a TSubclassOf<UNTimelineEventDecorator> parameter
+
+#### `public float `[`GetCurrentTime`](#classUNTimelineManagerBaseDecorator_1a72af9f0d56fd516331eea4b260746c8b)`() const` <a id="classUNTimelineManagerBaseDecorator_1a72af9f0d56fd516331eea4b260746c8b"></a>
+
 #### `public FName `[`GetLabel`](#classUNTimelineManagerBaseDecorator_1aa0e8960938aa54e96aef73b3780486b8)`() const` <a id="classUNTimelineManagerBaseDecorator_1aa0e8960938aa54e96aef73b3780486b8"></a>
 
 A pass-through for the embeded [UNTimelineDecorator::GetLabel()](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)
-
-#### `public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` <a id="classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1"></a>
-
-It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 
 #### `public virtual void `[`AddEvent`](#classUNTimelineManagerBaseDecorator_1ae02c91bae037a13209ac0d434567bf99)`(`[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * Event)` <a id="classUNTimelineManagerBaseDecorator_1ae02c91bae037a13209ac0d434567bf99"></a>
 

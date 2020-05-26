@@ -53,15 +53,15 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	{
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetTimelineTime(), 1.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetCurrentTime(), 1.f);
 		TimelineManager->Stop();
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager should never be stopped"), TimelineManager->GetTimelineTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager should never be stopped"), TimelineManager->GetCurrentTime(), 2.f);
 		TimelineManager->Pause();
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager should never be paused"), TimelineManager->GetTimelineTime(), 3.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager should never be paused"), TimelineManager->GetCurrentTime(), 3.f);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
@@ -70,7 +70,7 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Should not be influenced by ticking if realtime doesn't increase"),
-			TimelineManager->GetTimelineTime(),
+			TimelineManager->GetCurrentTime(),
 			3.f);
 	}
 	// End test
@@ -99,13 +99,13 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	{
 		FPlatformProcess::Sleep(2.1f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
 		FBufferArchive ToBinary;
 		TimelineManager->Serialize(ToBinary);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetTimelineTime(), 3.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
@@ -113,7 +113,7 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"), TimelineManager->GetLabel(), FName("TestTimeline"));
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline should recover lost time since last serialization"),
-			TimelineManager->GetTimelineTime(),
+			TimelineManager->GetCurrentTime(),
 			3.f);
 	}
 	// End test
@@ -141,7 +141,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 	{
 		FPlatformProcess::Sleep(2.1f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -152,7 +152,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(
-			TEST_TEXT_FN_DETAILS("New Timeline manager has been called 1 before load"), NewTimelineManager->GetTimelineTime(), 1.f);
+			TEST_TEXT_FN_DETAILS("New Timeline manager has been called 1 before load"), NewTimelineManager->GetCurrentTime(), 1.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("New Timeline add a different label from the saved one"),
 			NewTimelineManager->GetLabel(),
 			FName("DiffTimelineLabel"));
@@ -165,7 +165,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 			NewTimelineManager->GetLabel(),
 			FName("TestTimeline"));
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline should recover lost time since last serialization"),
-			NewTimelineManager->GetTimelineTime(),
+			NewTimelineManager->GetCurrentTime(),
 			3.f);
 	}
 	// End test

@@ -41,7 +41,7 @@ public:
 	 * @param Name - The name of your timeline
 	 */
 	// clang-format off
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New Timeline", Keywords = "Timeline create"), Category = "NansTimeline")
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create a New NansTimeline", Keywords = "Timeline create"), Category = "NansTimeline")
 	static UNTimelineManagerBaseDecorator* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseDecorator> Class, FName Name);
 	// clang-format on
 
@@ -54,7 +54,7 @@ public:
 	 * @param Timeline - To allow having a combobox of configured timelines
 	 */
 	// clang-format off
-	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "Get a Timeline by its configured name", Keywords = "Timeline get"), Category = "NansTimeline")
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "Get a NansTimeline by its configured name", Keywords = "Timeline get"), Category = "NansTimeline")
 	static UNTimelineManagerBaseDecorator* GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline);
 	// clang-format on
 };

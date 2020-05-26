@@ -44,7 +44,7 @@ public:
 	 *
 	 * @param Timeline - To allow having a combobox of configured timelines
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NansTimeline")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta = (DisplayName = "Get a NansTimeline"), Category = "NansTimeline")
 	UNTimelineManagerBaseDecorator* GetTimeline(FConfiguredTimeline Timeline) const;
 
 	virtual UNTimelineClient* GetClient() const;

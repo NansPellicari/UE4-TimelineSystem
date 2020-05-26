@@ -54,30 +54,30 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetTimelineTime(), 1.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetCurrentTime(), 1.f);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
 		TimelineManager->Pause();
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 2 after timeline manager paused"),
-			TimelineManager->GetTimelineTime(),
+			TimelineManager->GetCurrentTime(),
 			2.f);
 		TimelineManager->Play();
 		NTestWorld::Tick(World);
 
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"), TimelineManager->GetTimelineTime(), 3.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"), TimelineManager->GetCurrentTime(), 3.f);
 		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 3 after game paused"),
-			TimelineManager->GetTimelineTime(),
+			TimelineManager->GetCurrentTime(),
 			3.f);
 		NTestWorld::CreateAndOpenNewLevel(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been reset"), TimelineManager->GetTimelineTime(), 0.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been reset"), TimelineManager->GetCurrentTime(), 0.f);
 	}
 	// End test
 
@@ -109,7 +109,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetTimelineTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -117,7 +117,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetTimelineTime(), 3.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
 
 		// Load from memory
@@ -127,7 +127,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"), TimelineManager->GetLabel(), FName("TestTimeline"));
 		TEST_EQ(
-			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"), TimelineManager->GetTimelineTime(), 2.f);
+			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"), TimelineManager->GetCurrentTime(), 2.f);
 	}
 	// End test
 
