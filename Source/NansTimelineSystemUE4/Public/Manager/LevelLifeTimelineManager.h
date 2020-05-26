@@ -38,7 +38,7 @@ public:
 	 * Attaches event on level changes
 	 * @copydoc UNGameLifeTimelineManager::Init()
 	 */
-	virtual void Init(FName _Label = NAME_None) override;
+	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
 
 	/** This method to clear and reload timeline when level changed */
 	void OnLevelRemoved(ULevel* Level, UWorld* World);

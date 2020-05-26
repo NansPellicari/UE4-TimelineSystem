@@ -46,8 +46,13 @@ public:
 	/** Calls Clear() and release Timeline TSharedPtr */
 	virtual ~NTimelineManagerBase();
 
-	/** Instanciate the embeded NTimeline */
-	virtual void Init(FName _Label = NAME_None);
+	/**
+	 * Instanciate the embeded NTimeline
+	 *
+	 * @param _TickInterval - Interval time between tick in sec
+	 * @param _Label - Name of the Timeline.
+	 */
+	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None);
 
 	/** This pause the timeline ticking */
 	virtual void Pause();
@@ -62,17 +67,20 @@ public:
 	virtual void TimerTick();
 
 	/** Get the actual state. */
-	ENTimelineTimerState GetState();
+	ENTimelineTimerState GetState() const;
 
 	/** Get the tick interval which a timermanager should use to process */
-	float GetTickInterval();
+	float GetTickInterval() const;
+
+	/** Defined the desired ticking interval */
+	virtual void SetTickInterval(float _TickInterval);
 
 	/** Get the coupled NTimeline */
-	TSharedPtr<NTimeline> GetTimeline();
+	TSharedPtr<NTimeline> GetTimeline() const;
 
 protected:
-	/** The interval retrieve from the timeline. */
-	float TickInterval;
+	/** The interval retrieved from the timeline. */
+	float TickInterval = 1.f;
 
 	/** The actual state */
 	ENTimelineTimerState State = ENTimelineTimerState::Stopped;
@@ -94,10 +102,4 @@ protected:
 
 	/** The coupled timeline */
 	TSharedPtr<NTimeline> Timeline;
-
-	/**
-	 * It is used by NTimeline to set its desired ticking interval
-	 * TODO not a good idea, should be updatable by client for its needs
-	 */
-	void SetTickInterval(const float _TickInterval);
 };

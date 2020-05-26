@@ -39,4 +39,8 @@ public:
 	/** The Configured Timeline class */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
 	TSubclassOf<UNTimelineManagerBaseDecorator> TimelineClass;
+
+	/** You can use this to add more or less frequency between each tick. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
+	float TickInterval = 1.f;
 };

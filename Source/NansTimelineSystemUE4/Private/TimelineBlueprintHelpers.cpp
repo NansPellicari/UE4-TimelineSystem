@@ -20,14 +20,6 @@
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "TimelineGameInstance.h"
 
-UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::CreateNewTimeline(
-	UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseDecorator> Class, FName Name)
-{
-	UNTimelineManagerBaseDecorator* Object =
-		UNTimelineManagerBaseDecorator::CreateObject<UNTimelineManagerBaseDecorator>(WorldContextObject, Class, Name);
-	return Object;
-}
-
 UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {
 	UGameInstance* GI = WorldContextObject->GetWorld()->GetGameInstance();

@@ -56,14 +56,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
 
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	virtual void SetTickInterval(float _TickInterval) override;
+
 	/**
 	 * The embeded timeline is created as subobject in the ctor.
 	 * So this just gives the Label to the timeline.
 	 * @see UNTimelineManagerBaseDecorator()
 	 *
+	 * @param _TickInterval - Interval time between tick in sec
 	 * @param _Label - Name of the Timeline.
 	 */
-	virtual void Init(FName _Label = NAME_None) override;
+	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
 
 	/** It is called by the parent NTimelineManagerBase on dtor */
 	virtual void Clear() override;
@@ -100,23 +104,29 @@ public:
 	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator.
 	 *
 	 * @param Outer - The outer of the new object.
+	 * @param TickInterval - The interval between tick in sec
 	 * @param _Label - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>
-	static T* CreateObject(UObject* Outer, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+	static T* CreateObject(
+		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	/**
 	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator with a specific UClass.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param Class - The specific class we want our object will be.
+	 * @param TickInterval - The interval between tick in sec
 	 * @param _Label - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>
-	static T* CreateObject(
-		UObject* Outer, const UClass* Class, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+	static T* CreateObject(UObject* Outer,
+		const UClass* Class,
+		float TickInterval = 1.f,
+		FName _Label = NAME_None,
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	/**
 	 * Adds an event to the timeline object,

@@ -73,12 +73,16 @@ public:
 	virtual void Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection);
 
 	/**
-	 * This method is mainly used for savegame serialization
+	 * This should be called only by its friend NTimelineManagerBase
+	 * or a decorator to maintain consistency with its manager.
 	 */
+	virtual void SetTickInterval(float _TickInterval);
+
+	/** This method is mainly used for savegame serialization */
 	virtual void SetCurrentTime(float _CurrentTime);
 
 	/** Get CurrentTime */
-	virtual float GetCurrentTime();
+	virtual float GetCurrentTime() const;
 
 	/** Returns the FEventTuple collection */
 	const TArray<NTimeline::FEventTuple> GetEvents() const;
@@ -117,6 +121,11 @@ protected:
 	FName Label;
 
 	/**
+	 * Tick interval, should be set by its manager
+	 */
+	float TickInterval = 1.f;
+
+	/**
 	 * It is computed internally in the NotifyTick() method.
 	 * In every tick it adds GetTickInterval() return.
 	 */
@@ -142,11 +151,7 @@ protected:
 	 * The NotifyTick use this method to add time on CurrentTime
 	 * at each call.
 	 */
-	virtual const float& GetTickInterval() const
-	{
-		static const float TickInterval = 1.0f;
-		return TickInterval;
-	}
+	virtual const float GetTickInterval() const;
 
 	/**
 	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.

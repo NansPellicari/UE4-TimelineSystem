@@ -42,7 +42,7 @@ public:
 	 * It creates the timer with a FTimerManager and attached TimerDelegate to it.
 	 * @param _Label - Name of the timer
 	 */
-	virtual void Init(FName _Label = NAME_None) override;
+	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
 
 	/**
 	 * clears timer + unbind delegate + invalidate handle.

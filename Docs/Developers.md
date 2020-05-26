@@ -131,7 +131,7 @@ GI->GetClient()->Serialize(Ar);
 ### 4.2. Copy/Paste to override UE functions
 
 > /!\ Important note:  
-> Due to UE4 license limitation, I can't copy paste too much engine's code here.  
+> Due to UE4 license limitation, I can't copy/paste too much engine's code here.  
 > I'll try to give you the most clues as possible to do it on your own.
 
 All the concerns part are located in the [UGameplayStatics](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp) class.
@@ -156,7 +156,7 @@ OutSaveGameObject->WorldContextObject = WorldContextObject;
 // USaveGame::Serialize() call
 ```
 
-And because life is not so easy, you have to unfortunatly copy/paste and include other dependencies...
+And because life is not so easy, unfortunatly you have to copy/paste and include other dependencies...
 
 First in your cpp header:
 

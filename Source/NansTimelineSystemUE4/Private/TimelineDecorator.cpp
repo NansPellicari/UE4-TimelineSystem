@@ -38,13 +38,11 @@ void UNTimelineDecorator::Init(UNTimelineManagerBaseDecorator* TimelineManager, 
 	Timeline->EventExpired.BindUObject(this, &UNTimelineDecorator::OnEventExpired);
 }
 
-void UNTimelineDecorator::Clear()
+void UNTimelineDecorator::SetTickInterval(float _TickInterval)
 {
-	EventStore.Empty();
-	if (Timeline.IsValid())
-	{
-		Timeline->Clear();
-	}
+	if (!Timeline.IsValid()) return;
+	TickInterval = _TickInterval;
+	Timeline->SetTickInterval(TickInterval);
 }
 
 void UNTimelineDecorator::SetCurrentTime(float _CurrentTime)
@@ -136,7 +134,7 @@ void UNTimelineDecorator::OnEventExpired(TSharedPtr<NTimelineEventBase> Event, c
 	Record.Event = nullptr;
 }
 
-float UNTimelineDecorator::GetCurrentTime()
+float UNTimelineDecorator::GetCurrentTime() const
 {
 	check(Timeline.IsValid());
 	return Timeline->GetCurrentTime();
@@ -162,6 +160,15 @@ UNTimelineEventDecorator* UNTimelineDecorator::CreateNewEvent(
 	}
 
 	return Object;
+}
+
+void UNTimelineDecorator::Clear()
+{
+	EventStore.Empty();
+	if (Timeline.IsValid())
+	{
+		Timeline->Clear();
+	}
 }
 
 void UNTimelineDecorator::Serialize(FArchive& Ar)
@@ -191,11 +198,13 @@ void UNTimelineDecorator::Serialize(FArchive& Ar)
 	Ar << Label;
 	Ar << CurrentTime;
 	Ar << EventStore;
+	Ar << TickInterval;
 
 	if (Ar.IsLoading())
 	{
 		Timeline->Clear();
 		Timeline->SetLabel(Label);
+		Timeline->SetTickInterval(TickInterval);
 		Timeline->SetCurrentTime(CurrentTime);
 	}
 

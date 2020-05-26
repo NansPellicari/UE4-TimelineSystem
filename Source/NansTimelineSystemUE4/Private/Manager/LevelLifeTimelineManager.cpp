@@ -20,10 +20,9 @@
 
 UNLevelLifeTimelineManager::UNLevelLifeTimelineManager() {}
 
-void UNLevelLifeTimelineManager::Init(FName _Label)
+void UNLevelLifeTimelineManager::Init(float _TickInterval, FName _Label)
 {
-	Super::Init(_Label);
-
+	Super::Init(_TickInterval, _Label);
 	// Save it here cause we clear all datas when level events are triggered.
 	Label = _Label;
 	GetWorld()->OnSelectedLevelsChanged().AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
@@ -37,7 +36,7 @@ void UNLevelLifeTimelineManager::OnLevelChanged()
 	if (bDebug) UE_LOG(LogTemp, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
-	Init(Label);
+	Init(TickInterval, Label);
 }
 
 void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
@@ -46,7 +45,7 @@ void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
 	if (bDebug) UE_LOG(LogTemp, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
-	Init(Label);
+	Init(TickInterval, Label);
 }
 
 void UNLevelLifeTimelineManager::SaveDataAndClear()
@@ -82,7 +81,7 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 	if (bShouldBeCleared)
 	{
 		Clear();
-		Init(Label);
+		Init(TickInterval, Label);
 	}
 }
 

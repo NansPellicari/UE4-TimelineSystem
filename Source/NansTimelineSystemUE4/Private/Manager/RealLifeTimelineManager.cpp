@@ -19,9 +19,9 @@
 
 UNRealLifeTimelineManager::UNRealLifeTimelineManager() {}
 
-void UNRealLifeTimelineManager::Init(FName _Label)
+void UNRealLifeTimelineManager::Init(float _TickInterval, FName _Label)
 {
-	Super::Init(_Label);
+	Super::Init(_TickInterval, _Label);
 	// Real life timer should be always in play state.
 	State = ENTimelineTimerState::Played;
 	if (CreationTime == 0)

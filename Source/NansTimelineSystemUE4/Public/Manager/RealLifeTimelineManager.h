@@ -45,7 +45,7 @@ public:
 	 * This just init State to "Play" and time variables.
 	 * @copydoc UNTimelineManagerBaseDecorator::Init()
 	 */
-	virtual void Init(FName _Label = NAME_None) override;
+	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
 
 	// BEGIN FTickableGameObject override
 	/** Always returns true 'cause it can be paused or stopped */

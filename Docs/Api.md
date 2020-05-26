@@ -169,20 +169,22 @@ Its goal is to saved events and place them in time. It works as a Time & Event c
 `public virtual  `[`~NTimeline`](#classNTimeline_1adffcefb7fc7f2768021994f8730eb356)`()` | Calls [Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 `public virtual bool `[`Attached`](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a427fef6206ba24c609a56884de4167e5) for any custom usages
 `public virtual void `[`Attached`](#classNTimeline_1a404dbb01b58fff5746568ceac1226a0c)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) but for a collection of objects.
+`public virtual void `[`SetTickInterval`](#classNTimeline_1af4782d4a0bb4b13d2bce2684e9bdf539)`(float _TickInterval)` | This should be called only by its friend [NTimelineManagerBase](#classNTimelineManagerBase) or a decorator to maintain consistency with its manager.
 `public virtual void `[`SetCurrentTime`](#classNTimeline_1a0411bf651e453dd5446074b11829654d)`(float _CurrentTime)` | This method is mainly used for savegame serialization
-`public virtual float `[`GetCurrentTime`](#classNTimeline_1acd18d17b5b93782aaebdf03a0a94daf1)`()` | Get CurrentTime
+`public virtual float `[`GetCurrentTime`](#classNTimeline_1af27e09d598d6d5b47980983040142ee9)`() const` | Get CurrentTime
 `public const TArray< `[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` > `[`GetEvents`](#classNTimeline_1abf7ab8d1d90f06c80097ef760ed1d5b6)`() const` | Returns the FEventTuple collection
 `public virtual void `[`SetLabel`](#classNTimeline_1a059eca9a31a3ad6abd9e9b9b057ac153)`(FName _Label)` | Give a name to this timeline 
 `public virtual FName `[`GetLabel`](#classNTimeline_1a8516a8cac69ee9f96ad1c9ea4864ea25)`() const` | Return the actual name
 `public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db)` Tuple)` | This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) methods to set data during runtime.
 `public virtual void `[`Clear`](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)`()` | This completely reset every events. It should be used with caution.
-`public virtual void `[`NotifyTick`](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
+`public virtual void `[`NotifyTick`](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
 `protected FName `[`Label`](#classNTimeline_1a008f3afba683e14f05887e4df108c260) | The name of this timeline
-`protected float `[`CurrentTime`](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) | It is computed internally in the [NotifyTick()](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) return.
+`protected float `[`TickInterval`](#classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421) | Tick interval, should be set by its manager
+`protected float `[`CurrentTime`](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) | It is computed internally in the [NotifyTick()](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) return.
 `protected inline  `[`NTimeline`](#classNTimeline_1a6143741ff06add02f22ee82e5f1b6147)`()` | This to allow inherited adapters to have a default constructor
 `protected inline virtual bool `[`BeforeOnAttached`](#classNTimeline_1ab6eecf3faf16b14e4748d7c32a204ee1)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` | In case of specialisation needs to avoid the attach process in some cases
 `protected inline virtual void `[`AfterOnAttached`](#classNTimeline_1a427fef6206ba24c609a56884de4167e5)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float AttachedTime)` | If needed to make some stats, analytics, trigger error,...
-`protected inline virtual const float & `[`GetTickInterval`](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3)`() const` | This is the value required by a timer to know the tick frequency for this timeline. The NotifyTick use this method to add time on CurrentTime at each call.
+`protected virtual const float `[`GetTickInterval`](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417)`() const` | This is the value required by a timer to know the tick frequency for this timeline. The NotifyTick use this method to add time on CurrentTime at each call.
 `protected virtual void `[`OnExpired`](#classNTimeline_1a5fa6f33a2b53e4bf6ac71381b36b9905)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event,const float & ExpiredTime,const int32 & Index)` | Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
 `typedef `[`FEventTuple`](#classNTimeline_1a632c8756e47d7e95507296250c40e6db) | An event tuple is an event representation, it allows to keep important details trace in memory. 0: Event object 1: attached time 2: delay 3: duration 4: label 5: expired time
 
@@ -216,11 +218,15 @@ It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1ab6eecf
 
 Same as [Attached(TSharedPtr<NTimelineEventBase> Event)](#classNTimeline_1a8fd63d2d49b9970c9ed43f3dc21f66a6) but for a collection of objects.
 
+#### `public virtual void `[`SetTickInterval`](#classNTimeline_1af4782d4a0bb4b13d2bce2684e9bdf539)`(float _TickInterval)` <a id="classNTimeline_1af4782d4a0bb4b13d2bce2684e9bdf539"></a>
+
+This should be called only by its friend [NTimelineManagerBase](#classNTimelineManagerBase) or a decorator to maintain consistency with its manager.
+
 #### `public virtual void `[`SetCurrentTime`](#classNTimeline_1a0411bf651e453dd5446074b11829654d)`(float _CurrentTime)` <a id="classNTimeline_1a0411bf651e453dd5446074b11829654d"></a>
 
 This method is mainly used for savegame serialization
 
-#### `public virtual float `[`GetCurrentTime`](#classNTimeline_1acd18d17b5b93782aaebdf03a0a94daf1)`()` <a id="classNTimeline_1acd18d17b5b93782aaebdf03a0a94daf1"></a>
+#### `public virtual float `[`GetCurrentTime`](#classNTimeline_1af27e09d598d6d5b47980983040142ee9)`() const` <a id="classNTimeline_1af27e09d598d6d5b47980983040142ee9"></a>
 
 Get CurrentTime
 
@@ -251,15 +257,19 @@ This completely reset every events. It should be used with caution.
 
 #### `public virtual void `[`NotifyTick`](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c)`()` <a id="classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c"></a>
 
-This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
+This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
 
 #### `protected FName `[`Label`](#classNTimeline_1a008f3afba683e14f05887e4df108c260) <a id="classNTimeline_1a008f3afba683e14f05887e4df108c260"></a>
 
 The name of this timeline
 
+#### `protected float `[`TickInterval`](#classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421) <a id="classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421"></a>
+
+Tick interval, should be set by its manager
+
 #### `protected float `[`CurrentTime`](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) <a id="classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740"></a>
 
-It is computed internally in the [NotifyTick()](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) return.
+It is computed internally in the [NotifyTick()](#classNTimeline_1ad5766056b3fdac5e80a7118100c78e0c) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) return.
 
 #### `protected inline  `[`NTimeline`](#classNTimeline_1a6143741ff06add02f22ee82e5f1b6147)`()` <a id="classNTimeline_1a6143741ff06add02f22ee82e5f1b6147"></a>
 
@@ -273,7 +283,7 @@ In case of specialisation needs to avoid the attach process in some cases
 
 If needed to make some stats, analytics, trigger error,...
 
-#### `protected inline virtual const float & `[`GetTickInterval`](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3)`() const` <a id="classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3"></a>
+#### `protected virtual const float `[`GetTickInterval`](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417)`() const` <a id="classNTimeline_1a7c0dc7947a2f271fe68020d322fca417"></a>
 
 This is the value required by a timer to know the tick frequency for this timeline. The NotifyTick use this method to add time on CurrentTime at each call.
 
@@ -382,38 +392,43 @@ This class is the client for the [NTimeline](#classNTimeline) object. Its goal i
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public  `[`NTimelineManagerBase`](#classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d)`()` | Calls the [Init()](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35) method.
+`public  `[`NTimelineManagerBase`](#classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d)`()` | Calls the [Init()](#classNTimelineManagerBase_1a14e62840b3a719d76f1a02eee611d8b2) method.
 `public virtual  `[`~NTimelineManagerBase`](#classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32)`()` | Calls [Clear()](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054) and release Timeline TSharedPtr
-`public virtual void `[`Init`](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35)`(FName _Label)` | Instanciate the embeded [NTimeline](#classNTimeline)
+`public virtual void `[`Init`](#classNTimelineManagerBase_1a14e62840b3a719d76f1a02eee611d8b2)`(float _TickInterval,FName _Label)` | Instanciate the embeded [NTimeline](#classNTimeline)
 `public virtual void `[`Pause`](#classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab)`()` | This pause the timeline ticking
 `public virtual void `[`Play`](#classNTimelineManagerBase_1a460e6b974a885f32e75c39c5d8fd2f50)`()` | This (re)start the timeline ticking
 `public virtual void `[`Stop`](#classNTimelineManagerBase_1a996371baf5dc0e51a32c14325c1c1091)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
 `public virtual void `[`TimerTick`](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)`()` | This checks the actual play state (ENTimelineTimerState) and tick the [NTimeline](#classNTimeline) accordingly.
-`public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001)`()` | Get the actual state.
-`public float `[`GetTickInterval`](#classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9)`()` | Get the tick interval which a timermanager should use to process
-`public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530)`()` | Get the coupled [NTimeline](#classNTimeline)
-`protected float `[`TickInterval`](#classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d) | The interval retrieve from the timeline.
+`public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1a8b820e0df999f49192073398cc751adf)`() const` | Get the actual state.
+`public float `[`GetTickInterval`](#classNTimelineManagerBase_1a85cbb4210b418a6fbda376d6fdd8fe5a)`() const` | Get the tick interval which a timermanager should use to process
+`public virtual void `[`SetTickInterval`](#classNTimelineManagerBase_1a45252280e724ebca7b1971e16bdfcb61)`(float _TickInterval)` | Defined the desired ticking interval
+`public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1a2e0fb25eed415b60006a5b853d78c9b6)`() const` | Get the coupled [NTimeline](#classNTimeline)
+`protected float `[`TickInterval`](#classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d) | The interval retrieved from the timeline.
 `protected `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a) | The actual state
 `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classNTimelineManagerBase_1a1edf40f8bb3b300a8f3d6cb14e539c74) | The coupled timeline
 `protected virtual void `[`Clear`](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054)`()` | Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 `protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManagerBase_1a14d64e5d6ed18abaf85d24f8c5f1a598)`()` | This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
 `protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManagerBase_1a34257aba82c08f245f2e2465a24d2071)`()` | This method is call immediately before ticking
 `protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7)`()` | This method is call immediately after ticking
-`protected void `[`SetTickInterval`](#classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2)`(const float _TickInterval)` | It is used by [NTimeline](#classNTimeline) to set its desired ticking interval TODO not a good idea, should be updatable by client for its needs
 
 ## Members
 
 #### `public  `[`NTimelineManagerBase`](#classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d)`()` <a id="classNTimelineManagerBase_1a13e377bcc309051ae1ee3c5bfb15676d"></a>
 
-Calls the [Init()](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35) method.
+Calls the [Init()](#classNTimelineManagerBase_1a14e62840b3a719d76f1a02eee611d8b2) method.
 
 #### `public virtual  `[`~NTimelineManagerBase`](#classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32)`()` <a id="classNTimelineManagerBase_1aa0c078bc089e24f179512a91d2219a32"></a>
 
 Calls [Clear()](#classNTimelineManagerBase_1a97ba6d8c1ce7e2f7162ddfafbed98054) and release Timeline TSharedPtr
 
-#### `public virtual void `[`Init`](#classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35)`(FName _Label)` <a id="classNTimelineManagerBase_1ac2e483be82d0d11125c217748a007e35"></a>
+#### `public virtual void `[`Init`](#classNTimelineManagerBase_1a14e62840b3a719d76f1a02eee611d8b2)`(float _TickInterval,FName _Label)` <a id="classNTimelineManagerBase_1a14e62840b3a719d76f1a02eee611d8b2"></a>
 
 Instanciate the embeded [NTimeline](#classNTimeline)
+
+#### Parameters
+* `_TickInterval` - Interval time between tick in sec 
+
+* `_Label` - Name of the Timeline.
 
 #### `public virtual void `[`Pause`](#classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab)`()` <a id="classNTimelineManagerBase_1a101a281c4e161a206b1677ce410464ab"></a>
 
@@ -431,21 +446,25 @@ This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTi
 
 This checks the actual play state (ENTimelineTimerState) and tick the [NTimeline](#classNTimeline) accordingly.
 
-#### `public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001)`()` <a id="classNTimelineManagerBase_1aab80003c9c3e15446e3283f7884ad001"></a>
+#### `public `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManagerBase_1a8b820e0df999f49192073398cc751adf)`() const` <a id="classNTimelineManagerBase_1a8b820e0df999f49192073398cc751adf"></a>
 
 Get the actual state.
 
-#### `public float `[`GetTickInterval`](#classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9)`()` <a id="classNTimelineManagerBase_1a7c355c6bad3a84fb4e00f3f2ba0658b9"></a>
+#### `public float `[`GetTickInterval`](#classNTimelineManagerBase_1a85cbb4210b418a6fbda376d6fdd8fe5a)`() const` <a id="classNTimelineManagerBase_1a85cbb4210b418a6fbda376d6fdd8fe5a"></a>
 
 Get the tick interval which a timermanager should use to process
 
-#### `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530)`()` <a id="classNTimelineManagerBase_1acf58e576105745b11d2a591cbf9cf530"></a>
+#### `public virtual void `[`SetTickInterval`](#classNTimelineManagerBase_1a45252280e724ebca7b1971e16bdfcb61)`(float _TickInterval)` <a id="classNTimelineManagerBase_1a45252280e724ebca7b1971e16bdfcb61"></a>
+
+Defined the desired ticking interval
+
+#### `public TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`GetTimeline`](#classNTimelineManagerBase_1a2e0fb25eed415b60006a5b853d78c9b6)`() const` <a id="classNTimelineManagerBase_1a2e0fb25eed415b60006a5b853d78c9b6"></a>
 
 Get the coupled [NTimeline](#classNTimeline)
 
 #### `protected float `[`TickInterval`](#classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d) <a id="classNTimelineManagerBase_1a194b51bd0c7ac34786bc256b77218f8d"></a>
 
-The interval retrieve from the timeline.
+The interval retrieved from the timeline.
 
 #### `protected `[`ENTimelineTimerState`](#TimelineManagerBase_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a) <a id="classNTimelineManagerBase_1aea2bb1bd9437ff032c686389a7734c1a"></a>
 
@@ -470,10 +489,6 @@ This method is call immediately before ticking
 #### `protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7)`()` <a id="classNTimelineManagerBase_1aab9090f586908b3f53ab7938dda511c7"></a>
 
 This method is call immediately after ticking
-
-#### `protected void `[`SetTickInterval`](#classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2)`(const float _TickInterval)` <a id="classNTimelineManagerBase_1addc91da92ff0d218c8f677e1705483d2"></a>
-
-It is used by [NTimeline](#classNTimeline) to set its desired ticking interval TODO not a good idea, should be updatable by client for its needs
 
 # class `NTimelineManagerFake` <a id="classNTimelineManagerFake"></a>
 
@@ -642,7 +657,7 @@ For example: Player makes a very benevolent actions which gives him a health bon
 --------------------------------|---------------------------------------------
 `public FTimerHandle `[`TimerHandle`](#classUNGameLifeTimelineManager_1ab3212791e62e45a2ae67a307007addab) | Created by the FTimerManager
 `public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) | Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)
-`public virtual void `[`Init`](#classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6)`(FName _Label)` | It creates the timer with a FTimerManager and attached TimerDelegate to it. 
+`public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7)`(float _TickInterval,FName _Label)` | It creates the timer with a FTimerManager and attached TimerDelegate to it. 
 `public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` | clears timer + unbind delegate + invalidate handle. It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `protected float `[`SaveTime`](#classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4) | This is only used for savegame to keep time between sessions
 `protected  `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager_1abe6ebaa8f9f8601a5e97f6ae3c8a8f4b)`()` | A default ctor for engine system
@@ -657,7 +672,7 @@ Created by the FTimerManager
 
 Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865)
 
-#### `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6)`(FName _Label)` <a id="classUNGameLifeTimelineManager_1abc4a66f9884b1af3ae470939d3f564a6"></a>
+#### `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7)`(float _TickInterval,FName _Label)` <a id="classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7"></a>
 
 It creates the timer with a FTimerManager and attached TimerDelegate to it. 
 #### Parameters
@@ -696,7 +711,7 @@ For example:
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa21f092650d6adad0ac7c242f5c087fd)`(FName _Label)` | Attaches event on level changes It creates the timer with a FTimerManager and attached TimerDelegate to it. 
+`public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b)`(float _TickInterval,FName _Label)` | Attaches event on level changes It creates the timer with a FTimerManager and attached TimerDelegate to it. 
 `public void `[`OnLevelRemoved`](#classUNLevelLifeTimelineManager_1a3c1cd7121203fc49d09d54dc73c86632)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
 `public void `[`OnLevelAdded`](#classUNLevelLifeTimelineManager_1a377ebe035faf84250cb3ac5416ae1fb7)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
 `public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a5f3077625f452d2d0d0c58f436a36c75)`()` | This method to clear and reload timeline when level changed
@@ -709,7 +724,7 @@ For example:
 
 ## Members
 
-#### `public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa21f092650d6adad0ac7c242f5c087fd)`(FName _Label)` <a id="classUNLevelLifeTimelineManager_1aa21f092650d6adad0ac7c242f5c087fd"></a>
+#### `public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b)`(float _TickInterval,FName _Label)` <a id="classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b"></a>
 
 Attaches event on level changes It creates the timer with a FTimerManager and attached TimerDelegate to it. 
 #### Parameters
@@ -773,7 +788,7 @@ For example: A promo code which gives a market discount for 2 days.
 `public inline virtual void `[`Pause`](#classUNRealLifeTimelineManager_1ac2ec8f296c32a540bd6f91f3ea5f69f3)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 `public inline virtual void `[`Play`](#classUNRealLifeTimelineManager_1a1a53b520ad6595e1314f044e6e59bc7d)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 `public inline virtual void `[`Stop`](#classUNRealLifeTimelineManager_1acc4a988642b5ab6fa912706710eac2c3)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
-`public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a8408abf299f82de536717ac1e4018125)`(FName _Label)` | This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+`public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8)`(float _TickInterval,FName _Label)` | This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 `public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1)`() const` | Always returns true 'cause it can be paused or stopped
 `public virtual bool `[`IsTickable`](#classUNRealLifeTimelineManager_1aed1bad81ebfc134232dfc15757deae65)`() const` | Always returns true 'cause it can be paused or stopped
 `public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` | This override methods allows to tick [UNTimelineManagerBaseDecorator::TimerTick()](#classNTimelineManagerBase_1af842046499d2023a90ed2d46d0424865) and to increment times vars.
@@ -803,12 +818,14 @@ This do nothing. Excepts in our deepest dreams, we can't altered time in real li
 
 This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 
-#### `public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a8408abf299f82de536717ac1e4018125)`(FName _Label)` <a id="classUNRealLifeTimelineManager_1a8408abf299f82de536717ac1e4018125"></a>
+#### `public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8)`(float _TickInterval,FName _Label)` <a id="classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8"></a>
 
 This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 **See also**: [UNTimelineManagerBaseDecorator()](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)
 
 #### Parameters
+* `_TickInterval` - Interval time between tick in sec 
+
 * `_Label` - Name of the Timeline.
 
 #### `public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1)`() const` <a id="classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1"></a>
@@ -980,11 +997,12 @@ It manages:
 `public inline  `[`UNTimelineDecorator`](#classUNTimelineDecorator_1ac09cda631e61251a0bef283cea76d4e0)`()` | Just a default ctor for UObject paradigme
 `public virtual void `[`Init`](#classUNTimelineDecorator_1a0c34d54decdfcac0381b442d4b8ef149)`(`[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` * TimelineManager,FName _Label)` | this method is used to instanciate the embeded [NTimeline](#classNTimeline)
 `public virtual void `[`Clear`](#classUNTimelineDecorator_1a911af71c7621d03cfba0a59cd06d9305)`()` | This completely reset every events. It should be used with caution.
-`public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1aa491ecefa39a458119cc879ef28cb8ee)`(float _CurrentTime)` | This method is mainly used for savegame serialization
-`public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a318bb81dd9ab387ff1ff433667a4edc6)`()` | Get CurrentTime
+`public virtual void `[`SetTickInterval`](#classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d)`(float _TickInterval)` | This should be called only by its friend [NTimelineManagerBase](#classNTimelineManagerBase) or a decorator to maintain consistency with its manager.
+`public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce)`(float _CurrentTime)` | This method is mainly used for savegame serialization
+`public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2)`() const` | Get CurrentTime
 `public virtual void `[`SetLabel`](#classUNTimelineDecorator_1a3b4a02a04f013e165212abdee6ef3763)`(FName _Label)` | Give a name to this timeline 
 `public virtual FName `[`GetLabel`](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)`() const` | Return the actual name
-`public virtual void `[`NotifyTick`](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
+`public virtual void `[`NotifyTick`](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
 `public inline virtual bool `[`Attached`](#classUNTimelineDecorator_1af3cb0bb3aa22bf7565ed71f1c017f257)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` | This object should works only with Decorators. This method is reserved for core objects. 
 `public inline virtual void `[`Attached`](#classUNTimelineDecorator_1a2738256232901e69e74486646800a863)`(TArray< TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` >> EventsCollection)` | This object should works only with Decorators. This method is reserved for core objects. 
 `public virtual void `[`BeginDestroy`](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3)`()` | 
@@ -1013,11 +1031,15 @@ this method is used to instanciate the embeded [NTimeline](#classNTimeline)
 
 This completely reset every events. It should be used with caution.
 
-#### `public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1aa491ecefa39a458119cc879ef28cb8ee)`(float _CurrentTime)` <a id="classUNTimelineDecorator_1aa491ecefa39a458119cc879ef28cb8ee"></a>
+#### `public virtual void `[`SetTickInterval`](#classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d)`(float _TickInterval)` <a id="classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d"></a>
+
+This should be called only by its friend [NTimelineManagerBase](#classNTimelineManagerBase) or a decorator to maintain consistency with its manager.
+
+#### `public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce)`(float _CurrentTime)` <a id="classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce"></a>
 
 This method is mainly used for savegame serialization
 
-#### `public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a318bb81dd9ab387ff1ff433667a4edc6)`()` <a id="classUNTimelineDecorator_1a318bb81dd9ab387ff1ff433667a4edc6"></a>
+#### `public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2)`() const` <a id="classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2"></a>
 
 Get CurrentTime
 
@@ -1033,7 +1055,7 @@ Return the actual name
 
 #### `public virtual void `[`NotifyTick`](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)`()` <a id="classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414"></a>
 
-This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a3b72d2abe1c75bcca48473a74bc842a3) to increment time.
+This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
 
 #### `public inline virtual bool `[`Attached`](#classUNTimelineDecorator_1af3cb0bb3aa22bf7565ed71f1c017f257)`(TSharedPtr< `[`NTimelineEventBase`](#classNTimelineEventBase)` > Event)` <a id="classUNTimelineDecorator_1af3cb0bb3aa22bf7565ed71f1c017f257"></a>
 
@@ -1259,7 +1281,8 @@ To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDeco
 `public virtual void `[`Pause`](#classUNTimelineManagerBaseDecorator_1a9abb209019d5b48f98b25eb9781168c2)`()` | This pause the timeline ticking
 `public virtual void `[`Play`](#classUNTimelineManagerBaseDecorator_1a2f2f9aa7c7dd2d4bf67ce27495b0c6b2)`()` | This (re)start the timeline ticking
 `public virtual void `[`Stop`](#classUNTimelineManagerBaseDecorator_1adbf456c7877d96747d3587aba50cf7a6)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
-`public virtual void `[`Init`](#classUNTimelineManagerBaseDecorator_1a4158d01f1d2fcb3a3e6abfe3029033a4)`(FName _Label)` | The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+`public virtual void `[`SetTickInterval`](#classUNTimelineManagerBaseDecorator_1aa20e8e3fc7d873671f34f19c04a58683)`(float _TickInterval)` | Defined the desired ticking interval
+`public virtual void `[`Init`](#classUNTimelineManagerBaseDecorator_1a8bdbcd3c7057202ca64f3066432b64a9)`(float _TickInterval,FName _Label)` | The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 `public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` | It is called by the parent [NTimelineManagerBase](#classNTimelineManagerBase) on dtor
 `public virtual void `[`Serialize`](#classUNTimelineManagerBaseDecorator_1a2157f4309709b2f3cb3aa145cce7624b)`(FArchive & Ar)` | It's the starting link of serialization chain for all embeded decorators. This calls [UNTimelineDecorator::Serialize()](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9).
 `public virtual void `[`BeginDestroy`](#classUNTimelineManagerBaseDecorator_1a969904b7e92bc8252ef540e5bb97909b)`()` | This call the [UNTimelineDecorator::BeginDestroy()](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3) too.
@@ -1270,7 +1293,7 @@ To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDeco
 `public `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineManagerBaseDecorator_1a67a63b68e9e6bac3824e0e1baab31313)`(TSubclassOf< `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1a60e54308538c299ed44bbabe46a9f54a): Creates a new Event and use this timeline as the outer for this new object.
 `public `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerBaseDecorator_1adeb6a64d741a09925443d7cfd559214c)`(TSubclassOf< `[`UNTimelineEventDecorator`](#classUNTimelineEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1a60e54308538c299ed44bbabe46a9f54a): Creates a new Event and use this timeline as the outer for this new object.
 `protected `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`MyTimeline`](#classUNTimelineManagerBaseDecorator_1ad57c59a935c911cdde1f3f6419f12d09) | the timeline associated to this manager.
-`protected  `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)`()` | Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseDecorator_1a2388cb8330e146ad0e00a5d31420c9c5) methods (factory methods).
+`protected  `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)`()` | Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseDecorator_1acf2950242fb5298502597500305686e3) methods (factory methods).
 
 ## Members
 
@@ -1286,12 +1309,18 @@ This (re)start the timeline ticking
 
 This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
 
-#### `public virtual void `[`Init`](#classUNTimelineManagerBaseDecorator_1a4158d01f1d2fcb3a3e6abfe3029033a4)`(FName _Label)` <a id="classUNTimelineManagerBaseDecorator_1a4158d01f1d2fcb3a3e6abfe3029033a4"></a>
+#### `public virtual void `[`SetTickInterval`](#classUNTimelineManagerBaseDecorator_1aa20e8e3fc7d873671f34f19c04a58683)`(float _TickInterval)` <a id="classUNTimelineManagerBaseDecorator_1aa20e8e3fc7d873671f34f19c04a58683"></a>
+
+Defined the desired ticking interval
+
+#### `public virtual void `[`Init`](#classUNTimelineManagerBaseDecorator_1a8bdbcd3c7057202ca64f3066432b64a9)`(float _TickInterval,FName _Label)` <a id="classUNTimelineManagerBaseDecorator_1a8bdbcd3c7057202ca64f3066432b64a9"></a>
 
 The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 **See also**: [UNTimelineManagerBaseDecorator()](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)
 
 #### Parameters
+* `_TickInterval` - Interval time between tick in sec 
+
 * `_Label` - Name of the Timeline.
 
 #### `public virtual void `[`Clear`](#classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1)`()` <a id="classUNTimelineManagerBaseDecorator_1a6cf119d232cc8eca846516602c370bf1"></a>
@@ -1358,7 +1387,7 @@ the timeline associated to this manager.
 
 #### `protected  `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0)`()` <a id="classUNTimelineManagerBaseDecorator_1a6e909ad9b0121e777f066c9a67a7fcd0"></a>
 
-Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseDecorator_1a2388cb8330e146ad0e00a5d31420c9c5) methods (factory methods).
+Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerBaseDecorator_1acf2950242fb5298502597500305686e3) methods (factory methods).
 
 It instanciates the embeded timeline with CreateDefaultSubobject().
 
@@ -1372,6 +1401,7 @@ This struct to create Configured Timeline and ease Timeline instanciation. This 
 --------------------------------|---------------------------------------------
 `public FName `[`Name`](#structFConfiguredTimeline_1a47f13a6768b6cf144550a0a3cfb1e6b6) | This allows to retrieve easily a timeline. This is used by the [SConfiguredTimelinePin](#classSConfiguredTimelinePin) as a combobox.
 `public TSubclassOf< `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` > `[`TimelineClass`](#structFConfiguredTimeline_1a22929f5a3baa5bd80d4cee8388e46c58) | The Configured Timeline class
+`public float `[`TickInterval`](#structFConfiguredTimeline_1a8b27824729746bb4b3bf22502bad83a5) | You can use this to add more or less frequency between each tick.
 
 ## Members
 
@@ -1382,6 +1412,10 @@ This allows to retrieve easily a timeline. This is used by the [SConfiguredTimel
 #### `public TSubclassOf< `[`UNTimelineManagerBaseDecorator`](#classUNTimelineManagerBaseDecorator)` > `[`TimelineClass`](#structFConfiguredTimeline_1a22929f5a3baa5bd80d4cee8388e46c58) <a id="structFConfiguredTimeline_1a22929f5a3baa5bd80d4cee8388e46c58"></a>
 
 The Configured Timeline class
+
+#### `public float `[`TickInterval`](#structFConfiguredTimeline_1a8b27824729746bb4b3bf22502bad83a5) <a id="structFConfiguredTimeline_1a8b27824729746bb4b3bf22502bad83a5"></a>
+
+You can use this to add more or less frequency between each tick.
 
 # struct `FNEventRecord` <a id="structFNEventRecord"></a>
 

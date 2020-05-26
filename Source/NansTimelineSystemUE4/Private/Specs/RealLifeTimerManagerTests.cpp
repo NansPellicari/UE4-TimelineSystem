@@ -47,7 +47,7 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -93,7 +93,7 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -104,7 +104,7 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
+		TimelineManager->Init(1.f, FName("ChangeLabel"));	 // try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
@@ -135,7 +135,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -148,7 +148,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		TimelineManager->ConditionalBeginDestroy();
 		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-			FakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+			FakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(
@@ -188,7 +188,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
 	{
@@ -219,7 +219,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 
 		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNRealLifeTimelineManager>(
-			FakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+			FakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);

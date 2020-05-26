@@ -45,7 +45,7 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	NTestWorld::CreateAndOpenNewLevel(World);
 
 	// Begin test
@@ -100,7 +100,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
 	// Begin test
@@ -116,7 +116,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		TimelineManager->Serialize(ToBinary);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TimelineManager->Init(FName("ChangeLabel"));	// try to change label to checks if rewrite with the archive
+		TimelineManager->Init(1.f, FName("ChangeLabel"));	 // try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
 
@@ -149,7 +149,7 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
 	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
-		FakeObject, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
 	// Begin test
@@ -170,7 +170,7 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 		NewFakeObject->SetMyWorld(NewWorld);
 		UNLevelLifeTimelineManager* NewTimelineManager = UNTimelineManagerBaseDecorator::CreateObject<UNLevelLifeTimelineManager>(
-			NewFakeObject, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+			NewFakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);

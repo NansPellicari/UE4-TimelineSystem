@@ -28,24 +28,27 @@ UNTimelineManagerBaseDecorator::UNTimelineManagerBaseDecorator()
 	Timeline = MyTimeline->GetTimeline();
 }
 
-void UNTimelineManagerBaseDecorator::Init(FName _Label)
+void UNTimelineManagerBaseDecorator::Init(float _TickInterval, FName _Label)
 {
 	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerBaseDecorator need a world to live"));
-	Timeline->SetLabel(_Label);
+	TickInterval = _TickInterval;
+	MyTimeline->SetTickInterval(_TickInterval);
+	MyTimeline->SetLabel(_Label);
 }
 
 template <typename T>
-T* UNTimelineManagerBaseDecorator::CreateObject(UObject* Outer, FName _Label, EObjectFlags Flags)
+T* UNTimelineManagerBaseDecorator::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
 {
 	T* Obj = NewObject<T>(Outer, NAME_None, Flags);
-	Obj->Init(_Label);
+	Obj->Init(TickInterval, _Label);
 	return Obj;
 }
 template <typename T>
-T* UNTimelineManagerBaseDecorator::CreateObject(UObject* Outer, const UClass* Class, FName _Label, EObjectFlags Flags)
+T* UNTimelineManagerBaseDecorator::CreateObject(
+	UObject* Outer, const UClass* Class, float TickInterval, FName _Label, EObjectFlags Flags)
 {
 	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-	Obj->Init(_Label);
+	Obj->Init(TickInterval, _Label);
 	return Obj;
 }
 
@@ -68,6 +71,13 @@ void UNTimelineManagerBaseDecorator::Play()
 void UNTimelineManagerBaseDecorator::Stop()
 {
 	NTimelineManagerBase::Stop();
+}
+
+void UNTimelineManagerBaseDecorator::SetTickInterval(float _TickInterval)
+{
+	if (MyTimeline == nullptr) return;
+	TickInterval = _TickInterval;
+	MyTimeline->SetTickInterval(_TickInterval);
 }
 
 const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents() const

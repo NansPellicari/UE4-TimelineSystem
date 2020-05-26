@@ -113,12 +113,22 @@ void NTimeline::OnExpired(TSharedPtr<NTimelineEventBase> Event, const float& Exp
 	EventExpired.ExecuteIfBound(Event, ExpiredTime, Index);
 }
 
+const float NTimeline::GetTickInterval() const
+{
+	return TickInterval;
+}
+
+void NTimeline::SetTickInterval(float _TickInterval)
+{
+	TickInterval = _TickInterval;
+}
+
 void NTimeline::SetCurrentTime(float _CurrentTime)
 {
 	CurrentTime = _CurrentTime;
 }
 
-float NTimeline::GetCurrentTime()
+float NTimeline::GetCurrentTime() const
 {
 	return CurrentTime;
 }

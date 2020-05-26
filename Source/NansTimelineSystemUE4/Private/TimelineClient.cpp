@@ -25,8 +25,8 @@ void UNTimelineClient::Init()
 
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerBaseDecorator* Timeline =
-			UNTimelineManagerBaseDecorator::CreateObject<UNTimelineManagerBaseDecorator>(this, Conf.TimelineClass, Conf.Name);
+		UNTimelineManagerBaseDecorator* Timeline = UNTimelineManagerBaseDecorator::CreateObject<UNTimelineManagerBaseDecorator>(
+			this, Conf.TimelineClass, Conf.TickInterval, Conf.Name);
 		Timeline->Play();
 
 		TimelinesCollection.Add(Conf.Name, Timeline);

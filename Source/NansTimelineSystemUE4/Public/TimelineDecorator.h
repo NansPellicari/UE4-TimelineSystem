@@ -105,8 +105,9 @@ public:
 
 	// BEGIN NTimeline overrides
 	virtual void Clear() override;
-	virtual void SetCurrentTime(float _CurrentTime);
-	virtual float GetCurrentTime();
+	virtual void SetTickInterval(float _TickInterval) override;
+	virtual void SetCurrentTime(float _CurrentTime) override;
+	virtual float GetCurrentTime() const override;
 	virtual void SetLabel(FName _Label) override;
 	virtual FName GetLabel() const;
 	virtual void NotifyTick() override;

@@ -41,24 +41,35 @@ void NTimelineManagerBase::TimerTick()
 	}
 }
 
-TSharedPtr<NTimeline> NTimelineManagerBase::GetTimeline()
+TSharedPtr<NTimeline> NTimelineManagerBase::GetTimeline() const
 {
 	return Timeline;
 }
 
-float NTimelineManagerBase::GetTickInterval()
+ENTimelineTimerState NTimelineManagerBase::GetState() const
+{
+	return State;
+}
+
+float NTimelineManagerBase::GetTickInterval() const
 {
 	return TickInterval;
 }
 
-void NTimelineManagerBase::SetTickInterval(const float _TickInterval)
+void NTimelineManagerBase::SetTickInterval(float _TickInterval)
 {
 	TickInterval = _TickInterval;
+	if (Timeline != nullptr)
+	{
+		Timeline->SetTickInterval(_TickInterval);
+	}
 }
 
-void NTimelineManagerBase::Init(FName _Label)
+void NTimelineManagerBase::Init(float _TickInterval, FName _Label)
 {
 	Timeline = MakeShareable(new NTimeline(this, _Label));
+	TickInterval = _TickInterval;
+	Timeline->SetTickInterval(TickInterval);
 }
 
 void NTimelineManagerBase::Play()
@@ -77,11 +88,6 @@ void NTimelineManagerBase::Stop()
 {
 	Clear();
 	State = ENTimelineTimerState::Stopped;
-}
-
-ENTimelineTimerState NTimelineManagerBase::GetState()
-{
-	return State;
 }
 
 void NTimelineManagerBase::Clear()
