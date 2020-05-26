@@ -17,6 +17,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+// TODO create a K2node to allow creating a new event with all its custom fields as pins.
+
 /** Required to create a UE4 module */
 class FNansTimelineSystemUE4Module : public IModuleInterface
 {

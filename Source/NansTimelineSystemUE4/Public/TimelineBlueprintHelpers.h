@@ -32,7 +32,8 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineBlueprintHelpers : public UBlueprintFu
 	GENERATED_BODY()
 public:
 	/**
-	 * It allows you to create a new timeline manager with its embeded timeline.
+	 * It allows you to create a new timeline manager on the flye with its embeded timeline.
+	 * @note Prefer using the Configured Timeline which embed all the serialization functionnalities.
 	 *
 	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerBaseDecorator instanciation, it is implicitly
 	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
@@ -44,8 +45,16 @@ public:
 	static UNTimelineManagerBaseDecorator* CreateNewTimeline(UObject* WorldContextObject, TSubclassOf<UNTimelineManagerBaseDecorator> Class, FName Name);
 	// clang-format on
 
+	/**
+	 * This class is a pass-through for the INTimelineGameInstance::GetTimeline() method.
+	 * It provides a standalone node to avoid getting the game instance in your BP graph.
+	 *
+	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerBaseDecorator instanciation, it is implicitly
+	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
+	 * @param Timeline - To allow having a combobox of configured timelines
+	 */
 	// clang-format off
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "Create an attach new Event", Keywords = "Timeline Event create attach"), Category = "NansTimeline")
-	static void CreateAndAttachedEvent(UObject* WorldContextObject, FConfiguredTimeline Timeline);
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "Get a Timeline by its configured name", Keywords = "Timeline get"), Category = "NansTimeline")
+	static UNTimelineManagerBaseDecorator* GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline);
 	// clang-format on
 };

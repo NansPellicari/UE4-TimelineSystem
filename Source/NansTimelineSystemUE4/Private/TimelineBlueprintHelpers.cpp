@@ -14,6 +14,7 @@
 
 #include "TimelineBlueprintHelpers.h"
 
+#include "Engine/GameInstance.h"
 #include "Event/TimelineEventDecorator.h"
 #include "Manager/TimelineManagerBaseDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -27,17 +28,14 @@ UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::CreateNewTimeline(
 	return Object;
 }
 
-void UNTimelineBlueprintHelpers::CreateAndAttachedEvent(UObject* WorldContextObject, FConfiguredTimeline Timeline)
+UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {
-	INTimelineGameInstance* GI = Cast<INTimelineGameInstance>(WorldContextObject->GetWorld()->GetGameInstance());
-	checkf(GI != nullptr, TEXT("Game instance should derived from UNTimelineClient class."));
-	UNTimelineManagerBaseDecorator* TimelineObj = GI->GetTimeline(Timeline);
-	checkf(TimelineObj != nullptr, TEXT("A problem occured in timeline configuration."));
+	UGameInstance* GI = WorldContextObject->GetWorld()->GetGameInstance();
+	if (!GI->GetClass()->ImplementsInterface(UNTimelineGameInstance::StaticClass()))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Your game instance should implements INTimelineGameInstance"));
+		return nullptr;
+	}
 
-	UE_LOG(LogTemp,
-		Display,
-		TEXT("%s classname %s objectpath %s"),
-		ANSI_TO_TCHAR(__FUNCTION__),
-		*Timeline.TimelineClass->GetFullName(),
-		*TimelineObj->GetFullName());
+	return INTimelineGameInstance::Execute_GetTimeline(GI, Timeline);
 }
