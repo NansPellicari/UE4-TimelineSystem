@@ -3,13 +3,13 @@
 This plugins allows to keep tracks of time for different timeline paradigm<sup>(1)</sup>, attached events<sup>(2)</sup> to them and managed serialization for Save and Load game.
 
 > 1. [Real life](#331---real-life) time, [Game life](#332---game-life) and [Level life](#333---level-life)
-> 2. simple `UObject` carrying data or simple functionnalities you design
+> 2. light `UObject` carrying data and/or simple functionnalities you design
 
 ![Nans Timeline System](./Docs/img/intro.png)
 
 > Note:  
 > I've hesitated at first to use the word **"Timeline"** which is already used in the UE4 paradigm for animation (see [this](https://docs.unrealengine.com/en-US/Engine/Blueprints/UserGuide/Timelines/index.html)).  
-> The thing is, it's the most accurate word for the feature this plugin provides,  
+> The thing is, it's the most accurate word for the feature this plugin provides,
 > so I still decided to use it but for BP I prefixed with **Nans** (= **NansTimeline**) everywhere to avoid confusion.
 
 |                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                        |
@@ -91,7 +91,7 @@ As a client, it is your main interface.
 
 #### 3.3.1. - Real Life
 
-The intent of the **Real Life** timeline is to tracks times **since** the **game started**.  
+The intent of the **Real Life** timeline is to tracks times **since** the **first start of the game**.  
 It is **not affected** by **time alterations** such as **play/pause** and **slow motion**.  
 After the game stops, it shoulds **replay** all the **missing time** on game reloading to **update** attached **Events states**.  
 As real life is, its state is always **Play**.  
@@ -217,6 +217,24 @@ PublicDependencyModuleNames.AddRange(new string[] {
 
 **> Blueprint**
 
+First create a new Blueprint which inherit from a `UGameInstance` and open blueprint **class settings**:
+
+![gi-class-settings-btn.png](./Docs/img/gi-class-settings-btn.png)
+
+Add the `NTimelineGameInstance` interface:
+
+![gi-class-settings-interface-choice.png](./Docs/img/gi-class-settings-interface-choice.png)
+
+Override the `UGameInstance::init()` method + add a new variable of `NTimelineClient` Type:
+
+![gi-class-settings-interface-choice.png](./Docs/img/gi-class-settings-override-init.png)
+
+Override the interface method:
+
+![gi-class-settings-interface-choice.png](./Docs/img/gi-class-settings-interface-method.png)
+
+![gi-class-settings-interface-choice.png](./Docs/img/gi-class-settings-override-gettimeline.png)
+
 **> c++**
 
 Here an example of a `UGameInstance` class which implements it:
@@ -284,7 +302,7 @@ then to **Nans Timeline** settings:
 
 ![timeline settings](./Docs/img/stepbystep-timeline-settings.png)
 
-then **add, name and choose class** for the timeline you want:
+then **add** new timeline and configure its **name, tick interval and class** for your needs:
 
 ![add timelines](./Docs/img/stepbystep-timeline-add.png)
 

@@ -108,11 +108,11 @@ As I explain [here](https://answers.unrealengine.com/questions/958879/what-is-th
 
 ### 4.1. Create USaveGame Object
 
-Fist you can follow [this UE4 doc page](https://docs.unrealengine.com/en-US/Gameplay/SaveGame/index.html) to create your own.
+First you can follow [this UE4 doc page](https://docs.unrealengine.com/en-US/Gameplay/SaveGame/index.html) to create your own.
 Then you have to add a public `UObject* WorldContextObject` property and add these lines:
 
 ```cpp
-// in the top of file in the includes part
+// at the top of the file
 #include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
 // in your `Serialize()` method
 if (WorldContextObject == nullptr) return;
@@ -134,7 +134,7 @@ GI->GetClient()->Serialize(Ar);
 > Due to UE4 license limitation, I can't copy/paste too much engine's code here.  
 > I'll try to give you the most clues as possible to do it on your own.
 
-All the concerns part are located in the [UGameplayStatics](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp) class.
+All the party in question is located in the [UGameplayStatics](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp) class.
 
 So first you need to create a custom `UBlueprintFunctionLibrary` and copy/paste [UGameplayStatics::LoadGameFromMemory()](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2077) and [UGameplayStatics::LoadGameFromSlot()](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2150) on your project side.
 

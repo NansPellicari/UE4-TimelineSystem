@@ -45,6 +45,7 @@ public:
 	 *
 	 * @see FConfiguredTimeline
 	 */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline")
 	virtual void Init();
 
 	/**
@@ -52,6 +53,7 @@ public:
 	 *
 	 * @param Config - To allow having a combobox of configured timeline
 	 */
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetANansTimeline"), Category = "NansTimeline")
 	UNTimelineManagerBaseDecorator* GetTimeline(FConfiguredTimeline Config) const;
 
 	/**
