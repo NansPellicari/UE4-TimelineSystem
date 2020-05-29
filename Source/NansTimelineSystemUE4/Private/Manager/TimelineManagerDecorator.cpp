@@ -23,7 +23,7 @@ UNTimelineManagerDecorator::UNTimelineManagerDecorator()
 {
 	MyTimeline = CreateDefaultSubobject<UNTimelineDecorator>(FName(TEXT("MyTimeline")));
 	MyTimeline->Init(this);
-	Timeline = MakeShareable(new UnrealTimelineProxy(*MyTimeline));
+	Timeline = MakeShareable(new NUnrealTimelineProxy(*MyTimeline));
 }
 
 void UNTimelineManagerDecorator::Init(float _TickInterval, FName _Label)
@@ -87,7 +87,7 @@ FName UNTimelineManagerDecorator::GetLabel() const
 
 void UNTimelineManagerDecorator::AddEvent(UNEventDecorator* Event)
 {
-	Timeline->Attached(MakeShareable(new UnrealEventProxy(*Event)));
+	Timeline->Attached(MakeShareable(new NUnrealEventProxy(*Event)));
 }
 
 UNEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(

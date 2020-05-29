@@ -142,8 +142,7 @@ FName UNTimelineDecorator::GetLabel() const
 	return Timeline->GetLabel();
 }
 
-UNEventDecorator* UNTimelineDecorator::CreateNewEvent(
-	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
+UNEventDecorator* UNTimelineDecorator::CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
 {
 	UNEventDecorator* Object = UNEventDecoratorFactory::CreateObject<UNEventDecorator>(this, Class, Name);
 	if (Duration > 0)
