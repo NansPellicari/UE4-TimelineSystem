@@ -14,8 +14,8 @@
 
 #include "Manager/TimelineManagerDecorator.h"
 
-#include "Event/TimelineEventDecorator.h"
-#include "Event/UnrealTimelineEventProxy.h"
+#include "Event/EventDecorator.h"
+#include "Event/UnrealEventProxy.h"
 #include "TimerManager.h"
 #include "UnrealTimelineProxy.h"
 
@@ -85,22 +85,22 @@ FName UNTimelineManagerDecorator::GetLabel() const
 	return Timeline->GetLabel();
 }
 
-void UNTimelineManagerDecorator::AddEvent(UNTimelineEventDecorator* Event)
+void UNTimelineManagerDecorator::AddEvent(UNEventDecorator* Event)
 {
-	Timeline->Attached(MakeShareable(new UnrealTimelineEventProxy(*Event)));
+	Timeline->Attached(MakeShareable(new UnrealEventProxy(*Event)));
 }
 
-UNTimelineEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(
-	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
+UNEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(
+	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
 {
 	if (MyTimeline == nullptr) return nullptr;
 	return MyTimeline->CreateNewEvent(Class, Name, Duration, Delay);
 }
 
-UNTimelineEventDecorator* UNTimelineManagerDecorator::CreateAndAddNewEvent(
-	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
+UNEventDecorator* UNTimelineManagerDecorator::CreateAndAddNewEvent(
+	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
 {
-	UNTimelineEventDecorator* Object = CreateNewEvent(Class, Name, Duration, Delay);
+	UNEventDecorator* Object = CreateNewEvent(Class, Name, Duration, Delay);
 	if (Object == nullptr) return nullptr;
 
 	AddEvent(Object);

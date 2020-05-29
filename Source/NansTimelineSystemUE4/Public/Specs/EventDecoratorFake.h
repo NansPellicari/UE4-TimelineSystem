@@ -16,16 +16,16 @@
 
 #include "CoreMinimal.h"
 #include "Engine/EngineTypes.h"
-#include "Event/TimelineEventDecorator.h"
+#include "Event/EventDecorator.h"
 #include "TimerManager.h"
 
-#include "TimelineEventDecoratorFake.generated.h"
+#include "EventDecoratorFake.generated.h"
 
 /**
  * This class is used for tests only
  */
 UCLASS()
-class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecoratorFake : public UNTimelineEventDecorator
+class NANSTIMELINESYSTEMUE4_API UNEventDecoratorFake : public UNEventDecorator
 {
 	GENERATED_BODY()
 };

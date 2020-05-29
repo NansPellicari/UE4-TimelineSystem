@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 
-class NANSTIMELINESYSTEMCORE_API NTimelineEventInterface
+class NANSTIMELINESYSTEMCORE_API NEventInterface
 {
 public:
 	virtual bool IsExpired() const = 0;

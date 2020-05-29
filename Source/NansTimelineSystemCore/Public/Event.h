@@ -15,24 +15,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimelineEventInterface.h"
+#include "EventInterface.h"
 
 /**
  * An abstract class to manage events which can be attached to a timeline.
  */
-class NANSTIMELINESYSTEMCORE_API NTimelineEventBase : public NTimelineEventInterface
+class NANSTIMELINESYSTEMCORE_API NEvent : public NEventInterface
 {
 public:
 	/** Default ctor */
-	NTimelineEventBase()
+	NEvent()
 	{
 		Id = FGuid::NewGuid().ToString();
 	}
 
 	/** Ctor to gives directly a name for this event. */
-	NTimelineEventBase(FName _Label) : Label(_Label) {}
+	NEvent(FName _Label) : Label(_Label) {}
 
-	virtual ~NTimelineEventBase(){};
+	virtual ~NEvent(){};
 
 	/** It computes with Duration and LocalTime */
 	virtual bool IsExpired() const override;

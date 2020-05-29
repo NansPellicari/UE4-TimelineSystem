@@ -88,9 +88,9 @@ This class and it's decorator should not be overrided, they provide the basic fu
 
 <a id="markdown-33-timelinemanagerevent" name="33-timelinemanagerevent"></a>
 
-### 3.3. TimelineEvent
+### 3.3. Event
 
-You **should** create decorator for it, the best way its to extend the [TimelineEventDecorator](../Source/NansTimelineSystemUE4/Public/Event/TimelineEventDecorator.h) class.  
+You **should** create decorator for it, the best way its to extend the [EventDecorator](../Source/NansTimelineSystemUE4/Public/Event/EventDecorator.h) class.  
 You can create a **blueprint** child based on it or a **c++** override.
 
 > To make your data saveable, don't forget to use `UPROPERTY(SaveGame)` in your dedicated fields,  

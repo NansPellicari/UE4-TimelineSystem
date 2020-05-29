@@ -12,110 +12,110 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event/TimelineEventDecorator.h"
+#include "Event/EventDecorator.h"
 
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/Public/Event.h"
 #include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 
-bool UNTimelineEventDecorator::IsExpired() const
+bool UNEventDecorator::IsExpired() const
 {
 	if (!Event.IsValid()) return true;
 	return Event->IsExpired();
 }
 
-const float UNTimelineEventDecorator::GetLocalTime() const
+const float UNEventDecorator::GetLocalTime() const
 {
 	if (!Event.IsValid()) return LocalTime;
 	return Event->GetLocalTime();
 }
 
-const float UNTimelineEventDecorator::GetStartedAt() const
+const float UNEventDecorator::GetStartedAt() const
 {
 	if (!Event.IsValid()) return StartedAt;
 	return Event->GetStartedAt();
 }
 
-float UNTimelineEventDecorator::GetDuration() const
+float UNEventDecorator::GetDuration() const
 {
 	if (!Event.IsValid()) return Duration;
 	return Event->GetDuration();
 }
 
-void UNTimelineEventDecorator::Start(float StartTime)
+void UNEventDecorator::Start(float StartTime)
 {
 	if (!Event.IsValid()) return;
 	Event->Start(StartTime);
 }
 
-void UNTimelineEventDecorator::NotifyAddTime(float NewTime)
+void UNEventDecorator::NotifyAddTime(float NewTime)
 {
 	if (!Event.IsValid()) return;
 	Event->NotifyAddTime(NewTime);
 }
 
-float UNTimelineEventDecorator::GetDelay() const
+float UNEventDecorator::GetDelay() const
 {
 	if (!Event.IsValid()) return Delay;
 	return Event->GetDelay();
 }
 
-const FName UNTimelineEventDecorator::GetEventLabel() const
+const FName UNEventDecorator::GetEventLabel() const
 {
 	if (!Event.IsValid()) return Label;
 	return Event->GetEventLabel();
 }
 
-const FString UNTimelineEventDecorator::GetUID() const
+const FString UNEventDecorator::GetUID() const
 {
 	return Event->GetUID();
 }
 
-void UNTimelineEventDecorator::SetLocalTime(float _LocalTime)
+void UNEventDecorator::SetLocalTime(float _LocalTime)
 {
 	Event->SetLocalTime(_LocalTime);
 }
 
-void UNTimelineEventDecorator::SetStartedAt(float _StartedAt)
+void UNEventDecorator::SetStartedAt(float _StartedAt)
 {
 	Event->SetStartedAt(_StartedAt);
 }
 
-void UNTimelineEventDecorator::SetDuration(float _Duration)
+void UNEventDecorator::SetDuration(float _Duration)
 {
 	Event->SetDuration(_Duration);
 }
 
-void UNTimelineEventDecorator::SetDelay(float _Delay)
+void UNEventDecorator::SetDelay(float _Delay)
 {
 	Event->SetDelay(_Delay);
 }
 
-void UNTimelineEventDecorator::SetEventLabel(FName _EventLabel)
+void UNEventDecorator::SetEventLabel(FName _EventLabel)
 {
 	Event->SetEventLabel(_EventLabel);
 }
 
-TSharedPtr<NTimelineEventInterface> UNTimelineEventDecorator::GetEvent() const
+TSharedPtr<NEventInterface> UNEventDecorator::GetEvent() const
 {
 	return Event;
 }
 
-void UNTimelineEventDecorator::Init(FName _Label)
+void UNEventDecorator::Init(FName _Label)
 {
-	Event = MakeShareable(new NTimelineEventBase(_Label));
+	Event = MakeShareable(new NEvent(_Label));
 }
-void UNTimelineEventDecorator::BeginDestroy()
+void UNEventDecorator::BeginDestroy()
 {
 	Super::BeginDestroy();
 	Event.Reset();
 }
 
-void UNTimelineEventDecorator::Clear()
+void UNEventDecorator::Clear()
 {
 	Event->Clear();
 }
 
-void UNTimelineEventDecorator::Serialize(FArchive& Ar)
+void UNEventDecorator::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 

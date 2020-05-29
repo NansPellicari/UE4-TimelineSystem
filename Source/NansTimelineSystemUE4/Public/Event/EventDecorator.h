@@ -15,15 +15,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
+#include "NansTimelineSystemCore/Public/EventInterface.h"
 
-#include "TimelineEventDecorator.generated.h"
+#include "EventDecorator.generated.h"
 
-namespace UNTimelineEventDecoratorFactory
+namespace UNEventDecoratorFactory
 {
 	template <typename T>
 	static T* CreateObject(UObject* Outer,
-		const TSubclassOf<UNTimelineEventDecorator> Class,
+		const TSubclassOf<UNEventDecorator> Class,
 		FName Name = NAME_None,
 		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
 	{
@@ -41,8 +41,8 @@ namespace UNTimelineEventDecoratorFactory
 
 	template <typename T>
 	static T* CreateObjectFromEvent(UObject* Outer,
-		const TSharedPtr<NTimelineEventInterface> Object,
-		const TSubclassOf<UNTimelineEventDecorator> Class,
+		const TSharedPtr<NEventInterface> Object,
+		const TSubclassOf<UNEventDecorator> Class,
 		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
 	{
 		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
@@ -50,31 +50,31 @@ namespace UNTimelineEventDecoratorFactory
 		return Obj;
 	}
 
-}	 // namespace UNTimelineEventDecoratorFactory
+}	 // namespace UNEventDecoratorFactory
 
 /**
- * Base abstract class to create NTimelineEventInterface decorators (Blueprint or c++).
+ * Base abstract class to create NEventInterface decorators (Blueprint or c++).
  *
  * For a simple usage with blueprint:
  * you can derived blueprint base on this.
- * This way the NTimelineEventInterface instance should only manage timeline behavior.
+ * This way the NEventInterface instance should only manage timeline behavior.
  *
  * For a more complex usage in c++:
- * You should derive this and NTimelineEventInterface too to fit on your needs.
+ * You should derive this and NEventInterface too to fit on your needs.
  * - This class should only manage specifics behaviors related to the engine
  * (serialization, blueprint's specifics functionnalities, etc...)
- * - NTimelineEventInterface's derivation: all your core functionnalities
+ * - NEventInterface's derivation: all your core functionnalities
  */
 UCLASS(Abstract, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventInterface
+class NANSTIMELINESYSTEMUE4_API UNEventDecorator : public UObject, public NEventInterface
 {
 	friend class UNTimelineManagerDecorator;
 
 	GENERATED_BODY()
 public:
-	UNTimelineEventDecorator() {}
+	UNEventDecorator() {}
 
-	// BEGIN NTimelineEventInterface overrides
+	// BEGIN NEventInterface overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
@@ -106,7 +106,7 @@ public:
 	virtual void SetDelay(float _Delay) override;
 	virtual void SetEventLabel(FName _EventLabel) override;
 	virtual void Clear() override;
-	// END NTimelineEventInterface overrides
+	// END NEventInterface overrides
 
 	// BEGIN UObject overrides
 	virtual void BeginDestroy() override;
@@ -123,14 +123,14 @@ public:
 	 * This is used by other decorators which need to pass the core object to their own.
 	 * @see UNTimelineDecorator::Attached()
 	 */
-	virtual TSharedPtr<NTimelineEventInterface> GetEvent() const;
+	virtual TSharedPtr<NEventInterface> GetEvent() const;
 
 protected:
 	/**
 	 * The actual decorator is for this object.
 	 * It shoulds be instanciate on a ctor or a dedicated init function
 	 */
-	TSharedPtr<NTimelineEventInterface> Event;
+	TSharedPtr<NEventInterface> Event;
 
 private:
 	// Use for saving

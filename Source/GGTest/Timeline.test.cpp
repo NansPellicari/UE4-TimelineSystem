@@ -1,7 +1,7 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/Public/Event.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "gtest/gtest.h"
 
@@ -10,13 +10,13 @@ class TimelineTimerManagerFake : public NTimelineManager
 public:
 };
 
-class NTimelineEventFake : public NTimelineEventBase
+class NEventFake : public NEvent
 {
 public:
 	FName EventLabel;
 	bool bIsExpired = false;
 
-	NTimelineEventFake(FName _Label, float _Duration = 0.f, float _Delay = 0.f)
+	NEventFake(FName _Label, float _Duration = 0.f, float _Delay = 0.f)
 	{
 		EventLabel = _Label;
 		Duration = _Duration;
@@ -25,7 +25,7 @@ public:
 
 	virtual bool IsExpired() const override
 	{
-		return bIsExpired || NTimelineEventBase::IsExpired();
+		return bIsExpired || NEvent::IsExpired();
 	};
 	virtual const FName GetEventLabel() const override
 	{
@@ -42,18 +42,18 @@ class NansTimelineSystemCoreTimelineTest : public ::testing::Test
 {
 protected:
 	TimelineTimerManagerFake* Timer;
-	TArray<TSharedPtr<NTimelineEventFake>> Events;
+	TArray<TSharedPtr<NEventFake>> Events;
 
 	void SetUp() override
 	{
 		Timer = new TimelineTimerManagerFake();
 		Timer->SetTickInterval(1.f);
 		Events = {
-			MakeShareable(new NTimelineEventFake(FName("event 0"), 0)),
-			MakeShareable(new NTimelineEventFake(FName("event 1"), 2.f)),
-			MakeShareable(new NTimelineEventFake(FName("event 2"), 1.f, 2.f)),
-			MakeShareable(new NTimelineEventFake(FName("event 3"), 4.f)),
-			MakeShareable(new NTimelineEventFake(FName("event 4"), 1.f)),
+			MakeShareable(new NEventFake(FName("event 0"), 0)),
+			MakeShareable(new NEventFake(FName("event 1"), 2.f)),
+			MakeShareable(new NEventFake(FName("event 2"), 1.f, 2.f)),
+			MakeShareable(new NEventFake(FName("event 3"), 4.f)),
+			MakeShareable(new NEventFake(FName("event 4"), 1.f)),
 		};
 	}
 };

@@ -12,78 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "TimelineEventBase.h"
+#include "Event.h"
 
-bool NTimelineEventBase::IsExpired() const
+bool NEvent::IsExpired() const
 {
 	return GetDuration() > 0 && GetLocalTime() >= GetDuration();
 };
 
-const float NTimelineEventBase::GetLocalTime() const
+const float NEvent::GetLocalTime() const
 {
 	return LocalTime;
 }
 
-const float NTimelineEventBase::GetStartedAt() const
+const float NEvent::GetStartedAt() const
 {
 	return StartedAt;
 }
 
-float NTimelineEventBase::GetDuration() const
+float NEvent::GetDuration() const
 {
 	return Duration;
 }
-float NTimelineEventBase::GetDelay() const
+float NEvent::GetDelay() const
 {
 	return Delay;
 }
 
-const FName NTimelineEventBase::GetEventLabel() const
+const FName NEvent::GetEventLabel() const
 {
 	return Label;
 }
 
-const FString NTimelineEventBase::GetUID() const
+const FString NEvent::GetUID() const
 {
 	return Id;
 }
 
-void NTimelineEventBase::SetLocalTime(float _LocalTime)
+void NEvent::SetLocalTime(float _LocalTime)
 {
 	LocalTime = _LocalTime;
 }
 
-void NTimelineEventBase::SetStartedAt(float _StartedAt)
+void NEvent::SetStartedAt(float _StartedAt)
 {
 	StartedAt = _StartedAt;
 }
 
-void NTimelineEventBase::SetDuration(float _Duration)
+void NEvent::SetDuration(float _Duration)
 {
 	Duration = _Duration;
 }
 
-void NTimelineEventBase::SetDelay(float _Delay)
+void NEvent::SetDelay(float _Delay)
 {
 	Delay = _Delay;
 }
 
-void NTimelineEventBase::SetEventLabel(FName _EventLabel)
+void NEvent::SetEventLabel(FName _EventLabel)
 {
 	Label = _EventLabel;
 }
 
-void NTimelineEventBase::Start(float StartTime)
+void NEvent::Start(float StartTime)
 {
 	StartedAt = StartTime;
 }
 
-void NTimelineEventBase::NotifyAddTime(float NewTime)
+void NEvent::NotifyAddTime(float NewTime)
 {
 	LocalTime += NewTime;
 }
 
-void NTimelineEventBase::Clear()
+void NEvent::Clear()
 {
 	Label = NAME_None;
 	LocalTime = 0.f;

@@ -15,10 +15,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimelineEventInterface.h"
+#include "EventInterface.h"
 #include "TimelineInterface.h"
 
-DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventInterface>, const float&, const int32&);
+DECLARE_DELEGATE_ThreeParams(FEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
 
 class NTimelineManager;
 
@@ -44,7 +44,7 @@ public:
 	 * 4: label
 	 * 5: expired time
 	 */
-	using FEventTuple = TTuple<TSharedPtr<NTimelineEventInterface>, float, const float, const float, const FName, float>;
+	using FEventTuple = TTuple<TSharedPtr<NEventInterface>, float, const float, const float, const FName, float>;
 
 	/**
 	 * A Timeline can't exists with a manager.
@@ -59,19 +59,19 @@ public:
 	virtual ~NTimeline();
 
 	/** @see OnExpired() */
-	FTimelineEventDelegate EventExpired;
+	FEventDelegate EventExpired;
 
 	/** It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
 	 * and AfterOnAttached() for any custom usages
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual bool Attached(TSharedPtr<NTimelineEventInterface> Event);
+	virtual bool Attached(TSharedPtr<NEventInterface> Event);
 
 	/**
-	 * Same as Attached(TSharedPtr<NTimelineEventInterface> Event) but for a collection of objects.
+	 * Same as Attached(TSharedPtr<NEventInterface> Event) but for a collection of objects.
 	 */
-	virtual void Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection);
+	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection);
 
 	/**
 	 * This should be called only by its friend NTimelineManager
@@ -138,13 +138,13 @@ protected:
 	NTimeline(){};
 
 	/** In case of specialisation needs to avoid the attach process in some cases */
-	virtual bool BeforeOnAttached(TSharedPtr<NTimelineEventInterface> Event, const float AttachedTime)
+	virtual bool BeforeOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime)
 	{
 		return true;
 	};
 
 	/** If needed to make some stats, analytics, trigger error,... */
-	virtual void AfterOnAttached(TSharedPtr<NTimelineEventInterface> Event, const float AttachedTime) {}
+	virtual void AfterOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime) {}
 
 	/**
 	 * This is the value required by a timer to know
@@ -158,7 +158,7 @@ protected:
 	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
 	 * @warning the Event should be used internally only to avoid nullptr reference
 	 */
-	virtual void OnExpired(TSharedPtr<NTimelineEventInterface> Event, const float& ExpiredTime, const int32& Index);
+	virtual void OnExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 
 private:
 	/**

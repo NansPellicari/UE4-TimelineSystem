@@ -27,7 +27,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
-#include "Specs/TimelineEventDecoratorFake.h"
+#include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
 /**
@@ -192,15 +192,15 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Event live since 1 sec"), TimelineManager->GetEvents()[0].Event->GetLocalTime(), 1.f);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 1 Event in collection"), TimelineManager->GetEvents().Num(), 1);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), FName("Ev2"));
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), FName("Ev2"));
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), FName("Ev3"), 1.f);
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), FName("Ev3"), 1.f);
 		NTestWorld::Tick(World);
 		// clang-format off
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);

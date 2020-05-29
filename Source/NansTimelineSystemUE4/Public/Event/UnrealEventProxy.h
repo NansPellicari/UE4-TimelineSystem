@@ -1,15 +1,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
+#include "NansTimelineSystemCore/Public/EventInterface.h"
 
-class NANSTIMELINESYSTEMUE4_API UnrealTimelineEventProxy : public NTimelineEventInterface
+class NANSTIMELINESYSTEMUE4_API UnrealEventProxy : public NEventInterface
 {
 public:
-	UNTimelineEventDecorator& Event;
-	UnrealTimelineEventProxy(UNTimelineEventDecorator& _Event) : Event(_Event) {}
+	UNEventDecorator& Event;
+	UnrealEventProxy(UNEventDecorator& _Event) : Event(_Event) {}
 
-	virtual ~UnrealTimelineEventProxy()
+	virtual ~UnrealEventProxy()
 	{
 		Event.ConditionalBeginDestroy();
 	}
@@ -88,7 +88,7 @@ public:
 		Event.Clear();
 	}
 
-	UNTimelineEventDecorator& GetUnrealObject()
+	UNEventDecorator& GetUnrealObject()
 	{
 		return Event;
 	}

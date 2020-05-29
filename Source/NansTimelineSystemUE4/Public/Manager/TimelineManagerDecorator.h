@@ -21,7 +21,7 @@
 
 #include "TimelineManagerDecorator.generated.h"
 
-class NTimelineEventDecorator;
+class NEventDecorator;
 
 /**
  * This is the abstract decorator that every Timeline manager shoulds override.
@@ -85,7 +85,7 @@ public:
 
 	/**
 	 * Get the events list.
-	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNTimelineEventDecorator> parameter
+	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
 	 */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual const TArray<FNEventRecord> GetEvents() const;
@@ -127,13 +127,13 @@ public:
 
 	/**
 	 * Adds an event to the timeline object,
-	 * it works as a pass-through for UNTimelineDecorator::Attached(UNTimelineEventDecorator* Event)
+	 * it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
 	 *
 	 * @param Event - An Event object you want to saved to the associated timeline.
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add an Event to the NansTimeline", Keywords = "Event add"), Category = "NansTimeline|Manager")
-	virtual void AddEvent(UNTimelineEventDecorator* Event);
+	virtual void AddEvent(UNEventDecorator* Event);
 	// clang-format on
 
 	/**
@@ -142,7 +142,7 @@ public:
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create a New Event for the NansTimeline", Keywords = "Event create"), Category = "NansTimeline|Manager")
-	UNTimelineEventDecorator* CreateNewEvent(TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
+	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
 	// clang-format on
 
 	/**
@@ -151,7 +151,7 @@ public:
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNTimelineEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
+	UNEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
 	// clang-format on
 
 protected:

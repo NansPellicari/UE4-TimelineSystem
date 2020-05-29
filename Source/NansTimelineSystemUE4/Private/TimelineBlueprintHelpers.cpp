@@ -17,7 +17,7 @@
 #include "Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
-#include "Event/TimelineEventDecorator.h"
+#include "Event/EventDecorator.h"
 #include "Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "TimelineGameInstance.h"

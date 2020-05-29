@@ -72,7 +72,7 @@ void UNTimelineDecorator::NotifyTick()
 	Timeline->NotifyTick();
 }
 
-void UNTimelineDecorator::AddEvent(UNTimelineEventDecorator* Event)
+void UNTimelineDecorator::AddEvent(UNEventDecorator* Event)
 {
 	check(Timeline.IsValid());
 	FNEventRecord Record;
@@ -91,7 +91,7 @@ const TArray<FNEventRecord> UNTimelineDecorator::GetAdaptedEvents() const
 
 NTimeline::FEventTuple UNTimelineDecorator::ConvertRecordToTuple(FNEventRecord const Record)
 {
-	TSharedPtr<NTimelineEventInterface> Event;
+	TSharedPtr<NEventInterface> Event;
 	if (Record.Event != nullptr)
 	{
 		Event = Record.Event->GetEvent();
@@ -123,7 +123,7 @@ void UNTimelineDecorator::RefreshRecordData(const int32& Index)
 	Record.ExpiredTime = Tuple.Get<5>();
 }
 
-void UNTimelineDecorator::OnEventExpired(TSharedPtr<NTimelineEventInterface> Event, const float& ExpiredTime, const int32& Index)
+void UNTimelineDecorator::OnEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
 	RefreshRecordData(Index);
 	FNEventRecord& Record = EventStore[Index];
@@ -142,10 +142,10 @@ FName UNTimelineDecorator::GetLabel() const
 	return Timeline->GetLabel();
 }
 
-UNTimelineEventDecorator* UNTimelineDecorator::CreateNewEvent(
-	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
+UNEventDecorator* UNTimelineDecorator::CreateNewEvent(
+	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
 {
-	UNTimelineEventDecorator* Object = UNTimelineEventDecoratorFactory::CreateObject<UNTimelineEventDecorator>(this, Class, Name);
+	UNEventDecorator* Object = UNEventDecoratorFactory::CreateObject<UNEventDecorator>(this, Class, Name);
 	if (Duration > 0)
 	{
 		Object->SetDuration(Duration);

@@ -15,13 +15,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimelineEventInterface.h"
+#include "EventInterface.h"
 
 class NANSTIMELINESYSTEMCORE_API NTimelineInterface
 {
 public:
-	virtual bool Attached(TSharedPtr<NTimelineEventInterface> Event) = 0;
-	virtual void Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection) = 0;
+	virtual bool Attached(TSharedPtr<NEventInterface> Event) = 0;
+	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) = 0;
 	virtual void SetTickInterval(float _TickInterval) = 0;
 	virtual void SetCurrentTime(float _CurrentTime) = 0;
 	virtual float GetCurrentTime() const = 0;

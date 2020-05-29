@@ -26,7 +26,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
-#include "Specs/TimelineEventDecoratorFake.h"
+#include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
 /**
@@ -146,9 +146,9 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNTimelineEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
 
 		// Save in memory
