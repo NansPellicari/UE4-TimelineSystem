@@ -33,6 +33,7 @@ enum class ENTimelineTimerState : uint8
  * - NTimelineInterface manages time computation, notify events accordingly and save all states
  * - NTimelineManagerBase manages client controls.
  *
+ * @see NTimelineInterface
  * @see NTimeline
  */
 class NANSTIMELINESYSTEMCORE_API NTimelineManagerBase

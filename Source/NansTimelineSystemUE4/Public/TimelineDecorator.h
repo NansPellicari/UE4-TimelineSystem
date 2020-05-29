@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "Event/TimelineEventDecorator.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
+#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
 
 #include "TimelineDecorator.generated.h"
 

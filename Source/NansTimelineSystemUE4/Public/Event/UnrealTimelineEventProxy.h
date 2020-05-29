@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
 
 class NANSTIMELINESYSTEMUE4_API UnrealTimelineEventProxy : public NTimelineEventInterface
 {

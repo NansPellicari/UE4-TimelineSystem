@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
 
 #include "TimelineEventDecorator.generated.h"
 
@@ -63,7 +63,7 @@ namespace UNTimelineEventDecoratorFactory
  * You should derive this and NTimelineEventInterface too to fit on your needs.
  * - This class should only manage specifics behaviors related to the engine
  * (serialization, blueprint's specifics functionnalities, etc...)
- * - NTimelineEventBase's derivation: all your core functionnalities
+ * - NTimelineEventInterface's derivation: all your core functionnalities
  */
 UCLASS(Abstract, Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventInterface

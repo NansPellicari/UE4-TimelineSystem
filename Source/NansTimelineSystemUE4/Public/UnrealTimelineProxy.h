@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Event//UnrealTimelineEventProxy.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/Public/TimelineEventInterface.h"
 #include "TimelineDecorator.h"
 
 class NANSTIMELINESYSTEMUE4_API UnrealTimelineProxy : public NTimelineInterface

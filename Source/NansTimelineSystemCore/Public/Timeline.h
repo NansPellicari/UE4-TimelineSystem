@@ -15,25 +15,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimelineEventBase.h"
+#include "TimelineEventInterface.h"
+#include "TimelineInterface.h"
 
 DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventInterface>, const float&, const int32&);
 
 class NTimelineManagerBase;
-
-class NANSTIMELINESYSTEMCORE_API NTimelineInterface
-{
-public:
-	virtual bool Attached(TSharedPtr<NTimelineEventInterface> Event) = 0;
-	virtual void Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection) = 0;
-	virtual void SetTickInterval(float _TickInterval) = 0;
-	virtual void SetCurrentTime(float _CurrentTime) = 0;
-	virtual float GetCurrentTime() const = 0;
-	virtual void SetLabel(FName _Label) = 0;
-	virtual FName GetLabel() const = 0;
-	virtual void Clear() = 0;
-	virtual void NotifyTick() = 0;
-};
 
 /**
  * Its goal is to saved events and place them in time.

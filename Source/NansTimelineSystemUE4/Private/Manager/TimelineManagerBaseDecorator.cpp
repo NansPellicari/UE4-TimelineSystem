@@ -16,10 +16,6 @@
 
 #include "Event/TimelineEventDecorator.h"
 #include "Event/UnrealTimelineEventProxy.h"
-#include "Manager/GameLifeTimelineManager.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineEventBase.h"
-#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "TimerManager.h"
 #include "UnrealTimelineProxy.h"
 

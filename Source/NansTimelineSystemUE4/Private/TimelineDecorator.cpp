@@ -34,6 +34,7 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
 
 void UNTimelineDecorator::Init(UNTimelineManagerBaseDecorator* TimelineManager, FName _Label)
 {
+	// TODO remove static cast, not useful anymore??
 	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerBase*>(TimelineManager), _Label));
 	Timeline->EventExpired.BindUObject(this, &UNTimelineDecorator::OnEventExpired);
 }

@@ -15,26 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-class NANSTIMELINESYSTEMCORE_API NTimelineEventInterface
-{
-public:
-	virtual bool IsExpired() const = 0;
-	virtual const float GetLocalTime() const = 0;
-	virtual const float GetStartedAt() const = 0;
-	virtual float GetDuration() const = 0;
-	virtual float GetDelay() const = 0;
-	virtual const FString GetUID() const = 0;
-	virtual const FName GetEventLabel() const = 0;
-	virtual void SetLocalTime(float _LocalTime) = 0;
-	virtual void SetStartedAt(float _StartedAt) = 0;
-	virtual void SetDuration(float _Duration) = 0;
-	virtual void SetDelay(float _Delay) = 0;
-	virtual void SetEventLabel(FName _EventLabel) = 0;
-	virtual void Start(float StartTime) = 0;
-	virtual void NotifyAddTime(float NewTime) = 0;
-	virtual void Clear() = 0;
-};
+#include "TimelineEventInterface.h"
 
 /**
  * An abstract class to manage events which can be attached to a timeline.
