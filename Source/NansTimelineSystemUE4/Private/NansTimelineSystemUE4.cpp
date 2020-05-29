@@ -14,6 +14,7 @@
 
 #include "NansTimelineSystemUE4.h"
 
+#include "PropertyEditorModule.h"
 #include "TimelinePinFactory.h"
 
 #define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
@@ -24,13 +25,14 @@ void FNansTimelineSystemUE4Module::StartupModule()
 	TSharedPtr<FTimelinePinFactory> Factory = MakeShareable(new FTimelinePinFactory());
 	// and now register it.
 	FEdGraphUtilities::RegisterVisualPinFactory(Factory);
+
+	// =====================================================================================
+	// TODO Search how to create custom field that from here
+	// https://docs.unrealengine.com/en-US/Programming/Slate/DetailsCustomization/index.html
+	// =====================================================================================
 }
 
-void FNansTimelineSystemUE4Module::ShutdownModule()
-{
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}
+void FNansTimelineSystemUE4Module::ShutdownModule() {}
 
 #undef LOCTEXT_NAMESPACE
 

@@ -16,13 +16,13 @@
 
 #include "CoreMinimal.h"
 #include "Engine/EngineTypes.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
+#include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "TimerManager.h"
 
 /**
  * This class is used for tests only
  */
-class NTimelineManagerFake : public NTimelineManagerBase
+class NTimelineManagerFake : public NTimelineManager
 {
 public:
 	FTimerHandle TimerHandle;

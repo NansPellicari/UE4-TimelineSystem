@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "TimelineManagerBase.h"
+#include "TimelineManager.h"
 
 #include "Timeline.h"
 
-NTimelineManagerBase::NTimelineManagerBase()
+NTimelineManager::NTimelineManager()
 {
 	Init();
 }
 
-NTimelineManagerBase::~NTimelineManagerBase()
+NTimelineManager::~NTimelineManager()
 {
 	Timeline.Reset();
 }
 
-void NTimelineManagerBase::TimerTick()
+void NTimelineManager::TimerTick()
 {
 	// No reason for a timer to tick without a timeline created
 	check(Timeline.IsValid());
@@ -40,22 +40,22 @@ void NTimelineManagerBase::TimerTick()
 	}
 }
 
-TSharedPtr<NTimelineInterface> NTimelineManagerBase::GetTimeline() const
+TSharedPtr<NTimelineInterface> NTimelineManager::GetTimeline() const
 {
 	return Timeline;
 }
 
-ENTimelineTimerState NTimelineManagerBase::GetState() const
+ENTimelineTimerState NTimelineManager::GetState() const
 {
 	return State;
 }
 
-float NTimelineManagerBase::GetTickInterval() const
+float NTimelineManager::GetTickInterval() const
 {
 	return TickInterval;
 }
 
-void NTimelineManagerBase::SetTickInterval(float _TickInterval)
+void NTimelineManager::SetTickInterval(float _TickInterval)
 {
 	TickInterval = _TickInterval;
 	if (Timeline != nullptr)
@@ -64,32 +64,32 @@ void NTimelineManagerBase::SetTickInterval(float _TickInterval)
 	}
 }
 
-void NTimelineManagerBase::Init(float _TickInterval, FName _Label)
+void NTimelineManager::Init(float _TickInterval, FName _Label)
 {
 	Timeline = MakeShareable(new NTimeline(this, _Label));
 	TickInterval = _TickInterval;
 	Timeline->SetTickInterval(TickInterval);
 }
 
-void NTimelineManagerBase::Play()
+void NTimelineManager::Play()
 {
 	// No reason for a timer to play without a timeline created
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Played;
 }
-void NTimelineManagerBase::Pause()
+void NTimelineManager::Pause()
 {
 	// No reason for a timer to pause without a timeline created
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Paused;
 }
-void NTimelineManagerBase::Stop()
+void NTimelineManager::Stop()
 {
 	Clear();
 	State = ENTimelineTimerState::Stopped;
 }
 
-void NTimelineManagerBase::Clear()
+void NTimelineManager::Clear()
 {
 	if (Timeline.IsValid())
 	{

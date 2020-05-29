@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 
 #include "ConfiguredTimeline.generated.h"
 
@@ -38,5 +38,5 @@ public:
 
 	/** The Configured Timeline class */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
-	TSubclassOf<UNTimelineManagerBaseDecorator> TimelineClass;
+	TSubclassOf<UNTimelineManagerDecorator> TimelineClass;
 };

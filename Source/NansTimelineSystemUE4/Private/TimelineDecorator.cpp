@@ -14,9 +14,9 @@
 
 #include "TimelineDecorator.h"
 
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
+#include "NansTimelineSystemCore/Public/TimelineManager.h"
 
 void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
 {
@@ -32,10 +32,10 @@ void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
 	}
 }
 
-void UNTimelineDecorator::Init(UNTimelineManagerBaseDecorator* TimelineManager, FName _Label)
+void UNTimelineDecorator::Init(UNTimelineManagerDecorator* TimelineManager, FName _Label)
 {
 	// TODO remove static cast, not useful anymore??
-	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManagerBase*>(TimelineManager), _Label));
+	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManager*>(TimelineManager), _Label));
 	Timeline->EventExpired.BindUObject(this, &UNTimelineDecorator::OnEventExpired);
 }
 

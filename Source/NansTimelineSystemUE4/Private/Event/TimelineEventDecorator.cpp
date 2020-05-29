@@ -15,7 +15,7 @@
 #include "Event/TimelineEventDecorator.h"
 
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseDecorator.h"
+#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 
 bool UNTimelineEventDecorator::IsExpired() const
 {

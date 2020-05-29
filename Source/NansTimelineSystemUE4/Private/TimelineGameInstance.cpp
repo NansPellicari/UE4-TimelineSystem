@@ -14,7 +14,7 @@
 
 #include "TimelineGameInstance.h"
 
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 #include "TimelineClient.h"
 
 UNTimelineClient* INTimelineGameInstance::GetClient() const

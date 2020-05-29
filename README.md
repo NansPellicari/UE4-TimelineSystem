@@ -246,7 +246,7 @@ Here an example of a `UGameInstance` class which implements it:
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseDecorator.h"
+#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemUE4/Public/TimelineClient.h"
 #include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
 
@@ -269,7 +269,7 @@ public:
 	// END UGameInstance override
 
 	// BEGIN INTimelineGameInstance override
-	UNTimelineManagerBaseDecorator* GetTimeline_Implementation(FConfiguredTimeline Config) const override
+	UNTimelineManagerDecorator* GetTimeline_Implementation(FConfiguredTimeline Config) const override
 	{
 		return Client->GetTimeline(Config);
 	}

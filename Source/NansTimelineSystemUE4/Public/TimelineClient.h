@@ -20,7 +20,7 @@
 
 #include "TimelineClient.generated.h"
 
-class UNTimelineManagerBaseDecorator;
+class UNTimelineManagerDecorator;
 
 /**
  * This class should be used by your GameInstance object.
@@ -54,14 +54,14 @@ public:
 	 * @param Config - To allow having a combobox of configured timeline
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetANansTimeline"), Category = "NansTimeline")
-	UNTimelineManagerBaseDecorator* GetTimeline(FConfiguredTimeline Config) const;
+	UNTimelineManagerDecorator* GetTimeline(FConfiguredTimeline Config) const;
 
 	/**
 	 * Get the timeline from TimelinesCollection by its name.
 	 *
 	 * @param Name - The name of the timeline
 	 */
-	UNTimelineManagerBaseDecorator* GetTimeline(FName Name) const;
+	UNTimelineManagerDecorator* GetTimeline(FName Name) const;
 
 	/**
 	 * It used to save all timelines in the EventStore,
@@ -78,7 +78,7 @@ protected:
 	 * Collection of timelines instanciated by InstanciateTimelinesFromConfig()
 	 */
 	UPROPERTY(SkipSerialization)
-	TMap<FName, UNTimelineManagerBaseDecorator*> TimelinesCollection;
+	TMap<FName, UNTimelineManagerDecorator*> TimelinesCollection;
 
 private:
 	/**

@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "GameLifeTimelineManager.h"
-#include "TimelineManagerBaseDecorator.h"
+#include "TimelineManagerDecorator.h"
 
 #include "LevelLifeTimelineManager.generated.h"
 

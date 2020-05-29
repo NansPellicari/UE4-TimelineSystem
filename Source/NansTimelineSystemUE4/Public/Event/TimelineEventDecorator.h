@@ -68,7 +68,7 @@ namespace UNTimelineEventDecoratorFactory
 UCLASS(Abstract, Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventInterface
 {
-	friend class UNTimelineManagerBaseDecorator;
+	friend class UNTimelineManagerDecorator;
 
 	GENERATED_BODY()
 public:

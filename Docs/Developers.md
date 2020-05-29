@@ -77,7 +77,7 @@ The most preferable way to extend it, it's to create you own decorator or overri
 ### 3.1. TimelineManager
 
 It can be easily decorated, see [Source/NansTimelineSystemUE4/Public/Manager/\*](../Source/NansTimelineSystemUE4/Public/Manager/) for examples.  
-The easy way is to override the base decorator [TimelineManagerBaseDecorator](../Source/NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseDecorator.h).  
+The easy way is to override the base decorator [TimelineManagerDecorator](../Source/NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h).  
 You can create your own manager for your game specificities.
 
 <a id="markdown-32-timeline" name="32-timeline"></a>

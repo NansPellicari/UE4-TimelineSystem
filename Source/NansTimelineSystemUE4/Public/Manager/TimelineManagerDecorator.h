@@ -16,10 +16,10 @@
 
 #include "CoreMinimal.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
+#include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "TimelineDecorator.h"
 
-#include "TimelineManagerBaseDecorator.generated.h"
+#include "TimelineManagerDecorator.generated.h"
 
 class NTimelineEventDecorator;
 
@@ -27,7 +27,7 @@ class NTimelineEventDecorator;
  * This is the abstract decorator that every Timeline manager shoulds override.
  * It brings all core functionnalities for blueprint or c++.
  *
- * As the close relation between NTimelineManagerBase and NTimeline classes (core lib),
+ * As the close relation between NTimelineManager and NTimeline classes (core lib),
  * This class is coupled with UNTimelineDecorator.
  * @see UNTimelineDecorator
  *
@@ -37,7 +37,7 @@ class NTimelineEventDecorator;
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
  */
 UCLASS(Abstract, ConversionRoot, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineManagerBaseDecorator : public UObject, public NTimelineManagerBase
+class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, public NTimelineManager
 {
 	GENERATED_BODY()
 public:
@@ -46,7 +46,7 @@ public:
 	bool bDebug = false;
 #endif
 
-	// BEGIN NTimelineManagerBase overrides
+	// BEGIN NTimelineManager overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Pause() override;
 
@@ -62,13 +62,13 @@ public:
 	/**
 	 * The embeded timeline is created as subobject in the ctor.
 	 * So this just gives the Label to the timeline.
-	 * @see UNTimelineManagerBaseDecorator()
+	 * @see UNTimelineManagerDecorator()
 	 *
 	 * @param _TickInterval - Interval time between tick in sec
 	 * @param _Label - Name of the Timeline.
 	 */
 	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
-	// END NTimelineManagerBase overrides
+	// END NTimelineManager overrides
 
 	// BEGIN UObject overrides
 	/**
@@ -98,7 +98,7 @@ public:
 	FName GetLabel() const;
 
 	/**
-	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator.
+	 * This method is a factory method to create a derived UNTimelineManagerDecorator.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param TickInterval - The interval between tick in sec
@@ -110,7 +110,7 @@ public:
 		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	/**
-	 * This method is a factory method to create a derived UNTimelineManagerBaseDecorator with a specific UClass.
+	 * This method is a factory method to create a derived UNTimelineManagerDecorator with a specific UClass.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param Class - The specific class we want our object will be.
@@ -147,7 +147,7 @@ public:
 
 	/**
 	 * Attaches the event to the timeline stream +
-	 * @copydoc UNTimelineManagerBaseDecorator::CreateNewEvent()
+	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
 	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
@@ -164,7 +164,7 @@ protected:
 	 *
 	 * It instanciates the embeded timeline with CreateDefaultSubobject().
 	 */
-	UNTimelineManagerBaseDecorator();
+	UNTimelineManagerDecorator();
 
 private:
 };

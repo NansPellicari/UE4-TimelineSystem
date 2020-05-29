@@ -20,7 +20,7 @@
 
 #include "TimelineDecorator.generated.h"
 
-class UNTimelineManagerBaseDecorator;
+class UNTimelineManagerDecorator;
 
 /**
  * This struct is both a pass-through for NTimeline::FEventTuple
@@ -99,9 +99,9 @@ public:
 
 	/**
 	 * this method is used to instanciate the embeded NTimeline
-	 * @param TimelineManager - The Decorator which provide the NTimelineManagerBase object.
+	 * @param TimelineManager - The Decorator which provide the NTimelineManager object.
 	 */
-	virtual void Init(UNTimelineManagerBaseDecorator* TimelineManager, FName _Label = NAME_None);
+	virtual void Init(UNTimelineManagerDecorator* TimelineManager, FName _Label = NAME_None);
 
 	// BEGIN NTimelineInterface overrides
 	virtual void Clear() override;

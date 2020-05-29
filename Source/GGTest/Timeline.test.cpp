@@ -2,10 +2,10 @@
 #include "GoogleTestApp.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
-#include "NansTimelineSystemCore/Public/TimelineManagerBase.h"
+#include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "gtest/gtest.h"
 
-class TimelineTimerManagerFake : public NTimelineManagerBase
+class TimelineTimerManagerFake : public NTimelineManager
 {
 public:
 };

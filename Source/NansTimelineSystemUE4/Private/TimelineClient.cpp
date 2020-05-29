@@ -14,7 +14,7 @@
 
 #include "TimelineClient.h"
 
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 
 UNTimelineClient::UNTimelineClient() {}
 
@@ -25,7 +25,7 @@ void UNTimelineClient::Init()
 
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerBaseDecorator* Timeline = UNTimelineManagerBaseDecorator::CreateObject<UNTimelineManagerBaseDecorator>(
+		UNTimelineManagerDecorator* Timeline = UNTimelineManagerDecorator::CreateObject<UNTimelineManagerDecorator>(
 			this, Conf.TimelineClass, Conf.TickInterval, Conf.Name);
 		Timeline->Play();
 
@@ -33,12 +33,12 @@ void UNTimelineClient::Init()
 	}
 }
 
-UNTimelineManagerBaseDecorator* UNTimelineClient::GetTimeline(FConfiguredTimeline Config) const
+UNTimelineManagerDecorator* UNTimelineClient::GetTimeline(FConfiguredTimeline Config) const
 {
 	return GetTimeline(Config.Name);
 }
 
-UNTimelineManagerBaseDecorator* UNTimelineClient::GetTimeline(FName Name) const
+UNTimelineManagerDecorator* UNTimelineClient::GetTimeline(FName Name) const
 {
 	if (!TimelinesCollection.Contains(Name))
 	{
@@ -73,7 +73,7 @@ void UNTimelineClient::Serialize(FArchive& Ar)
 
 	for (auto& Name : SaveNamesOrder)
 	{
-		UNTimelineManagerBaseDecorator* Timeline = GetTimeline(Name);
+		UNTimelineManagerDecorator* Timeline = GetTimeline(Name);
 		if (Timeline == nullptr)
 		{
 			UE_LOG(LogTemp,

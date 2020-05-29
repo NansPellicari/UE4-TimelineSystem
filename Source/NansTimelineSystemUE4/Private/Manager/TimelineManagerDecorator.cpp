@@ -12,37 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 
 #include "Event/TimelineEventDecorator.h"
 #include "Event/UnrealTimelineEventProxy.h"
 #include "TimerManager.h"
 #include "UnrealTimelineProxy.h"
 
-UNTimelineManagerBaseDecorator::UNTimelineManagerBaseDecorator()
+UNTimelineManagerDecorator::UNTimelineManagerDecorator()
 {
 	MyTimeline = CreateDefaultSubobject<UNTimelineDecorator>(FName(TEXT("MyTimeline")));
 	MyTimeline->Init(this);
 	Timeline = MakeShareable(new UnrealTimelineProxy(*MyTimeline));
 }
 
-void UNTimelineManagerBaseDecorator::Init(float _TickInterval, FName _Label)
+void UNTimelineManagerDecorator::Init(float _TickInterval, FName _Label)
 {
-	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerBaseDecorator need a world to live"));
+	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerDecorator need a world to live"));
 	TickInterval = _TickInterval;
 	Timeline->SetTickInterval(_TickInterval);
 	Timeline->SetLabel(_Label);
 }
 
 template <typename T>
-T* UNTimelineManagerBaseDecorator::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
+T* UNTimelineManagerDecorator::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
 {
 	T* Obj = NewObject<T>(Outer, NAME_None, Flags);
 	Obj->Init(TickInterval, _Label);
 	return Obj;
 }
 template <typename T>
-T* UNTimelineManagerBaseDecorator::CreateObject(
+T* UNTimelineManagerDecorator::CreateObject(
 	UObject* Outer, const UClass* Class, float TickInterval, FName _Label, EObjectFlags Flags)
 {
 	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
@@ -50,54 +50,54 @@ T* UNTimelineManagerBaseDecorator::CreateObject(
 	return Obj;
 }
 
-float UNTimelineManagerBaseDecorator::GetCurrentTime() const
+float UNTimelineManagerDecorator::GetCurrentTime() const
 {
 	return Timeline->GetCurrentTime();
 }
 
-void UNTimelineManagerBaseDecorator::Pause()
+void UNTimelineManagerDecorator::Pause()
 {
-	NTimelineManagerBase::Pause();
+	NTimelineManager::Pause();
 }
 
-void UNTimelineManagerBaseDecorator::Play()
+void UNTimelineManagerDecorator::Play()
 {
-	NTimelineManagerBase::Play();
+	NTimelineManager::Play();
 }
 
-void UNTimelineManagerBaseDecorator::Stop()
+void UNTimelineManagerDecorator::Stop()
 {
-	NTimelineManagerBase::Stop();
+	NTimelineManager::Stop();
 }
 
-void UNTimelineManagerBaseDecorator::SetTickInterval(float _TickInterval)
+void UNTimelineManagerDecorator::SetTickInterval(float _TickInterval)
 {
-	NTimelineManagerBase::SetTickInterval(_TickInterval);
+	NTimelineManager::SetTickInterval(_TickInterval);
 }
 
-const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents() const
+const TArray<FNEventRecord> UNTimelineManagerDecorator::GetEvents() const
 {
 	return MyTimeline->GetAdaptedEvents();
 }
 
-FName UNTimelineManagerBaseDecorator::GetLabel() const
+FName UNTimelineManagerDecorator::GetLabel() const
 {
 	return Timeline->GetLabel();
 }
 
-void UNTimelineManagerBaseDecorator::AddEvent(UNTimelineEventDecorator* Event)
+void UNTimelineManagerDecorator::AddEvent(UNTimelineEventDecorator* Event)
 {
 	Timeline->Attached(MakeShareable(new UnrealTimelineEventProxy(*Event)));
 }
 
-UNTimelineEventDecorator* UNTimelineManagerBaseDecorator::CreateNewEvent(
+UNTimelineEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(
 	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
 {
 	if (MyTimeline == nullptr) return nullptr;
 	return MyTimeline->CreateNewEvent(Class, Name, Duration, Delay);
 }
 
-UNTimelineEventDecorator* UNTimelineManagerBaseDecorator::CreateAndAddNewEvent(
+UNTimelineEventDecorator* UNTimelineManagerDecorator::CreateAndAddNewEvent(
 	TSubclassOf<UNTimelineEventDecorator> Class, FName Name, float Duration, float Delay)
 {
 	UNTimelineEventDecorator* Object = CreateNewEvent(Class, Name, Duration, Delay);
@@ -107,7 +107,7 @@ UNTimelineEventDecorator* UNTimelineManagerBaseDecorator::CreateAndAddNewEvent(
 	return Object;
 }
 
-void UNTimelineManagerBaseDecorator::Serialize(FArchive& Ar)
+void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 {
 	// Thanks to the UE4 serializing system, this will serialize all uproperty with "SaveGame"
 	Super::Serialize(Ar);
@@ -121,7 +121,7 @@ void UNTimelineManagerBaseDecorator::Serialize(FArchive& Ar)
 	Ar << TickInterval;
 }
 
-void UNTimelineManagerBaseDecorator::BeginDestroy()
+void UNTimelineManagerDecorator::BeginDestroy()
 {
 	if (MyTimeline != nullptr)
 	{

@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TimelineManagerBaseDecorator.h"
+#include "TimelineManagerDecorator.h"
 
 #include "GameLifeTimelineManager.generated.h"
 
@@ -28,7 +28,7 @@
  * For example: Player makes a very benevolent actions which gives him a health bonus for 10 minutes in game.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNGameLifeTimelineManager : public UNTimelineManagerBaseDecorator
+class NANSTIMELINESYSTEMUE4_API UNGameLifeTimelineManager : public UNTimelineManagerDecorator
 {
 	GENERATED_BODY()
 public:
@@ -46,7 +46,7 @@ public:
 
 	/**
 	 * clears timer + unbind delegate + invalidate handle.
-	 * @copydoc UNTimelineManagerBaseDecorator::Clear()
+	 * @copydoc UNTimelineManagerDecorator::Clear()
 	 */
 	virtual void Clear() override;
 

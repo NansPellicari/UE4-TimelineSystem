@@ -18,11 +18,11 @@
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
 #include "Event/TimelineEventDecorator.h"
-#include "Manager/TimelineManagerBaseDecorator.h"
+#include "Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "TimelineGameInstance.h"
 
-UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
+UNTimelineManagerDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {
 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
 	if (!World) return nullptr;

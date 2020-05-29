@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "Runtime/Engine/Public/Tickable.h"
-#include "TimelineManagerBaseDecorator.h"
+#include "TimelineManagerDecorator.h"
 
 #include "RealLifeTimelineManager.generated.h"
 
@@ -28,7 +28,7 @@
  * For example: A promo code which gives a market discount for 2 days.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNRealLifeTimelineManager : public UNTimelineManagerBaseDecorator, public FTickableGameObject
+class NANSTIMELINESYSTEMUE4_API UNRealLifeTimelineManager : public UNTimelineManagerDecorator, public FTickableGameObject
 {
 	GENERATED_BODY()
 public:
@@ -43,7 +43,7 @@ public:
 
 	/**
 	 * This just init State to "Play" and time variables.
-	 * @copydoc UNTimelineManagerBaseDecorator::Init()
+	 * @copydoc UNTimelineManagerDecorator::Init()
 	 */
 	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
 
@@ -58,7 +58,7 @@ public:
 	virtual bool IsTickable() const override;
 
 	/**
-	 * This override methods allows to tick UNTimelineManagerBaseDecorator::TimerTick()
+	 * This override methods allows to tick UNTimelineManagerDecorator::TimerTick()
 	 * and to increment times vars.
 	 *
 	 * @param DeltaTime - It is not used here, it used FDateTime::Now() - LastPlayTime to compute the real life delta time
