@@ -20,7 +20,7 @@ UNTimelineClient::UNTimelineClient() {}
 
 void UNTimelineClient::Init()
 {
-	TArray<FConfiguredTimeline> ConfigList;
+	TArray<FConfiguredTimelineConf> ConfigList;
 	UNTimelineConfig::GetConfigs(ConfigList);
 
 	for (auto& Conf : ConfigList)

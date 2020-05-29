@@ -19,38 +19,62 @@
 
 #include "TimelineEventDecorator.generated.h"
 
+namespace UNTimelineEventDecoratorFactory
+{
+	template <typename T>
+	static T* CreateObject(UObject* Outer,
+		const TSubclassOf<UNTimelineEventDecorator> Class,
+		FName Name = NAME_None,
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+	{
+		static int32 Counter;
+		if (Name == NAME_None)
+		{
+			FString EvtLabel = FString::Format(TEXT("EventDecorator_{0}"), {++Counter});
+			Name = FName(*EvtLabel);
+		}
+
+		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
+		Obj->Init(Name);
+		return Obj;
+	}
+
+	template <typename T>
+	static T* CreateObjectFromEvent(UObject* Outer,
+		const TSharedPtr<NTimelineEventInterface> Object,
+		const TSubclassOf<UNTimelineEventDecorator> Class,
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+	{
+		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
+		Obj->Event = Object;
+		return Obj;
+	}
+
+}	 // namespace UNTimelineEventDecoratorFactory
+
 /**
- * Base abstract class to create NTimelineEventBase decorators (Blueprint or c++).
+ * Base abstract class to create NTimelineEventInterface decorators (Blueprint or c++).
  *
  * For a simple usage with blueprint:
  * you can derived blueprint base on this.
- * This way the NTimelineEventBase instance should only manage timeline behavior.
+ * This way the NTimelineEventInterface instance should only manage timeline behavior.
  *
  * For a more complex usage in c++:
- * You should derive this and NTimelineEventBase too to fit on your needs.
+ * You should derive this and NTimelineEventInterface too to fit on your needs.
  * - This class should only manage specifics behaviors related to the engine
  * (serialization, blueprint's specifics functionnalities, etc...)
  * - NTimelineEventBase's derivation: all your core functionnalities
  */
 UCLASS(Abstract, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventBase
+class NANSTIMELINESYSTEMUE4_API UNTimelineEventDecorator : public UObject, public NTimelineEventInterface
 {
 	friend class UNTimelineManagerBaseDecorator;
 
 	GENERATED_BODY()
 public:
-	template <typename T>
-	static T* CreateObject(UObject* Outer,
-		const TSubclassOf<UNTimelineEventDecorator> Class,
-		FName Name = NAME_None,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
-	template <typename T>
-	static T* CreateObjectFromEvent(UObject* Outer,
-		const TSharedPtr<NTimelineEventBase> Object,
-		const TSubclassOf<UNTimelineEventDecorator> Class,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+	UNTimelineEventDecorator() {}
 
-	// BEGIN NTimelineEventBase overrides
+	// BEGIN NTimelineEventInterface overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
@@ -74,15 +98,20 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual const FName GetEventLabel() const override;
-	// END NTimelineEventBase overrides
+
+	virtual const FString GetUID() const override;
+	virtual void SetLocalTime(float _LocalTime) override;
+	virtual void SetStartedAt(float _StartedAt) override;
+	virtual void SetDuration(float _Duration) override;
+	virtual void SetDelay(float _Delay) override;
+	virtual void SetEventLabel(FName _EventLabel) override;
+	virtual void Clear() override;
+	// END NTimelineEventInterface overrides
 
 	// BEGIN UObject overrides
 	virtual void BeginDestroy() override;
 	virtual void Serialize(FArchive& Ar) override;
 	// END UObject overrides
-
-	void SetDelay(float _Delay);
-	void SetDuration(float _Duration);
 
 	/**
 	 * This is where the Core object is instanciated.
@@ -94,15 +123,20 @@ public:
 	 * This is used by other decorators which need to pass the core object to their own.
 	 * @see UNTimelineDecorator::Attached()
 	 */
-	TSharedPtr<NTimelineEventBase> GetEvent();
+	virtual TSharedPtr<NTimelineEventInterface> GetEvent() const;
 
 protected:
 	/**
 	 * The actual decorator is for this object.
 	 * It shoulds be instanciate on a ctor or a dedicated init function
-	 * */
-	TSharedPtr<NTimelineEventBase> Event;
+	 */
+	TSharedPtr<NTimelineEventInterface> Event;
 
-	/** Default ctor for the engine */
-	UNTimelineEventDecorator() {}
+private:
+	// Use for saving
+	FName Label = NAME_None;
+	float LocalTime = 0.f;
+	float StartedAt = -1.f;
+	float Duration = 0.f;
+	float Delay = 0.f;
 };

@@ -19,6 +19,7 @@
 #include "SlateBasics.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/SWidget.h"
+#include "Config/TimelineConfig.h"
 
 class SNameComboBox;
 
@@ -79,7 +80,7 @@ private:
 	 * List retrieved from the UNTimelineConfig::GetConfigs().
 	 * @see GetDefaultValueWidget() to know how.
 	 */
-	TArray<FConfiguredTimeline> AttributesList;
+	TArray<FConfiguredTimelineConf> AttributesList;
 
 	/** Names extract from the AttributesList */
 	TArray<TSharedPtr<FName>> Names;

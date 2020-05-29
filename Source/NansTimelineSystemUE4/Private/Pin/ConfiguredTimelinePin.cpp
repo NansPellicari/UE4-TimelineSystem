@@ -36,18 +36,20 @@ TSharedRef<SWidget> SConfiguredTimelinePin::GetDefaultValueWidget()
 
 	// retrieve the previous value selected (or the first value as default)
 	TSharedPtr<FName> PreviousSelectedName = GetSelectedName();
-	TSharedPtr<FName> CurrentlySelectedName;
 
-	// It is possible if no configured timelines have been created.
-	if (PreviousSelectedName.IsValid())
+	// if no data selected, save the first one
+	// Note: Null val is possible if no configured timelines have been created.
+	if (!PreviousSelectedName.IsValid() && Names.Num() > 0 && Names[0].IsValid())
 	{
-		CurrentlySelectedName = PreviousSelectedName;
+		PreviousSelectedName = Names[0];
+		SetPropertyWithName(*PreviousSelectedName);
+		PreviousSelectedName = GetSelectedName();
 	}
 
-	return SAssignNew(NameComboBox, SNameComboBox)		 // you can display any widget here
-		.ContentPadding(FMargin(6.0f, 2.0f))			 // you can stylize how you want by the way, check Slate library
-		.OptionsSource(&Names)							 // this to create all possibilities
-		.InitiallySelectedItem(CurrentlySelectedName)	 // the default or previous selected value
+	return SAssignNew(NameComboBox, SNameComboBox)		// you can display any widget here
+		.ContentPadding(FMargin(6.0f, 2.0f))			// you can stylize how you want by the way, check Slate library
+		.OptionsSource(&Names)							// this to create all possibilities
+		.InitiallySelectedItem(PreviousSelectedName)	// the default or previous selected value
 		.OnComboBoxOpening(this, &SConfiguredTimelinePin::OnComboBoxOpening)		// this event is defined by the SNameComboBox
 		.OnSelectionChanged(this, &SConfiguredTimelinePin::OnAttributeSelected);	// dito
 }
@@ -127,7 +129,7 @@ TSharedPtr<FName> SConfiguredTimelinePin::GetSelectedName() const
 		}
 	}
 	// no value has been found, return a default value
-	return Names[0];
+	return NULL;
 }
 
 void SConfiguredTimelinePin::GetPropertyAsName(FName& OutName) const

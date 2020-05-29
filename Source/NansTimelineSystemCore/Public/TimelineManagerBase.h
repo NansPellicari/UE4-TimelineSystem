@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 
-class NTimeline;
+class NTimelineInterface;
 
 /** Enum for the NTimelineManagerBase::State */
 enum class ENTimelineTimerState : uint8
@@ -27,17 +27,17 @@ enum class ENTimelineTimerState : uint8
 };
 
 /**
- * This class is the client for the NTimeline object.
+ * This class is the client for the NTimelineInterface object.
  * Its goal is to decoupled client interface with timeline management.
  *
- * - NTimeline manages time computation, notify events accordingly and save all states
+ * - NTimelineInterface manages time computation, notify events accordingly and save all states
  * - NTimelineManagerBase manages client controls.
  *
  * @see NTimeline
  */
 class NANSTIMELINESYSTEMCORE_API NTimelineManagerBase
 {
-	friend class NTimeline;
+	friend class NTimelineInterface;
 
 public:
 	/** Calls the Init() method. */
@@ -63,7 +63,7 @@ public:
 	/** This pause the timeline ticking and reset the NTimeline::CurrentTime to 0 */
 	virtual void Stop();
 
-	/** This checks the actual play state (ENTimelineTimerState) and tick the NTimeline accordingly. */
+	/** This checks the actual play state (ENTimelineTimerState) and tick the NTimelineInterface accordingly. */
 	virtual void TimerTick();
 
 	/** Get the actual state. */
@@ -75,8 +75,8 @@ public:
 	/** Defined the desired ticking interval */
 	virtual void SetTickInterval(float _TickInterval);
 
-	/** Get the coupled NTimeline */
-	TSharedPtr<NTimeline> GetTimeline() const;
+	/** Get the coupled NTimelineInterface */
+	TSharedPtr<NTimelineInterface> GetTimeline() const;
 
 protected:
 	/** The interval retrieved from the timeline. */
@@ -101,5 +101,5 @@ protected:
 	virtual void onNotifyTimelineTickAfter() {}
 
 	/** The coupled timeline */
-	TSharedPtr<NTimeline> Timeline;
+	TSharedPtr<NTimelineInterface> Timeline;
 };

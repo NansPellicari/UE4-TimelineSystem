@@ -17,9 +17,23 @@
 #include "CoreMinimal.h"
 #include "TimelineEventBase.h"
 
-DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventBase>, const float&, const int32&);
+DECLARE_DELEGATE_ThreeParams(FTimelineEventDelegate, TSharedPtr<NTimelineEventInterface>, const float&, const int32&);
 
 class NTimelineManagerBase;
+
+class NANSTIMELINESYSTEMCORE_API NTimelineInterface
+{
+public:
+	virtual bool Attached(TSharedPtr<NTimelineEventInterface> Event) = 0;
+	virtual void Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection) = 0;
+	virtual void SetTickInterval(float _TickInterval) = 0;
+	virtual void SetCurrentTime(float _CurrentTime) = 0;
+	virtual float GetCurrentTime() const = 0;
+	virtual void SetLabel(FName _Label) = 0;
+	virtual FName GetLabel() const = 0;
+	virtual void Clear() = 0;
+	virtual void NotifyTick() = 0;
+};
 
 /**
  * Its goal is to saved events and place them in time.
@@ -28,7 +42,7 @@ class NTimelineManagerBase;
  *
  * @see ./TimelineManagerBase.h
  */
-class NANSTIMELINESYSTEMCORE_API NTimeline
+class NANSTIMELINESYSTEMCORE_API NTimeline : public NTimelineInterface
 {
 	friend class NTimelineManagerBase;
 
@@ -43,7 +57,7 @@ public:
 	 * 4: label
 	 * 5: expired time
 	 */
-	using FEventTuple = TTuple<TSharedPtr<NTimelineEventBase>, float, const float, const float, const FName, float>;
+	using FEventTuple = TTuple<TSharedPtr<NTimelineEventInterface>, float, const float, const float, const FName, float>;
 
 	/**
 	 * A Timeline can't exists with a manager.
@@ -65,12 +79,12 @@ public:
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual bool Attached(TSharedPtr<NTimelineEventBase> Event);
+	virtual bool Attached(TSharedPtr<NTimelineEventInterface> Event);
 
 	/**
-	 * Same as Attached(TSharedPtr<NTimelineEventBase> Event) but for a collection of objects.
+	 * Same as Attached(TSharedPtr<NTimelineEventInterface> Event) but for a collection of objects.
 	 */
-	virtual void Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection);
+	virtual void Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection);
 
 	/**
 	 * This should be called only by its friend NTimelineManagerBase
@@ -137,13 +151,13 @@ protected:
 	NTimeline(){};
 
 	/** In case of specialisation needs to avoid the attach process in some cases */
-	virtual bool BeforeOnAttached(TSharedPtr<NTimelineEventBase> Event, const float AttachedTime)
+	virtual bool BeforeOnAttached(TSharedPtr<NTimelineEventInterface> Event, const float AttachedTime)
 	{
 		return true;
 	};
 
 	/** If needed to make some stats, analytics, trigger error,... */
-	virtual void AfterOnAttached(TSharedPtr<NTimelineEventBase> Event, const float AttachedTime) {}
+	virtual void AfterOnAttached(TSharedPtr<NTimelineEventInterface> Event, const float AttachedTime) {}
 
 	/**
 	 * This is the value required by a timer to know
@@ -157,7 +171,7 @@ protected:
 	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
 	 * @warning the Event should be used internally only to avoid nullptr reference
 	 */
-	virtual void OnExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index);
+	virtual void OnExpired(TSharedPtr<NTimelineEventInterface> Event, const float& ExpiredTime, const int32& Index);
 
 private:
 	/**

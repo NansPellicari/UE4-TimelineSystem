@@ -15,25 +15,27 @@
 #include "Manager/TimelineManagerBaseDecorator.h"
 
 #include "Event/TimelineEventDecorator.h"
+#include "Event/UnrealTimelineEventProxy.h"
 #include "Manager/GameLifeTimelineManager.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineEventBase.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "TimerManager.h"
+#include "UnrealTimelineProxy.h"
 
 UNTimelineManagerBaseDecorator::UNTimelineManagerBaseDecorator()
 {
 	MyTimeline = CreateDefaultSubobject<UNTimelineDecorator>(FName(TEXT("MyTimeline")));
 	MyTimeline->Init(this);
-	Timeline = MyTimeline->GetTimeline();
+	Timeline = MakeShareable(new UnrealTimelineProxy(*MyTimeline));
 }
 
 void UNTimelineManagerBaseDecorator::Init(float _TickInterval, FName _Label)
 {
 	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerBaseDecorator need a world to live"));
 	TickInterval = _TickInterval;
-	MyTimeline->SetTickInterval(_TickInterval);
-	MyTimeline->SetLabel(_Label);
+	Timeline->SetTickInterval(_TickInterval);
+	Timeline->SetLabel(_Label);
 }
 
 template <typename T>
@@ -54,8 +56,7 @@ T* UNTimelineManagerBaseDecorator::CreateObject(
 
 float UNTimelineManagerBaseDecorator::GetCurrentTime() const
 {
-	if (MyTimeline == nullptr) return 0;
-	return MyTimeline->GetCurrentTime();
+	return Timeline->GetCurrentTime();
 }
 
 void UNTimelineManagerBaseDecorator::Pause()
@@ -75,9 +76,7 @@ void UNTimelineManagerBaseDecorator::Stop()
 
 void UNTimelineManagerBaseDecorator::SetTickInterval(float _TickInterval)
 {
-	if (MyTimeline == nullptr) return;
-	TickInterval = _TickInterval;
-	MyTimeline->SetTickInterval(_TickInterval);
+	NTimelineManagerBase::SetTickInterval(_TickInterval);
 }
 
 const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents() const
@@ -87,12 +86,12 @@ const TArray<FNEventRecord> UNTimelineManagerBaseDecorator::GetEvents() const
 
 FName UNTimelineManagerBaseDecorator::GetLabel() const
 {
-	return MyTimeline->GetLabel();
+	return Timeline->GetLabel();
 }
 
 void UNTimelineManagerBaseDecorator::AddEvent(UNTimelineEventDecorator* Event)
 {
-	MyTimeline->Attached(Event);
+	Timeline->Attached(MakeShareable(new UnrealTimelineEventProxy(*Event)));
 }
 
 UNTimelineEventDecorator* UNTimelineManagerBaseDecorator::CreateNewEvent(
@@ -133,12 +132,4 @@ void UNTimelineManagerBaseDecorator::BeginDestroy()
 		MyTimeline->ConditionalBeginDestroy();
 	}
 	Super::BeginDestroy();
-}
-
-void UNTimelineManagerBaseDecorator::Clear()
-{
-	if (MyTimeline != nullptr)
-	{
-		MyTimeline->Clear();
-	}
 }

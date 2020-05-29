@@ -33,6 +33,45 @@ float NTimelineEventBase::GetDuration() const
 {
 	return Duration;
 }
+float NTimelineEventBase::GetDelay() const
+{
+	return Delay;
+}
+
+const FName NTimelineEventBase::GetEventLabel() const
+{
+	return Label;
+}
+
+const FString NTimelineEventBase::GetUID() const
+{
+	return Id;
+}
+
+void NTimelineEventBase::SetLocalTime(float _LocalTime)
+{
+	LocalTime = _LocalTime;
+}
+
+void NTimelineEventBase::SetStartedAt(float _StartedAt)
+{
+	StartedAt = _StartedAt;
+}
+
+void NTimelineEventBase::SetDuration(float _Duration)
+{
+	Duration = _Duration;
+}
+
+void NTimelineEventBase::SetDelay(float _Delay)
+{
+	Delay = _Delay;
+}
+
+void NTimelineEventBase::SetEventLabel(FName _EventLabel)
+{
+	Label = _EventLabel;
+}
 
 void NTimelineEventBase::Start(float StartTime)
 {
@@ -42,16 +81,6 @@ void NTimelineEventBase::Start(float StartTime)
 void NTimelineEventBase::NotifyAddTime(float NewTime)
 {
 	LocalTime += NewTime;
-}
-
-float NTimelineEventBase::GetDelay() const
-{
-	return Delay;
-}
-
-const FName NTimelineEventBase::GetEventLabel() const
-{
-	return Label;
 }
 
 void NTimelineEventBase::Clear()

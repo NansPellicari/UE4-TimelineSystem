@@ -14,7 +14,9 @@
 
 #include "TimelineBlueprintHelpers.h"
 
+#include "Engine.h"
 #include "Engine/GameInstance.h"
+#include "Engine/World.h"
 #include "Event/TimelineEventDecorator.h"
 #include "Manager/TimelineManagerBaseDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -22,7 +24,10 @@
 
 UNTimelineManagerBaseDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {
-	UGameInstance* GI = WorldContextObject->GetWorld()->GetGameInstance();
+	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	if (!World) return nullptr;
+
+	UGameInstance* GI = World->GetGameInstance();
 	if (!GI->GetClass()->ImplementsInterface(UNTimelineGameInstance::StaticClass()))
 	{
 		UE_LOG(LogTemp, Error, TEXT("Your game instance should implements INTimelineGameInstance"));

@@ -27,4 +27,7 @@ public:
 	virtual void StartupModule() override;
 	/** IModuleInterface implementation */
 	virtual void ShutdownModule() override;
+
+private:
+	TSet<FName> RegisteredPropertyTypes;
 };

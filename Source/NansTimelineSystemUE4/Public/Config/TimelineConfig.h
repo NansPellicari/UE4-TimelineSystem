@@ -21,6 +21,32 @@
 #include "TimelineConfig.generated.h"
 
 /**
+ * This struct to create Configured Timeline and ease Timeline instanciation.
+ * This allows to associated a Timeline Name to a class.
+ */
+USTRUCT(BlueprintType)
+struct NANSTIMELINESYSTEMUE4_API FConfiguredTimelineConf
+{
+	GENERATED_BODY()
+
+public:
+	/**
+	 * This allows to retrieve easily a timeline.
+	 * This is used by the SConfiguredTimelinePin as a combobox.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
+	FName Name;
+
+	/** The Configured Timeline class */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
+	TSubclassOf<UNTimelineManagerBaseDecorator> TimelineClass;
+
+	/** You can use this to add more or less frequency between each tick. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
+	float TickInterval = 1.f;
+};
+
+/**
  * A simple configuration to ease timeline instanciation for developpers.
  */
 UCLASS(config = Game, defaultconfig, meta = (DisplayName = "Nans Timeline"))
@@ -29,15 +55,15 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineConfig : public UDeveloperSettings
 	GENERATED_BODY()
 public:
 	UPROPERTY(config, EditAnywhere, Category = "NansTimeline")
-	TArray<FConfiguredTimeline> ConfiguredTimeline;
+	TArray<FConfiguredTimelineConf> ConfiguredTimeline;
 
 	/**
 	 * Retrieve config from developpers choices.
 	 */
-	static void GetConfigs(TArray<FConfiguredTimeline>& ShareableNames)
+	static void GetConfigs(TArray<FConfiguredTimelineConf>& ShareableNames)
 	{
 		static const UNTimelineConfig* StaticObject = GetDefault<UNTimelineConfig>();
-		for (FConfiguredTimeline Config : StaticObject->ConfiguredTimeline)
+		for (FConfiguredTimelineConf Config : StaticObject->ConfiguredTimeline)
 		{
 			ShareableNames.Add(Config);
 		}

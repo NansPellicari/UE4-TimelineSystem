@@ -15,28 +15,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Manager/TimelineManagerBaseDecorator.h"
 
-#include "ConfiguredTimeline.generated.h"
+#include "TimelineNameProperty.generated.h"
 
-/**
- * This struct to create Configured Timeline and ease Timeline instanciation.
- * This allows to associated a Timeline Name to a class.
- */
 USTRUCT(BlueprintType)
-struct NANSTIMELINESYSTEMUE4_API FConfiguredTimeline
+struct NANSTIMELINESYSTEMUE4_API FTimelineNameProperty
 {
-	GENERATED_BODY()
-
+	GENERATED_USTRUCT_BODY()
 public:
-	/**
-	 * This allows to retrieve easily a timeline.
-	 * This is used by the SConfiguredTimelinePin as a combobox.
-	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
-	FName Name;
-
-	/** The Configured Timeline class */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
-	TSubclassOf<UNTimelineManagerBaseDecorator> TimelineClass;
+	FName TimelineName;
 };

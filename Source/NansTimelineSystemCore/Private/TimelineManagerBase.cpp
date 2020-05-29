@@ -23,7 +23,6 @@ NTimelineManagerBase::NTimelineManagerBase()
 
 NTimelineManagerBase::~NTimelineManagerBase()
 {
-	Clear();
 	Timeline.Reset();
 }
 
@@ -41,7 +40,7 @@ void NTimelineManagerBase::TimerTick()
 	}
 }
 
-TSharedPtr<NTimeline> NTimelineManagerBase::GetTimeline() const
+TSharedPtr<NTimelineInterface> NTimelineManagerBase::GetTimeline() const
 {
 	return Timeline;
 }

@@ -65,18 +65,39 @@ const FName UNTimelineEventDecorator::GetEventLabel() const
 	return Event->GetEventLabel();
 }
 
-TSharedPtr<NTimelineEventBase> UNTimelineEventDecorator::GetEvent()
+const FString UNTimelineEventDecorator::GetUID() const
 {
-	return Event;
+	return Event->GetUID();
+}
+
+void UNTimelineEventDecorator::SetLocalTime(float _LocalTime)
+{
+	Event->SetLocalTime(_LocalTime);
+}
+
+void UNTimelineEventDecorator::SetStartedAt(float _StartedAt)
+{
+	Event->SetStartedAt(_StartedAt);
+}
+
+void UNTimelineEventDecorator::SetDuration(float _Duration)
+{
+	Event->SetDuration(_Duration);
 }
 
 void UNTimelineEventDecorator::SetDelay(float _Delay)
 {
-	Event->Delay = _Delay;
+	Event->SetDelay(_Delay);
 }
-void UNTimelineEventDecorator::SetDuration(float _Duration)
+
+void UNTimelineEventDecorator::SetEventLabel(FName _EventLabel)
 {
-	Event->Duration = _Duration;
+	Event->SetEventLabel(_EventLabel);
+}
+
+TSharedPtr<NTimelineEventInterface> UNTimelineEventDecorator::GetEvent() const
+{
+	return Event;
 }
 
 void UNTimelineEventDecorator::Init(FName _Label)
@@ -89,17 +110,22 @@ void UNTimelineEventDecorator::BeginDestroy()
 	Event.Reset();
 }
 
+void UNTimelineEventDecorator::Clear()
+{
+	Event->Clear();
+}
+
 void UNTimelineEventDecorator::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
 	if (Ar.IsSaving() && Event.IsValid())
 	{
-		Label = Event->Label;
-		LocalTime = Event->LocalTime;
-		StartedAt = Event->StartedAt;
-		Duration = Event->Duration;
-		Delay = Event->Delay;
+		Label = Event->GetEventLabel();
+		LocalTime = Event->GetLocalTime();
+		StartedAt = Event->GetStartedAt();
+		Duration = Event->GetDuration();
+		Delay = Event->GetDelay();
 	}
 
 	Ar << Label;
@@ -115,38 +141,10 @@ void UNTimelineEventDecorator::Serialize(FArchive& Ar)
 
 	if (Event.IsValid())
 	{
-		Event->Label = Label;
-		Event->LocalTime = LocalTime;
-		Event->StartedAt = StartedAt;
-		Event->Duration = Duration;
-		Event->Delay = Delay;
-		Clear();
+		Event->SetEventLabel(Label);
+		Event->SetLocalTime(LocalTime);
+		Event->SetStartedAt(StartedAt);
+		Event->SetDuration(Duration);
+		Event->SetDelay(Delay);
 	}
-}
-
-template <typename T>
-T* UNTimelineEventDecorator::CreateObject(
-	UObject* Outer, const TSubclassOf<UNTimelineEventDecorator> Class, FName Name, EObjectFlags Flags)
-{
-	static int32 Counter;
-	if (Name == NAME_None)
-	{
-		FString EvtLabel = FString::Format(TEXT("EventDecorator_{0}"), {++Counter});
-		Name = FName(*EvtLabel);
-	}
-
-	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-	Obj->Init(Name);
-	return Obj;
-}
-
-template <typename T>
-T* UNTimelineEventDecorator::CreateObjectFromEvent(UObject* Outer,
-	const TSharedPtr<NTimelineEventBase> Object,
-	const TSubclassOf<UNTimelineEventDecorator> Class,
-	EObjectFlags Flags)
-{
-	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-	Obj->Event = Object;
-	return Obj;
 }

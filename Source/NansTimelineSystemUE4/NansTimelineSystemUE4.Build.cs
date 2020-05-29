@@ -17,35 +17,41 @@ using UnrealBuildTool;
 
 public class NansTimelineSystemUE4 : ModuleRules
 {
-	public NansTimelineSystemUE4(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+    public NansTimelineSystemUE4(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-			}
-			);
+        // This to allow dynamic_cast
+        // https://answers.unrealengine.com/questions/477792/how-do-i-cast-between-polymorphic-classes-that-don.html?sort=oldest
+        bUseRTTI = true;
+
+        PublicDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "Core",
+            }
+            );
 
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"UnrealEd",
-				"BlueprintGraph",
-				"GraphEditor",
-				"PropertyEditor",
-				"Slate",
-				"SlateCore",
-				"EditorStyle",
-				"Kismet",
-				"KismetCompiler",
-				"NansTimelineSystemCore",
-				"NansUE4TestsHelpers"
-			}
-			);
-	}
+        PrivateDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "CoreUObject",
+                "Engine",
+                "UnrealEd",
+                "BlueprintGraph",
+                "GraphEditor",
+                "Slate",
+                "SlateCore",
+                "EditorStyle",
+                "Kismet",
+                "KismetCompiler",
+                "EditorWidgets",
+                "PropertyEditor",
+                "DetailCustomizations",
+                "NansTimelineSystemCore",
+                "NansUE4TestsHelpers"
+            }
+            );
+    }
 }

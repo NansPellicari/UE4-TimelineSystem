@@ -68,9 +68,6 @@ public:
 	 * @param _Label - Name of the Timeline.
 	 */
 	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
-
-	/** It is called by the parent NTimelineManagerBase on dtor */
-	virtual void Clear() override;
 	// END NTimelineManagerBase overrides
 
 	// BEGIN UObject overrides

@@ -16,51 +16,84 @@
 
 #include "CoreMinimal.h"
 
+class NANSTIMELINESYSTEMCORE_API NTimelineEventInterface
+{
+public:
+	virtual bool IsExpired() const = 0;
+	virtual const float GetLocalTime() const = 0;
+	virtual const float GetStartedAt() const = 0;
+	virtual float GetDuration() const = 0;
+	virtual float GetDelay() const = 0;
+	virtual const FString GetUID() const = 0;
+	virtual const FName GetEventLabel() const = 0;
+	virtual void SetLocalTime(float _LocalTime) = 0;
+	virtual void SetStartedAt(float _StartedAt) = 0;
+	virtual void SetDuration(float _Duration) = 0;
+	virtual void SetDelay(float _Delay) = 0;
+	virtual void SetEventLabel(FName _EventLabel) = 0;
+	virtual void Start(float StartTime) = 0;
+	virtual void NotifyAddTime(float NewTime) = 0;
+	virtual void Clear() = 0;
+};
+
 /**
  * An abstract class to manage events which can be attached to a timeline.
  */
-class NANSTIMELINESYSTEMCORE_API NTimelineEventBase
+class NANSTIMELINESYSTEMCORE_API NTimelineEventBase : public NTimelineEventInterface
 {
 public:
 	/** Default ctor */
-	NTimelineEventBase() {}
+	NTimelineEventBase()
+	{
+		Id = FGuid::NewGuid().ToString();
+	}
 
 	/** Ctor to gives directly a name for this event. */
 	NTimelineEventBase(FName _Label) : Label(_Label) {}
 
+	virtual ~NTimelineEventBase(){};
+
 	/** It computes with Duration and LocalTime */
-	virtual bool IsExpired() const;
+	virtual bool IsExpired() const override;
 
 	/** Getter for LocalTime */
-	virtual const float GetLocalTime() const;
+	virtual const float GetLocalTime() const override;
 
 	/** Getter for StartedAt */
-	virtual const float GetStartedAt() const;
+	virtual const float GetStartedAt() const override;
 
 	/** Getter for Duration */
-	virtual float GetDuration() const;
+	virtual float GetDuration() const override;
 
 	/** A setter for StartedAt */
-	virtual void Start(float StartTime);
+	virtual void Start(float StartTime) override;
 
+	/** Increments LocalTime */
+	virtual float GetDelay() const override;
+	virtual const FString GetUID() const override;
+
+	/** Getter for Label */
+	virtual const FName GetEventLabel() const override;
+
+	virtual void SetLocalTime(float _LocalTime) override;
+	virtual void SetStartedAt(float _StartedAt) override;
+	virtual void SetDuration(float _Duration) override;
+	virtual void SetDelay(float _Delay) override;
+	virtual void SetEventLabel(FName _EventLabel) override;
 	/**
 	 * Increments LocalTime
 	 * @param NewTime - in Millisecs
 	 */
-	virtual void NotifyAddTime(float NewTime);
-
-	/** Increments LocalTime */
-	virtual float GetDelay() const;
-
-	/** Getter for Label */
-	virtual const FName GetEventLabel() const;
+	virtual void NotifyAddTime(float NewTime) override;
 
 	/** Reset all default data */
-	virtual void Clear();
+	virtual void Clear() override;
 
+protected:
 	FName Label = NAME_None;
 	float LocalTime = 0.f;
 	float StartedAt = -1.f;
 	float Duration = 0.f;
 	float Delay = 0.f;
+	FString Id;
 };

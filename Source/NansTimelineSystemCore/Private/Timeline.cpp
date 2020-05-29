@@ -29,10 +29,10 @@ NTimeline::NTimeline(NTimelineManagerBase* TimelineTimer, FName _Label)
 
 NTimeline::~NTimeline()
 {
-	Clear();
+	Events.Empty();
 }
 
-void NTimeline::Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection)
+void NTimeline::Attached(TArray<TSharedPtr<NTimelineEventInterface>> EventsCollection)
 {
 	for (auto Event : EventsCollection)
 	{
@@ -40,7 +40,7 @@ void NTimeline::Attached(TArray<TSharedPtr<NTimelineEventBase>> EventsCollection
 	}
 }
 
-bool NTimeline::Attached(TSharedPtr<NTimelineEventBase> Event)
+bool NTimeline::Attached(TSharedPtr<NTimelineEventInterface> Event)
 {
 	if (Event->GetDelay() <= 0.f)
 	{
@@ -64,7 +64,7 @@ void NTimeline::NotifyTick()
 	for (Index; Index < Events.Num(); ++Index)
 	{
 		FEventTuple& EventTuple = Events[Index];
-		TSharedPtr<NTimelineEventBase> Event = EventTuple.Get<0>();
+		TSharedPtr<NTimelineEventInterface> Event = EventTuple.Get<0>();
 
 		if (!Event.IsValid())
 		{
@@ -108,7 +108,7 @@ void NTimeline::NotifyTick()
 	}
 }
 
-void NTimeline::OnExpired(TSharedPtr<NTimelineEventBase> Event, const float& ExpiredTime, const int32& Index)
+void NTimeline::OnExpired(TSharedPtr<NTimelineEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
 	EventExpired.ExecuteIfBound(Event, ExpiredTime, Index);
 }
