@@ -14,6 +14,8 @@
 
 #include "Event/UnrealEventProxy.h"
 
+#include "Event/EventDecorator.h"
+
 bool NUnrealEventProxy::IsExpired() const
 {
 	return Event.IsExpired();

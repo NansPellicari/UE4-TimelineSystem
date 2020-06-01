@@ -24,6 +24,41 @@
 class NEventDecorator;
 
 /**
+ * This class is a factory to managed properly UNTimelineManagerDecorator instanciation.
+ */
+class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecoratorFactory
+{
+public:
+	/**
+	 * Method to create a derived UNTimelineManagerDecorator.
+	 *
+	 * @param Outer - The outer of the new object.
+	 * @param TickInterval - The interval between tick in sec
+	 * @param _Label - The name of this new Timeline
+	 * @param Flags - The EObjectFlags for NewObject().
+	 */
+	template <typename T>
+	static T* CreateObject(
+		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+
+	/**
+	 * This method is a factory method to create a derived UNTimelineManagerDecorator with a specific UClass.
+	 *
+	 * @param Outer - The outer of the new object.
+	 * @param Class - The specific class we want our object will be.
+	 * @param TickInterval - The interval between tick in sec
+	 * @param _Label - The name of this new Timeline
+	 * @param Flags - The EObjectFlags for NewObject().
+	 */
+	template <typename T>
+	static T* CreateObject(UObject* Outer,
+		const UClass* Class,
+		float TickInterval = 1.f,
+		FName _Label = NAME_None,
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+};
+
+/**
  * This is the abstract decorator that every Timeline manager shoulds override.
  * It brings all core functionnalities for blueprint or c++.
  *
@@ -96,34 +131,6 @@ public:
 	/** A pass-through for the embeded UNTimelineDecorator::GetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
-
-	/**
-	 * This method is a factory method to create a derived UNTimelineManagerDecorator.
-	 *
-	 * @param Outer - The outer of the new object.
-	 * @param TickInterval - The interval between tick in sec
-	 * @param _Label - The name of this new Timeline
-	 * @param Flags - The EObjectFlags for NewObject().
-	 */
-	template <typename T>
-	static T* CreateObject(
-		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
-
-	/**
-	 * This method is a factory method to create a derived UNTimelineManagerDecorator with a specific UClass.
-	 *
-	 * @param Outer - The outer of the new object.
-	 * @param Class - The specific class we want our object will be.
-	 * @param TickInterval - The interval between tick in sec
-	 * @param _Label - The name of this new Timeline
-	 * @param Flags - The EObjectFlags for NewObject().
-	 */
-	template <typename T>
-	static T* CreateObject(UObject* Outer,
-		const UClass* Class,
-		float TickInterval = 1.f,
-		FName _Label = NAME_None,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
 
 	/**
 	 * Adds an event to the timeline object,

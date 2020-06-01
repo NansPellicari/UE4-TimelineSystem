@@ -45,7 +45,7 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecorator::CreateObject<UNGameLifeTimelineManager>(
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
 		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 
 	// Begin test
@@ -95,7 +95,7 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecorator::CreateObject<UNGameLifeTimelineManager>(
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
 		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
@@ -140,7 +140,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecorator::CreateObject<UNGameLifeTimelineManager>(
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
 		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
 	TimelineManager->Play();
 
@@ -161,7 +161,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 
 		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 		NewFakeObject->SetMyWorld(NewWorld);
-		UNGameLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecorator::CreateObject<UNGameLifeTimelineManager>(
+		UNGameLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
 			NewFakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory

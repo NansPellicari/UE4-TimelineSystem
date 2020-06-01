@@ -5,7 +5,6 @@
 `namespace `[`UNEventDecoratorFactory`](#namespaceUNEventDecoratorFactory) | 
 `class `[`FNansTimelineSystemCoreModule`](#classFNansTimelineSystemCoreModule) | Required to create a UE4 module
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
-`class `[`FTimelineNamePropertyCustomization`](#classFTimelineNamePropertyCustomization) | 
 `class `[`FTimelinePinFactory`](#classFTimelinePinFactory) | It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
 `class `[`INTimelineGameInstance`](#classINTimelineGameInstance) | This interface should be implemented by your GameInstance class or blueprint object. See README.md in step by step guide to see how to implements it.
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
@@ -18,6 +17,8 @@
 `class `[`NTimelineInterface`](#classNTimelineInterface) | 
 `class `[`NTimelineManager`](#classNTimelineManager) | This class is the client for the [NTimelineInterface](#classNTimelineInterface) object. Its goal is to decoupled client interface with timeline management.
 `class `[`NTimelineManagerFake`](#classNTimelineManagerFake) | This class is used for tests only
+`class `[`NUnrealEventProxy`](#classNUnrealEventProxy) | This class is just a pass-through to allows an [UNEventDecorator](#classUNEventDecorator) (a derived UObject) to be passed on the core system using TSharedPtr.
+`class `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy) | This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTimelineProxy) (a derived UObject) to be passed on the core system using TSharedPtr, and it manages [NUnrealEventProxy](#classNUnrealEventProxy) attachment .
 `class `[`SConfiguredTimelinePin`](#classSConfiguredTimelinePin) | This class allows to create a dedicated pin to get names from [UNTimelineConfig](#classUNTimelineConfig).
 `class `[`TimelineManagerTickableOnPauseFake`](#classTimelineManagerTickableOnPauseFake) | This class is used for tests only
 `class `[`TimelineTimerManagerFake`](#classTimelineTimerManagerFake) | 
@@ -25,15 +26,14 @@
 `class `[`UNEventDecoratorFake`](#classUNEventDecoratorFake) | This class is used for tests only
 `class `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager) | This decorator is fitted to track time when player plays since the game is launched.
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
-`class `[`UnrealEventProxy`](#classUnrealEventProxy) | 
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
-`class `[`UnrealTimelineProxy`](#classUnrealTimelineProxy) | 
 `class `[`UNTimelineBlueprintHelpers`](#classUNTimelineBlueprintHelpers) | A simple Blueprint Library class to manage Timeline creation.
 `class `[`UNTimelineClient`](#classUNTimelineClient) | This class should be used by your GameInstance object. This object is the glue for all the timeline configuration and blueprint helpers.
 `class `[`UNTimelineConfig`](#classUNTimelineConfig) | A simple configuration to ease timeline instanciation for developpers.
 `class `[`UNTimelineDecorator`](#classUNTimelineDecorator) | The decorator for [NTimelineInterface](#classNTimelineInterface) object.
 `class `[`UNTimelineGameInstance`](#classUNTimelineGameInstance) | **See also**: [INTimelineGameInstance](#classINTimelineGameInstance)
 `class `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator) | This is the abstract decorator that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or c++.
+`class `[`UNTimelineManagerDecoratorFactory`](#classUNTimelineManagerDecoratorFactory) | This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instanciation.
 `struct `[`FConfiguredTimeline`](#structFConfiguredTimeline) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
 `struct `[`FConfiguredTimelineConf`](#structFConfiguredTimelineConf) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
 `struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a9c84d07b1a46de333b43ebd79ced4aa4) and a record object used for savegame.
@@ -105,28 +105,6 @@ IModuleInterface implementation
 #### `public virtual void `[`ShutdownModule`](#classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363)`()` <a id="classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363"></a>
 
 IModuleInterface implementation
-
-# class `FTimelineNamePropertyCustomization` <a id="classFTimelineNamePropertyCustomization"></a>
-
-```
-class FTimelineNamePropertyCustomization
-  : public IPropertyTypeCustomization
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public virtual void `[`CustomizeHeader`](#classFTimelineNamePropertyCustomization_1a0c446f0f0f4d2231bf00ef70222038dd)`(TSharedRef< class IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | IPropertyTypeCustomization interface
-`public virtual void `[`CustomizeChildren`](#classFTimelineNamePropertyCustomization_1a917601e1722aec238845724941441e48)`(TSharedRef< class IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | 
-
-## Members
-
-#### `public virtual void `[`CustomizeHeader`](#classFTimelineNamePropertyCustomization_1a0c446f0f0f4d2231bf00ef70222038dd)`(TSharedRef< class IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFTimelineNamePropertyCustomization_1a0c446f0f0f4d2231bf00ef70222038dd"></a>
-
-IPropertyTypeCustomization interface
-
-#### `public virtual void `[`CustomizeChildren`](#classFTimelineNamePropertyCustomization_1a917601e1722aec238845724941441e48)`(TSharedRef< class IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFTimelineNamePropertyCustomization_1a917601e1722aec238845724941441e48"></a>
 
 # class `FTimelinePinFactory` <a id="classFTimelinePinFactory"></a>
 
@@ -761,6 +739,125 @@ This method is call immediately before ticking
 
 Calls [NTimeline::Clear()](#classNTimeline_1aa1c1ea88a8875507cd18f2d4464eddd8)
 
+# class `NUnrealEventProxy` <a id="classNUnrealEventProxy"></a>
+
+```
+class NUnrealEventProxy
+  : public NEventInterface
+```  
+
+This class is just a pass-through to allows an [UNEventDecorator](#classUNEventDecorator) (a derived UObject) to be passed on the core system using TSharedPtr.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532) | 
+`public inline  `[`NUnrealEventProxy`](#classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` | 
+`public virtual bool `[`IsExpired`](#classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157)`() const` | 
+`public virtual const float `[`GetLocalTime`](#classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43)`() const` | 
+`public virtual const float `[`GetStartedAt`](#classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89)`() const` | 
+`public virtual float `[`GetDuration`](#classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187)`() const` | 
+`public virtual void `[`Start`](#classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d)`(float StartTime)` | 
+`public virtual void `[`NotifyAddTime`](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345)`(float NewTime)` | 
+`public virtual float `[`GetDelay`](#classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab)`() const` | 
+`public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` | 
+`public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` | 
+`public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` | 
+`public virtual void `[`SetStartedAt`](#classNUnrealEventProxy_1a5af78086c9576e90c72e411a5736e8b6)`(float _StartedAt)` | 
+`public virtual void `[`SetDuration`](#classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360)`(float _Duration)` | 
+`public virtual void `[`SetDelay`](#classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85)`(float _Delay)` | 
+`public virtual void `[`SetEventLabel`](#classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd)`(FName _EventLabel)` | 
+`public virtual void `[`Clear`](#classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a)`()` | 
+`public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95)`()` | 
+
+## Members
+
+#### `public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532) <a id="classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532"></a>
+
+#### `public inline  `[`NUnrealEventProxy`](#classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` <a id="classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5"></a>
+
+#### `public virtual bool `[`IsExpired`](#classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157)`() const` <a id="classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157"></a>
+
+#### `public virtual const float `[`GetLocalTime`](#classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43)`() const` <a id="classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43"></a>
+
+#### `public virtual const float `[`GetStartedAt`](#classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89)`() const` <a id="classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89"></a>
+
+#### `public virtual float `[`GetDuration`](#classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187)`() const` <a id="classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187"></a>
+
+#### `public virtual void `[`Start`](#classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d)`(float StartTime)` <a id="classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d"></a>
+
+#### `public virtual void `[`NotifyAddTime`](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345)`(float NewTime)` <a id="classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345"></a>
+
+#### `public virtual float `[`GetDelay`](#classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab)`() const` <a id="classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab"></a>
+
+#### `public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` <a id="classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b"></a>
+
+#### `public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` <a id="classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a"></a>
+
+#### `public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` <a id="classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259"></a>
+
+#### `public virtual void `[`SetStartedAt`](#classNUnrealEventProxy_1a5af78086c9576e90c72e411a5736e8b6)`(float _StartedAt)` <a id="classNUnrealEventProxy_1a5af78086c9576e90c72e411a5736e8b6"></a>
+
+#### `public virtual void `[`SetDuration`](#classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360)`(float _Duration)` <a id="classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360"></a>
+
+#### `public virtual void `[`SetDelay`](#classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85)`(float _Delay)` <a id="classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85"></a>
+
+#### `public virtual void `[`SetEventLabel`](#classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd)`(FName _EventLabel)` <a id="classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd"></a>
+
+#### `public virtual void `[`Clear`](#classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a)`()` <a id="classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a"></a>
+
+#### `public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95)`()` <a id="classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95"></a>
+
+# class `NUnrealTimelineProxy` <a id="classNUnrealTimelineProxy"></a>
+
+```
+class NUnrealTimelineProxy
+  : public NTimelineInterface
+```  
+
+This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTimelineProxy) (a derived UObject) to be passed on the core system using TSharedPtr, and it manages [NUnrealEventProxy](#classNUnrealEventProxy) attachment .
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced) | 
+`public inline  `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` | 
+`public virtual bool `[`Attached`](#classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | 
+`public virtual void `[`Attached`](#classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | 
+`public virtual void `[`SetTickInterval`](#classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295)`(float _TickInterval)` | 
+`public virtual void `[`SetCurrentTime`](#classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3)`(float _CurrentTime)` | 
+`public virtual float `[`GetCurrentTime`](#classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210)`() const` | 
+`public virtual void `[`SetLabel`](#classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1)`(FName _Label)` | 
+`public virtual FName `[`GetLabel`](#classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617)`() const` | 
+`public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` | 
+`public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` | 
+
+## Members
+
+#### `public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced) <a id="classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced"></a>
+
+#### `public inline  `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` <a id="classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b"></a>
+
+#### `public virtual bool `[`Attached`](#classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5"></a>
+
+#### `public virtual void `[`Attached`](#classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7"></a>
+
+#### `public virtual void `[`SetTickInterval`](#classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295)`(float _TickInterval)` <a id="classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295"></a>
+
+#### `public virtual void `[`SetCurrentTime`](#classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3)`(float _CurrentTime)` <a id="classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3"></a>
+
+#### `public virtual float `[`GetCurrentTime`](#classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210)`() const` <a id="classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210"></a>
+
+#### `public virtual void `[`SetLabel`](#classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1)`(FName _Label)` <a id="classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1"></a>
+
+#### `public virtual FName `[`GetLabel`](#classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617)`() const` <a id="classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617"></a>
+
+#### `public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` <a id="classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be"></a>
+
+#### `public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` <a id="classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be"></a>
+
 # class `SConfiguredTimelinePin` <a id="classSConfiguredTimelinePin"></a>
 
 ```
@@ -1124,77 +1221,6 @@ Default ctor
 
 WIP
 
-# class `UnrealEventProxy` <a id="classUnrealEventProxy"></a>
-
-```
-class UnrealEventProxy
-  : public NEventInterface
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classUnrealEventProxy_1a3fe915d91e04c54924304f88f0bbc671) | 
-`public inline  `[`UnrealEventProxy`](#classUnrealEventProxy_1ad10d4371d19b75d27fb81aab67e2e1e8)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` | 
-`public inline virtual  `[`~UnrealEventProxy`](#classUnrealEventProxy_1a90e2e49831de99f4f31875890f9fc7a7)`()` | 
-`public inline virtual bool `[`IsExpired`](#classUnrealEventProxy_1af2c6d4ffabc1d7ec0c228b6eb64c1e16)`() const` | 
-`public inline virtual const float `[`GetLocalTime`](#classUnrealEventProxy_1a0a96d882f5e1f77e5c0d00e8bf1fc44b)`() const` | 
-`public inline virtual const float `[`GetStartedAt`](#classUnrealEventProxy_1a94f52a47ea43909d4a52ec7a7818a09e)`() const` | 
-`public inline virtual float `[`GetDuration`](#classUnrealEventProxy_1a782155c440a6d64dc3d5ab069b829495)`() const` | 
-`public inline virtual void `[`Start`](#classUnrealEventProxy_1abfac5ea7113e25e3ea68f436e3997707)`(float StartTime)` | 
-`public inline virtual void `[`NotifyAddTime`](#classUnrealEventProxy_1ad67b7cc9ca640442bf27f1c5dc1479f0)`(float NewTime)` | 
-`public inline virtual float `[`GetDelay`](#classUnrealEventProxy_1a00c390e9409dbc5dcf6908c772f4cc93)`() const` | 
-`public inline virtual const FName `[`GetEventLabel`](#classUnrealEventProxy_1ac714bc06ccbdf28a60ba7b7bf9f89c97)`() const` | 
-`public inline virtual const FString `[`GetUID`](#classUnrealEventProxy_1a0cdf81c63b2bbdf6c87397433f5db661)`() const` | 
-`public inline virtual void `[`SetLocalTime`](#classUnrealEventProxy_1a64260c499c604e52ae0f14d65e08534d)`(float _LocalTime)` | 
-`public inline virtual void `[`SetStartedAt`](#classUnrealEventProxy_1a3cb2a12b95212bce89037b2ba18f8b6f)`(float _StartedAt)` | 
-`public inline virtual void `[`SetDuration`](#classUnrealEventProxy_1adbed8a975b2275175f482b55286bb050)`(float _Duration)` | 
-`public inline virtual void `[`SetDelay`](#classUnrealEventProxy_1acfdd6b69d715817f99abca8af881a6ce)`(float _Delay)` | 
-`public inline virtual void `[`SetEventLabel`](#classUnrealEventProxy_1ae0a6afa8ef1994e37f2bbf36dde97280)`(FName _EventLabel)` | 
-`public inline virtual void `[`Clear`](#classUnrealEventProxy_1a445e114c53bd387f31751dc42d161c6c)`()` | 
-`public inline `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classUnrealEventProxy_1a6a573224e46cae7002b49dd77ded86a2)`()` | 
-
-## Members
-
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classUnrealEventProxy_1a3fe915d91e04c54924304f88f0bbc671) <a id="classUnrealEventProxy_1a3fe915d91e04c54924304f88f0bbc671"></a>
-
-#### `public inline  `[`UnrealEventProxy`](#classUnrealEventProxy_1ad10d4371d19b75d27fb81aab67e2e1e8)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` <a id="classUnrealEventProxy_1ad10d4371d19b75d27fb81aab67e2e1e8"></a>
-
-#### `public inline virtual  `[`~UnrealEventProxy`](#classUnrealEventProxy_1a90e2e49831de99f4f31875890f9fc7a7)`()` <a id="classUnrealEventProxy_1a90e2e49831de99f4f31875890f9fc7a7"></a>
-
-#### `public inline virtual bool `[`IsExpired`](#classUnrealEventProxy_1af2c6d4ffabc1d7ec0c228b6eb64c1e16)`() const` <a id="classUnrealEventProxy_1af2c6d4ffabc1d7ec0c228b6eb64c1e16"></a>
-
-#### `public inline virtual const float `[`GetLocalTime`](#classUnrealEventProxy_1a0a96d882f5e1f77e5c0d00e8bf1fc44b)`() const` <a id="classUnrealEventProxy_1a0a96d882f5e1f77e5c0d00e8bf1fc44b"></a>
-
-#### `public inline virtual const float `[`GetStartedAt`](#classUnrealEventProxy_1a94f52a47ea43909d4a52ec7a7818a09e)`() const` <a id="classUnrealEventProxy_1a94f52a47ea43909d4a52ec7a7818a09e"></a>
-
-#### `public inline virtual float `[`GetDuration`](#classUnrealEventProxy_1a782155c440a6d64dc3d5ab069b829495)`() const` <a id="classUnrealEventProxy_1a782155c440a6d64dc3d5ab069b829495"></a>
-
-#### `public inline virtual void `[`Start`](#classUnrealEventProxy_1abfac5ea7113e25e3ea68f436e3997707)`(float StartTime)` <a id="classUnrealEventProxy_1abfac5ea7113e25e3ea68f436e3997707"></a>
-
-#### `public inline virtual void `[`NotifyAddTime`](#classUnrealEventProxy_1ad67b7cc9ca640442bf27f1c5dc1479f0)`(float NewTime)` <a id="classUnrealEventProxy_1ad67b7cc9ca640442bf27f1c5dc1479f0"></a>
-
-#### `public inline virtual float `[`GetDelay`](#classUnrealEventProxy_1a00c390e9409dbc5dcf6908c772f4cc93)`() const` <a id="classUnrealEventProxy_1a00c390e9409dbc5dcf6908c772f4cc93"></a>
-
-#### `public inline virtual const FName `[`GetEventLabel`](#classUnrealEventProxy_1ac714bc06ccbdf28a60ba7b7bf9f89c97)`() const` <a id="classUnrealEventProxy_1ac714bc06ccbdf28a60ba7b7bf9f89c97"></a>
-
-#### `public inline virtual const FString `[`GetUID`](#classUnrealEventProxy_1a0cdf81c63b2bbdf6c87397433f5db661)`() const` <a id="classUnrealEventProxy_1a0cdf81c63b2bbdf6c87397433f5db661"></a>
-
-#### `public inline virtual void `[`SetLocalTime`](#classUnrealEventProxy_1a64260c499c604e52ae0f14d65e08534d)`(float _LocalTime)` <a id="classUnrealEventProxy_1a64260c499c604e52ae0f14d65e08534d"></a>
-
-#### `public inline virtual void `[`SetStartedAt`](#classUnrealEventProxy_1a3cb2a12b95212bce89037b2ba18f8b6f)`(float _StartedAt)` <a id="classUnrealEventProxy_1a3cb2a12b95212bce89037b2ba18f8b6f"></a>
-
-#### `public inline virtual void `[`SetDuration`](#classUnrealEventProxy_1adbed8a975b2275175f482b55286bb050)`(float _Duration)` <a id="classUnrealEventProxy_1adbed8a975b2275175f482b55286bb050"></a>
-
-#### `public inline virtual void `[`SetDelay`](#classUnrealEventProxy_1acfdd6b69d715817f99abca8af881a6ce)`(float _Delay)` <a id="classUnrealEventProxy_1acfdd6b69d715817f99abca8af881a6ce"></a>
-
-#### `public inline virtual void `[`SetEventLabel`](#classUnrealEventProxy_1ae0a6afa8ef1994e37f2bbf36dde97280)`(FName _EventLabel)` <a id="classUnrealEventProxy_1ae0a6afa8ef1994e37f2bbf36dde97280"></a>
-
-#### `public inline virtual void `[`Clear`](#classUnrealEventProxy_1a445e114c53bd387f31751dc42d161c6c)`()` <a id="classUnrealEventProxy_1a445e114c53bd387f31751dc42d161c6c"></a>
-
-#### `public inline `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classUnrealEventProxy_1a6a573224e46cae7002b49dd77ded86a2)`()` <a id="classUnrealEventProxy_1a6a573224e46cae7002b49dd77ded86a2"></a>
-
 # class `UNRealLifeTimelineManager` <a id="classUNRealLifeTimelineManager"></a>
 
 ```
@@ -1301,53 +1327,6 @@ It tracks time (FDateTime) since timeline has been ticked
 #### `protected  `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager_1a41ddb4d1ccec9fe79a80b9413fe3ed52)`()` <a id="classUNRealLifeTimelineManager_1a41ddb4d1ccec9fe79a80b9413fe3ed52"></a>
 
 Default ctor
-
-# class `UnrealTimelineProxy` <a id="classUnrealTimelineProxy"></a>
-
-```
-class UnrealTimelineProxy
-  : public NTimelineInterface
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classUnrealTimelineProxy_1a52d332f010c1ca2234757934290cd1eb) | 
-`public inline  `[`UnrealTimelineProxy`](#classUnrealTimelineProxy_1a3145ae1118075f149625d95068a40935)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` | 
-`public inline virtual bool `[`Attached`](#classUnrealTimelineProxy_1a7debb2a88b8e1d82e497da749340ebeb)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | 
-`public inline virtual void `[`Attached`](#classUnrealTimelineProxy_1afe5004cc99c31d59959c64b3f059bbb4)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | 
-`public inline virtual void `[`SetTickInterval`](#classUnrealTimelineProxy_1a06af9a087b9481aec007f5f39fb3f58d)`(float _TickInterval)` | 
-`public inline virtual void `[`SetCurrentTime`](#classUnrealTimelineProxy_1a6fcf53bdc8fd7b17dc64a4183323aae4)`(float _CurrentTime)` | 
-`public inline virtual float `[`GetCurrentTime`](#classUnrealTimelineProxy_1ad4d0a0fd37d8bc56279d4f68fa41c0c9)`() const` | 
-`public inline virtual void `[`SetLabel`](#classUnrealTimelineProxy_1a8f2d2724f23f6949c60d337d8ad4530b)`(FName _Label)` | 
-`public inline virtual FName `[`GetLabel`](#classUnrealTimelineProxy_1a31a755da6b897da470d93f50d37be310)`() const` | 
-`public inline virtual void `[`Clear`](#classUnrealTimelineProxy_1ab34162c1fc8e113fbdee3a452feb05fd)`()` | 
-`public inline virtual void `[`NotifyTick`](#classUnrealTimelineProxy_1a3a4b312a7206ccc2487a7d20a0b4c197)`()` | 
-
-## Members
-
-#### `public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classUnrealTimelineProxy_1a52d332f010c1ca2234757934290cd1eb) <a id="classUnrealTimelineProxy_1a52d332f010c1ca2234757934290cd1eb"></a>
-
-#### `public inline  `[`UnrealTimelineProxy`](#classUnrealTimelineProxy_1a3145ae1118075f149625d95068a40935)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` <a id="classUnrealTimelineProxy_1a3145ae1118075f149625d95068a40935"></a>
-
-#### `public inline virtual bool `[`Attached`](#classUnrealTimelineProxy_1a7debb2a88b8e1d82e497da749340ebeb)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classUnrealTimelineProxy_1a7debb2a88b8e1d82e497da749340ebeb"></a>
-
-#### `public inline virtual void `[`Attached`](#classUnrealTimelineProxy_1afe5004cc99c31d59959c64b3f059bbb4)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classUnrealTimelineProxy_1afe5004cc99c31d59959c64b3f059bbb4"></a>
-
-#### `public inline virtual void `[`SetTickInterval`](#classUnrealTimelineProxy_1a06af9a087b9481aec007f5f39fb3f58d)`(float _TickInterval)` <a id="classUnrealTimelineProxy_1a06af9a087b9481aec007f5f39fb3f58d"></a>
-
-#### `public inline virtual void `[`SetCurrentTime`](#classUnrealTimelineProxy_1a6fcf53bdc8fd7b17dc64a4183323aae4)`(float _CurrentTime)` <a id="classUnrealTimelineProxy_1a6fcf53bdc8fd7b17dc64a4183323aae4"></a>
-
-#### `public inline virtual float `[`GetCurrentTime`](#classUnrealTimelineProxy_1ad4d0a0fd37d8bc56279d4f68fa41c0c9)`() const` <a id="classUnrealTimelineProxy_1ad4d0a0fd37d8bc56279d4f68fa41c0c9"></a>
-
-#### `public inline virtual void `[`SetLabel`](#classUnrealTimelineProxy_1a8f2d2724f23f6949c60d337d8ad4530b)`(FName _Label)` <a id="classUnrealTimelineProxy_1a8f2d2724f23f6949c60d337d8ad4530b"></a>
-
-#### `public inline virtual FName `[`GetLabel`](#classUnrealTimelineProxy_1a31a755da6b897da470d93f50d37be310)`() const` <a id="classUnrealTimelineProxy_1a31a755da6b897da470d93f50d37be310"></a>
-
-#### `public inline virtual void `[`Clear`](#classUnrealTimelineProxy_1ab34162c1fc8e113fbdee3a452feb05fd)`()` <a id="classUnrealTimelineProxy_1ab34162c1fc8e113fbdee3a452feb05fd"></a>
-
-#### `public inline virtual void `[`NotifyTick`](#classUnrealTimelineProxy_1a3a4b312a7206ccc2487a7d20a0b4c197)`()` <a id="classUnrealTimelineProxy_1a3a4b312a7206ccc2487a7d20a0b4c197"></a>
 
 # class `UNTimelineBlueprintHelpers` <a id="classUNTimelineBlueprintHelpers"></a>
 
@@ -1636,7 +1615,7 @@ To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDeco
 `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineManagerDecorator_1a12df827b8172ba4e34bc163c2a9564de)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
 `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerDecorator_1a4029c1f60449033ca3dda2e28bdf7098)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
 `protected `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`MyTimeline`](#classUNTimelineManagerDecorator_1a5a5a6bff257a09d9146813eaeb53fe78) | the timeline associated to this manager.
-`protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` | Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerDecorator_1a7c128fdf9da4fd3369efa1e80fdc3dcf) methods (factory methods).
+`protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` | Protected ctor to force instanciation with CreateObject() methods (factory methods).
 
 ## Members
 
@@ -1726,9 +1705,20 @@ the timeline associated to this manager.
 
 #### `protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` <a id="classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd"></a>
 
-Protected ctor to force instanciation with [CreateObject()](#classUNTimelineManagerDecorator_1a7c128fdf9da4fd3369efa1e80fdc3dcf) methods (factory methods).
+Protected ctor to force instanciation with CreateObject() methods (factory methods).
 
 It instanciates the embeded timeline with CreateDefaultSubobject().
+
+# class `UNTimelineManagerDecoratorFactory` <a id="classUNTimelineManagerDecoratorFactory"></a>
+
+This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instanciation.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
 
 # struct `FConfiguredTimeline` <a id="structFConfiguredTimeline"></a>
 

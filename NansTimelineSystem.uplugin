@@ -31,6 +31,10 @@
 		{
 			"Name": "NansUE4TestsHelpers",
 			"Enabled": true
+		},
+		{
+			"Name": "NansCoreHelpers",
+			"Enabled": true
 		}
 	]
 }

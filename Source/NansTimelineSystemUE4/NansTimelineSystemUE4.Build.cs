@@ -50,6 +50,7 @@ public class NansTimelineSystemUE4 : ModuleRules
                 "PropertyEditor",
                 "DetailCustomizations",
                 "NansTimelineSystemCore",
+                "NansCoreHelpers",
                 "NansUE4TestsHelpers"
             }
             );

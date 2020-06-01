@@ -16,8 +16,31 @@
 
 #include "Event/EventDecorator.h"
 #include "Event/UnrealEventProxy.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "TimerManager.h"
 #include "UnrealTimelineProxy.h"
+
+template <typename T>
+T* UNTimelineManagerDecoratorFactory::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
+{
+	T* Obj = NewObject<T>(Outer, NAME_None, Flags);
+
+	mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+		TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!"));
+	Obj->Init(TickInterval, _Label);
+	return Obj;
+}
+template <typename T>
+T* UNTimelineManagerDecoratorFactory::CreateObject(
+	UObject* Outer, const UClass* Class, float TickInterval, FName _Label, EObjectFlags Flags)
+{
+	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
+	mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+		TEXT("Your TimelineManager class %s should dervived from UNTimelineManagerDecorator!"),
+		*Class->GetFullName());
+	Obj->Init(TickInterval, _Label);
+	return Obj;
+}
 
 UNTimelineManagerDecorator::UNTimelineManagerDecorator()
 {
@@ -32,22 +55,6 @@ void UNTimelineManagerDecorator::Init(float _TickInterval, FName _Label)
 	TickInterval = _TickInterval;
 	Timeline->SetTickInterval(_TickInterval);
 	Timeline->SetLabel(_Label);
-}
-
-template <typename T>
-T* UNTimelineManagerDecorator::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
-{
-	T* Obj = NewObject<T>(Outer, NAME_None, Flags);
-	Obj->Init(TickInterval, _Label);
-	return Obj;
-}
-template <typename T>
-T* UNTimelineManagerDecorator::CreateObject(
-	UObject* Outer, const UClass* Class, float TickInterval, FName _Label, EObjectFlags Flags)
-{
-	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-	Obj->Init(TickInterval, _Label);
-	return Obj;
 }
 
 float UNTimelineManagerDecorator::GetCurrentTime() const

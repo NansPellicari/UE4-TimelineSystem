@@ -11,7 +11,7 @@ Get the full documentation of the [API here](Api.md).
 -   [3. How to override, create my own Event, Timeline, etc...](#3-how-to-override-create-my-own-event-timeline-etc)
     -   [3.1. TimelineManager](#31-timelinemanager)
     -   [3.2. Timeline](#32-timeline)
-    -   [3.3. TimelineManagerEvent](#33-timelinemanagerevent)
+    -   [3.3. Event](#33-event)
 -   [4. Special case: Load game](#4-special-case-load-game)
     -   [4.1. Create USaveGame Object](#41-create-usavegame-object)
     -   [4.2. Copy/Paste to override UE functions](#42-copypaste-to-override-ue-functions)
@@ -86,7 +86,7 @@ You can create your own manager for your game specificities.
 
 This class and it's decorator should not be overrided, they provide the basic functionnalities to manage events and serialization, they work more as extended queues rather than client object with complex usage.
 
-<a id="markdown-33-timelinemanagerevent" name="33-timelinemanagerevent"></a>
+<a id="markdown-33-event" name="33-event"></a>
 
 ### 3.3. Event
 
