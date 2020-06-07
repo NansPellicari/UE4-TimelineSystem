@@ -61,6 +61,11 @@ const FString NUnrealEventProxy::GetUID() const
 	return Event.GetUID();
 }
 
+void NUnrealEventProxy::SetUID(FString _UId)
+{
+	Event.SetUID(_UId);
+}
+
 void NUnrealEventProxy::SetLocalTime(float _LocalTime)
 {
 	Event.SetLocalTime(_LocalTime);

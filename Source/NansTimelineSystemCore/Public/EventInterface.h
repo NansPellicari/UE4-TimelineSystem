@@ -25,6 +25,7 @@ public:
 	virtual float GetDuration() const = 0;
 	virtual float GetDelay() const = 0;
 	virtual const FString GetUID() const = 0;
+	virtual void SetUID(FString _UId) = 0;
 	virtual const FName GetEventLabel() const = 0;
 	virtual void SetLocalTime(float _LocalTime) = 0;
 	virtual void SetStartedAt(float _StartedAt) = 0;

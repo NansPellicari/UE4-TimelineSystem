@@ -56,13 +56,13 @@ void UNTimelineClient::Serialize(FArchive& Ar)
 	{
 		for (auto& Timeline : TimelinesCollection)
 		{
-			SaveNamesOrder.Add(Timeline.Key);
+			SaveNamesOrder.AddUnique(Timeline.Key);
 		}
 	}
 
 	if (Ar.IsLoading())
 	{
-		// Refresh Timeline data, in case data has been set from previous load or game play.
+		// Refresh Timeline data, in case data has been set from previous load or during game play.
 		TimelinesCollection.Empty();
 		Init();
 	}

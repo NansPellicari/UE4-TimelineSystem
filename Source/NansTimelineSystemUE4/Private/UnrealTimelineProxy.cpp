@@ -63,3 +63,7 @@ void NUnrealTimelineProxy::NotifyTick()
 {
 	Timeline.NotifyTick();
 }
+UNTimelineDecorator* NUnrealTimelineProxy::GetUnrealObject()
+{
+	return &Timeline;
+}

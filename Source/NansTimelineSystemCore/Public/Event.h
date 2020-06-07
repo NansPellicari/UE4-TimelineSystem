@@ -24,13 +24,10 @@ class NANSTIMELINESYSTEMCORE_API NEvent : public NEventInterface
 {
 public:
 	/** Default ctor */
-	NEvent()
-	{
-		Id = FGuid::NewGuid().ToString();
-	}
+	NEvent();
 
-	/** Ctor to gives directly a name for this event. */
-	NEvent(FName _Label) : Label(_Label) {}
+	/** Ctor to gives directly a name for this event and Id (optionnal). */
+	NEvent(FName _Label, FString _UId = FString(""));
 
 	virtual ~NEvent(){};
 
@@ -52,6 +49,7 @@ public:
 	/** Increments LocalTime */
 	virtual float GetDelay() const override;
 	virtual const FString GetUID() const override;
+	virtual void SetUID(FString _UId) override;
 
 	/** Getter for Label */
 	virtual const FName GetEventLabel() const override;
@@ -76,5 +74,5 @@ protected:
 	float StartedAt = -1.f;
 	float Duration = 0.f;
 	float Delay = 0.f;
-	FString Id;
+	FString UId;
 };

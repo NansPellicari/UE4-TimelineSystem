@@ -14,6 +14,27 @@
 
 #include "Event.h"
 
+NEvent::NEvent()
+{
+	if (UId.IsEmpty())
+	{
+		UId = FGuid::NewGuid().ToString();
+	}
+}
+
+NEvent::NEvent(FName _Label, FString _UId)
+{
+	Label = _Label;
+	if (!_UId.IsEmpty())
+	{
+		UId = _UId;
+	}
+	else
+	{
+		UId = FGuid::NewGuid().ToString();
+	}
+}
+
 bool NEvent::IsExpired() const
 {
 	return GetDuration() > 0 && GetLocalTime() >= GetDuration();
@@ -45,7 +66,12 @@ const FName NEvent::GetEventLabel() const
 
 const FString NEvent::GetUID() const
 {
-	return Id;
+	return UId;
+}
+
+void NEvent::SetUID(FString _UId)
+{
+	UId = _UId;
 }
 
 void NEvent::SetLocalTime(float _LocalTime)

@@ -24,6 +24,7 @@
 `class `[`TimelineTimerManagerFake`](#classTimelineTimerManagerFake) | 
 `class `[`UNEventDecorator`](#classUNEventDecorator) | Base abstract class to create [NEventInterface](#classNEventInterface) decorators (Blueprint or c++).
 `class `[`UNEventDecoratorFake`](#classUNEventDecoratorFake) | This class is used for tests only
+`class `[`UNFakeTimelineGameInstance`](#classUNFakeTimelineGameInstance) | 
 `class `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager) | This decorator is fitted to track time when player plays since the game is launched.
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
@@ -216,8 +217,8 @@ An abstract class to manage events which can be attached to a timeline.
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public inline  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` | Default ctor
-`public inline  `[`NEvent`](#classNEvent_1aadd9d898d0ae0afc18955e15577ea281)`(FName _Label)` | Ctor to gives directly a name for this event.
+`public  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` | Default ctor
+`public  `[`NEvent`](#classNEvent_1a15c6d7063b5857607cfb0d91446d8241)`(FName _Label,FString _UId)` | Ctor to gives directly a name for this event and Id (optionnal).
 `public inline virtual  `[`~NEvent`](#classNEvent_1a179af95c5b72caf083dc7dbbda577244)`()` | 
 `public virtual bool `[`IsExpired`](#classNEvent_1a035106bed5f526ecf68ae7b067e7beff)`() const` | It computes with Duration and LocalTime
 `public virtual const float `[`GetLocalTime`](#classNEvent_1a74e7fae4f40337ca18e115280d7ebf7f)`() const` | Getter for LocalTime
@@ -226,6 +227,7 @@ An abstract class to manage events which can be attached to a timeline.
 `public virtual void `[`Start`](#classNEvent_1a3ba279542a5aeddc86d924bbd4a12594)`(float StartTime)` | A setter for StartedAt
 `public virtual float `[`GetDelay`](#classNEvent_1afed25f6f7bbd624401803a76d530f18f)`() const` | Increments LocalTime
 `public virtual const FString `[`GetUID`](#classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c)`() const` | 
+`public virtual void `[`SetUID`](#classNEvent_1aebeec7efe7cef04342d2b8e97ade8276)`(FString _UId)` | 
 `public virtual const FName `[`GetEventLabel`](#classNEvent_1adefb1f4297e5e4b1342249b666396d9a)`() const` | Getter for Label
 `public virtual void `[`SetLocalTime`](#classNEvent_1a09ebad2d5cd8c97ec830b55f1c347c3b)`(float _LocalTime)` | 
 `public virtual void `[`SetStartedAt`](#classNEvent_1aab4e709ab903d1029543769f64a28f20)`(float _StartedAt)` | 
@@ -239,17 +241,17 @@ An abstract class to manage events which can be attached to a timeline.
 `protected float `[`StartedAt`](#classNEvent_1ab7eaaeb61f9c50c2882acf67c8c80b40) | 
 `protected float `[`Duration`](#classNEvent_1a67fd9c10419486d8c1fda1a9a7b5f971) | 
 `protected float `[`Delay`](#classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d) | 
-`protected FString `[`Id`](#classNEvent_1a8d80055abe14a0a04077153145e846af) | 
+`protected FString `[`UId`](#classNEvent_1ac660a2be16fdef80e7859f11a9324324) | 
 
 ## Members
 
-#### `public inline  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` <a id="classNEvent_1aac75c1f215cd691c48e87495f2131686"></a>
+#### `public  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` <a id="classNEvent_1aac75c1f215cd691c48e87495f2131686"></a>
 
 Default ctor
 
-#### `public inline  `[`NEvent`](#classNEvent_1aadd9d898d0ae0afc18955e15577ea281)`(FName _Label)` <a id="classNEvent_1aadd9d898d0ae0afc18955e15577ea281"></a>
+#### `public  `[`NEvent`](#classNEvent_1a15c6d7063b5857607cfb0d91446d8241)`(FName _Label,FString _UId)` <a id="classNEvent_1a15c6d7063b5857607cfb0d91446d8241"></a>
 
-Ctor to gives directly a name for this event.
+Ctor to gives directly a name for this event and Id (optionnal).
 
 #### `public inline virtual  `[`~NEvent`](#classNEvent_1a179af95c5b72caf083dc7dbbda577244)`()` <a id="classNEvent_1a179af95c5b72caf083dc7dbbda577244"></a>
 
@@ -278,6 +280,8 @@ A setter for StartedAt
 Increments LocalTime
 
 #### `public virtual const FString `[`GetUID`](#classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c)`() const` <a id="classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c"></a>
+
+#### `public virtual void `[`SetUID`](#classNEvent_1aebeec7efe7cef04342d2b8e97ade8276)`(FString _UId)` <a id="classNEvent_1aebeec7efe7cef04342d2b8e97ade8276"></a>
 
 #### `public virtual const FName `[`GetEventLabel`](#classNEvent_1adefb1f4297e5e4b1342249b666396d9a)`() const` <a id="classNEvent_1adefb1f4297e5e4b1342249b666396d9a"></a>
 
@@ -313,7 +317,7 @@ Reset all default data
 
 #### `protected float `[`Delay`](#classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d) <a id="classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d"></a>
 
-#### `protected FString `[`Id`](#classNEvent_1a8d80055abe14a0a04077153145e846af) <a id="classNEvent_1a8d80055abe14a0a04077153145e846af"></a>
+#### `protected FString `[`UId`](#classNEvent_1ac660a2be16fdef80e7859f11a9324324) <a id="classNEvent_1ac660a2be16fdef80e7859f11a9324324"></a>
 
 # class `NEventFake` <a id="classNEventFake"></a>
 
@@ -363,6 +367,7 @@ Getter for Label
 `public float `[`GetDuration`](#classNEventInterface_1abb1b6c05e352b2dd0d8ad07401868851)`() const` | 
 `public float `[`GetDelay`](#classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086)`() const` | 
 `public const FString `[`GetUID`](#classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d)`() const` | 
+`public void `[`SetUID`](#classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8)`(FString _UId)` | 
 `public const FName `[`GetEventLabel`](#classNEventInterface_1ade495738a17e98e110742533aa1752be)`() const` | 
 `public void `[`SetLocalTime`](#classNEventInterface_1ac716c3624cae2ced48465c794cdb1032)`(float _LocalTime)` | 
 `public void `[`SetStartedAt`](#classNEventInterface_1a072d3fb3d59e8d08dc5977c040ef390c)`(float _StartedAt)` | 
@@ -386,6 +391,8 @@ Getter for Label
 #### `public float `[`GetDelay`](#classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086)`() const` <a id="classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086"></a>
 
 #### `public const FString `[`GetUID`](#classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d)`() const` <a id="classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d"></a>
+
+#### `public void `[`SetUID`](#classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8)`(FString _UId)` <a id="classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8"></a>
 
 #### `public const FName `[`GetEventLabel`](#classNEventInterface_1ade495738a17e98e110742533aa1752be)`() const` <a id="classNEventInterface_1ade495738a17e98e110742533aa1752be"></a>
 
@@ -763,6 +770,7 @@ This class is just a pass-through to allows an [UNEventDecorator](#classUNEventD
 `public virtual float `[`GetDelay`](#classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab)`() const` | 
 `public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` | 
 `public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` | 
+`public virtual void `[`SetUID`](#classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a)`(FString _UId)` | 
 `public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` | 
 `public virtual void `[`SetStartedAt`](#classNUnrealEventProxy_1a5af78086c9576e90c72e411a5736e8b6)`(float _StartedAt)` | 
 `public virtual void `[`SetDuration`](#classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360)`(float _Duration)` | 
@@ -794,6 +802,8 @@ This class is just a pass-through to allows an [UNEventDecorator](#classUNEventD
 #### `public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` <a id="classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b"></a>
 
 #### `public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` <a id="classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a"></a>
+
+#### `public virtual void `[`SetUID`](#classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a)`(FString _UId)` <a id="classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a"></a>
 
 #### `public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` <a id="classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259"></a>
 
@@ -833,6 +843,7 @@ This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTi
 `public virtual FName `[`GetLabel`](#classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617)`() const` | 
 `public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` | 
 `public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` | 
+`public virtual `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`GetUnrealObject`](#classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42)`()` | 
 
 ## Members
 
@@ -857,6 +868,8 @@ This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTi
 #### `public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` <a id="classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be"></a>
 
 #### `public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` <a id="classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be"></a>
+
+#### `public virtual `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`GetUnrealObject`](#classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42)`()` <a id="classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42"></a>
 
 # class `SConfiguredTimelinePin` <a id="classSConfiguredTimelinePin"></a>
 
@@ -1014,6 +1027,7 @@ For a more complex usage in c++: You should derive this and [NEventInterface](#c
 `public virtual float `[`GetDelay`](#classUNEventDecorator_1a33715665287b45121f2ff25514c41ef1)`() const` | 
 `public virtual const FName `[`GetEventLabel`](#classUNEventDecorator_1ad88e97e6031018c0f3de2ce245341dd6)`() const` | 
 `public virtual const FString `[`GetUID`](#classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f)`() const` | 
+`public virtual void `[`SetUID`](#classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447)`(FString _UId)` | 
 `public virtual void `[`SetLocalTime`](#classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b)`(float _LocalTime)` | 
 `public virtual void `[`SetStartedAt`](#classUNEventDecorator_1a669a459814f553d242bd4a105b4b6bb3)`(float _StartedAt)` | 
 `public virtual void `[`SetDuration`](#classUNEventDecorator_1ade8dd2b05d490b5892aaf63991aa1e6d)`(float _Duration)` | 
@@ -1022,7 +1036,7 @@ For a more complex usage in c++: You should derive this and [NEventInterface](#c
 `public virtual void `[`Clear`](#classUNEventDecorator_1a6876f229d6f190d204abe89ba0847d1e)`()` | 
 `public virtual void `[`BeginDestroy`](#classUNEventDecorator_1a75739f0f1ec3c9dcde05bddb93e00664)`()` | 
 `public virtual void `[`Serialize`](#classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7)`(FArchive & Ar)` | 
-`public virtual void `[`Init`](#classUNEventDecorator_1ab8e1e00ad0cc2d47887296f217c54879)`(FName _Label)` | This is where the Core object is instanciated. You should override this to instanciate your derived core object.
+`public virtual void `[`Init`](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562)`(FName _Label,FString UId)` | This is where the Core object is instanciated. You should override this to instanciate your derived core object.
 `public virtual TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`GetEvent`](#classUNEventDecorator_1a289aa0372ca4512839143e84617dec47)`() const` | This is used by other decorators which need to pass the core object to their own. 
 `protected TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`Event`](#classUNEventDecorator_1a0c2fe0db6d7d2eb0f837d3f5e79d875e) | The actual decorator is for this object. It shoulds be instanciate on a ctor or a dedicated init function
 
@@ -1048,6 +1062,8 @@ For a more complex usage in c++: You should derive this and [NEventInterface](#c
 
 #### `public virtual const FString `[`GetUID`](#classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f)`() const` <a id="classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f"></a>
 
+#### `public virtual void `[`SetUID`](#classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447)`(FString _UId)` <a id="classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447"></a>
+
 #### `public virtual void `[`SetLocalTime`](#classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b)`(float _LocalTime)` <a id="classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b"></a>
 
 #### `public virtual void `[`SetStartedAt`](#classUNEventDecorator_1a669a459814f553d242bd4a105b4b6bb3)`(float _StartedAt)` <a id="classUNEventDecorator_1a669a459814f553d242bd4a105b4b6bb3"></a>
@@ -1064,7 +1080,7 @@ For a more complex usage in c++: You should derive this and [NEventInterface](#c
 
 #### `public virtual void `[`Serialize`](#classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7)`(FArchive & Ar)` <a id="classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7"></a>
 
-#### `public virtual void `[`Init`](#classUNEventDecorator_1ab8e1e00ad0cc2d47887296f217c54879)`(FName _Label)` <a id="classUNEventDecorator_1ab8e1e00ad0cc2d47887296f217c54879"></a>
+#### `public virtual void `[`Init`](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562)`(FName _Label,FString UId)` <a id="classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562"></a>
 
 This is where the Core object is instanciated. You should override this to instanciate your derived core object.
 
@@ -1092,6 +1108,36 @@ This class is used for tests only
 --------------------------------|---------------------------------------------
 
 ## Members
+
+# class `UNFakeTimelineGameInstance` <a id="classUNFakeTimelineGameInstance"></a>
+
+```
+class UNFakeTimelineGameInstance
+  : public UFakeGameInstance
+  : public INTimelineGameInstance
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`UNFakeTimelineGameInstance`](#classUNFakeTimelineGameInstance_1ab3e0382fd0f2eec343704a3240fd9250)`()` | 
+`public inline virtual void `[`Init`](#classUNFakeTimelineGameInstance_1a272688dd8d7c61c3ef2b12746cafcec8)`()` | 
+`public inline `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline_Implementation`](#classUNFakeTimelineGameInstance_1ac2df203876b762cc45cc68ce39c73761)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | 
+`public inline virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classUNFakeTimelineGameInstance_1a9cbfcfd99473534bd39267f75de932ff)`() const` | 
+`protected `[`UNTimelineClient`](#classUNTimelineClient)` * `[`TimelineClient`](#classUNFakeTimelineGameInstance_1a9f554868ff6a18dd1cc28fc0943fe934) | 
+
+## Members
+
+#### `public inline  `[`UNFakeTimelineGameInstance`](#classUNFakeTimelineGameInstance_1ab3e0382fd0f2eec343704a3240fd9250)`()` <a id="classUNFakeTimelineGameInstance_1ab3e0382fd0f2eec343704a3240fd9250"></a>
+
+#### `public inline virtual void `[`Init`](#classUNFakeTimelineGameInstance_1a272688dd8d7c61c3ef2b12746cafcec8)`()` <a id="classUNFakeTimelineGameInstance_1a272688dd8d7c61c3ef2b12746cafcec8"></a>
+
+#### `public inline `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline_Implementation`](#classUNFakeTimelineGameInstance_1ac2df203876b762cc45cc68ce39c73761)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` <a id="classUNFakeTimelineGameInstance_1ac2df203876b762cc45cc68ce39c73761"></a>
+
+#### `public inline virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classUNFakeTimelineGameInstance_1a9cbfcfd99473534bd39267f75de932ff)`() const` <a id="classUNFakeTimelineGameInstance_1a9cbfcfd99473534bd39267f75de932ff"></a>
+
+#### `protected `[`UNTimelineClient`](#classUNTimelineClient)` * `[`TimelineClient`](#classUNFakeTimelineGameInstance_1a9f554868ff6a18dd1cc28fc0943fe934) <a id="classUNFakeTimelineGameInstance_1a9f554868ff6a18dd1cc28fc0943fe934"></a>
 
 # class `UNGameLifeTimelineManager` <a id="classUNGameLifeTimelineManager"></a>
 
@@ -1464,9 +1510,10 @@ It manages:
 `public TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`GetTimeline`](#classUNTimelineDecorator_1a18c2085acb175e91abfcebc41c706758)`() const` | 
 `public virtual void `[`AddEvent`](#classUNTimelineDecorator_1a39979ad6186e008643b2e6212bd87ae9)`(`[`UNEventDecorator`](#classUNEventDecorator)` * Event)` | This method is made to work with decorators object. It will save data in the EventStore array for serialization and save game. 
 `public const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetAdaptedEvents`](#classUNTimelineDecorator_1a332145e2dc18aa14f40781aa4c090b71)`() const` | This retrieve the EventStore
+`public `[`FNEventRecord`](#structFNEventRecord)` * `[`GetEventRecord`](#classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5)`(FString UId)` | Retrieve an event record by its Id
 `public void `[`OnEventExpired`](#classUNTimelineDecorator_1af66a84b74f059aed26634c0a01ad6a61)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` | A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a52680c1a036e791bb2249892f97419a6). It controls the EventStore data refreshing.
-`public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` | It used to save all events state in the EventStore, and reload them correclty.
 `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Creates a new Event and use this timeline as the outer for this new object.
+`public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` | It used to save all events state in the EventStore, and reload them correclty.
 `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76) | The embeded object
 `protected virtual void `[`RefreshRecordData`](#classUNTimelineDecorator_1ae631f75cbddac322ed8e59dc730ce07a)`(const int32 & Index)` | This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a9c84d07b1a46de333b43ebd79ced4aa4) with is associated [FNEventRecord](#structFNEventRecord). It checks coherence with Tuple Event and Record Event before doing it.
 
@@ -1520,6 +1567,10 @@ This method is made to work with decorators object. It will save data in the Eve
 
 This retrieve the EventStore
 
+#### `public `[`FNEventRecord`](#structFNEventRecord)` * `[`GetEventRecord`](#classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5)`(FString UId)` <a id="classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5"></a>
+
+Retrieve an event record by its Id
+
 #### `public void `[`OnEventExpired`](#classUNTimelineDecorator_1af66a84b74f059aed26634c0a01ad6a61)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` <a id="classUNTimelineDecorator_1af66a84b74f059aed26634c0a01ad6a61"></a>
 
 A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a52680c1a036e791bb2249892f97419a6). It controls the EventStore data refreshing.
@@ -1530,13 +1581,6 @@ A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a52680c1a036e7
 * `ExpiredTime` - The time when this event expires 
 
 * `Index` - The index of the NTimeline::Events array
-
-#### `public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` <a id="classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9"></a>
-
-It used to save all events state in the EventStore, and reload them correclty.
-
-#### Parameters
-* `Ar` - Archive for save and load
 
 #### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` <a id="classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7"></a>
 
@@ -1550,6 +1594,13 @@ Creates a new Event and use this timeline as the outer for this new object.
 * `Duration` - The time this event is active, 0 to almost INFINI (0 means undeterminated time) 
 
 * `Delay` - The time before this event start being active, 0 to almost INFINI (0 means "right now")
+
+#### `public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` <a id="classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9"></a>
+
+It used to save all events state in the EventStore, and reload them correclty.
+
+#### Parameters
+* `Ar` - Archive for save and load
 
 #### `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76) <a id="classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76"></a>
 
@@ -1776,6 +1827,7 @@ This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`Event`](#structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6) | The [UNEventDecorator](#classUNEventDecorator) object
+`public FString `[`UId`](#structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e) | The [UNEventDecorator](#classUNEventDecorator) UId, it can be used to create consistant link to an object that envelops and EventDecorator
 `public float `[`AttachedTime`](#structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d) | The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt)
 `public float `[`Delay`](#structFNEventRecord_1a93060a69818f28c533e913e0f6f6c6dc) | The delay before starting in secs
 `public float `[`Duration`](#structFNEventRecord_1a1678e0c5820aff90fc32e45bad7a2afe) | The duration this event lives in secs (0 means inderterminate)
@@ -1783,7 +1835,6 @@ This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_
 `public float `[`ExpiredTime`](#structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d) | Expiration time of this event in secs (0 means can't expired))
 `public FString `[`EventClassName`](#structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93) | This is used only for serialization, it allow to re-instance the object on load
 `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` | 
-`public inline  `[`FNEventRecord`](#structFNEventRecord_1ab5b7184a999984c38050b6f556836359)`(`[`UNEventDecorator`](#classUNEventDecorator)` * _Event,float _AttachedTime,float _Delay,float _Duration,FName _Label,float _ExpiredTime)` | 
 `public void `[`Serialize`](#structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4)`(FArchive & Ar,`[`UNTimelineDecorator`](#classUNTimelineDecorator)` * Timeline)` | It manages Event object saving and loading
 
 ## Members
@@ -1791,6 +1842,10 @@ This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_
 #### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`Event`](#structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6) <a id="structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6"></a>
 
 The [UNEventDecorator](#classUNEventDecorator) object
+
+#### `public FString `[`UId`](#structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e) <a id="structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e"></a>
+
+The [UNEventDecorator](#classUNEventDecorator) UId, it can be used to create consistant link to an object that envelops and EventDecorator
 
 #### `public float `[`AttachedTime`](#structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d) <a id="structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d"></a>
 
@@ -1817,8 +1872,6 @@ Expiration time of this event in secs (0 means can't expired))
 This is used only for serialization, it allow to re-instance the object on load
 
 #### `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` <a id="structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d"></a>
-
-#### `public inline  `[`FNEventRecord`](#structFNEventRecord_1ab5b7184a999984c38050b6f556836359)`(`[`UNEventDecorator`](#classUNEventDecorator)` * _Event,float _AttachedTime,float _Delay,float _Duration,FName _Label,float _ExpiredTime)` <a id="structFNEventRecord_1ab5b7184a999984c38050b6f556836359"></a>
 
 #### `public void `[`Serialize`](#structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4)`(FArchive & Ar,`[`UNTimelineDecorator`](#classUNTimelineDecorator)` * Timeline)` <a id="structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4"></a>
 

@@ -41,4 +41,5 @@ public:
 	virtual FName GetLabel() const override;
 	virtual void Clear() override;
 	virtual void NotifyTick() override;
+	virtual UNTimelineDecorator* GetUnrealObject();
 };

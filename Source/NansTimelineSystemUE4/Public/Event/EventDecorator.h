@@ -100,6 +100,7 @@ public:
 	virtual const FName GetEventLabel() const override;
 
 	virtual const FString GetUID() const override;
+	virtual void SetUID(FString _UId) override;
 	virtual void SetLocalTime(float _LocalTime) override;
 	virtual void SetStartedAt(float _StartedAt) override;
 	virtual void SetDuration(float _Duration) override;
@@ -117,7 +118,7 @@ public:
 	 * This is where the Core object is instanciated.
 	 * You should override this to instanciate your derived core object.
 	 */
-	virtual void Init(FName _Label);
+	virtual void Init(FName _Label, FString UId = FString(""));
 
 	/**
 	 * This is used by other decorators which need to pass the core object to their own.
@@ -139,4 +140,5 @@ private:
 	float StartedAt = -1.f;
 	float Duration = 0.f;
 	float Delay = 0.f;
+	FString Id = FString("");
 };

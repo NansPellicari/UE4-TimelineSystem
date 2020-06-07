@@ -17,6 +17,11 @@
 #include "NansTimelineSystemCore/Public/Event.h"
 #include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 
+void UNEventDecorator::Init(FName _Label, FString UId)
+{
+	Event = MakeShareable(new NEvent(_Label, UId));
+}
+
 bool UNEventDecorator::IsExpired() const
 {
 	if (!Event.IsValid()) return true;
@@ -70,6 +75,11 @@ const FString UNEventDecorator::GetUID() const
 	return Event->GetUID();
 }
 
+void UNEventDecorator::SetUID(FString _UId)
+{
+	Event->SetUID(_UId);
+}
+
 void UNEventDecorator::SetLocalTime(float _LocalTime)
 {
 	Event->SetLocalTime(_LocalTime);
@@ -100,10 +110,6 @@ TSharedPtr<NEventInterface> UNEventDecorator::GetEvent() const
 	return Event;
 }
 
-void UNEventDecorator::Init(FName _Label)
-{
-	Event = MakeShareable(new NEvent(_Label));
-}
 void UNEventDecorator::BeginDestroy()
 {
 	Super::BeginDestroy();
@@ -121,6 +127,7 @@ void UNEventDecorator::Serialize(FArchive& Ar)
 
 	if (Ar.IsSaving() && Event.IsValid())
 	{
+		Id = Event->GetUID();
 		Label = Event->GetEventLabel();
 		LocalTime = Event->GetLocalTime();
 		StartedAt = Event->GetStartedAt();
@@ -128,6 +135,7 @@ void UNEventDecorator::Serialize(FArchive& Ar)
 		Delay = Event->GetDelay();
 	}
 
+	Ar << Id;
 	Ar << Label;
 	Ar << LocalTime;
 	Ar << StartedAt;
@@ -136,11 +144,12 @@ void UNEventDecorator::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading() && !Event.IsValid())
 	{
-		Init(Label);
+		Init(Label, Id);
 	}
 
 	if (Event.IsValid())
 	{
+		Event->SetUID(Id);
 		Event->SetEventLabel(Label);
 		Event->SetLocalTime(LocalTime);
 		Event->SetStartedAt(StartedAt);

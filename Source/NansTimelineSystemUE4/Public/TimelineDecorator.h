@@ -16,71 +16,12 @@
 
 #include "CoreMinimal.h"
 #include "Event/EventDecorator.h"
+#include "Event/EventRecord.h"
 #include "NansTimelineSystemCore/Public/EventInterface.h"
 
 #include "TimelineDecorator.generated.h"
 
 class UNTimelineManagerDecorator;
-
-/**
- * This struct is both a pass-through for NTimeline::FEventTuple
- * and a record object used for savegame.
- */
-USTRUCT(BlueprintType)
-struct NANSTIMELINESYSTEMUE4_API FNEventRecord
-{
-	GENERATED_USTRUCT_BODY()
-
-	FNEventRecord() {}
-	FNEventRecord(
-		UNEventDecorator* _Event, float _AttachedTime, float _Delay, float _Duration, FName _Label, float _ExpiredTime)
-		: Event(_Event), AttachedTime(_AttachedTime), Delay(_Delay), Duration(_Duration), Label(_Label), ExpiredTime(_ExpiredTime)
-	{
-	}
-
-	/** The UNEventDecorator object */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	UNEventDecorator* Event = nullptr;
-	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	float AttachedTime = -1.f;
-	/** The delay before starting in secs */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	float Delay = -1.f;
-	/** The duration this event lives in secs (0 means inderterminate) */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	float Duration = -1.f;
-	/** The name of the event */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	FName Label = NAME_None;
-	/** Expiration time of this event in secs (0 means can't expired)) */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	float ExpiredTime = -1.f;
-	/** This is used only for serialization, it allow to re-instance the object on load */
-	UPROPERTY(SkipSerialization)
-	FString EventClassName = FString("");
-
-	/** It manages Event object saving and loading */
-	void Serialize(FArchive& Ar, UNTimelineDecorator* Timeline);
-
-	/** Just save basic data, see FNEventRecord::Serialize() to see how Event object is managed */
-	friend FArchive& operator<<(FArchive& Ar, FNEventRecord& Record)
-	{
-		if (Ar.IsSaving())
-		{
-			Record.EventClassName = Record.Event != nullptr ? Record.Event->GetClass()->GetPathName() : FString("");
-		}
-
-		Ar << Record.EventClassName;
-		Ar << Record.AttachedTime;
-		Ar << Record.Delay;
-		Ar << Record.Duration;
-		Ar << Record.Label;
-		Ar << Record.ExpiredTime;
-
-		return Ar;
-	};
-};
 
 /**
  * The decorator for NTimelineInterface object.
@@ -149,8 +90,8 @@ public:
 	/** This retrieve the EventStore */
 	const TArray<FNEventRecord> GetAdaptedEvents() const;
 
-	/** It is used to convert data for core NTimelineInterface object */
-	static NTimeline::FEventTuple ConvertRecordToTuple(FNEventRecord const Record);
+	/** Retrieve an event record by its Id */
+	FNEventRecord* GetEventRecord(FString UId);
 
 	/**
 	 * A delegate attached to NTimeline::EventExpired.
@@ -163,14 +104,6 @@ public:
 	void OnEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 
 	/**
-	 * It used to save all events state in the EventStore,
-	 * and reload them correclty.
-	 *
-	 * @param Ar - Archive for save and load
-	 */
-	virtual void Serialize(FArchive& Ar);
-
-	/**
 	 * Creates a new Event and use this timeline as the outer for this new object.
 	 *
 	 * @param Class - The derived class of your choice
@@ -178,8 +111,15 @@ public:
 	 * @param Duration - The time this event is active, 0 to almost INFINI (0 means undeterminated time)
 	 * @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 	 */
-	UNEventDecorator* CreateNewEvent(
-		TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0.f, float Delay = 0.f);
+	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0.f, float Delay = 0.f);
+
+	/**
+	 * It used to save all events state in the EventStore,
+	 * and reload them correclty.
+	 *
+	 * @param Ar - Archive for save and load
+	 */
+	virtual void Serialize(FArchive& Ar);
 
 protected:
 	/** The embeded object */
@@ -193,6 +133,9 @@ protected:
 	 * @param Record - The record you want to synchronize.
 	 */
 	virtual void RefreshRecordData(const int32& Index);
+
+	/** It is used to convert data for core NTimelineInterface object */
+	static NTimeline::FEventTuple ConvertRecordToTuple(FNEventRecord const Record);
 
 private:
 	/**

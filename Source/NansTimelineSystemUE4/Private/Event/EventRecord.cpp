@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "Event/EventRecord.h"
 
-#include "CoreMinimal.h"
-#include "Engine/EngineTypes.h"
-#include "Event/EventDecorator.h"
-#include "TimerManager.h"
+#include "TimelineDecorator.h"
 
-#include "EventDecoratorFake.generated.h"
-
-/**
- * This class is used for tests only
- */
-UCLASS(NotBlueprintable, NotPlaceable)
-class NANSTIMELINESYSTEMUE4_API UNEventDecoratorFake : public UNEventDecorator
+void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
 {
-	GENERATED_BODY()
-};
+	if (Ar.IsSaving() && Event != nullptr)
+	{
+		Event->Serialize(Ar);
+	}
+	if (Ar.IsLoading() && EventClassName != FString(""))
+	{
+		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *EventClassName);
+		Event = Timeline->CreateNewEvent(Class, Label);
+		Event->Serialize(Ar);
+	}
+}

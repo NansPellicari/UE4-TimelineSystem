@@ -14,23 +14,10 @@
 
 #include "TimelineDecorator.h"
 
+#include "Event/EventRecord.h"
 #include "Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
-
-void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
-{
-	if (Ar.IsSaving() && Event != nullptr)
-	{
-		Event->Serialize(Ar);
-	}
-	if (Ar.IsLoading() && EventClassName != FString(""))
-	{
-		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *EventClassName);
-		Event = Timeline->CreateNewEvent(Class, Label);
-		Event->Serialize(Ar);
-	}
-}
 
 void UNTimelineDecorator::Init(UNTimelineManagerDecorator* TimelineManager, FName _Label)
 {
@@ -77,6 +64,7 @@ void UNTimelineDecorator::AddEvent(UNEventDecorator* Event)
 	check(Timeline.IsValid());
 	FNEventRecord Record;
 	Record.Event = Event;
+	Record.UId = Event->GetUID();
 	int32 Last = Timeline->GetEvents().Num() - 1;
 	Last = Last > 0 ? Last : 0;
 	EventStore.Insert(Record, Last);
@@ -87,6 +75,11 @@ void UNTimelineDecorator::AddEvent(UNEventDecorator* Event)
 const TArray<FNEventRecord> UNTimelineDecorator::GetAdaptedEvents() const
 {
 	return EventStore;
+}
+
+FNEventRecord* UNTimelineDecorator::GetEventRecord(FString UId)
+{
+	return EventStore.FindByPredicate([UId](const FNEventRecord& Record) { return Record.UId == UId; });
 }
 
 NTimeline::FEventTuple UNTimelineDecorator::ConvertRecordToTuple(FNEventRecord const Record)
@@ -185,6 +178,7 @@ void UNTimelineDecorator::Serialize(FArchive& Ar)
 			Record.ExpiredTime = Tuple.Get<5>();
 		}
 	}
+
 	if (Ar.IsLoading())
 	{
 		EventStore.Empty();
