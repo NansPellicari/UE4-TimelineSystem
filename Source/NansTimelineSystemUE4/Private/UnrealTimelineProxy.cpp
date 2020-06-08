@@ -63,6 +63,10 @@ void NUnrealTimelineProxy::NotifyTick()
 {
 	Timeline.NotifyTick();
 }
+FEventDelegate& NUnrealTimelineProxy::OnEventExpired()
+{
+	return Timeline.OnEventExpired();
+}
 UNTimelineDecorator* NUnrealTimelineProxy::GetUnrealObject()
 {
 	return &Timeline;

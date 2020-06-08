@@ -18,10 +18,12 @@
 #include "Event/EventDecorator.h"
 #include "Event/EventRecord.h"
 #include "NansTimelineSystemCore/Public/EventInterface.h"
+#include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
 #include "TimelineDecorator.generated.h"
 
 class UNTimelineManagerDecorator;
+class NTimeline;
 
 /**
  * The decorator for NTimelineInterface object.
@@ -76,6 +78,13 @@ public:
 
 	// BEGIN UObject overrides
 	virtual void BeginDestroy() override;
+	/**
+	 * It used to save all events state in the EventStore,
+	 * and reload them correclty.
+	 *
+	 * @param Ar - Archive for save and load
+	 */
+	virtual void Serialize(FArchive& Ar);
 	// END UObject overrides
 
 	TSharedPtr<NTimelineInterface> GetTimeline() const;
@@ -101,7 +110,9 @@ public:
 	 * @param ExpiredTime - The time when this event expires
 	 * @param Index - The index of the NTimeline::Events array
 	 */
-	void OnEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
+	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
+
+	virtual FEventDelegate& OnEventExpired() override;
 
 	/**
 	 * Creates a new Event and use this timeline as the outer for this new object.
@@ -112,14 +123,6 @@ public:
 	 * @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 	 */
 	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0.f, float Delay = 0.f);
-
-	/**
-	 * It used to save all events state in the EventStore,
-	 * and reload them correclty.
-	 *
-	 * @param Ar - Archive for save and load
-	 */
-	virtual void Serialize(FArchive& Ar);
 
 protected:
 	/** The embeded object */

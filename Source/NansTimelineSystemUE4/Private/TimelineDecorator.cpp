@@ -23,7 +23,7 @@ void UNTimelineDecorator::Init(UNTimelineManagerDecorator* TimelineManager, FNam
 {
 	// TODO remove static cast, not useful anymore??
 	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManager*>(TimelineManager), _Label));
-	Timeline->EventExpired.BindUObject(this, &UNTimelineDecorator::OnEventExpired);
+	OnEventExpired().AddUObject(this, &UNTimelineDecorator::OnTimelineEventExpired);
 }
 
 void UNTimelineDecorator::SetTickInterval(float _TickInterval)
@@ -116,11 +116,16 @@ void UNTimelineDecorator::RefreshRecordData(const int32& Index)
 	Record.ExpiredTime = Tuple.Get<5>();
 }
 
-void UNTimelineDecorator::OnEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
+void UNTimelineDecorator::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
 	RefreshRecordData(Index);
 	FNEventRecord& Record = EventStore[Index];
 	Record.Event = nullptr;
+}
+
+FEventDelegate& UNTimelineDecorator::OnEventExpired()
+{
+	return Timeline->OnEventExpired();
 }
 
 float UNTimelineDecorator::GetCurrentTime() const

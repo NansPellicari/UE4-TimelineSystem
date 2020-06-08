@@ -30,6 +30,7 @@ NTimeline::NTimeline(NTimelineManager* TimelineTimer, FName _Label)
 NTimeline::~NTimeline()
 {
 	Events.Empty();
+	EventExpired.Clear();
 }
 
 void NTimeline::Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection)
@@ -42,12 +43,30 @@ void NTimeline::Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection)
 
 bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 {
+	bool bCanAttached = true;
+	int32 Index = 0;
+	for (Index; Index < Events.Num(); ++Index)
+	{
+		FEventTuple& EventTuple = Events[Index];
+		// Only add unique event
+		if (EventTuple.Get<0>().IsValid() && EventTuple.Get<0>()->GetUID() == Event->GetUID())
+		{
+			bCanAttached = false;
+			break;
+		}
+	}
+
+	if (!bCanAttached)
+	{
+		return bCanAttached;
+	}
+
 	if (Event->GetDelay() <= 0.f)
 	{
 		Event->Start(CurrentTime);
 	}
 
-	bool bCanAttached = BeforeOnAttached(Event, CurrentTime);
+	bCanAttached = BeforeOnAttached(Event, CurrentTime);
 	if (bCanAttached)
 	{
 		SetTuple(FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f));
@@ -110,7 +129,12 @@ void NTimeline::NotifyTick()
 
 void NTimeline::OnExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
-	EventExpired.ExecuteIfBound(Event, ExpiredTime, Index);
+	EventExpired.Broadcast(Event, ExpiredTime, Index);
+}
+
+FEventDelegate& NTimeline::OnEventExpired()
+{
+	return EventExpired;
 }
 
 const float NTimeline::GetTickInterval() const

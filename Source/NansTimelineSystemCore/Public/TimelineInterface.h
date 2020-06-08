@@ -17,6 +17,8 @@
 #include "CoreMinimal.h"
 #include "EventInterface.h"
 
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
+
 class NANSTIMELINESYSTEMCORE_API NTimelineInterface
 {
 public:
@@ -29,4 +31,5 @@ public:
 	virtual FName GetLabel() const = 0;
 	virtual void Clear() = 0;
 	virtual void NotifyTick() = 0;
+	virtual FEventDelegate& OnEventExpired() = 0;
 };

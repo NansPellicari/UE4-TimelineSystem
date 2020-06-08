@@ -1,9 +1,11 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/Event.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "gtest/gtest.h"
+
+#include <iostream>
 
 class TimelineTimerManagerFake : public NTimelineManager
 {
@@ -207,4 +209,23 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageAHigherTickFrequency)
 	Timer->TimerTick();	   // should be 2.5sec
 	Timer->TimerTick();	   // should be 3sec
 	EXPECT_TRUE(Events[1]->IsExpired());
+}
+
+TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventExpired)
+{
+	bool Test = false;
+	FString UID = Events[1]->GetUID();
+	Timer->GetTimeline()->OnEventExpired().AddLambda(
+		[&Test, &UID](TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index) {
+			Test = Event->GetUID() == UID;
+			EXPECT_EQ(ExpiredTime, 2.f);
+		});
+
+	Timer->Play();
+	Timer->GetTimeline()->Attached(Events[1]);
+	Timer->TimerTick();
+	Timer->TimerTick();
+	Timer->TimerTick();
+	EXPECT_TRUE(Events[1]->IsExpired());
+	EXPECT_TRUE(Test);
 }

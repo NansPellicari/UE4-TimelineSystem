@@ -18,8 +18,6 @@
 #include "EventInterface.h"
 #include "TimelineInterface.h"
 
-DECLARE_DELEGATE_ThreeParams(FEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
-
 class NTimelineManager;
 
 /**
@@ -55,35 +53,39 @@ public:
 	 */
 	NTimeline(NTimelineManager* TimerManager, FName _Label = NAME_None);
 
-	/** Calls Clear() */
+	/** Empty events array */
 	virtual ~NTimeline();
 
 	/** @see OnExpired() */
 	FEventDelegate EventExpired;
+
+	virtual FEventDelegate& OnEventExpired() override;
 
 	/** It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
 	 * and AfterOnAttached() for any custom usages
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual bool Attached(TSharedPtr<NEventInterface> Event);
+	virtual bool Attached(TSharedPtr<NEventInterface> Event) override;
 
 	/**
 	 * Same as Attached(TSharedPtr<NEventInterface> Event) but for a collection of objects.
+	 *
+	 * @see NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 	 */
-	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection);
+	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override;
 
 	/**
 	 * This should be called only by its friend NTimelineManager
 	 * or a decorator to maintain consistency with its manager.
 	 */
-	virtual void SetTickInterval(float _TickInterval);
+	virtual void SetTickInterval(float _TickInterval) override;
 
 	/** This method is mainly used for savegame serialization */
-	virtual void SetCurrentTime(float _CurrentTime);
+	virtual void SetCurrentTime(float _CurrentTime) override;
 
 	/** Get CurrentTime */
-	virtual float GetCurrentTime() const;
+	virtual float GetCurrentTime() const override;
 
 	/** Returns the FEventTuple collection */
 	const TArray<NTimeline::FEventTuple> GetEvents() const;
@@ -92,10 +94,10 @@ public:
 	 * Give a name to this timeline
 	 * @param _Label - The name
 	 */
-	virtual void SetLabel(FName _Label);
+	virtual void SetLabel(FName _Label) override;
 
 	/** Return the actual name */
-	virtual FName GetLabel() const;
+	virtual FName GetLabel() const override;
 
 	/**
 	 * This should be used only to set data from an archive (save game).
@@ -109,13 +111,13 @@ public:
 	 * This completely reset every events.
 	 * It should be used with caution.
 	 */
-	virtual void Clear();
+	virtual void Clear() override;
 
 	/**
 	 * This manages to notify every events saved in this timeline with the new time added.
 	 * It uses internally GetTickInterval() to increment time.
 	 */
-	virtual void NotifyTick();
+	virtual void NotifyTick() override;
 
 protected:
 	/** The name of this timeline */

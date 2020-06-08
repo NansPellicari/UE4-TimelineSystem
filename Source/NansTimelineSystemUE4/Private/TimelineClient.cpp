@@ -62,6 +62,10 @@ void UNTimelineClient::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
+		for (auto& It : TimelinesCollection)
+		{
+			It.Value->ConditionalBeginDestroy();
+		}
 		// Refresh Timeline data, in case data has been set from previous load or during game play.
 		TimelinesCollection.Empty();
 		Init();
