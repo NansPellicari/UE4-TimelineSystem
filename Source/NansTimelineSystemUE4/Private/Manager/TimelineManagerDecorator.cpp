@@ -16,31 +16,8 @@
 
 #include "Event/EventDecorator.h"
 #include "Event/UnrealEventProxy.h"
-#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "TimerManager.h"
 #include "UnrealTimelineProxy.h"
-
-template <typename T>
-T* UNTimelineManagerDecoratorFactory::CreateObject(UObject* Outer, float TickInterval, FName _Label, EObjectFlags Flags)
-{
-	T* Obj = NewObject<T>(Outer, NAME_None, Flags);
-
-	mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
-		TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!"));
-	Obj->Init(TickInterval, _Label);
-	return Obj;
-}
-template <typename T>
-T* UNTimelineManagerDecoratorFactory::CreateObject(
-	UObject* Outer, const UClass* Class, float TickInterval, FName _Label, EObjectFlags Flags)
-{
-	T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-	mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
-		TEXT("Your TimelineManager class %s should dervived from UNTimelineManagerDecorator!"),
-		*Class->GetFullName());
-	Obj->Init(TickInterval, _Label);
-	return Obj;
-}
 
 UNTimelineManagerDecorator::UNTimelineManagerDecorator()
 {

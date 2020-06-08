@@ -15,6 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
 #include "TimelineDecorator.h"
@@ -39,7 +40,15 @@ public:
 	 */
 	template <typename T>
 	static T* CreateObject(
-		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+	{
+		T* Obj = NewObject<T>(Outer, NAME_None, Flags);
+
+		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+			TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!"));
+		Obj->Init(TickInterval, _Label);
+		return Obj;
+	}
 
 	/**
 	 * This method is a factory method to create a derived UNTimelineManagerDecorator with a specific UClass.
@@ -55,7 +64,15 @@ public:
 		const UClass* Class,
 		float TickInterval = 1.f,
 		FName _Label = NAME_None,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags);
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+	{
+		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
+		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+			TEXT("Your TimelineManager class %s should dervived from UNTimelineManagerDecorator!"),
+			*Class->GetFullName());
+		Obj->Init(TickInterval, _Label);
+		return Obj;
+	}
 };
 
 /**
