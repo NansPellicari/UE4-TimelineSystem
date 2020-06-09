@@ -16,7 +16,9 @@ Get the full documentation of the [API here](Api.md).
     -   [4.1. Create USaveGame Object](#41-create-usavegame-object)
     -   [4.2. Copy/Paste to override UE functions](#42-copypaste-to-override-ue-functions)
     -   [4.3. Trigger Save/Load](#43-trigger-saveload)
--   [5. Contributing](#5-contributing)
+-   [5. Testing](#5-testing)
+    -   [5.1. Make Google Tests works](#51-make-google-tests-works)
+-   [6. Contributing](#6-contributing)
 
 <!-- /TOC -->
 
@@ -181,9 +183,44 @@ Now you can use you special function to load game:
 
 ![save & load](./img/save-load.png)
 
-<a id="markdown-5-contributing" name="5-contributing"></a>
+<a id="markdown-5-testing" name="5-testing"></a>
 
-## 5. Contributing
+## 5. Testing
 
-You are very welcome if you want to contribute.  
+They are 2 kinds of tests in this project:
+
+-   [Google Test](https://github.com/google/googletest/) for **unit test** the core lib.
+-   [UE4 automation tests](https://docs.unrealengine.com/en-US/Programming/Automation/TechnicalGuide/index.html) which I use more like **functionnal test** here.
+
+In my workflow I use this project template https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv to simplify all the testing settings, tests launches and to get nice reports.  
+I invite you to using it if you want to [contribute](#6-contributing) to this project or quick testing these features.
+
+<a id="markdown-51-make-google-tests-works" name="51-make-google-tests-works"></a>
+
+### 5.1. Make Google Tests works
+
+After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv following the [Step by step guide](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv#3-step-by-step-guide), you have to download this repo as a git submodule using this:
+
+```powershell
+# in your project root folder
+git submodule add https://github.com/NansPellicari/UE4-NansTimelineSystem .\Plugins\NansTimelineSystem
+# this to place in the right directory and rename correctly
+# the plugin's folder to avoid UE4 misconfiguration.
+```
+
+After that you just have to link tests located into the `GGTest` folder of the plugin from the **GoogleTestApp project** test's entry point like this:
+
+```cpp
+// in Source/Tests/GoogleTestApp/Private/Test.cpp
+#define WITH_GG_TESTS = 1
+#include "../../../Plugins/NansTimelineSystem/Source/GGTest/Timeline.test.cpp"
+```
+
+And that it!
+
+<a id="markdown-6-contributing" name="6-contributing"></a>
+
+## 6. Contributing
+
+You are very welcome if you want to contribute.
 I explain in [CONTRIBUTING.md](../CONTRIBUTING.md) what is the most comfortable way to me you can contribute.

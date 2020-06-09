@@ -79,11 +79,6 @@ void NEvent::SetLocalTime(float _LocalTime)
 	LocalTime = _LocalTime;
 }
 
-void NEvent::SetStartedAt(float _StartedAt)
-{
-	StartedAt = _StartedAt;
-}
-
 void NEvent::SetDuration(float _Duration)
 {
 	Duration = _Duration;

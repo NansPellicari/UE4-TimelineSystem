@@ -21,7 +21,7 @@
 #include "TimelineDecorator.h"
 
 /**
- *  This class is a pass-through to allows an NUnrealTimelineProxy (a derived UObject)
+ * This class is a pass-through to allows an NUnrealTimelineProxy (a derived UObject)
  * to be passed on the core system using TSharedPtr, and it manages NUnrealEventProxy
  * attachment .
  */

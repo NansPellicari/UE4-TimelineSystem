@@ -2,8 +2,8 @@
 
 This plugins allows to keep tracks of time for different timeline paradigm<sup>(1)</sup>, attached events<sup>(2)</sup> to them and managed serialization for Save and Load game.
 
-> 1. [Real life](#331---real-life) time, [Game life](#332---game-life) and [Level life](#333---level-life)
-> 2. light `UObject` carrying data and/or simple functionnalities you design
+> <sup>1</sup> [Real life](#331---real-life) time, [Game life](#332---game-life) and [Level life](#333---level-life)  
+> <sup>2</sup> Light `UObject` carrying data and/or simple functionnalities you design
 
 ![Nans Timeline System](./Docs/img/intro.png)
 
@@ -12,9 +12,9 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
 > The thing is, it's the most accurate word for the feature this plugin provides,
 > so I still decided to use it but for BP I prefixed with **Nans** (= **NansTimeline**) everywhere to avoid confusion.
 
-|                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                        |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| I've decided to make all the code I developped for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm fulltime dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
+|                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                       |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| I've decided to make all the code I developed for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm fulltime dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
 
 <!-- TOC -->
 
@@ -56,6 +56,7 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
 ### 1.1. UE4 plugins
 
 -   [NansUE4TestsHelpers](https://github.com/NansPellicari/NansUE4TestsHelpers) (free UE4 plugins)
+-   [NansCoreHelpers](https://github.com/NansPellicari/UE4-NansCoreHelpers) (free UE4 plugins)
 
 <a id="markdown-2-usages" name="2-usages"></a>
 
@@ -149,17 +150,22 @@ First, go to your `Plugins` directory and clone project:
 cd .\Plugins\
 git clone git@github.com:NansPellicari/UE4-NansTimelineSystem.git NansTimelineSystem
 # /!\ renaming destination folder is important, because UE4 doesn't like dash in project name
+
 # or in your root dir if you already use git for your project
 git submodule add git@github.com:NansPellicari/UE4-NansTimelineSystem.git Plugins/NansTimelineSystem
 ```
 
-You have to clone a dependency too:
+You have to clone dependencies too:
 
 ```powershell
 # still in .\Plugins\ dir
 git clone git@github.com:NansPellicari/NansUE4TestsHelpers
+git clone git@github.com:NansPellicari/UE4-NansCoreHelpers.git NansCoreHelpers
+
 # or in your root dir if you already use git for your project
 git submodule add git@github.com:NansPellicari/NansUE4TestsHelpers Plugins/NansUE4TestsHelpers
+git submodule add git@github.com:NansPellicari/UE4-NansCoreHelpers.git Plugins/NansCoreHelpers
+
 ```
 
 <a id="markdown-412-add-plugin-in-your-game-dependencies" name="412-add-plugin-in-your-game-dependencies"></a>
@@ -179,6 +185,10 @@ In your `<MyProject>.uproject` file add these lines:
 		{
 			"Name": "NansUE4TestsHelpers",
 			"Enabled": true
+		},
+		{
+			"Name": "NansCoreHelpers",
+			"Enabled": true
 		}
 	]
 }
@@ -189,6 +199,8 @@ in your `Source/<MyProject>.Target.cs` and `Source/<MyProject>Editor.Target.cs`:
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
     // Other dependencies here ...
+    "NansUE4TestsHelpers",
+    "NansCoreHelpers",
     "NansTimelineSystemCore",
     "NansTimelineSystemUE4"
 });
@@ -203,6 +215,7 @@ PublicDependencyModuleNames.AddRange(new string[] {
     "Engine",
     "InputCore",
     "Kismet",
+    "NansCoreHelpers",
     "NansTimelineSystemCore",
     "NansTimelineSystemUE4",
     "Slate", "SlateCore"
@@ -324,11 +337,11 @@ You should use a timeline manager's function
 
 ## 5. Contributing and Supporting
 
-I've decided to make all the code I developped for my games free to use and open source.  
+I've decided to make all the code I developed for my games free to use and open source.  
 I am a true believer in the mindset that sharing and collaborating makes the world a better place.  
 I'll be very glad if you decided to help me to follow my dream.
 
 | How?                                                                                                                                                                               |                                                                                         With                                                                                         |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| **Donating**<br> Because I'm an independant developper/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                       | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
+| **Donating**<br> Because I'm an independant developer/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                        | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
 | **Contributing**<br> You are very welcome if you want to contribute. I explain [here](./CONTRIBUTING.md) in details what<br> is the most comfortable way to me you can contribute. |                                                                         [CONTRIBUTING.md](./CONTRIBUTING.md)                                                                         |

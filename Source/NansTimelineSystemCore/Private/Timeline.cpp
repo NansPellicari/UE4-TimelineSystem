@@ -113,8 +113,6 @@ void NTimeline::NotifyTick()
 			Event->Start(CurrentTime);
 		}
 
-		// TODO should be an idea to have a possiblity to add a time relative to the timeline...
-		// float IntervalFromLastNotification = CurrentTime - Event->GetLocalTime();
 		Event->NotifyAddTime(GetTickInterval());
 
 		if (Event->IsExpired())

@@ -27,7 +27,7 @@ void FNansTimelineSystemUE4Module::StartupModule()
 	FEdGraphUtilities::RegisterVisualPinFactory(Factory);
 
 	// =====================================================================================
-	// TODO Search how to create custom field that from here
+	// TODO Search how to create custom field (config panel) from here
 	// https://docs.unrealengine.com/en-US/Programming/Slate/DetailsCustomization/index.html
 	// =====================================================================================
 }

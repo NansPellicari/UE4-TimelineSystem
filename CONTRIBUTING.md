@@ -48,7 +48,9 @@
 
 ## Development Setup
 
-You will need requirements specified in the [README](./README.md#requirements).
+You will need requirements specified in the [README](./README.md#1-requirements) and dependencies specified in the [Developers doc](./Docs/Developers.md#1-dependencies).
+
+Follow steps in [Developers testing](./Docs/Developers.md#5-testing) section to have a well configured environment.
 
 Follow steps in [README Step by step guide](./README.md#4-step-by-step-guide) to install the project.
 

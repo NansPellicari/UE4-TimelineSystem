@@ -19,8 +19,20 @@
 
 #include "EventDecorator.generated.h"
 
+/**
+ * Factory functions to help creating event decorators.
+ */
 namespace UNEventDecoratorFactory
 {
+	/**
+	 * This will instanciate a new Event decorator based on class UNEventDecorator.
+	 * It uses UNEventDecorator::Init() function too to have a fully initialized object.
+	 *
+	 * @param Outer - The UObject outer
+	 * @param Class - A subclass of UNEventDecorator
+	 * @param Name - (optionnal) the name you want this event is called, it gives a generated ones if not provided
+	 * @param Flags - Flag for GC management
+	 */
 	template <typename T>
 	static T* CreateObject(UObject* Outer,
 		const TSubclassOf<UNEventDecorator> Class,
@@ -36,17 +48,6 @@ namespace UNEventDecoratorFactory
 
 		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
 		Obj->Init(Name);
-		return Obj;
-	}
-
-	template <typename T>
-	static T* CreateObjectFromEvent(UObject* Outer,
-		const TSharedPtr<NEventInterface> Object,
-		const TSubclassOf<UNEventDecorator> Class,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
-	{
-		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-		Obj->Event = Object;
 		return Obj;
 	}
 
@@ -102,7 +103,6 @@ public:
 	virtual const FString GetUID() const override;
 	virtual void SetUID(FString _UId) override;
 	virtual void SetLocalTime(float _LocalTime) override;
-	virtual void SetStartedAt(float _StartedAt) override;
 	virtual void SetDuration(float _Duration) override;
 	virtual void SetDelay(float _Delay) override;
 	virtual void SetEventLabel(FName _EventLabel) override;

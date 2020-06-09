@@ -18,6 +18,7 @@
 #include "Event/EventDecorator.h"
 #include "Event/EventRecord.h"
 #include "NansTimelineSystemCore/Public/EventInterface.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
 #include "TimelineDecorator.generated.h"
@@ -148,12 +149,15 @@ private:
 	UPROPERTY(SaveGame)
 	TArray<FNEventRecord> EventStore;
 
+	/** This property is used only for serialization */
 	UPROPERTY(SaveGame)
 	FName Label;
 
+	/** This property is used only for serialization */
 	UPROPERTY(SaveGame)
 	float CurrentTime;
 
+	/** This property is used only for serialization */
 	UPROPERTY(SaveGame)
 	float TickInterval;
 };

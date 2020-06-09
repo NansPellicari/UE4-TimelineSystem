@@ -77,7 +77,7 @@ public:
 
 /**
  * This is the abstract decorator that every Timeline manager shoulds override.
- * It brings all core functionnalities for blueprint or c++.
+ * It brings all core functionnalities for blueprint or UE4 c++ paradigm.
  *
  * As the close relation between NTimelineManager and NTimeline classes (core lib),
  * This class is coupled with UNTimelineDecorator.

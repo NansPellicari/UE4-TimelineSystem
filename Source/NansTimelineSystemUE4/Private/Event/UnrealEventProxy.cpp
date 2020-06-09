@@ -71,11 +71,6 @@ void NUnrealEventProxy::SetLocalTime(float _LocalTime)
 	Event.SetLocalTime(_LocalTime);
 }
 
-void NUnrealEventProxy::SetStartedAt(float _StartedAt)
-{
-	Event.SetStartedAt(_StartedAt);
-}
-
 void NUnrealEventProxy::SetDuration(float _Duration)
 {
 	Event.SetDuration(_Duration);

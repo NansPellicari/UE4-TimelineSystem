@@ -28,10 +28,7 @@
 #include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
-/**
- * For an unknown reason, I can't create a Spec with World ticking,
- * frame doesn't increase. But a SIMPLE_AUTOMATION_TEST works... o.O
- */
+// TODO make specs for these
 // clang-format off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerTest,
 "Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanPauseAndPlay", EAutomationTestFlags::EditorContext |
@@ -169,8 +166,9 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 
 		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 		NewFakeObject->SetMyWorld(NewWorld);
-		UNLevelLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNLevelLifeTimelineManager>(
-			NewFakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+		UNLevelLifeTimelineManager* NewTimelineManager =
+			UNTimelineManagerDecoratorFactory::CreateObject<UNLevelLifeTimelineManager>(
+				NewFakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
 
 		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);

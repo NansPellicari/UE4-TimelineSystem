@@ -29,10 +29,7 @@
 #include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
-/**
- * For an unknown reason, I can't create a Spec with World ticking,
- * frame doesn't increase. But a SIMPLE_AUTOMATION_TEST works... o.O
- */
+// TODO make specs for these
 // clang-format off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FGameLifeTimelineManagerTest,
 "Nans.TimelineSystem.UE4.GameLifeTimelineManager.Test.CanPauseAndPlay", EAutomationTestFlags::EditorContext |

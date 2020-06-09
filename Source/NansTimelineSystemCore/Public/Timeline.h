@@ -21,11 +21,7 @@
 class NTimelineManager;
 
 /**
- * Its goal is to saved events and place them in time.
- * It works as a Time & Event container.
- * The NTimelineManager class is dedicated to handle it.
- *
- * @see ./TimelineManager.h
+ * @see NTimelineInterface
  */
 class NANSTIMELINESYSTEMCORE_API NTimeline : public NTimelineInterface
 {
@@ -61,7 +57,8 @@ public:
 
 	virtual FEventDelegate& OnEventExpired() override;
 
-	/** It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
+	/**
+	 * It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
 	 * and AfterOnAttached() for any custom usages
 	 *
 	 * @param Event - The event you want to put in the timeline stream
@@ -78,25 +75,17 @@ public:
 	/**
 	 * This should be called only by its friend NTimelineManager
 	 * or a decorator to maintain consistency with its manager.
+	 * @copydoc NTimelineInterface::SetTickInterval()
 	 */
 	virtual void SetTickInterval(float _TickInterval) override;
 
-	/** This method is mainly used for savegame serialization */
 	virtual void SetCurrentTime(float _CurrentTime) override;
-
-	/** Get CurrentTime */
 	virtual float GetCurrentTime() const override;
 
 	/** Returns the FEventTuple collection */
 	const TArray<NTimeline::FEventTuple> GetEvents() const;
 
-	/**
-	 * Give a name to this timeline
-	 * @param _Label - The name
-	 */
 	virtual void SetLabel(FName _Label) override;
-
-	/** Return the actual name */
 	virtual FName GetLabel() const override;
 
 	/**
@@ -114,7 +103,7 @@ public:
 	virtual void Clear() override;
 
 	/**
-	 * This manages to notify every events saved in this timeline with the new time added.
+	 * @copydoc NTimelineInterface::NotifyTick()
 	 * It uses internally GetTickInterval() to increment time.
 	 */
 	virtual void NotifyTick() override;
@@ -149,8 +138,8 @@ protected:
 	virtual void AfterOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime) {}
 
 	/**
-	 * This is the value required by a timer to know
-	 * the tick frequency for this timeline.
+	 * This is the value required by a timer manager to know
+	 * the tick frequency for this timeline (given by NTimelineManager).
 	 * The NotifyTick use this method to add time on CurrentTime
 	 * at each call.
 	 */
@@ -168,7 +157,7 @@ private:
 	 * These event tuples are made to keep traces of what happens during game sessions.
 	 * They could be used for stats or user feedbacks for instance.
 	 * > Important notes:
-	 * Inside the tuple, the shared pointer is destroyed to avoid memory leaks on NotifyTick().
+	 * Inside the tuple, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
 	 */
 	TArray<FEventTuple> Events;
 };

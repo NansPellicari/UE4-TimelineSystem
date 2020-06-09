@@ -16,7 +16,6 @@
 
 #include "Event/EventRecord.h"
 #include "Manager/TimelineManagerDecorator.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
 
 void UNTimelineDecorator::Init(UNTimelineManagerDecorator* TimelineManager, FName _Label)

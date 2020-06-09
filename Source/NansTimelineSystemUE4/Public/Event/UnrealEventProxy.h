@@ -40,7 +40,6 @@ public:
 	virtual const FString GetUID() const override;
 	virtual void SetUID(FString _UId) override;
 	virtual void SetLocalTime(float _LocalTime) override;
-	virtual void SetStartedAt(float _StartedAt) override;
 	virtual void SetDuration(float _Duration) override;
 	virtual void SetDelay(float _Delay) override;
 	virtual void SetEventLabel(FName _EventLabel) override;

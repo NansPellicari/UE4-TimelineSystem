@@ -32,7 +32,7 @@ class UNTimelineGameInstance : public UInterface
 
 /**
  * This interface should be implemented by your GameInstance class or blueprint object.
- * See README.md in step by step guide to see how to implements it.
+ * See ../README.md in step by step guide to see how to implements it.
  */
 class NANSTIMELINESYSTEMUE4_API INTimelineGameInstance
 {

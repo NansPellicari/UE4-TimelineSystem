@@ -64,7 +64,7 @@ public:
 	UNTimelineManagerDecorator* GetTimeline(FName Name) const;
 
 	/**
-	 * It used to save all timelines in the EventStore,
+	 * It used to save all timelines in the TimelinesCollection,
 	 * and reload them correctly.
 	 *
 	 * @param Ar - Archive for save and load

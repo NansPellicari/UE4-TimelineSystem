@@ -85,11 +85,6 @@ void UNEventDecorator::SetLocalTime(float _LocalTime)
 	Event->SetLocalTime(_LocalTime);
 }
 
-void UNEventDecorator::SetStartedAt(float _StartedAt)
-{
-	Event->SetStartedAt(_StartedAt);
-}
-
 void UNEventDecorator::SetDuration(float _Duration)
 {
 	Event->SetDuration(_Duration);
@@ -152,7 +147,7 @@ void UNEventDecorator::Serialize(FArchive& Ar)
 		Event->SetUID(Id);
 		Event->SetEventLabel(Label);
 		Event->SetLocalTime(LocalTime);
-		Event->SetStartedAt(StartedAt);
+		Event->Start(StartedAt);
 		Event->SetDuration(Duration);
 		Event->SetDelay(Delay);
 	}
