@@ -66,7 +66,7 @@ namespace UNEventDecoratorFactory
  * (serialization, blueprint's specifics functionnalities, etc...)
  * - NEventInterface's derivation: all your core functionnalities
  */
-UCLASS(Abstract, Blueprintable)
+UCLASS(Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNEventDecorator : public UObject, public NEventInterface
 {
 	friend class UNTimelineManagerDecorator;
@@ -100,19 +100,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual const FName GetEventLabel() const override;
 
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual void SetEventLabel(FName _EventLabel) override;
+
 	virtual const FString GetUID() const override;
 	virtual void SetUID(FString _UId) override;
 	virtual void SetLocalTime(float _LocalTime) override;
 	virtual void SetDuration(float _Duration) override;
 	virtual void SetDelay(float _Delay) override;
-	virtual void SetEventLabel(FName _EventLabel) override;
 	virtual void Clear() override;
+	virtual FNEventDelegate& OnStart() override;
 	// END NEventInterface overrides
 
 	// BEGIN UObject overrides
 	virtual void BeginDestroy() override;
 	virtual void Serialize(FArchive& Ar) override;
 	// END UObject overrides
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnInit();
 
 	/**
 	 * This is where the Core object is instanciated.

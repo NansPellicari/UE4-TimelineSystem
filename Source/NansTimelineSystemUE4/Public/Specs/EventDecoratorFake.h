@@ -24,8 +24,8 @@
 /**
  * This class is used for tests only
  */
-UCLASS(NotBlueprintable, NotPlaceable)
-class NANSTIMELINESYSTEMUE4_API UNEventDecoratorFake : public UNEventDecorator
+UCLASS(MinimalAPI, NotBlueprintable, hidecategories = (UObject, Object), NotPlaceable)
+class UNEventDecoratorFake : public UNEventDecorator
 {
 	GENERATED_BODY()
 };

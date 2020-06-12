@@ -91,6 +91,11 @@ void NUnrealEventProxy::Clear()
 	Event.Clear();
 }
 
+FNEventDelegate& NUnrealEventProxy::OnStart()
+{
+	return Event.OnStart();
+}
+
 UNEventDecorator& NUnrealEventProxy::GetUnrealObject()
 {
 	return Event;

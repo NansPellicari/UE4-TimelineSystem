@@ -44,5 +44,6 @@ public:
 	virtual void SetDelay(float _Delay) override;
 	virtual void SetEventLabel(FName _EventLabel) override;
 	virtual void Clear() override;
+	virtual FNEventDelegate& OnStart() override;
 	UNEventDecorator& GetUnrealObject();
 };

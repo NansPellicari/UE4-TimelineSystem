@@ -16,6 +16,8 @@
 
 #include "CoreMinimal.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FNEventDelegate, class NEventInterface*, const float&);
+
 /**
  * An interface to manage events which can be attached to a timeline.
  */
@@ -82,4 +84,6 @@ public:
 	virtual void NotifyAddTime(float NewTime) = 0;
 	/** This should reset all data */
 	virtual void Clear() = 0;
+	/** @returns a FNTimelineEventDelegate ref which is broadcasted when an event expires. */
+	virtual FNEventDelegate& OnStart() = 0;
 };

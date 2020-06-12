@@ -122,7 +122,7 @@ void UNTimelineDecorator::OnTimelineEventExpired(TSharedPtr<NEventInterface> Eve
 	Record.Event = nullptr;
 }
 
-FEventDelegate& UNTimelineDecorator::OnEventExpired()
+FNTimelineEventDelegate& UNTimelineDecorator::OnEventExpired()
 {
 	return Timeline->OnEventExpired();
 }

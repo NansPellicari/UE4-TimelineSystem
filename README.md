@@ -124,12 +124,12 @@ You can easily create your own timeline manager. See [Developers docs](./Docs/De
 ### 3.4. Event
 
 It is intended to be the most extensible as possible.  
-So in its actual state, it is just an abstract class which embeds the necessary data to managed its lifetime.  
-You can specialized them with only a simple **Blueprint** or in **c++ classes** (creating a [Decorator](https://refactoring.guru/design-patterns/decorator)) to do what your want.  
+So in its actual state, it is just a base class which embeds the necessary data to managed its lifetime.  
+You can specialized it with only a simple inherited **Blueprint** or in **c++ classes** (creating a [Decorator](https://refactoring.guru/design-patterns/decorator)) to do what your want.  
 To get some examples:
 
 -   I create a **scheduled event** to **trigger a message** to motivate the player when it cumulates an amount of succeeded actions during a determinate range of time.
--   In combination with my [Factors Factory System](https://github.com/NansPellicari/UE4-NansFactorsFactory) and [Interaction System](...), I used them to create temp **Bonus/Malus** after an Actor interaction.
+-   In combination with my [Factors Factory System](https://github.com/NansPellicari/UE4-NansFactorsFactory) and **Interaction System** (not public repo yet), I used them to create a temporary **Bonus/Malus factor** after an Actor interaction.
 -   ... Sky's the limit!
 
 <a id="markdown-4-step-by-step-guide" name="4-step-by-step-guide"></a>

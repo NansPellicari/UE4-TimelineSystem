@@ -229,3 +229,26 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventExpired)
 	EXPECT_TRUE(Events[1]->IsExpired());
 	EXPECT_TRUE(Test);
 }
+
+TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
+{
+	bool Test = false;
+	FString UID = Events[2]->GetUID();
+	Events[2]->OnStart().AddLambda([&Test, &UID](NEventInterface* Event, const float& StartTime) {
+		EXPECT_EQ(StartTime, 3.1f);
+		Test = true;
+	});
+
+	Timer->Play();
+	Timer->TimerTick();
+	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 1.f);
+	Timer->GetTimeline()->Attached(Events[2]);
+	Timer->TimerTick();
+	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 2.f);
+	Timer->TimerTick();
+	Timer->SetTickInterval(0.1f);
+	Timer->TimerTick();
+	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 3.1f);
+	EXPECT_EQ(Events[2]->GetStartedAt(), 3.1f);
+	EXPECT_TRUE(Test);
+}

@@ -97,11 +97,17 @@ void NEvent::SetEventLabel(FName _EventLabel)
 void NEvent::Start(float StartTime)
 {
 	StartedAt = StartTime;
+	EventStart.Broadcast(this, StartedAt);
 }
 
 void NEvent::NotifyAddTime(float NewTime)
 {
 	LocalTime += NewTime;
+}
+
+FNEventDelegate& NEvent::OnStart()
+{
+	return EventStart;
 }
 
 void NEvent::Clear()

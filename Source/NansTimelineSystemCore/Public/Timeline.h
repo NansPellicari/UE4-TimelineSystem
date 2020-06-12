@@ -53,9 +53,9 @@ public:
 	virtual ~NTimeline();
 
 	/** @see OnExpired() */
-	FEventDelegate EventExpired;
+	FNTimelineEventDelegate EventExpired;
 
-	virtual FEventDelegate& OnEventExpired() override;
+	virtual FNTimelineEventDelegate& OnEventExpired() override;
 
 	/**
 	 * It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached

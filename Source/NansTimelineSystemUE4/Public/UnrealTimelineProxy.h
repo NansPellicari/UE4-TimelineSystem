@@ -41,6 +41,6 @@ public:
 	virtual FName GetLabel() const override;
 	virtual void Clear() override;
 	virtual void NotifyTick() override;
-	virtual FEventDelegate& OnEventExpired() override;
+	virtual FNTimelineEventDelegate& OnEventExpired() override;
 	virtual UNTimelineDecorator* GetUnrealObject();
 };

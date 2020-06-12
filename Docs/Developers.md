@@ -17,7 +17,8 @@ Get the full documentation of the [API here](Api.md).
     -   [4.2. Copy/Paste to override UE functions](#42-copypaste-to-override-ue-functions)
     -   [4.3. Trigger Save/Load](#43-trigger-saveload)
 -   [5. Testing](#5-testing)
-    -   [5.1. Make Google Tests works](#51-make-google-tests-works)
+    -   [5.1. Launch UE4 tests](#51-launch-ue4-tests)
+    -   [5.2. Make Google Tests works](#52-make-google-tests-works)
 -   [6. Contributing](#6-contributing)
 
 <!-- /TOC -->
@@ -72,7 +73,7 @@ To doing it, we have to consider **3** basics elements:
 > To get more details, you can read the [README definitions](../README.md#3-definitions) section.
 
 Each of these **Core** classes in `Source/NansTimelineSystemCore` have their **decorator(s)** in the `Source/NansTimelineSystemUE4`.  
-The most preferable way to extend it, it's to create you own decorator or override existants decorators.
+The most preferable way to extend them, it's to create your own decorators or override existants decorators.
 
 <a id="markdown-31-timelinemanager" name="31-timelinemanager"></a>
 
@@ -195,14 +196,29 @@ They are 2 kinds of tests in this project:
 In my workflow I use this project template https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv to simplify all the testing settings, tests launches and to get nice reports.  
 I invite you to using it if you want to [contribute](#6-contributing) to this project or quick testing these features.
 
-<a id="markdown-51-make-google-tests-works" name="51-make-google-tests-works"></a>
+<a id="markdown-51-launch-ue4-tests" name="51-launch-ue4-tests"></a>
 
-### 5.1. Make Google Tests works
+### 5.1. Launch UE4 tests
 
-After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv following the [Step by step guide](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv#3-step-by-step-guide), you have to download this repo as a git submodule using this:
+All tests definitions begin with `Nans.TimelineSystem`, and for all plugins I made or will made tests defs are prefixed with `Nans` for simplicity sake.
+
+If you don't want to use my [template](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv) repo, you can launch your tests with this command line:
+
+```powershell
+# this command must be launched from <YourUE4RootDir>/Engine/Binaries/Win<YourOsVersion> directory
+UE4Editor-Cmd.exe "<YourProjectPath>\YourProject.uproject" -unattended -nopause -NullRHI -ExecCmds="Automation RunTests Nans.TimelineSystem; quit" -TestExit="Automation Test Queue Empty" -log -log=RunTests.log -ReportOutputPath="<YourProjectPath>\TheFolderYouWantForReports"
+```
+
+<a id="markdown-52-make-google-tests-works" name="52-make-google-tests-works"></a>
+
+### 5.2. Make Google Tests works
+
+After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv following the [Step by step guide](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv#3-step-by-step-guide), you have to download this repo and dependencies as git submodules using this:
 
 ```powershell
 # in your project root folder
+git submodule add https://github.com/NansPellicari/NansUE4TestsHelpers .\Plugins\NansUE4TestsHelpers
+git submodule add https://github.com/NansPellicari/UE4-NansCoreHelpers .\Plugins\NansCoreHelpers
 git submodule add https://github.com/NansPellicari/UE4-NansTimelineSystem .\Plugins\NansTimelineSystem
 # this to place in the right directory and rename correctly
 # the plugin's folder to avoid UE4 misconfiguration.

@@ -17,7 +17,7 @@
 #include "CoreMinimal.h"
 #include "EventInterface.h"
 
-DECLARE_MULTICAST_DELEGATE_ThreeParams(FEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FNTimelineEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
 
 /**
  * Its goal is to saved events and place them in time.
@@ -59,6 +59,6 @@ public:
 	virtual void Clear() = 0;
 	/** This manages to notify every events saved in this timeline with the new time added. */
 	virtual void NotifyTick() = 0;
-	/** @returns a FEventDelegate ref which is broadcasted when an event expires. */
-	virtual FEventDelegate& OnEventExpired() = 0;
+	/** @returns a FNTimelineEventDelegate ref which is broadcasted when an event expires. */
+	virtual FNTimelineEventDelegate& OnEventExpired() = 0;
 };

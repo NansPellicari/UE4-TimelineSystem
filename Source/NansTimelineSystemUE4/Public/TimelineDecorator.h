@@ -113,7 +113,7 @@ public:
 	 */
 	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 
-	virtual FEventDelegate& OnEventExpired() override;
+	virtual FNTimelineEventDelegate& OnEventExpired() override;
 
 	/**
 	 * Creates a new Event and use this timeline as the outer for this new object.

@@ -130,7 +130,7 @@ void NTimeline::OnExpired(TSharedPtr<NEventInterface> Event, const float& Expire
 	EventExpired.Broadcast(Event, ExpiredTime, Index);
 }
 
-FEventDelegate& NTimeline::OnEventExpired()
+FNTimelineEventDelegate& NTimeline::OnEventExpired()
 {
 	return EventExpired;
 }

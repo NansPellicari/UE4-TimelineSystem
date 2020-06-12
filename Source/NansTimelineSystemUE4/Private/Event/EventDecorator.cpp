@@ -20,6 +20,7 @@
 void UNEventDecorator::Init(FName _Label, FString UId)
 {
 	Event = MakeShareable(new NEvent(_Label, UId));
+	OnInit();
 }
 
 bool UNEventDecorator::IsExpired() const
@@ -114,6 +115,11 @@ void UNEventDecorator::BeginDestroy()
 void UNEventDecorator::Clear()
 {
 	Event->Clear();
+}
+
+FNEventDelegate& UNEventDecorator::OnStart()
+{
+	return Event->OnStart();
 }
 
 void UNEventDecorator::Serialize(FArchive& Ar)

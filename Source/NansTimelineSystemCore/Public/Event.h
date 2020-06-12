@@ -31,6 +31,8 @@ public:
 
 	/** Default dtor */
 	virtual ~NEvent(){};
+
+	FNEventDelegate EventStart;
 	/**
 	 * @copydoc NEventInterface::IsExpired()
 	 * It is computed with Duration and LocalTime
@@ -50,6 +52,7 @@ public:
 	virtual void SetEventLabel(FName _EventLabel) override;
 	virtual void NotifyAddTime(float NewTime) override;
 	virtual void Clear() override;
+	virtual FNEventDelegate& OnStart() override;
 
 protected:
 	FName Label = NAME_None;
