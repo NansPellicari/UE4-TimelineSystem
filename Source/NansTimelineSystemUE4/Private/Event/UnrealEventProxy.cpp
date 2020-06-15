@@ -41,6 +41,11 @@ void NUnrealEventProxy::Start(float StartTime)
 	Event.Start(StartTime);
 }
 
+void NUnrealEventProxy::Stop()
+{
+	Event.Stop();
+}
+
 void NUnrealEventProxy::NotifyAddTime(float NewTime)
 {
 	Event.NotifyAddTime(NewTime);

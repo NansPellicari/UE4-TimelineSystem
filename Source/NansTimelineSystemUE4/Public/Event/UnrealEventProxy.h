@@ -34,6 +34,7 @@ public:
 	virtual const float GetStartedAt() const override;
 	virtual float GetDuration() const override;
 	virtual void Start(float StartTime) override;
+	virtual void Stop() override;
 	virtual void NotifyAddTime(float NewTime) override;
 	virtual float GetDelay() const override;
 	virtual const FName GetEventLabel() const override;

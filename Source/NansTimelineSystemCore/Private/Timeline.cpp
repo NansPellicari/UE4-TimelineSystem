@@ -61,15 +61,15 @@ bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 		return bCanAttached;
 	}
 
-	if (Event->GetDelay() <= 0.f)
-	{
-		Event->Start(CurrentTime);
-	}
-
 	bCanAttached = BeforeOnAttached(Event, CurrentTime);
 	if (bCanAttached)
 	{
-		SetTuple(FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f));
+		if (Event->GetDelay() <= 0.f)
+		{
+			Event->Start(CurrentTime);
+		}
+		SetTuple(
+			FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f, Event->GetUID()));
 		AfterOnAttached(Event, CurrentTime);
 	}
 	return bCanAttached;
@@ -91,7 +91,7 @@ void NTimeline::NotifyTick()
 		}
 
 		// This allow to manage expiration elsewhere
-		if (Event->IsExpired())
+		if (Event->IsExpired() && Event->GetStartedAt() >= 0.f)
 		{
 			EventTuple.Get<5>() = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
@@ -103,7 +103,7 @@ void NTimeline::NotifyTick()
 		float AttachedAt = EventTuple.Get<1>();
 		float IntervalAttachedAt = CurrentTime - AttachedAt;
 
-		if (Event->GetDelay() > 0 && Event->GetDelay() >= IntervalAttachedAt)
+		if (Event->GetDelay() > 0 && Event->GetDelay() > IntervalAttachedAt)
 		{
 			continue;
 		}
@@ -111,6 +111,7 @@ void NTimeline::NotifyTick()
 		if (Event->GetStartedAt() < 0.f)
 		{
 			Event->Start(CurrentTime);
+			continue;
 		}
 
 		Event->NotifyAddTime(GetTickInterval());

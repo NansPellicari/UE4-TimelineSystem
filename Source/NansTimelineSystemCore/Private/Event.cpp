@@ -37,7 +37,7 @@ NEvent::NEvent(FName _Label, FString _UId)
 
 bool NEvent::IsExpired() const
 {
-	return GetDuration() > 0 && GetLocalTime() >= GetDuration();
+	return !bActivated || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
 };
 
 const float NEvent::GetLocalTime() const
@@ -97,7 +97,13 @@ void NEvent::SetEventLabel(FName _EventLabel)
 void NEvent::Start(float StartTime)
 {
 	StartedAt = StartTime;
+	bActivated = true;
 	EventStart.Broadcast(this, StartedAt);
+}
+
+void NEvent::Stop()
+{
+	bActivated = false;
 }
 
 void NEvent::NotifyAddTime(float NewTime)

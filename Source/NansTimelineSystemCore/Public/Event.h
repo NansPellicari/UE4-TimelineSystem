@@ -42,6 +42,7 @@ public:
 	virtual const float GetStartedAt() const override;
 	virtual float GetDuration() const override;
 	virtual void Start(float StartTime) override;
+	virtual void Stop() override;
 	virtual float GetDelay() const override;
 	virtual const FString GetUID() const override;
 	virtual void SetUID(FString _UId) override;
@@ -61,4 +62,5 @@ protected:
 	float Duration = 0.f;
 	float Delay = 0.f;
 	FString UId;
+	bool bActivated = false;
 };

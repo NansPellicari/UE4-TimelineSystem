@@ -37,8 +37,9 @@ public:
 	 * 3: duration
 	 * 4: label
 	 * 5: expired time
+	 * 6: UId
 	 */
-	using FEventTuple = TTuple<TSharedPtr<NEventInterface>, float, const float, const float, const FName, float>;
+	using FEventTuple = TTuple<TSharedPtr<NEventInterface>, float, const float, const float, const FName, float, const FString>;
 
 	/**
 	 * A Timeline can't exists with a manager.

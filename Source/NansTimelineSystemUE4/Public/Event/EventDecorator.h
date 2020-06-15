@@ -92,6 +92,9 @@ public:
 	virtual void Start(float StartTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual void Stop() override;
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual void NotifyAddTime(float NewTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")

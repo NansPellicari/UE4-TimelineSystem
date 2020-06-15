@@ -84,11 +84,13 @@ FNEventRecord* UNTimelineDecorator::GetEventRecord(FString UId)
 NTimeline::FEventTuple UNTimelineDecorator::ConvertRecordToTuple(FNEventRecord const Record)
 {
 	TSharedPtr<NEventInterface> Event;
+	FString UId = FString("");
 	if (Record.Event != nullptr)
 	{
 		Event = Record.Event->GetEvent();
+		UId = Event->GetUID();
 	}
-	return NTimeline::FEventTuple(Event, Record.AttachedTime, Record.Delay, Record.Duration, Record.Label, Record.ExpiredTime);
+	return NTimeline::FEventTuple(Event, Record.AttachedTime, Record.Delay, Record.Duration, Record.Label, Record.ExpiredTime, UId);
 }
 
 void UNTimelineDecorator::RefreshRecordData(const int32& Index)

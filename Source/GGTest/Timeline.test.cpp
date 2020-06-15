@@ -104,8 +104,8 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageCorrectlyDifferentEvents)
 	// Should start an finish in the same time as the "event4"
 	Timer->GetTimeline()->Attached(Events[2]);
 	Timer->GetTimeline()->Attached(Events[3]);
-	Timer->TimerTick();	   // 2 sec
-	Timer->TimerTick();	   // 3 sec
+	Timer->TimerTick();	   // 2 secs
+	Timer->TimerTick();	   // 3 secs
 	Timer->GetTimeline()->Attached(Events[4]);
 	EXPECT_FALSE(Events[0]->IsExpired());
 	EXPECT_EQ(Events[1]->GetStartedAt(), 0);
@@ -113,6 +113,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageCorrectlyDifferentEvents)
 	EXPECT_TRUE(Events[1]->IsExpired());
 	// means it has been removed from the timeline events collection
 	EXPECT_TRUE(Events[1].IsUnique());
+	EXPECT_EQ(Events[2]->GetStartedAt(), 3.f);
 	EXPECT_FALSE(Events[2]->IsExpired());
 	EXPECT_FALSE(Events[2].IsUnique());
 	Timer->TimerTick();	   // 4 sec
@@ -132,7 +133,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageCorrectlyDifferentEvents)
 	EXPECT_EQ(Events[1]->GetStartedAt(), 0.f);
 	// event 2
 	EXPECT_EQ(Events[2]->GetLocalTime(), 1.f);
-	EXPECT_EQ(Events[2]->GetStartedAt(), 4.f);	  // 2 sec delay
+	EXPECT_EQ(Events[2]->GetStartedAt(), 3.f);	  // 2 sec delay + attached at 1 sec
 	// event 3
 	EXPECT_EQ(Events[3]->GetLocalTime(), 4.f);
 	EXPECT_EQ(Events[3]->GetStartedAt(), 1.f);
@@ -235,7 +236,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
 	bool Test = false;
 	FString UID = Events[2]->GetUID();
 	Events[2]->OnStart().AddLambda([&Test, &UID](NEventInterface* Event, const float& StartTime) {
-		EXPECT_EQ(StartTime, 3.1f);
+		EXPECT_EQ(StartTime, 3.f);
 		Test = true;
 	});
 
@@ -246,9 +247,9 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
 	Timer->TimerTick();
 	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 2.f);
 	Timer->TimerTick();
-	Timer->SetTickInterval(0.1f);
 	Timer->TimerTick();
-	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 3.1f);
-	EXPECT_EQ(Events[2]->GetStartedAt(), 3.1f);
+	EXPECT_EQ(Timer->GetTimeline()->GetCurrentTime(), 4.f);
+	EXPECT_EQ(Events[2]->GetStartedAt(), 3.f);
+	EXPECT_TRUE(Events[2]->IsExpired());
 	EXPECT_TRUE(Test);
 }

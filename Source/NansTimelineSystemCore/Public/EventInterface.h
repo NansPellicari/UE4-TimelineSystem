@@ -78,6 +78,10 @@ public:
 	 */
 	virtual void Start(float StartTime) = 0;
 	/**
+	 * This can stop the event and make it expires to its next tick.
+	 */
+	virtual void Stop() = 0;
+	/**
 	 * Increments LocalTime
 	 * @param NewTime - in Millisecs
 	 */

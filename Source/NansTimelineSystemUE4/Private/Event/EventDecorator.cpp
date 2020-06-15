@@ -53,6 +53,12 @@ void UNEventDecorator::Start(float StartTime)
 	Event->Start(StartTime);
 }
 
+void UNEventDecorator::Stop()
+{
+	if (!Event.IsValid()) return;
+	Event->Stop();
+}
+
 void UNEventDecorator::NotifyAddTime(float NewTime)
 {
 	if (!Event.IsValid()) return;
