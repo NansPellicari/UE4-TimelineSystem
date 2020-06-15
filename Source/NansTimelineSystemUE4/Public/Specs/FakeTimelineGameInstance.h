@@ -27,7 +27,7 @@ public:
 		return TimelineClient->GetTimeline(Config);
 	}
 
-	virtual UNTimelineClient* GetClient() const override
+	virtual UNTimelineClient* GetTimelineClient_Implementation() const override
 	{
 		return TimelineClient;
 	}

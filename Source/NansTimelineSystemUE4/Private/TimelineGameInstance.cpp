@@ -16,8 +16,3 @@
 
 #include "Manager/TimelineManagerDecorator.h"
 #include "TimelineClient.h"
-
-UNTimelineClient* INTimelineGameInstance::GetClient() const
-{
-	return nullptr;
-}

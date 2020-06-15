@@ -47,5 +47,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta = (DisplayName = "Get a NansTimeline"), Category = "NansTimeline")
 	UNTimelineManagerDecorator* GetTimeline(FConfiguredTimeline Timeline) const;
 
-	virtual UNTimelineClient* GetClient() const;
+	// clang-format off
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta = (DisplayName = "Get the NansTimeline client"), Category = "NansTimeline")
+	UNTimelineClient* GetTimelineClient() const;
+	// clang-format on
 };

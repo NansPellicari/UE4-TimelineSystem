@@ -49,6 +49,7 @@ My goal was to create the most extensible plugin as possible and keep things sim
 **> Core** module manage every "basic" functionnalities:
 
 -   it manipulates basics data
+-   it tries to be the most **UE4 agnostic**
 -   it is a lightweight library with the less dependencies as possible (only **Core** UE4 modules)
 -   it provides basics interfaces or abstract classes to work with
 -   it can be build for simple project as **program** build instead of **game** build (to run fast unit tests for example, see [UE4-TPL-CppWithTestEnv](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv) for an "how to")
@@ -117,16 +118,22 @@ Then you have to add a public `UObject* WorldContextObject` property and add the
 ```cpp
 // at the top of the file
 #include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
+#include "Runtime/Engine/Classes/Engine/GameInstance.h"
+
 // in your `Serialize()` method
 if (WorldContextObject == nullptr) return;
 if (WorldContextObject->GetWorld() == nullptr) return;
 if (WorldContextObject->GetWorld()->GetGameInstance() == nullptr) return;
 
 // To retrieve the c++ layer of the interface
-INTimelineGameInstance* GI = Cast<INTimelineGameInstance>(WorldContextObject->GetWorld()->GetGameInstance());
-if (GI == nullptr) return;
+UGameInstance* GI = WorldContextObject->GetWorld()->GetGameInstance());
+if (!GI->GetClass()->ImplementsInterface(UNTimelineGameInstance::StaticClass()))
+{
+    UE_LOG(LogTemp, Error, TEXT("Your game instance should implements INTimelineGameInstance"));
+    return;
+}
+INTimelineGameInstance::Execute_GetTimelineClient(GI)->Serialize(Ar);
 
-GI->GetClient()->Serialize(Ar);
 ```
 
 <a id="markdown-42-copypaste-to-override-ue-functions" name="42-copypaste-to-override-ue-functions"></a>
