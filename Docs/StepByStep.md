@@ -29,23 +29,23 @@ First, go to your `Plugins` directory and clone project:
 
 ```powershell
 cd .\Plugins\
-git clone git@github.com:NansPellicari/UE4-NansTimelineSystem.git NansTimelineSystem
+git clone git@github.com:NansPellicari/UE4-TimelineSystem.git NansTimelineSystem
 # /!\ renaming destination folder is important, because UE4 doesn't like dash in project name
 
 # or in your root dir if you already use git for your project
-git submodule add git@github.com:NansPellicari/UE4-NansTimelineSystem.git Plugins/NansTimelineSystem
+git submodule add git@github.com:NansPellicari/UE4-TimelineSystem.git Plugins/NansTimelineSystem
 ```
 
 You have to clone dependencies too:
 
 ```powershell
 # still in .\Plugins\ dir
-git clone git@github.com:NansPellicari/NansUE4TestsHelpers
-git clone git@github.com:NansPellicari/UE4-NansCoreHelpers.git NansCoreHelpers
+git clone git@github.com:NansPellicari/UE4-TestsHelpers.git NansUE4TestsHelpers
+git clone git@github.com:NansPellicari/UE4-CoreHelpers.git NansCoreHelpers
 
 # or in your root dir if you already use git for your project
-git submodule add git@github.com:NansPellicari/NansUE4TestsHelpers Plugins/NansUE4TestsHelpers
-git submodule add git@github.com:NansPellicari/UE4-NansCoreHelpers.git Plugins/NansCoreHelpers
+git submodule add git@github.com:NansPellicari/UE4-TestsHelpers.git Plugins/NansUE4TestsHelpers
+git submodule add git@github.com:NansPellicari/UE4-CoreHelpers.git Plugins/NansCoreHelpers
 
 ```
 

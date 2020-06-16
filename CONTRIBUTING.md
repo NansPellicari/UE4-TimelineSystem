@@ -37,14 +37,14 @@
 
 ### Work Step Example
 
--   Fork the repository from [NansPellicari/UE4-NansTimelineSystem](https://github.com/NansPellicari/UE4-NansTimelineSystem) !
+-   Fork the repository from [NansPellicari/UE4-TimelineSystem](https://github.com/NansPellicari/UE4-TimelineSystem) !
 -   Create your topic branch from `develop`: `git branch my-new-topic origin/develop`
 -   Add codes and pass tests !
 -   Generating API doc if you change or add code `npm run doc`
 
 -   Commit your changes: `git commit -am 'Add some topic'`
 -   Push to the branch: `git push origin my-new-topic`
--   Submit a pull request to `develop` branch of `NansPellicari/UE4-NansTimelineSystem` repository !
+-   Submit a pull request to `develop` branch of `NansPellicari/UE4-TimelineSystem` repository !
 
 ## Development Setup
 

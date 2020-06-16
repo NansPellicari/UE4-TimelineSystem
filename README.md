@@ -47,8 +47,8 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
 
 ### 1.1. UE4 plugins
 
--   [NansUE4TestsHelpers](https://github.com/NansPellicari/NansUE4TestsHelpers) (free UE4 plugins)
--   [NansCoreHelpers](https://github.com/NansPellicari/UE4-NansCoreHelpers) (free UE4 plugins)
+-   [NansUE4TestsHelpers](https://github.com/NansPellicari/UE4-TestsHelpers) (free UE4 plugins)
+-   [NansCoreHelpers](https://github.com/NansPellicari/UE4-CoreHelpers) (free UE4 plugins)
 
 <a id="markdown-2-usages" name="2-usages"></a>
 
@@ -121,7 +121,7 @@ You can specialized it with only a simple inherited **Blueprint** or in **c++ cl
 To get some examples:
 
 -   I create a **scheduled event** to **trigger a message** to motivate the player when it cumulates an amount of succeeded actions during a determinate range of time.
--   In combination with my [Factors Factory System](https://github.com/NansPellicari/UE4-NansFactorsFactory) and **Interaction System** (not public repo yet), I used them to create a temporary **Bonus/Malus factor** after an Actor interaction.
+-   In combination with my [Factors Factory System](https://github.com/NansPellicari/UE4-FactorsFactory) and **Interaction System** (not public repo yet), I used them to create a temporary **Bonus/Malus factor** after an Actor interaction.
 -   ... Sky's the limit!
 
 <a id="markdown-4-step-by-step-guide" name="4-step-by-step-guide"></a>

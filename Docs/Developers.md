@@ -224,9 +224,9 @@ After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv fol
 
 ```powershell
 # in your project root folder
-git submodule add https://github.com/NansPellicari/NansUE4TestsHelpers .\Plugins\NansUE4TestsHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansCoreHelpers .\Plugins\NansCoreHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansTimelineSystem .\Plugins\NansTimelineSystem
+git submodule add https://github.com/NansPellicari/UE4-TestsHelpers.git .\Plugins\NansUE4TestsHelpers
+git submodule add https://github.com/NansPellicari/UE4-CoreHelpers.git .\Plugins\NansCoreHelpers
+git submodule add https://github.com/NansPellicari/UE4-TimelineSystem.git .\Plugins\NansTimelineSystem
 # this to place in the right directory and rename correctly
 # the plugin's folder to avoid UE4 misconfiguration.
 ```
