@@ -30,7 +30,7 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
         -   [3.3.3. - Level Life](#333---level-life)
         -   [3.3.4. - And ...](#334---and-)
     -   [3.4. Event](#34-event)
--   [4. Step by step guide](#4-step-by-step-guide)
+-   [4. Getting started - a step by step guide](#4-getting-started---a-step-by-step-guide)
 -   [5. Contributing and Supporting](#5-contributing-and-supporting)
 
 <!-- /TOC -->
@@ -124,9 +124,9 @@ To get some examples:
 -   In combination with my [Factors Factory System](https://github.com/NansPellicari/UE4-FactorsFactory) and **Interaction System** (not public repo yet), I used them to create a temporary **Bonus/Malus factor** after an Actor interaction.
 -   ... Sky's the limit!
 
-<a id="markdown-4-step-by-step-guide" name="4-step-by-step-guide"></a>
+<a id="markdown-4-getting-started---a-step-by-step-guide" name="4-getting-started---a-step-by-step-guide"></a>
 
-## 4. Step by step guide
+## 4. Getting started - a step by step guide
 
 To maintain a short doc here, please read this page [here](./Docs/StepByStep.md)
 

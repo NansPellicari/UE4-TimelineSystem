@@ -1,4 +1,4 @@
-# Step by step guide
+# Getting started - a step by step guide
 
 <!-- TOC -->
 
