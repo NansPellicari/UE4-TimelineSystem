@@ -25,6 +25,11 @@
 			"Name": "NansTimelineSystemUE4",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansTimelineSystemEd",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	],
 	"Plugins": [

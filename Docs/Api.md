@@ -3,8 +3,11 @@
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `namespace `[`UNEventDecoratorFactory`](#namespaceUNEventDecoratorFactory) | Factory functions to help creating event decorators.
+`namespace `[`UnrealBuildTool::Rules`](#namespaceUnrealBuildTool_1_1Rules) | 
 `class `[`FNansTimelineSystemCoreModule`](#classFNansTimelineSystemCoreModule) | Required to create a UE4 module
+`class `[`FNansTimelineSystemEdModule`](#classFNansTimelineSystemEdModule) | 
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
+`class `[`FNConfiguredTimelineCustomization`](#classFNConfiguredTimelineCustomization) | 
 `class `[`FTimelinePinFactory`](#classFTimelinePinFactory) | It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
 `class `[`INTimelineGameInstance`](#classINTimelineGameInstance) | This interface should be implemented by your GameInstance class or blueprint object. See ../README.md in step by step guide to see how to implements it.
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
@@ -57,6 +60,31 @@ This will instanciate a new Event decorator based on class [UNEventDecorator](#c
 
 * `Flags` - Flag for GC management
 
+# namespace `UnrealBuildTool::Rules` <a id="namespaceUnrealBuildTool_1_1Rules"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`class `[`UnrealBuildTool::Rules::NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd) | 
+
+# class `UnrealBuildTool::Rules::NansTimelineSystemEd` <a id="classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd"></a>
+
+```
+class UnrealBuildTool::Rules::NansTimelineSystemEd
+  : public ModuleRules
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656)`(ReadOnlyTargetRules Target)` | 
+
+## Members
+
+#### `public inline  `[`NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656)`(ReadOnlyTargetRules Target)` <a id="classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656"></a>
+
 # class `FNansTimelineSystemCoreModule` <a id="classFNansTimelineSystemCoreModule"></a>
 
 ```
@@ -83,6 +111,31 @@ IModuleInterface implementation
 
 IModuleInterface implementation
 
+# class `FNansTimelineSystemEdModule` <a id="classFNansTimelineSystemEdModule"></a>
+
+```
+class FNansTimelineSystemEdModule
+  : public IModuleInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`StartupModule`](#classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d)`()` | IModuleInterface implementation
+`public virtual void `[`ShutdownModule`](#classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3)`()` | 
+`protected TSharedPtr< `[`FTimelinePinFactory`](#classFTimelinePinFactory)` > `[`TimelinePinFactory`](#classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e) | 
+
+## Members
+
+#### `public virtual void `[`StartupModule`](#classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d)`()` <a id="classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d"></a>
+
+IModuleInterface implementation
+
+#### `public virtual void `[`ShutdownModule`](#classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3)`()` <a id="classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3"></a>
+
+#### `protected TSharedPtr< `[`FTimelinePinFactory`](#classFTimelinePinFactory)` > `[`TimelinePinFactory`](#classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e) <a id="classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e"></a>
+
 # class `FNansTimelineSystemUE4Module` <a id="classFNansTimelineSystemUE4Module"></a>
 
 ```
@@ -108,6 +161,31 @@ IModuleInterface implementation
 #### `public virtual void `[`ShutdownModule`](#classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363)`()` <a id="classFNansTimelineSystemUE4Module_1a8b5df09796b8c28fb25faea9f05d9363"></a>
 
 IModuleInterface implementation
+
+# class `FNConfiguredTimelineCustomization` <a id="classFNConfiguredTimelineCustomization"></a>
+
+```
+class FNConfiguredTimelineCustomization
+  : public IPropertyTypeCustomization
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`CustomizeHeader`](#classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | IPropertyTypeCustomization interface
+`public virtual void `[`CustomizeChildren`](#classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | 
+`protected void `[`OnAttributeSelected`](#classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` | 
+
+## Members
+
+#### `public virtual void `[`CustomizeHeader`](#classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b"></a>
+
+IPropertyTypeCustomization interface
+
+#### `public virtual void `[`CustomizeChildren`](#classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea"></a>
+
+#### `protected void `[`OnAttributeSelected`](#classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` <a id="classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463"></a>
 
 # class `FTimelinePinFactory` <a id="classFTimelinePinFactory"></a>
 
@@ -136,7 +214,7 @@ This interface should be implemented by your GameInstance class or blueprint obj
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a8744c686532c01f502c3e2d452315597)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
-`public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` | 
+`public `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetTimelineClient`](#classINTimelineGameInstance_1a0b0d7a95c162b97530aeeae7e3e3ce08)`() const` | 
 
 ## Members
 
@@ -147,7 +225,7 @@ A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline C
 #### Parameters
 * `Timeline` - To allow having a combobox of configured timelines
 
-#### `public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` <a id="classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad"></a>
+#### `public `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetTimelineClient`](#classINTimelineGameInstance_1a0b0d7a95c162b97530aeeae7e3e3ce08)`() const` <a id="classINTimelineGameInstance_1a0b0d7a95c162b97530aeeae7e3e3ce08"></a>
 
 # class `NansTimelineSystemCore` <a id="classNansTimelineSystemCore"></a>
 

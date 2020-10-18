@@ -4,7 +4,7 @@
 
 -   [1. Installation](#1-installation)
     -   [1.1. Clone plugins](#11-clone-plugins)
-    -   [1.2. Add plugin in your game dependencies](#12-add-plugin-in-your-game-dependencies)
+    -   [1.2. Add plugins in your game dependencies](#12-add-plugins-in-your-game-dependencies)
     -   [1.3. Use TimelineGameInstance and TimelineClient](#13-use-timelinegameinstance-and-timelineclient)
 -   [2. Usages](#2-usages)
     -   [2.1. Configure Timelines](#21-configure-timelines)
@@ -13,13 +13,9 @@
 
 <!-- /TOC -->
 
-<a id="markdown-41-installation" name="41-installation"></a>
-
 <a id="markdown-1-installation" name="1-installation"></a>
 
 ## 1. Installation
-
-<a id="markdown-411-clone-plugins" name="411-clone-plugins"></a>
 
 <a id="markdown-11-clone-plugins" name="11-clone-plugins"></a>
 
@@ -49,11 +45,13 @@ git submodule add git@github.com:NansPellicari/UE4-CoreHelpers.git Plugins/NansC
 
 ```
 
-<a id="markdown-412-add-plugin-in-your-game-dependencies" name="412-add-plugin-in-your-game-dependencies"></a>
+<a id="markdown-12-add-plugins-in-your-game-dependencies" name="12-add-plugins-in-your-game-dependencies"></a>
 
-<a id="markdown-12-add-plugin-in-your-game-dependencies" name="12-add-plugin-in-your-game-dependencies"></a>
+### 1.2. Add plugins in your game dependencies
 
-### 1.2. Add plugin in your game dependencies
+> :warning: I considered you have an Editor Module next to your project. If not, read this:  
+> https://ue4community.wiki/legacy/creating-an-editor-module-x64nt5g3  
+> BTW, this is required to add Custom Pins and Property Customization.
 
 In your `<MyProject>.uproject` file add these lines:
 
@@ -77,7 +75,7 @@ In your `<MyProject>.uproject` file add these lines:
 }
 ```
 
-in your `Source/<MyProject>.Target.cs` and `Source/<MyProject>Editor.Target.cs`:
+in your `Source/<MyProject>.Target.cs`:
 
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
@@ -89,7 +87,32 @@ ExtraModuleNames.AddRange(new string[] {
 });
 ```
 
+in your `Source/<MyProject>Editor.Target.cs`:
+
+```csharp
+ExtraModuleNames.AddRange(new string[] {
+    // Other dependencies here ...
+    "NansUE4TestsHelpers",
+    "NansCoreHelpers",
+    "NansTimelineSystemCore",
+    "NansTimelineSystemUE4",
+    "NansTimelineSystemEd"
+});
+```
+
 And be sure to have these in your project public dependencies (in `Source/<MyProject>/<MyProject>.Build.cs`):
+
+```csharp
+PublicDependencyModuleNames.AddRange(new string[] {
+    "Core",
+    "CoreUObject",
+    "NansCoreHelpers",
+    "NansTimelineSystemCore",
+    "NansTimelineSystemUE4",
+});
+```
+
+And be sure to have these in your EditorModule public dependencies (in `Source/<MyProject>Editor/<MyProject>Editor.Build.cs`):
 
 ```csharp
 PublicDependencyModuleNames.AddRange(new string[] {
@@ -97,15 +120,15 @@ PublicDependencyModuleNames.AddRange(new string[] {
     "CoreUObject",
     "Engine",
     "InputCore",
+    "Slate",
+    "SlateCore",
     "Kismet",
     "NansCoreHelpers",
     "NansTimelineSystemCore",
     "NansTimelineSystemUE4",
-    "Slate", "SlateCore"
+    "NansTimelineSystemEd",
 });
 ```
-
-<a id="markdown-413-use-timelinegameinstance-and-timelineclient" name="413-use-timelinegameinstance-and-timelineclient"></a>
 
 <a id="markdown-13-use-timelinegameinstance-and-timelineclient" name="13-use-timelinegameinstance-and-timelineclient"></a>
 
@@ -186,13 +209,9 @@ protected:
 };
 ```
 
-<a id="markdown-42-usages" name="42-usages"></a>
-
 <a id="markdown-2-usages" name="2-usages"></a>
 
 ## 2. Usages
-
-<a id="markdown-421-configure-timelines" name="421-configure-timelines"></a>
 
 <a id="markdown-21-configure-timelines" name="21-configure-timelines"></a>
 
@@ -210,8 +229,6 @@ then **add** new timeline and configure its **name, tick interval and class** fo
 
 ![add timelines](./img/stepbystep-timeline-add.png)
 
-<a id="markdown-422-add-event" name="422-add-event"></a>
-
 <a id="markdown-22-add-event" name="22-add-event"></a>
 
 ### 2.2. Add Event
@@ -219,8 +236,6 @@ then **add** new timeline and configure its **name, tick interval and class** fo
 You should use a timeline manager's function
 
 ![add event from manager](./img/stepbystep-event-add-1.png)
-
-<a id="markdown-423-get--display" name="423-get--display"></a>
 
 <a id="markdown-23-get--display" name="23-get--display"></a>
 

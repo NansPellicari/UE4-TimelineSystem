@@ -12,14 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemUE4.h"
+#pragma once
 
-#define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
+#include "Modules/ModuleManager.h"
 
-void FNansTimelineSystemUE4Module::StartupModule() {}
+class FTimelinePinFactory;
 
-void FNansTimelineSystemUE4Module::ShutdownModule() {}
+class FNansTimelineSystemEdModule : public IModuleInterface
+{
+public:
+	/** IModuleInterface implementation */
+	virtual void StartupModule() override;
+	virtual void ShutdownModule() override;
 
-#undef LOCTEXT_NAMESPACE
-
-IMPLEMENT_MODULE(FNansTimelineSystemUE4Module, NansTimelineSystemUE4)
+protected:
+	TSharedPtr<FTimelinePinFactory> TimelinePinFactory;
+};
