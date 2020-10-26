@@ -30,7 +30,7 @@
 #include "TimelineFactory.h"
 #include "TimerManager.h"
 
-// TODO make specs for these
+// TODO make specs instead of these
 // clang-format off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineFactoryTest,
 "Nans.TimelineSystem.UE4.TimelineFactory.Test.CanCreateNewTimeline", EAutomationTestFlags::EditorContext |

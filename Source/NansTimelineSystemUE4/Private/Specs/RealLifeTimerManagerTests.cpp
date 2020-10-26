@@ -30,7 +30,7 @@
 #include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
-// TODO make specs for these
+// TODO make specs instead of these
 // clang-format off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRealLifeTimelineManagerTest,
 "Nans.TimelineSystem.UE4.RealLifeTimelineManager.Test.CanPauseAndPlayButShouldNotBeAffectedByGamePause", EAutomationTestFlags::EditorContext |
