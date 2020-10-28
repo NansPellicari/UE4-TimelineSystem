@@ -62,7 +62,7 @@ public:
 	 */
 	static void GetConfigs(TArray<FConfiguredTimelineConf>& ShareableNames)
 	{
-		static const UNTimelineConfig* StaticObject = GetDefault<UNTimelineConfig>();
+		const UNTimelineConfig* StaticObject = GetDefault<UNTimelineConfig>();
 		for (FConfiguredTimelineConf Config : StaticObject->ConfiguredTimeline)
 		{
 			ShareableNames.Add(Config);
