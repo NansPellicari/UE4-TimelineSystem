@@ -16,6 +16,8 @@
 
 #include "TimelineManager.h"
 
+#include <iostream>
+
 NTimeline::NTimeline(NTimelineManager* TimelineTimer, FName _Label)
 {
 	static int32 Counter;
@@ -43,33 +45,40 @@ void NTimeline::Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection)
 
 bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 {
-	bool bCanAttached = true;
-	int32 Index = 0;
-	for (Index; Index < Events.Num(); ++Index)
+	for (int32 Index = 0; Index < Events.Num(); ++Index)
 	{
-		FEventTuple& EventTuple = Events[Index];
-		// Only add unique event
-		if (EventTuple.Get<0>().IsValid() && EventTuple.Get<0>()->GetUID() == Event->GetUID())
+		FNEventSave& EventRecord = Events[Index];
+		// manage unique event or event from Serialized data
+		if (EventRecord.UID == Event->GetUID())
 		{
-			bCanAttached = false;
-			break;
+			// Only add unique event
+			if (EventsObjects.Contains(EventRecord.UID))
+			{
+				return false;
+			}
+			else
+			{
+				// Add object from Serialized data
+				EventsObjects.Add(Event->GetUID(), Event);
+				return true;
+			}
 		}
 	}
 
-	if (!bCanAttached)
-	{
-		return bCanAttached;
-	}
+	bool bCanAttached = true;
 
 	bCanAttached = BeforeOnAttached(Event, CurrentTime);
 	if (bCanAttached)
 	{
+		FNEventSave Record =
+			FNEventSave(Event->GetUID(), CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f);
 		if (Event->GetDelay() <= 0.f)
 		{
 			Event->Start(CurrentTime);
+			Record.StartedAt = CurrentTime;
 		}
-		SetTuple(
-			FEventTuple(Event, CurrentTime, Event->GetDelay(), Event->GetDuration(), Event->GetEventLabel(), 0.f, Event->GetUID()));
+		Events.Add(Record);
+		EventsObjects.Add(Event->GetUID(), Event);
 		AfterOnAttached(Event, CurrentTime);
 	}
 	return bCanAttached;
@@ -79,28 +88,27 @@ void NTimeline::NotifyTick()
 {
 	CurrentTime += GetTickInterval();
 
-	int32 Index = 0;
-	for (Index; Index < Events.Num(); ++Index)
+	for (int32 Index = 0; Index < Events.Num(); ++Index)
 	{
-		FEventTuple& EventTuple = Events[Index];
-		TSharedPtr<NEventInterface> Event = EventTuple.Get<0>();
+		FNEventSave& EventRecord = Events[Index];
 
-		if (!Event.IsValid())
+		if (!EventsObjects.Contains(EventRecord.UID))
 		{
 			continue;
 		}
 
-		// This allow to manage expiration elsewhere
+		TSharedPtr<NEventInterface> Event = *EventsObjects.Find(EventRecord.UID);
+
+		// This allow to manage manual expiration elsewhere
 		if (Event->IsExpired() && Event->GetStartedAt() >= 0.f)
 		{
-			EventTuple.Get<5>() = CurrentTime;
+			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
-			Event.Reset();
-			EventTuple.Get<0>().Reset();
+			EventsObjects.FindAndRemoveChecked(EventRecord.UID);
 			continue;
 		}
 
-		float AttachedAt = EventTuple.Get<1>();
+		float AttachedAt = EventRecord.AttachedTime;
 		float IntervalAttachedAt = CurrentTime - AttachedAt;
 
 		if (Event->GetDelay() > 0 && Event->GetDelay() > IntervalAttachedAt)
@@ -111,17 +119,20 @@ void NTimeline::NotifyTick()
 		if (Event->GetStartedAt() < 0.f)
 		{
 			Event->Start(CurrentTime);
+			EventRecord.StartedAt = CurrentTime;
 			continue;
 		}
 
 		Event->NotifyAddTime(GetTickInterval());
+		EventRecord.LocalTime = Event->GetLocalTime();
 
 		if (Event->IsExpired())
 		{
-			EventTuple.Get<5>() = CurrentTime;
+			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
-			Event.Reset();
-			EventTuple.Get<0>().Reset();
+			// TODO refacto: should be great to have this here
+			// Event->PreDelete();
+			EventsObjects.FindAndRemoveChecked(EventRecord.UID);
 		}
 	}
 }
@@ -166,18 +177,50 @@ FName NTimeline::GetLabel() const
 	return Label;
 }
 
-void NTimeline::SetTuple(NTimeline::FEventTuple Tuple)
-{
-	Events.Add(Tuple);
-}
-
 void NTimeline::Clear()
 {
 	Events.Empty();
 	CurrentTime = 0;
 }
 
-const TArray<NTimeline::FEventTuple> NTimeline::GetEvents() const
+const TArray<FNEventSave> NTimeline::GetEvents() const
 {
 	return Events;
+}
+
+TMap<FString, TSharedPtr<NEventInterface>> NTimeline::GetEventObjects()
+{
+	return EventsObjects;
+}
+
+TSharedPtr<NEventInterface> NTimeline::GetEvent(FString _UID)
+{
+	TSharedPtr<NEventInterface> Event;
+	if (EventsObjects.Contains(_UID))
+	{
+		Event = *EventsObjects.Find(_UID);
+	}
+	return Event;
+}
+
+void NTimeline::PreDelete()
+{
+	Clear();
+}
+void NTimeline::Archive(FArchive& Ar)
+{
+	if (Ar.IsSaving())
+	{
+		EventsCount = Events.Num();
+	}
+	Ar << Label;
+	Ar << CurrentTime;
+	Ar << TickInterval;
+	Ar << Events;
+
+	if (Ar.IsLoading())
+	{
+		// clean up to allow decorator to fill with real objects
+		EventsObjects.Empty();
+	}
 }

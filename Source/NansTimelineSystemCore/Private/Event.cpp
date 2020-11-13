@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event.h"
+#include "NansTimelineSystemCore/Public/Event.h"
 
 NEvent::NEvent()
 {
@@ -123,4 +123,20 @@ void NEvent::Clear()
 	StartedAt = -1.f;
 	Duration = 0.f;
 	Delay = 0.f;
+}
+
+void NEvent::PreDelete()
+{
+	Clear();
+}
+
+void NEvent::Archive(FArchive& Ar)
+{
+	Ar << UId;
+	Ar << Label;
+	Ar << LocalTime;
+	Ar << StartedAt;
+	Ar << Duration;
+	Ar << Delay;
+	Ar << bActivated;
 }

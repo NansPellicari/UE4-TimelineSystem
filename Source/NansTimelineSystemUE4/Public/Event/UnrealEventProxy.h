@@ -26,9 +26,12 @@ class UNEventDecorator;
 class NANSTIMELINESYSTEMUE4_API NUnrealEventProxy : public NEventInterface
 {
 public:
-	UNEventDecorator& Event;
-	NUnrealEventProxy(UNEventDecorator& _Event) : Event(_Event) {}
-
+	UNEventDecorator* Event;
+	// TODO make this protected and UNTimelineDecorator as friend?
+	/** Should be only used by serializer */
+	NUnrealEventProxy() {}
+	NUnrealEventProxy(UNEventDecorator* _Event) : Event(_Event) {}
+	virtual ~NUnrealEventProxy() {}
 	virtual bool IsExpired() const override;
 	virtual const float GetLocalTime() const override;
 	virtual const float GetStartedAt() const override;
@@ -46,5 +49,12 @@ public:
 	virtual void SetEventLabel(FName _EventLabel) override;
 	virtual void Clear() override;
 	virtual FNEventDelegate& OnStart() override;
-	UNEventDecorator& GetUnrealObject();
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
+	void ArchiveWithTimeline(FArchive& Ar, UNTimelineDecorator* Timeline);
+
+protected:
+	FString EventClassName;
+	FName Label;
+	FName UID;
 };

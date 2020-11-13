@@ -90,4 +90,7 @@ public:
 	virtual void Clear() = 0;
 	/** @returns a FNTimelineEventDelegate ref which is broadcasted when an event expires. */
 	virtual FNEventDelegate& OnStart() = 0;
+
+	virtual void PreDelete() = 0;
+	virtual void Archive(FArchive& Ar) = 0;
 };

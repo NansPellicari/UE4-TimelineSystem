@@ -59,9 +59,18 @@ void UNTimelineManagerDecorator::SetTickInterval(float _TickInterval)
 	NTimelineManager::SetTickInterval(_TickInterval);
 }
 
+const TSharedPtr<NEventInterface> UNTimelineManagerDecorator::GetEvent(FString _UID) const
+{
+	return Timeline->GetEvent(_UID);
+}
 const TArray<FNEventRecord> UNTimelineManagerDecorator::GetEvents() const
 {
-	return MyTimeline->GetAdaptedEvents();
+	TArray<FNEventRecord> EventRecords;
+	for (auto& Event : Timeline->GetEvents())
+	{
+		EventRecords.Add(FNEventRecord(Event));
+	}
+	return EventRecords;
 }
 
 FName UNTimelineManagerDecorator::GetLabel() const
@@ -71,13 +80,13 @@ FName UNTimelineManagerDecorator::GetLabel() const
 
 void UNTimelineManagerDecorator::AddEvent(UNEventDecorator* Event)
 {
-	Timeline->Attached(MakeShareable(new NUnrealEventProxy(*Event)));
+	Timeline->Attached(MakeShareable(new NUnrealEventProxy(Event)));
 }
 
 UNEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(
 	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
 {
-	if (MyTimeline == nullptr) return nullptr;
+	if (!IsValid(MyTimeline)) return nullptr;
 	return MyTimeline->CreateNewEvent(Class, Name, Duration, Delay);
 }
 
@@ -96,9 +105,9 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 	// Thanks to the UE4 serializing system, this will serialize all uproperty with "SaveGame"
 	Super::Serialize(Ar);
 
-	if (MyTimeline != nullptr)
+	if (Timeline.IsValid())
 	{
-		MyTimeline->Serialize(Ar);
+		Timeline->Archive(Ar);
 	}
 
 	Ar << State;
@@ -107,9 +116,9 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 
 void UNTimelineManagerDecorator::BeginDestroy()
 {
-	if (MyTimeline != nullptr)
+	if (Timeline.IsValid())
 	{
-		MyTimeline->ConditionalBeginDestroy();
+		Timeline->PreDelete();
 	}
 	Super::BeginDestroy();
 }

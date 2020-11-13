@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/EngineTypes.h"
-#include "Event/EventDecorator.h"
+#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
 #include "TimerManager.h"
 
 #include "EventDecoratorFake.generated.h"

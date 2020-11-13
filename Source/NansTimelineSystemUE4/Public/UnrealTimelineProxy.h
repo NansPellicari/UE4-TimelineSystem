@@ -20,12 +20,14 @@
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
 #include "TimelineDecorator.h"
 
+class UNEventDecorator;
+
 /**
  * This class is a pass-through to allows an NUnrealTimelineProxy (a derived UObject)
  * to be passed on the core system using TSharedPtr, and it manages NUnrealEventProxy
  * attachment .
  */
-class NANSTIMELINESYSTEMUE4_API NUnrealTimelineProxy : public NTimelineInterface
+class NANSTIMELINESYSTEMUE4_API NUnrealTimelineProxy final : public NTimelineInterface
 {
 public:
 	UNTimelineDecorator& Timeline;
@@ -41,6 +43,10 @@ public:
 	virtual FName GetLabel() const override;
 	virtual void Clear() override;
 	virtual void NotifyTick() override;
+	virtual const TArray<FNEventSave> GetEvents() const override;
+	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() override;
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
 	virtual FNTimelineEventDelegate& OnEventExpired() override;
-	virtual UNTimelineDecorator* GetUnrealObject();
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 };

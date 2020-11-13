@@ -17,9 +17,9 @@
 #include "NansTimelineSystemCore/Public/Event.h"
 #include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 
-void UNEventDecorator::Init(FName _Label, FString UId)
+void UNEventDecorator::Init(FName _Label)
 {
-	Event = MakeShareable(new NEvent(_Label, UId));
+	Event = MakeShareable(new NEvent(_Label));
 	OnInit();
 }
 
@@ -31,19 +31,19 @@ bool UNEventDecorator::IsExpired() const
 
 const float UNEventDecorator::GetLocalTime() const
 {
-	if (!Event.IsValid()) return LocalTime;
+	if (!Event.IsValid()) return -1.f;
 	return Event->GetLocalTime();
 }
 
 const float UNEventDecorator::GetStartedAt() const
 {
-	if (!Event.IsValid()) return StartedAt;
+	if (!Event.IsValid()) return -1.f;
 	return Event->GetStartedAt();
 }
 
 float UNEventDecorator::GetDuration() const
 {
-	if (!Event.IsValid()) return Duration;
+	if (!Event.IsValid()) return -1.f;
 	return Event->GetDuration();
 }
 
@@ -67,7 +67,7 @@ void UNEventDecorator::NotifyAddTime(float NewTime)
 
 float UNEventDecorator::GetDelay() const
 {
-	if (!Event.IsValid()) return Delay;
+	if (!Event.IsValid()) return -1.f;
 	return Event->GetDelay();
 }
 
@@ -79,31 +79,37 @@ const FName UNEventDecorator::GetEventLabel() const
 
 const FString UNEventDecorator::GetUID() const
 {
+	if (!Event.IsValid()) return FString("");
 	return Event->GetUID();
 }
 
 void UNEventDecorator::SetUID(FString _UId)
 {
+	if (!Event.IsValid()) return;
 	Event->SetUID(_UId);
 }
 
 void UNEventDecorator::SetLocalTime(float _LocalTime)
 {
+	if (!Event.IsValid()) return;
 	Event->SetLocalTime(_LocalTime);
 }
 
 void UNEventDecorator::SetDuration(float _Duration)
 {
+	if (!Event.IsValid()) return;
 	Event->SetDuration(_Duration);
 }
 
 void UNEventDecorator::SetDelay(float _Delay)
 {
+	if (!Event.IsValid()) return;
 	Event->SetDelay(_Delay);
 }
 
 void UNEventDecorator::SetEventLabel(FName _EventLabel)
 {
+	if (!Event.IsValid()) return;
 	Event->SetEventLabel(_EventLabel);
 }
 
@@ -114,8 +120,12 @@ TSharedPtr<NEventInterface> UNEventDecorator::GetEvent() const
 
 void UNEventDecorator::BeginDestroy()
 {
+	if (Event.IsValid())
+	{
+		Event->PreDelete();
+		Event.Reset();
+	}
 	Super::BeginDestroy();
-	Event.Reset();
 }
 
 void UNEventDecorator::Clear()
@@ -132,35 +142,8 @@ void UNEventDecorator::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
-	if (Ar.IsSaving() && Event.IsValid())
-	{
-		Id = Event->GetUID();
-		Label = Event->GetEventLabel();
-		LocalTime = Event->GetLocalTime();
-		StartedAt = Event->GetStartedAt();
-		Duration = Event->GetDuration();
-		Delay = Event->GetDelay();
-	}
-
-	Ar << Id;
-	Ar << Label;
-	Ar << LocalTime;
-	Ar << StartedAt;
-	Ar << Duration;
-	Ar << Delay;
-
-	if (Ar.IsLoading() && !Event.IsValid())
-	{
-		Init(Label, Id);
-	}
-
 	if (Event.IsValid())
 	{
-		Event->SetUID(Id);
-		Event->SetEventLabel(Label);
-		Event->SetLocalTime(LocalTime);
-		Event->Start(StartedAt);
-		Event->SetDuration(Duration);
-		Event->SetDelay(Delay);
+		Event->Archive(Ar);
 	}
 }

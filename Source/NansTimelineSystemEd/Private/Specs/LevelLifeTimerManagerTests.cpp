@@ -18,8 +18,8 @@
 #include "Engine/EngineBaseTypes.h"
 #include "Engine/EngineTypes.h"
 #include "EngineGlobals.h"
-#include "Manager/LevelLifeTimelineManager.h"
 #include "Misc/AutomationTest.h"
+#include "NansTimelineSystemUE4/Public/Manager/LevelLifeTimelineManager.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
@@ -29,11 +29,11 @@
 #include "TimerManager.h"
 
 // TODO make specs instead of these
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerTest,
 "Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanPauseAndPlay", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -84,11 +84,11 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerSerializationSameObjTest,
 "Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanSerializeWithTheSameObjectInstance", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -133,11 +133,11 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLevelLifeTimelineManagerSerializationWithEventsTest,
 "Nans.TimelineSystem.UE4.LevelLifeTimelineManager.Test.CanNotLoadEventsFromDifferentWorld", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();

@@ -15,93 +15,141 @@
 #include "Event/UnrealEventProxy.h"
 
 #include "Event/EventDecorator.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 
 bool NUnrealEventProxy::IsExpired() const
 {
-	return Event.IsExpired();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->IsExpired();
 }
 
 const float NUnrealEventProxy::GetLocalTime() const
 {
-	return Event.GetLocalTime();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetLocalTime();
 }
 
 const float NUnrealEventProxy::GetStartedAt() const
 {
-	return Event.GetStartedAt();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetStartedAt();
 }
 
 float NUnrealEventProxy::GetDuration() const
 {
-	return Event.GetDuration();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetDuration();
 }
 
 void NUnrealEventProxy::Start(float StartTime)
 {
-	Event.Start(StartTime);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->Start(StartTime);
 }
 
 void NUnrealEventProxy::Stop()
 {
-	Event.Stop();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->Stop();
 }
 
 void NUnrealEventProxy::NotifyAddTime(float NewTime)
 {
-	Event.NotifyAddTime(NewTime);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->NotifyAddTime(NewTime);
 }
 
 float NUnrealEventProxy::GetDelay() const
 {
-	return Event.GetDelay();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetDelay();
 }
 
 const FName NUnrealEventProxy::GetEventLabel() const
 {
-	return Event.GetEventLabel();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetEventLabel();
 }
 
 const FString NUnrealEventProxy::GetUID() const
 {
-	return Event.GetUID();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->GetUID();
 }
 
 void NUnrealEventProxy::SetUID(FString _UId)
 {
-	Event.SetUID(_UId);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->SetUID(_UId);
 }
 
 void NUnrealEventProxy::SetLocalTime(float _LocalTime)
 {
-	Event.SetLocalTime(_LocalTime);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->SetLocalTime(_LocalTime);
 }
 
 void NUnrealEventProxy::SetDuration(float _Duration)
 {
-	Event.SetDuration(_Duration);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->SetDuration(_Duration);
 }
 
 void NUnrealEventProxy::SetDelay(float _Delay)
 {
-	Event.SetDelay(_Delay);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->SetDelay(_Delay);
 }
 
 void NUnrealEventProxy::SetEventLabel(FName _EventLabel)
 {
-	Event.SetEventLabel(_EventLabel);
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->SetEventLabel(_EventLabel);
 }
 
 void NUnrealEventProxy::Clear()
 {
-	Event.Clear();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->Clear();
 }
 
 FNEventDelegate& NUnrealEventProxy::OnStart()
 {
-	return Event.OnStart();
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	return Event->OnStart();
 }
 
-UNEventDecorator& NUnrealEventProxy::GetUnrealObject()
+void NUnrealEventProxy::PreDelete()
 {
-	return Event;
+	checkf(IsValid(Event), TEXT("Necessary object is missing!"));
+	Event->ConditionalBeginDestroy();
+}
+
+void NUnrealEventProxy::ArchiveWithTimeline(FArchive& Ar, UNTimelineDecorator* Timeline)
+{
+	if (Ar.IsLoading())
+	{
+		Ar << EventClassName;
+		Ar << Label;
+		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *EventClassName);
+		checkf(Class != nullptr, TEXT("The class \"%s\" was not found"), *EventClassName);
+		Event = Timeline->CreateNewEvent(Class, Label);
+	}
+}
+
+void NUnrealEventProxy::Archive(FArchive& Ar)
+{
+	if (Ar.IsSaving() && Event != nullptr && Event->GetClass() != nullptr)
+	{
+		EventClassName = Event->GetClass()->GetPathName();
+		Label = Event->GetEventLabel();
+		// Only in save cause they have been already retrieved by ArchiveWithTimeline() when Loading
+		Ar << EventClassName;
+		Ar << Label;
+	}
+
+	if (Event != nullptr)
+	{
+		Event->Serialize(Ar);
+	}
 }

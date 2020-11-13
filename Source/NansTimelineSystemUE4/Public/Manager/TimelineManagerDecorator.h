@@ -40,12 +40,15 @@ public:
 	 */
 	template <typename T>
 	static T* CreateObject(
-		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None,
+		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
 	{
 		T* Obj = NewObject<T>(Outer, NAME_None, Flags);
 
-		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
-			TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!"));
+		mycheckf(
+			Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+			TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!")
+		);
 		Obj->Init(TickInterval, _Label);
 		return Obj;
 	}
@@ -67,9 +70,11 @@ public:
 		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
 	{
 		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+		mycheckf(
+			Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
 			TEXT("Your TimelineManager class %s should dervived from UNTimelineManagerDecorator!"),
-			*Class->GetFullName());
+			*Class->GetFullName()
+		);
 		Obj->Init(TickInterval, _Label);
 		return Obj;
 	}
@@ -93,10 +98,10 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, pub
 {
 	GENERATED_BODY()
 public:
-#if WITH_EDITOR
+#if WITH_EDITORONLY_DATA
 	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
-#endif
+#endif	  // WITH_EDITORONLY_DATA
 
 	// BEGIN NTimelineManager overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
@@ -140,7 +145,9 @@ public:
 	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
 	 */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	virtual const TArray<FNEventRecord> GetEvents() const;
+	const TArray<FNEventRecord> GetEvents() const;
+
+	const TSharedPtr<NEventInterface> GetEvent(FString _UID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
@@ -149,34 +156,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
 
+	// @formatter:off
 	/**
 	 * Adds an event to the timeline object,
 	 * it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
 	 *
 	 * @param Event - An Event object you want to saved to the associated timeline.
 	 */
-	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add an Event to the NansTimeline", Keywords = "Event add"), Category = "NansTimeline|Manager")
 	virtual void AddEvent(UNEventDecorator* Event);
-	// clang-format on
 
 	/**
 	 * A pass-through for UNTimelineDecorator::CreateNewEvent():
 	 * @copydoc UNTimelineDecorator::CreateNewEvent()
 	 */
-	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create a New Event for the NansTimeline", Keywords = "Event create"), Category = "NansTimeline|Manager")
 	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
-	// clang-format on
 
 	/**
 	 * Attaches the event to the timeline stream +
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
-	// clang-format off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
 	UNEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
-	// clang-format on
+	// @formatter:on
 
 protected:
 	/** the timeline associated to this manager. */

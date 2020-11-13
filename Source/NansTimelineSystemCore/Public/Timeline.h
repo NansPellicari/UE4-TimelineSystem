@@ -29,19 +29,6 @@ class NANSTIMELINESYSTEMCORE_API NTimeline : public NTimelineInterface
 
 public:
 	/**
-	 * An event tuple is an event representation,
-	 * it allows to keep important details trace in memory.
-	 * 0: Event object
-	 * 1: attached time
-	 * 2: delay
-	 * 3: duration
-	 * 4: label
-	 * 5: expired time
-	 * 6: UId
-	 */
-	using FEventTuple = TTuple<TSharedPtr<NEventInterface>, float, const float, const float, const FName, float, const FString>;
-
-	/**
 	 * A Timeline can't exists with a manager.
 	 * This contructor garanties the necessary coupling & behavior consistancy.
 	 *
@@ -84,7 +71,7 @@ public:
 	virtual float GetCurrentTime() const override;
 
 	/** Returns the FEventTuple collection */
-	const TArray<NTimeline::FEventTuple> GetEvents() const;
+	virtual const TArray<FNEventSave> GetEvents() const override;
 
 	virtual void SetLabel(FName _Label) override;
 	virtual FName GetLabel() const override;
@@ -95,7 +82,7 @@ public:
 	 *
 	 * @param Tuple - Data which will be added to the Events TArray
 	 */
-	void SetTuple(NTimeline::FEventTuple Tuple);
+	// void SetTuple(NTimeline::FEventTuple Tuple);
 
 	/**
 	 * This completely reset every events.
@@ -108,6 +95,10 @@ public:
 	 * It uses internally GetTickInterval() to increment time.
 	 */
 	virtual void NotifyTick() override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
+	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() override;
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
 
 protected:
 	/** The name of this timeline */
@@ -160,5 +151,9 @@ private:
 	 * > Important notes:
 	 * Inside the tuple, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
 	 */
-	TArray<FEventTuple> Events;
+	TArray<FNEventSave> Events;
+	TMap<FString, TSharedPtr<NEventInterface>> EventsObjects;
+
+	/** only used for serialization */
+	int32 EventsCount;
 };

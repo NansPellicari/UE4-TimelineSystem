@@ -15,13 +15,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Event/EventDecorator.h"
-#include "NansTimelineSystemCore/Public/EventInterface.h"
+#include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
 #include "EventRecord.generated.h"
 
-class UNTimelineManagerDecorator;
-class UNTimelineDecorator;
+class NTimelineInterface;
 
 /**
  * This struct is both a pass-through for NTimeline::FEventTuple
@@ -32,52 +30,39 @@ struct NANSTIMELINESYSTEMUE4_API FNEventRecord
 {
 	GENERATED_USTRUCT_BODY()
 
+public:
 	FNEventRecord() {}
+	FNEventRecord(const FNEventSave& Record)
+	{
+		UID = Record.UID;
+		AttachedTime = Record.AttachedTime;
+		Delay = Record.Delay;
+		Duration = Record.Duration;
+		LocalTime = Record.LocalTime;
+		StartedAt = Record.StartedAt;
+		Label = Record.Label;
+		ExpiredTime = Record.ExpiredTime;
+	}
 
-	/** The UNEventDecorator object */
-	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
-	UNEventDecorator* Event = nullptr;
-	/** The UNEventDecorator UId, it can be used to create consistant link to an object that envelops and EventDecorator */
-	UPROPERTY(SkipSerialization)
-	FString UId = FString("");
+	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	FString UID = FString("");
 	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float AttachedTime = -1.f;
+	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
+	float StartedAt = -1.f;
 	/** The delay before starting in secs */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float Delay = -1.f;
 	/** The duration this event lives in secs (0 means inderterminate) */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float Duration = -1.f;
+	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
+	float LocalTime = -1.f;
 	/** The name of the event */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	FName Label = NAME_None;
 	/** Expiration time of this event in secs (0 means can't expired)) */
 	UPROPERTY(SkipSerialization, BlueprintReadOnly, EditInstanceOnly)
 	float ExpiredTime = -1.f;
-	/** This is used only for serialization, it allow to re-instance the object on load */
-	UPROPERTY(SkipSerialization)
-	FString EventClassName = FString("");
-
-	/** It manages Event object saving and loading */
-	void Serialize(FArchive& Ar, UNTimelineDecorator* Timeline);
-
-	/** Just save basic data, see FNEventRecord::Serialize() to see how Event object is managed */
-	friend FArchive& operator<<(FArchive& Ar, FNEventRecord& Record)
-	{
-		if (Ar.IsSaving())
-		{
-			Record.EventClassName = Record.Event != nullptr ? Record.Event->GetClass()->GetPathName() : FString("");
-		}
-
-		Ar << Record.UId;
-		Ar << Record.EventClassName;
-		Ar << Record.AttachedTime;
-		Ar << Record.Delay;
-		Ar << Record.Duration;
-		Ar << Record.Label;
-		Ar << Record.ExpiredTime;
-
-		return Ar;
-	};
 };

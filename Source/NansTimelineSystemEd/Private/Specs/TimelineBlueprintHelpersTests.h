@@ -18,8 +18,9 @@
 #include "Engine/EngineBaseTypes.h"
 #include "Engine/EngineTypes.h"
 #include "EngineGlobals.h"
-#include "Manager/RealLifeTimelineManager.h"
 #include "Misc/AutomationTest.h"
+#include "NansTimelineSystemUE4/Public/Manager/RealLifeTimelineManager.h"
+#include "NansTimelineSystemUE4/Public/TimelineFactory.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
@@ -27,15 +28,14 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
-#include "TimelineFactory.h"
 #include "TimerManager.h"
 
 // TODO make specs instead of these
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineFactoryTest,
 "Nans.TimelineSystem.UE4.TimelineFactory.Test.CanCreateNewTimeline", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineFactoryTest::RunTest(const FString& Parameters)
 {
 	// const double StartTime = FPlatformTime::Seconds();

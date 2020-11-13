@@ -20,40 +20,6 @@
 #include "EventDecorator.generated.h"
 
 /**
- * Factory functions to help creating event decorators.
- */
-namespace UNEventDecoratorFactory
-{
-	/**
-	 * This will instanciate a new Event decorator based on class UNEventDecorator.
-	 * It uses UNEventDecorator::Init() function too to have a fully initialized object.
-	 *
-	 * @param Outer - The UObject outer
-	 * @param Class - A subclass of UNEventDecorator
-	 * @param Name - (optionnal) the name you want this event is called, it gives a generated ones if not provided
-	 * @param Flags - Flag for GC management
-	 */
-	template <typename T>
-	static T* CreateObject(UObject* Outer,
-		const TSubclassOf<UNEventDecorator> Class,
-		FName Name = NAME_None,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
-	{
-		static int32 Counter;
-		if (Name == NAME_None)
-		{
-			FString EvtLabel = FString::Format(TEXT("EventDecorator_{0}"), {++Counter});
-			Name = FName(*EvtLabel);
-		}
-
-		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-		Obj->Init(Name);
-		return Obj;
-	}
-
-}	 // namespace UNEventDecoratorFactory
-
-/**
  * Base abstract class to create NEventInterface decorators (Blueprint or c++).
  *
  * For a simple usage with blueprint:
@@ -65,6 +31,8 @@ namespace UNEventDecoratorFactory
  * - This class should only manage specifics behaviors related to the engine
  * (serialization, blueprint's specifics functionnalities, etc...)
  * - NEventInterface's derivation: all your core functionnalities
+ *
+ * TODO refacto: remove the NEventInterface dependency
  */
 UCLASS(Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNEventDecorator : public UObject, public NEventInterface
@@ -113,6 +81,9 @@ public:
 	virtual void SetDelay(float _Delay) override;
 	virtual void Clear() override;
 	virtual FNEventDelegate& OnStart() override;
+	// TODO refacto: Should be removed when NEventInterface dependency removed
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
 	// END NEventInterface overrides
 
 	// BEGIN UObject overrides
@@ -127,7 +98,7 @@ public:
 	 * This is where the Core object is instanciated.
 	 * You should override this to instanciate your derived core object.
 	 */
-	virtual void Init(FName _Label, FString UId = FString(""));
+	virtual void Init(FName _Label);
 
 	/**
 	 * This is used by other decorators which need to pass the core object to their own.
@@ -145,9 +116,4 @@ protected:
 private:
 	// Use for saving
 	FName Label = NAME_None;
-	float LocalTime = 0.f;
-	float StartedAt = -1.f;
-	float Duration = 0.f;
-	float Delay = 0.f;
-	FString Id = FString("");
 };

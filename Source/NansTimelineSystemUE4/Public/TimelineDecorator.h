@@ -32,6 +32,8 @@ class NTimeline;
  * It manages:
  * - serialization
  * - attachment of UNEventDecorator object to the embeded NTimeline
+ *
+ * TODO refacto: remove NTimelineInterface dependency and use Proxy to let a NTimelineInterface & UNTimelineDecorator live together
  */
 UCLASS()
 class NANSTIMELINESYSTEMUE4_API UNTimelineDecorator : public UObject, public NTimelineInterface
@@ -55,26 +57,13 @@ public:
 	virtual void SetLabel(FName _Label) override;
 	virtual FName GetLabel() const;
 	virtual void NotifyTick() override;
-
-	/**
-	 * This object should works only with Decorators.
-	 * This method is reserved for core objects.
-	 * @see UNTimelineDecorator::Attached(UNEventDecorator* Event)
-	 */
-	virtual bool Attached(TSharedPtr<NEventInterface> Event) override
-	{
-		return Timeline->Attached(Event);
-	}
-
-	/**
-	 * This object should works only with Decorators.
-	 * This method is reserved for core objects.
-	 * @see UNTimelineDecorator::Attached(UNEventDecorator* Event)
-	 */
-	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override
-	{
-		Timeline->Attached(EventsCollection);
-	}
+	virtual bool Attached(TSharedPtr<NEventInterface> Event) override;
+	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
+	virtual const TArray<FNEventSave> GetEvents() const override;
+	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() override;
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
 	// END NTimelineInterface overrides
 
 	// BEGIN UObject overrides
@@ -95,13 +84,13 @@ public:
 	 * It will save data in the EventStore array for serialization and save game.
 	 * @param Event - The decorator event
 	 */
-	virtual void AddEvent(UNEventDecorator* Event);
+	// virtual void AddEvent(UNEventDecorator* Event);
 
 	/** This retrieve the EventStore */
-	const TArray<FNEventRecord> GetAdaptedEvents() const;
+	// const TArray<FNEventRecord> GetAdaptedEvents() const;
 
 	/** Retrieve an event record by its Id */
-	FNEventRecord* GetEventRecord(FString UId);
+	// FNEventRecord* GetEventRecord(FString UId);
 
 	/**
 	 * A delegate attached to NTimeline::EventExpired.
@@ -111,7 +100,7 @@ public:
 	 * @param ExpiredTime - The time when this event expires
 	 * @param Index - The index of the NTimeline::Events array
 	 */
-	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
+	// void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 
 	virtual FNTimelineEventDelegate& OnEventExpired() override;
 
@@ -136,28 +125,16 @@ protected:
 	 * @param Index - The index of the NTimeline::Events array
 	 * @param Record - The record you want to synchronize.
 	 */
-	virtual void RefreshRecordData(const int32& Index);
+	// virtual void RefreshRecordData(const int32& Index);
 
 	/** It is used to convert data for core NTimelineInterface object */
-	static NTimeline::FEventTuple ConvertRecordToTuple(FNEventRecord const Record);
+	// static NTimeline::FEventTuple ConvertRecordToTuple(FNEventRecord const Record);
 
 private:
-	/**
-	 * It is a pass-through for NTimelineInterface NTimeline::FEventTuple
-	 * and allows to save UNEventDecorator's specializations data.
-	 */
-	UPROPERTY(SaveGame)
-	TArray<FNEventRecord> EventStore;
+	UPROPERTY()
+	TArray<FString> StoreEventsUID;
 
-	/** This property is used only for serialization */
-	UPROPERTY(SaveGame)
-	FName Label;
-
-	/** This property is used only for serialization */
-	UPROPERTY(SaveGame)
-	float CurrentTime;
-
-	/** This property is used only for serialization */
-	UPROPERTY(SaveGame)
-	float TickInterval;
+	/** this to save object for GC... */
+	UPROPERTY()
+	TArray<UNEventDecorator*> GCEvents;
 };

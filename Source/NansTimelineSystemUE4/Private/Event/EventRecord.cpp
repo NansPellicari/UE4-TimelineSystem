@@ -14,18 +14,4 @@
 
 #include "Event/EventRecord.h"
 
-#include "TimelineDecorator.h"
-
-void FNEventRecord::Serialize(FArchive& Ar, UNTimelineDecorator* Timeline)
-{
-	if (Ar.IsSaving() && Event != nullptr)
-	{
-		Event->Serialize(Ar);
-	}
-	if (Ar.IsLoading() && EventClassName != FString(""))
-	{
-		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *EventClassName);
-		Event = Timeline->CreateNewEvent(Class, Label);
-		Event->Serialize(Ar);
-	}
-}
+#include "NansTimelineSystemCore/Public/Timeline.h"

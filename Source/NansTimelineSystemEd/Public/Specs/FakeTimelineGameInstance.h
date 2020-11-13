@@ -2,14 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "NansTimelineSystemUE4/Public/TimelineClient.h"
+#include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeGameInstance.h"
-#include "TimelineClient.h"
-#include "TimelineGameInstance.h"
 
 #include "FakeTimelineGameInstance.generated.h"
 
 UCLASS(NotBlueprintable, NotPlaceable)
-class NANSTIMELINESYSTEMUE4_API UNFakeTimelineGameInstance : public UFakeGameInstance, public INTimelineGameInstance
+class NANSTIMELINESYSTEMED_API UNFakeTimelineGameInstance : public UFakeGameInstance, public INTimelineGameInstance
 {
 	GENERATED_BODY()
 public:

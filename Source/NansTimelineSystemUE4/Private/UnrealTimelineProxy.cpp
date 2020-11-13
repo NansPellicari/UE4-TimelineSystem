@@ -16,24 +16,11 @@
 
 bool NUnrealTimelineProxy::Attached(TSharedPtr<NEventInterface> Event)
 {
-	bool bIsAttached = Timeline.Attached(Event);
-	if (bIsAttached)
-	{
-		NUnrealEventProxy* Proxy = dynamic_cast<NUnrealEventProxy*>(Event.Get());
-		checkf(Proxy != nullptr,
-			TEXT("The event %s should be wrapped by a UnrealEventProxy before being saved in a timeline"),
-			*Event->GetEventLabel().ToString());
-
-		Timeline.AddEvent(&Proxy->GetUnrealObject());
-	}
-	return bIsAttached;
+	return Timeline.Attached(Event);
 }
 void NUnrealTimelineProxy::Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection)
 {
-	for (auto Event : EventsCollection)
-	{
-		Attached(EventsCollection);
-	}
+	return Timeline.Attached(EventsCollection);
 }
 void NUnrealTimelineProxy::SetTickInterval(float _TickInterval)
 {
@@ -67,7 +54,23 @@ FNTimelineEventDelegate& NUnrealTimelineProxy::OnEventExpired()
 {
 	return Timeline.OnEventExpired();
 }
-UNTimelineDecorator* NUnrealTimelineProxy::GetUnrealObject()
+void NUnrealTimelineProxy::PreDelete()
 {
-	return &Timeline;
+	Timeline.ConditionalBeginDestroy();
+}
+void NUnrealTimelineProxy::Archive(FArchive& Ar)
+{
+	Timeline.Serialize(Ar);
+}
+const TArray<FNEventSave> NUnrealTimelineProxy::GetEvents() const
+{
+	return Timeline.GetEvents();
+}
+TMap<FString, TSharedPtr<NEventInterface>> NUnrealTimelineProxy::GetEventObjects()
+{
+	return Timeline.GetEventObjects();
+}
+TSharedPtr<NEventInterface> NUnrealTimelineProxy::GetEvent(FString _UID)
+{
+	return Timeline.GetEvent(_UID);
 }

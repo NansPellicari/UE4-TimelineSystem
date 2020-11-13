@@ -54,6 +54,8 @@ public:
 	virtual void NotifyAddTime(float NewTime) override;
 	virtual void Clear() override;
 	virtual FNEventDelegate& OnStart() override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 
 protected:
 	FName Label = NAME_None;

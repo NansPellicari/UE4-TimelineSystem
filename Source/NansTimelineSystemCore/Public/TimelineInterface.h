@@ -19,6 +19,39 @@
 
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FNTimelineEventDelegate, TSharedPtr<NEventInterface>, const float&, const int32&);
 
+struct NANSTIMELINESYSTEMCORE_API FNEventSave
+{
+	FNEventSave() {}
+	FNEventSave(FString _UID, float _AttachedTime, float _Delay, float _Duration, FName _Label, float _ExpiredTime)
+		: UID(_UID), AttachedTime(_AttachedTime), Delay(_Delay), Duration(_Duration), Label(_Label), ExpiredTime(_ExpiredTime)
+	{
+	}
+	FString UID;
+	float AttachedTime = -1.f;
+	float Delay = 0.f;
+	float Duration = 0.f;
+	FName Label = NAME_None;
+	float ExpiredTime;
+	float StartedAt = -1.f;
+	float LocalTime = 0.f;
+	// TODO add this possiblity later
+	// TArray<uint8> ExtraData
+
+	friend FArchive& operator<<(FArchive& Ar, FNEventSave& Record)
+	{
+		Ar << Record.UID;
+		Ar << Record.AttachedTime;
+		Ar << Record.Delay;
+		Ar << Record.Duration;
+		Ar << Record.Label;
+		Ar << Record.ExpiredTime;
+		Ar << Record.LocalTime;
+		Ar << Record.StartedAt;
+
+		return Ar;
+	};
+};
+
 /**
  * Its goal is to saved events and place them in time.
  * It works as a Time & Event container.
@@ -61,4 +94,11 @@ public:
 	virtual void NotifyTick() = 0;
 	/** @returns a FNTimelineEventDelegate ref which is broadcasted when an event expires. */
 	virtual FNTimelineEventDelegate& OnEventExpired() = 0;
+
+	virtual const TArray<FNEventSave> GetEvents() const = 0;
+	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() = 0;
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) = 0;
+
+	virtual void PreDelete() = 0;
+	virtual void Archive(FArchive& Ar) = 0;
 };
