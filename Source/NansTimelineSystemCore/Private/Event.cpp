@@ -35,6 +35,17 @@ NEvent::NEvent(FName _Label, FString _UId)
 	}
 }
 
+NEvent::NEvent(FNEventSave Record)
+{
+	UId = Record.UID;
+	Delay = Record.Delay;
+	Duration = Record.Duration;
+	LocalTime = Record.LocalTime;
+	StartedAt = Record.StartedAt;
+	Label = Record.Label;
+	bActivated = Record.ExpiredTime <= 0.f;
+}
+
 bool NEvent::IsExpired() const
 {
 	return !bActivated || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
@@ -54,6 +65,7 @@ float NEvent::GetDuration() const
 {
 	return Duration;
 }
+
 float NEvent::GetDelay() const
 {
 	return Delay;
@@ -128,15 +140,4 @@ void NEvent::Clear()
 void NEvent::PreDelete()
 {
 	Clear();
-}
-
-void NEvent::Archive(FArchive& Ar)
-{
-	Ar << UId;
-	Ar << Label;
-	Ar << LocalTime;
-	Ar << StartedAt;
-	Ar << Duration;
-	Ar << Delay;
-	Ar << bActivated;
 }

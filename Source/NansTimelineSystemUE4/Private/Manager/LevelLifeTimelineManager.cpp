@@ -90,14 +90,14 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 
 void UNLevelLifeTimelineManager::Clear()
 {
-	Super::Clear();
 	FWorldDelegates::LevelRemovedFromWorld.RemoveAll(this);
 	FWorldDelegates::LevelAddedToWorld.RemoveAll(this);
 
 #if WITH_EDITOR
-	if (GetWorld() != nullptr)
+	if (IsValid(GetWorld()))
 	{
 		GetWorld()->OnSelectedLevelsChanged().RemoveAll(this);
 	}
 #endif
+	Super::Clear();
 }

@@ -16,6 +16,7 @@
 
 #include "CoreMinimal.h"
 
+class NEventInterface;
 class NTimelineInterface;
 
 /** Enum for the NTimelineManager::State */
@@ -78,6 +79,31 @@ public:
 
 	/** Get the coupled NTimelineInterface */
 	TSharedPtr<NTimelineInterface> GetTimeline() const;
+
+	/**
+	* Adds an event to the timeline object,
+	* it works as a pass-through for UNTimelineDecorator::Attached(UNEventView* Event)
+	*
+	* @param Event - An Event object you want to saved to the associated timeline.
+	*/
+	virtual void AddEvent(TSharedPtr<NEventInterface> Event);
+
+	/**
+	* Creates a new Event and use this timeline as the outer for this new object.
+	*
+	* @param Class - The derived class of your choice
+	* @param Name - The label of the event, can be usefull for user stats & feedback
+	* @param Duration - The time this event is active, 0 to almost INFINI (0 means undeterminated time)
+	* @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
+	*/
+	virtual TSharedPtr<NEventInterface> CreateNewEvent(FName Name, float Duration = 0.f, float Delay = 0.f) const;
+
+	TSharedPtr<NEventInterface> GetEvent(FString _UID);
+	const TArray<TSharedPtr<NEventInterface>> GetEvents() const;
+
+
+	virtual void PreDelete();
+	virtual void Archive(FArchive& Ar);
 
 protected:
 	/** The interval retrieved from the timeline. */

@@ -18,6 +18,7 @@
 #include "EventInterface.h"
 #include "TimelineInterface.h"
 
+struct FNEventSave;
 class NTimelineManager;
 
 /**
@@ -70,19 +71,8 @@ public:
 	virtual void SetCurrentTime(float _CurrentTime) override;
 	virtual float GetCurrentTime() const override;
 
-	/** Returns the FEventTuple collection */
-	virtual const TArray<FNEventSave> GetEvents() const override;
-
 	virtual void SetLabel(FName _Label) override;
 	virtual FName GetLabel() const override;
-
-	/**
-	 * This should be used only to set data from an archive (save game).
-	 * Prefer NTimeline::Attached() methods to set data during runtime.
-	 *
-	 * @param Tuple - Data which will be added to the Events TArray
-	 */
-	// void SetTuple(NTimeline::FEventTuple Tuple);
 
 	/**
 	 * This completely reset every events.
@@ -97,7 +87,7 @@ public:
 	virtual void NotifyTick() override;
 	virtual void PreDelete() override;
 	virtual void Archive(FArchive& Ar) override;
-	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() override;
+	virtual TArray<TSharedPtr<NEventInterface>> GetEvents() override;
 	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
 
 protected:
@@ -118,7 +108,7 @@ protected:
 	/**
 	 * This to allow inherited adapters to have a default constructor
 	 */
-	NTimeline(){};
+	NTimeline() {};
 
 	/** In case of specialisation needs to avoid the attach process in some cases */
 	virtual bool BeforeOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime)
@@ -151,9 +141,6 @@ private:
 	 * > Important notes:
 	 * Inside the tuple, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
 	 */
-	TArray<FNEventSave> Events;
-	TMap<FString, TSharedPtr<NEventInterface>> EventsObjects;
-
-	/** only used for serialization */
-	int32 EventsCount;
+	TArray<FNEventSave> SavedEvents;
+	TMap<FString, TSharedPtr<NEventInterface>> Events;
 };

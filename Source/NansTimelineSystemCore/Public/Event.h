@@ -17,6 +17,7 @@
 #include "CoreMinimal.h"
 #include "EventInterface.h"
 
+
 /**
  * @see NEventInterface
  */
@@ -28,9 +29,10 @@ public:
 
 	/** Ctor to gives directly a name for this event and an Id (optionnal). */
 	NEvent(FName _Label, FString _UId = FString(""));
+	NEvent(FNEventSave Record);
 
 	/** Default dtor */
-	virtual ~NEvent(){};
+	virtual ~NEvent() {};
 
 	FNEventDelegate EventStart;
 	/**
@@ -55,7 +57,6 @@ public:
 	virtual void Clear() override;
 	virtual FNEventDelegate& OnStart() override;
 	virtual void PreDelete() override;
-	virtual void Archive(FArchive& Ar) override;
 
 protected:
 	FName Label = NAME_None;

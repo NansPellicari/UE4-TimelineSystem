@@ -14,16 +14,12 @@
 
 #include "Manager/TimelineManagerDecorator.h"
 
-#include "Event/EventDecorator.h"
-#include "Event/UnrealEventProxy.h"
+#include "Event/EventView.h"
 #include "TimerManager.h"
-#include "UnrealTimelineProxy.h"
 
 UNTimelineManagerDecorator::UNTimelineManagerDecorator()
 {
-	MyTimeline = CreateDefaultSubobject<UNTimelineDecorator>(FName(TEXT("MyTimeline")));
-	MyTimeline->Init(this);
-	Timeline = MakeShareable(new NUnrealTimelineProxy(*MyTimeline));
+	Timeline = MakeShareable(new NTimeline(static_cast<NTimelineManager*>(this), FName(TEXT("MyTimeline"))));
 }
 
 void UNTimelineManagerDecorator::Init(float _TickInterval, FName _Label)
@@ -59,18 +55,23 @@ void UNTimelineManagerDecorator::SetTickInterval(float _TickInterval)
 	NTimelineManager::SetTickInterval(_TickInterval);
 }
 
-const TSharedPtr<NEventInterface> UNTimelineManagerDecorator::GetEvent(FString _UID) const
+const TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
 {
-	return Timeline->GetEvent(_UID);
-}
-const TArray<FNEventRecord> UNTimelineManagerDecorator::GetEvents() const
-{
-	TArray<FNEventRecord> EventRecords;
-	for (auto& Event : Timeline->GetEvents())
+	TArray<UNEventView*> EventRecords;
+	for (auto& Event : GetEvents())
 	{
-		EventRecords.Add(FNEventRecord(Event));
+		auto EventView = NewObject<UNEventView>();
+		EventView->Init(Event);
+		EventRecords.Add(EventView);
 	}
 	return EventRecords;
+}
+
+UNEventView* UNTimelineManagerDecorator::GetEventView(FString _UID)
+{
+	auto Event = NewObject<UNEventView>();
+	Event->Init(GetEvent(_UID));
+	return Event;
 }
 
 FName UNTimelineManagerDecorator::GetLabel() const
@@ -78,47 +79,25 @@ FName UNTimelineManagerDecorator::GetLabel() const
 	return Timeline->GetLabel();
 }
 
-void UNTimelineManagerDecorator::AddEvent(UNEventDecorator* Event)
-{
-	Timeline->Attached(MakeShareable(new NUnrealEventProxy(Event)));
-}
 
-UNEventDecorator* UNTimelineManagerDecorator::CreateNewEvent(
-	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
+void UNTimelineManagerDecorator::CreateAndAddNewEvent(
+	FName Name, float Duration, float Delay)
 {
-	if (!IsValid(MyTimeline)) return nullptr;
-	return MyTimeline->CreateNewEvent(Class, Name, Duration, Delay);
-}
+	TSharedPtr<NEventInterface> Object = CreateNewEvent(Name, Duration, Delay);
+	if (!Object.IsValid()) return;
 
-UNEventDecorator* UNTimelineManagerDecorator::CreateAndAddNewEvent(
-	TSubclassOf<UNEventDecorator> Class, FName Name, float Duration, float Delay)
-{
-	UNEventDecorator* Object = CreateNewEvent(Class, Name, Duration, Delay);
-	if (Object == nullptr) return nullptr;
-
-	AddEvent(Object);
-	return Object;
+	NTimelineManager::AddEvent(Object);
 }
 
 void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 {
 	// Thanks to the UE4 serializing system, this will serialize all uproperty with "SaveGame"
 	Super::Serialize(Ar);
-
-	if (Timeline.IsValid())
-	{
-		Timeline->Archive(Ar);
-	}
-
-	Ar << State;
-	Ar << TickInterval;
+	Archive(Ar);
 }
 
 void UNTimelineManagerDecorator::BeginDestroy()
 {
-	if (Timeline.IsValid())
-	{
-		Timeline->PreDelete();
-	}
+	PreDelete();
 	Super::BeginDestroy();
 }

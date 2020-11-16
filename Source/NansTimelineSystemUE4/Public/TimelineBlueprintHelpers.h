@@ -21,7 +21,7 @@
 #include "TimelineBlueprintHelpers.generated.h"
 
 class UNTimelineManagerDecorator;
-class UNEventDecorator;
+class UNEventView;
 
 /**
  * A simple Blueprint Library class to manage Timeline creation.

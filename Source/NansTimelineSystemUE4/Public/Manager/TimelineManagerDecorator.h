@@ -18,11 +18,11 @@
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineManager.h"
-#include "TimelineDecorator.h"
 
 #include "TimelineManagerDecorator.generated.h"
 
-class NEventDecorator;
+struct FNEventRecord;
+class UNEventView;
 
 /**
  * This class is a factory to managed properly UNTimelineManagerDecorator instanciation.
@@ -140,14 +140,11 @@ public:
 	virtual void BeginDestroy() override;
 	// END UObject overrides
 
-	/**
-	 * Get the events list.
-	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
-	 */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	const TArray<FNEventRecord> GetEvents() const;
+	const TArray<UNEventView*> GetEventViews() const;
 
-	const TSharedPtr<NEventInterface> GetEvent(FString _UID) const;
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	UNEventView* GetEventView(FString _UID);
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
@@ -158,33 +155,14 @@ public:
 
 	// @formatter:off
 	/**
-	 * Adds an event to the timeline object,
-	 * it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
-	 *
-	 * @param Event - An Event object you want to saved to the associated timeline.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add an Event to the NansTimeline", Keywords = "Event add"), Category = "NansTimeline|Manager")
-	virtual void AddEvent(UNEventDecorator* Event);
-
-	/**
-	 * A pass-through for UNTimelineDecorator::CreateNewEvent():
-	 * @copydoc UNTimelineDecorator::CreateNewEvent()
-	 */
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create a New Event for the NansTimeline", Keywords = "Event create"), Category = "NansTimeline|Manager")
-	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
-
-	/**
-	 * Attaches the event to the timeline stream +
+	 * Attaches the event to the timeline stream
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
+	void CreateAndAddNewEvent(FName Name, float Duration = 0, float Delay = 0);
 	// @formatter:on
 
 protected:
-	/** the timeline associated to this manager. */
-	UPROPERTY(SkipSerialization)
-	UNTimelineDecorator* MyTimeline;
 
 	/**
 	 * Protected ctor to force instanciation with CreateObject() methods (factory methods).
