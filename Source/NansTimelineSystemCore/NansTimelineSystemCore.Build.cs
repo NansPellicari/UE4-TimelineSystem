@@ -14,7 +14,6 @@
 
 using UnrealBuildTool;
 
-
 public class NansTimelineSystemCore : ModuleRules
 {
 	public NansTimelineSystemCore(ReadOnlyTargetRules Target) : base(Target)
@@ -26,16 +25,13 @@ public class NansTimelineSystemCore : ModuleRules
 			{
 				"Core",
 			}
-			);
-
+		);
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"CoreUObject",
 			}
-			);
-
-
+		);
 	}
 }

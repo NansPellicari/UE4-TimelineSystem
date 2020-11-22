@@ -18,12 +18,47 @@
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FNEventDelegate, class NEventInterface*, const float&);
 
+struct NANSTIMELINESYSTEMCORE_API FNEventSave
+{
+	FNEventSave() {}
+
+	FNEventSave(FString _UID, float _AttachedTime, float _Delay, float _Duration, FName _Label, float _ExpiredTime)
+		: UID(_UID), AttachedTime(_AttachedTime), Delay(_Delay), Duration(_Duration), Label(_Label),
+		  ExpiredTime(_ExpiredTime) { }
+
+	FString UID;
+	float AttachedTime = -1.f;
+	float Delay = 0.f;
+	float Duration = 0.f;
+	FName Label = NAME_None;
+	float ExpiredTime = -1.f;
+	float StartedAt = -1.f;
+	float LocalTime = 0.f;
+	// TODO add this possiblity later
+	// TArray<uint8> ExtraData
+
+	friend FArchive& operator<<(FArchive& Ar, FNEventSave& Record)
+	{
+		Ar << Record.UID;
+		Ar << Record.AttachedTime;
+		Ar << Record.Delay;
+		Ar << Record.Duration;
+		Ar << Record.Label;
+		Ar << Record.ExpiredTime;
+		Ar << Record.LocalTime;
+		Ar << Record.StartedAt;
+
+		return Ar;
+	};
+};
+
 /**
  * An interface to manage events which can be attached to a timeline.
  */
 class NANSTIMELINESYSTEMCORE_API NEventInterface
 {
 public:
+	virtual ~NEventInterface() {}
 	/** It indicates if the event expired. */
 	virtual bool IsExpired() const = 0;
 	/** Returns the localTime since the events has been attached (- delay) to a timeline */
@@ -90,4 +125,6 @@ public:
 	virtual void Clear() = 0;
 	/** @returns a FNTimelineEventDelegate ref which is broadcasted when an event expires. */
 	virtual FNEventDelegate& OnStart() = 0;
+
+	virtual void PreDelete() = 0;
 };

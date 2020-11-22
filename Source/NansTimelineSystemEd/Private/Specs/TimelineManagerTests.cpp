@@ -30,11 +30,11 @@
 #include "TimerManager.h"
 
 // TODO make specs instead of these
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestCounterIncrease,
 "Nans.TimelineSystem.UE4.TimelineManager.Test.ShouldTickThanksToWorldTimerManager", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -46,7 +46,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	// Begin test
 	{
 		TimelineManager->Play();
-		// clang-format off
+		// @formatter:off
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("Handle should be valid after calling SetTimer"), TimelineManager->TimerHandle.IsValid());
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("TimerExists called with a pending timer"), TimerManager.TimerExists(TimelineManager->TimerHandle));
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("IsTimerActive called with a pending timer"), TimerManager.IsTimerActive(TimelineManager->TimerHandle));
@@ -54,7 +54,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRate called with a pending timer"), (TimerManager.GetTimerRate(TimelineManager->TimerHandle) == TimelineManager->GetTickInterval()));
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerElapsed called with a pending timer"), (TimerManager.GetTimerElapsed(TimelineManager->TimerHandle) == 0.f));
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRemaining called with a pending timer"), (TimerManager.GetTimerRemaining(TimelineManager->TimerHandle) == TimelineManager->GetTickInterval()));
-		// clang-format on
+		// @formatter:on
 
 		// small tick to move the timer from the pending list to the active list, the timer will start counting time after this tick
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
@@ -71,10 +71,10 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestPauseAndPlay, "Nans.TimelineSystem.UE4.TimelineManager.Test.ShouldPauseAndPlay",
 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -110,11 +110,11 @@ bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestTimerManagerPauseAndPlay,
 "Nans.TimelineSystem.UE4.TimelineManager.Test.ShouldPauseAndPlayCauseOfTimerManager", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -150,11 +150,11 @@ bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestTimerManagerGamePause,
 "Nans.TimelineSystem.UE4.TimelineManager.Test.SetGamePauseShouldNotInfluenceTimerManagerAttachedToWorld",
 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -194,11 +194,11 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTimelineTestTimerManagerGamePauseWithController,
 "Nans.TimelineSystem.UE4.TimelineManager.Test.SetGamePauseInfluenceTimerManagerAttachedToWorldSTimerManager",
 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();

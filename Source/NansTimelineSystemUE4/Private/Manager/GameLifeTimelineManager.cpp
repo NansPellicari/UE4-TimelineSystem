@@ -30,12 +30,12 @@ void UNGameLifeTimelineManager::Init(float _TickInterval, FName _Label)
 
 void UNGameLifeTimelineManager::Clear()
 {
-	Super::Clear();
-	if (GetWorld() != nullptr)
+	if (IsValid(GetWorld()))
 	{
 		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 		TimerManager.ClearTimer(TimerHandle);
 	}
 	TimerDelegate.Unbind();
 	TimerHandle.Invalidate();
+	Super::Clear();
 }

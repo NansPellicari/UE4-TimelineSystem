@@ -18,23 +18,22 @@
 #include "Engine/EngineBaseTypes.h"
 #include "Engine/EngineTypes.h"
 #include "EngineGlobals.h"
-#include "Manager/GameLifeTimelineManager.h"
 #include "Misc/AutomationTest.h"
+#include "NansTimelineSystemUE4/Public/Manager/GameLifeTimelineManager.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
-#include "Specs/EventDecoratorFake.h"
 #include "TimerManager.h"
 
 // TODO make specs instead of these
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FGameLifeTimelineManagerTest,
 "Nans.TimelineSystem.UE4.GameLifeTimelineManager.Test.CanPauseAndPlay", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -42,8 +41,13 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
-		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNGameLifeTimelineManager>(
+		FakeObject,
+		1.f,
+		FName("TestTimeline"),
+		EObjectFlags::RF_MarkAsRootSet
+	);
 
 	// Begin test
 	{
@@ -59,19 +63,27 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 2 after timeline manager paused"),
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 2 after timeline manager paused"),
 			TimelineManager->GetCurrentTime(),
-			2.f);
+			2.f
+		);
 		TimelineManager->Play();
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"), TimelineManager->GetCurrentTime(), 3.f);
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"),
+			TimelineManager->GetCurrentTime(),
+			3.f
+		);
 		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 3 after game paused"),
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 3 after game paused"),
 			TimelineManager->GetCurrentTime(),
-			3.f);
+			3.f
+		);
 	}
 	// End test
 
@@ -80,11 +92,11 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FGameLifeTimelineManagerSerializationSameObjTest,
 "Nans.TimelineSystem.UE4.GameLifeTimelineManager.Test.CanSerializeWithTheSameObjectInstance", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -92,8 +104,13 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
-		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNGameLifeTimelineManager>(
+		FakeObject,
+		1.f,
+		FName("TestTimeline"),
+		EObjectFlags::RF_MarkAsRootSet
+	);
 	TimelineManager->Play();
 
 	// Begin test
@@ -107,16 +124,26 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TimelineManager->Init(1.f, FName("ChangeLabel"));	 // try to change label to checks if rewrite with the archive
+		TimelineManager->Init(1.f, FName("ChangeLabel")); // try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager label changed"), TimelineManager->GetLabel(), FName("ChangeLabel"));
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("Timeline manager label changed"),
+			TimelineManager->GetLabel(),
+			FName("ChangeLabel")
+		);
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
 		TimelineManager->Serialize(FromBinary);
 		TEST_EQ(
-			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"), TimelineManager->GetLabel(), FName("TestTimeline"));
+			TEST_TEXT_FN_DETAILS("Timeline manager label reload from archive"),
+			TimelineManager->GetLabel(),
+			FName("TestTimeline")
+		);
 		TEST_EQ(
-			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"), TimelineManager->GetCurrentTime(), 2.f);
+			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"),
+			TimelineManager->GetCurrentTime(),
+			2.f
+		);
 	}
 	// End test
 
@@ -125,11 +152,11 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	return true;
 }
 
-// clang-format off
+// @formatter:off
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FGameLifeTimelineManagerSerializationWithEventsTest,
 "Nans.TimelineSystem.UE4.GameLifeTimelineManager.Test.CanLoadEventsFromDifferentWorld", EAutomationTestFlags::EditorContext |
 EAutomationTestFlags::EngineFilter)
-// clang-format on
+// @formatter:on
 bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString& Parameters)
 {
 	const double StartTime = FPlatformTime::Seconds();
@@ -137,15 +164,20 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
-		FakeObject, 1.f, FName("TestTimeline"), EObjectFlags::RF_MarkAsRootSet);
+	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNGameLifeTimelineManager>(
+		FakeObject,
+		1.f,
+		FName("TestTimeline"),
+		EObjectFlags::RF_MarkAsRootSet
+	);
 	TimelineManager->Play();
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
-		TimelineManager->CreateAndAddNewEvent(UNEventDecoratorFake::StaticClass(), NAME_None);
+		TimelineManager->CreateAndAddNewEvent(NAME_None);
+		TimelineManager->CreateAndAddNewEvent(NAME_None);
+		TimelineManager->CreateAndAddNewEvent(NAME_None);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
 
 		// Save in memory
@@ -156,10 +188,19 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 		NTestWorld::Destroy(World);
 		UWorld* NewWorld = NTestWorld::CreateAndPlay(EWorldType::Game, true, FName("ANewWorld"));
 
-		UFakeObject* NewFakeObject = NewObject<UFakeObject>(NewWorld, FName("MyNewFakeObject"), EObjectFlags::RF_MarkAsRootSet);
+		UFakeObject* NewFakeObject = NewObject<UFakeObject>(
+			NewWorld,
+			FName("MyNewFakeObject"),
+			EObjectFlags::RF_MarkAsRootSet
+		);
 		NewFakeObject->SetMyWorld(NewWorld);
-		UNGameLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<UNGameLifeTimelineManager>(
-			NewFakeObject, 1.f, FName("DiffTimelineLabel"), EObjectFlags::RF_MarkAsRootSet);
+		UNGameLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+			UNGameLifeTimelineManager>(
+			NewFakeObject,
+			1.f,
+			FName("DiffTimelineLabel"),
+			EObjectFlags::RF_MarkAsRootSet
+		);
 
 		// Load from memory
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);

@@ -25,7 +25,10 @@ void UNLevelLifeTimelineManager::Init(float _TickInterval, FName _Label)
 	Super::Init(_TickInterval, _Label);
 	// Save it here cause we clear all datas when level events are triggered.
 	Label = _Label;
+#if WITH_EDITOR
 	GetWorld()->OnSelectedLevelsChanged().AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
+#endif
+
 	// FWorldDelegates::LevelAddedToWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
 	FWorldDelegates::LevelRemovedFromWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
 }
@@ -87,11 +90,14 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 
 void UNLevelLifeTimelineManager::Clear()
 {
-	Super::Clear();
 	FWorldDelegates::LevelRemovedFromWorld.RemoveAll(this);
 	FWorldDelegates::LevelAddedToWorld.RemoveAll(this);
-	if (GetWorld() != nullptr)
+
+#if WITH_EDITOR
+	if (IsValid(GetWorld()))
 	{
 		GetWorld()->OnSelectedLevelsChanged().RemoveAll(this);
 	}
+#endif
+	Super::Clear();
 }

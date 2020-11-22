@@ -18,6 +18,7 @@
 #include "EventInterface.h"
 #include "TimelineInterface.h"
 
+struct FNEventSave;
 class NTimelineManager;
 
 /**
@@ -28,19 +29,6 @@ class NANSTIMELINESYSTEMCORE_API NTimeline : public NTimelineInterface
 	friend class NTimelineManager;
 
 public:
-	/**
-	 * An event tuple is an event representation,
-	 * it allows to keep important details trace in memory.
-	 * 0: Event object
-	 * 1: attached time
-	 * 2: delay
-	 * 3: duration
-	 * 4: label
-	 * 5: expired time
-	 * 6: UId
-	 */
-	using FEventTuple = TTuple<TSharedPtr<NEventInterface>, float, const float, const float, const FName, float, const FString>;
-
 	/**
 	 * A Timeline can't exists with a manager.
 	 * This contructor garanties the necessary coupling & behavior consistancy.
@@ -83,19 +71,8 @@ public:
 	virtual void SetCurrentTime(float _CurrentTime) override;
 	virtual float GetCurrentTime() const override;
 
-	/** Returns the FEventTuple collection */
-	const TArray<NTimeline::FEventTuple> GetEvents() const;
-
 	virtual void SetLabel(FName _Label) override;
 	virtual FName GetLabel() const override;
-
-	/**
-	 * This should be used only to set data from an archive (save game).
-	 * Prefer NTimeline::Attached() methods to set data during runtime.
-	 *
-	 * @param Tuple - Data which will be added to the Events TArray
-	 */
-	void SetTuple(NTimeline::FEventTuple Tuple);
 
 	/**
 	 * This completely reset every events.
@@ -108,6 +85,10 @@ public:
 	 * It uses internally GetTickInterval() to increment time.
 	 */
 	virtual void NotifyTick() override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
+	virtual TArray<TSharedPtr<NEventInterface>> GetEvents() override;
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
 
 protected:
 	/** The name of this timeline */
@@ -127,7 +108,7 @@ protected:
 	/**
 	 * This to allow inherited adapters to have a default constructor
 	 */
-	NTimeline(){};
+	NTimeline() {};
 
 	/** In case of specialisation needs to avoid the attach process in some cases */
 	virtual bool BeforeOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime)
@@ -160,5 +141,6 @@ private:
 	 * > Important notes:
 	 * Inside the tuple, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
 	 */
-	TArray<FEventTuple> Events;
+	TArray<FNEventSave> SavedEvents;
+	TMap<FString, TSharedPtr<NEventInterface>> Events;
 };

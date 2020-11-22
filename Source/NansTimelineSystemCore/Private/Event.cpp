@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event.h"
+#include "NansTimelineSystemCore/Public/Event.h"
 
 NEvent::NEvent()
 {
@@ -35,6 +35,17 @@ NEvent::NEvent(FName _Label, FString _UId)
 	}
 }
 
+NEvent::NEvent(FNEventSave Record)
+{
+	UId = Record.UID;
+	Delay = Record.Delay;
+	Duration = Record.Duration;
+	LocalTime = Record.LocalTime;
+	StartedAt = Record.StartedAt;
+	Label = Record.Label;
+	bActivated = Record.ExpiredTime <= 0.f;
+}
+
 bool NEvent::IsExpired() const
 {
 	return !bActivated || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
@@ -54,6 +65,7 @@ float NEvent::GetDuration() const
 {
 	return Duration;
 }
+
 float NEvent::GetDelay() const
 {
 	return Delay;
@@ -123,4 +135,9 @@ void NEvent::Clear()
 	StartedAt = -1.f;
 	Duration = 0.f;
 	Delay = 0.f;
+}
+
+void NEvent::PreDelete()
+{
+	Clear();
 }

@@ -14,7 +14,14 @@
 
 #include "TimelineManager.h"
 
+
+#include "Event.h"
 #include "Timeline.h"
+#include "Math/UnitConversion.h"
+#include "Programs/UnrealLightmass/Private/ImportExport/3DVisualizer.h"
+#include "Programs/UnrealLightmass/Private/ImportExport/3DVisualizer.h"
+#include "Programs/UnrealLightmass/Private/ImportExport/3DVisualizer.h"
+#include "Programs/UnrealLightmass/Private/ImportExport/3DVisualizer.h"
 
 NTimelineManager::NTimelineManager()
 {
@@ -58,7 +65,7 @@ float NTimelineManager::GetTickInterval() const
 void NTimelineManager::SetTickInterval(float _TickInterval)
 {
 	TickInterval = _TickInterval;
-	if (Timeline != nullptr)
+	if (Timeline.IsValid())
 	{
 		Timeline->SetTickInterval(_TickInterval);
 	}
@@ -77,17 +84,80 @@ void NTimelineManager::Play()
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Played;
 }
+
 void NTimelineManager::Pause()
 {
 	// No reason for a timer to pause without a timeline created
 	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Paused;
 }
+
 void NTimelineManager::Stop()
 {
 	Clear();
 	State = ENTimelineTimerState::Stopped;
 }
+
+void NTimelineManager::AddEvent(TSharedPtr<NEventInterface> Event)
+{
+	if (!Timeline.IsValid()) return;
+	Timeline->Attached(Event);
+}
+
+TSharedPtr<NEventInterface> NTimelineManager::CreateNewEvent(FName Name, float Duration, float Delay) const
+{
+	static int32 Counter;
+	if (!Timeline.IsValid()) return nullptr;
+
+	if (Name == NAME_None)
+	{
+		const FString EvtLabel = FString::Format(TEXT("EventView_{0}"), {++Counter});
+		Name = FName(*EvtLabel);
+	}
+	TSharedPtr<NEvent> Object = MakeShareable(new NEvent(Name));
+	if (Duration > 0)
+	{
+		Object->SetDuration(Duration);
+	}
+	if (Delay > 0)
+	{
+		Object->SetDelay(Delay);
+	}
+
+	return Object;
+}
+
+TSharedPtr<NEventInterface> NTimelineManager::GetEvent(FString _UID)
+{
+	return Timeline->GetEvent(_UID);
+}
+
+const TArray<TSharedPtr<NEventInterface>> NTimelineManager::GetEvents() const
+{
+	return Timeline->GetEvents();
+}
+
+void NTimelineManager::PreDelete()
+{
+	Clear();
+
+	if (Timeline.IsValid())
+	{
+		Timeline->PreDelete();
+	}
+}
+
+void NTimelineManager::Archive(FArchive& Ar)
+{
+	if (Timeline.IsValid())
+	{
+		Timeline->Archive(Ar);
+	}
+
+	Ar << State;
+	Ar << TickInterval;
+}
+
 
 void NTimelineManager::Clear()
 {

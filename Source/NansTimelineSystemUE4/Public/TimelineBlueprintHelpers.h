@@ -21,7 +21,7 @@
 #include "TimelineBlueprintHelpers.generated.h"
 
 class UNTimelineManagerDecorator;
-class UNEventDecorator;
+class UNEventView;
 
 /**
  * A simple Blueprint Library class to manage Timeline creation.
@@ -39,8 +39,8 @@ public:
 	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
 	 * @param Timeline - To allow having a combobox of configured timelines
 	 */
-	// clang-format off
+	// @formatter:off
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "Get a NansTimeline by its configured name", Keywords = "Timeline get"), Category = "NansTimeline")
 	static UNTimelineManagerDecorator* GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline);
-	// clang-format on
+	// @formatter:on
 };
