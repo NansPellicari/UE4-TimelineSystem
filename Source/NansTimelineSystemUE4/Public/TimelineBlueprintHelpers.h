@@ -35,7 +35,7 @@ public:
 	 * This class is a pass-through for the INTimelineGameInstance::GetTimeline() method.
 	 * It provides a standalone node to avoid getting the game instance in your BP graph.
 	 *
-	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerDecorator instanciation, it is implicitly
+	 * @param WorldContextObject - This is as a Outer object for UNTimelineManagerDecorator instantiation, it is implicitly
 	 * provided by kismet library thanks to UFUNCTION meta data "WorldContext"
 	 * @param Timeline - To allow having a combobox of configured timelines
 	 */

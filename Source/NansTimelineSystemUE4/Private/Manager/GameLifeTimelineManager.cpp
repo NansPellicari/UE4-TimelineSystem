@@ -20,9 +20,9 @@
 
 UNGameLifeTimelineManager::UNGameLifeTimelineManager() {}
 
-void UNGameLifeTimelineManager::Init(float _TickInterval, FName _Label)
+void UNGameLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
-	Super::Init(_TickInterval, _Label);
+	Super::Init(InTickInterval, InLabel);
 	TimerDelegate = FTimerDelegate::CreateUObject(this, &UNGameLifeTimelineManager::TimerTick);
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	TimerManager.SetTimer(TimerHandle, TimerDelegate, GetTickInterval(), true);

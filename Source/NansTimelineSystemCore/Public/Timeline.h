@@ -19,32 +19,32 @@
 #include "TimelineInterface.h"
 
 struct FNEventSave;
-class NTimelineManager;
+class FNTimelineManager;
 
 /**
  * @see NTimelineInterface
  */
-class NANSTIMELINESYSTEMCORE_API NTimeline : public NTimelineInterface
+class NANSTIMELINESYSTEMCORE_API FNTimeline final : public INTimelineInterface
 {
-	friend class NTimelineManager;
+	friend class FNTimelineManager;
 
 public:
 	/**
 	 * A Timeline can't exists with a manager.
-	 * This contructor garanties the necessary coupling & behavior consistancy.
+	 * This constructor guaranties the necessary coupling & behavior consistency.
 	 *
-	 * @param TimerManager - Timer which manage all time behavior (tick, pause, stop, play,...)
-	 * @param _Label - (optionnal) The name of this timeline. If not provided it creates a name with a static incremented value.
+	 * @param TimelineManager - Timer which manage all time behavior (tick, pause, stop, play,...)
+	 * @param InLabel - (optional) The name of this timeline. If not provided it creates a name with a static incremented value.
 	 */
-	NTimeline(NTimelineManager* TimerManager, FName _Label = NAME_None);
+	FNTimeline(FNTimelineManager& TimelineManager, const FName& InLabel = NAME_None);
 
 	/** Empty events array */
-	virtual ~NTimeline();
+	virtual ~FNTimeline() override;
 
 	/** @see OnExpired() */
-	FNTimelineEventDelegate EventExpired;
+	FNTimelineEventDelegate EventChanged;
 
-	virtual FNTimelineEventDelegate& OnEventExpired() override;
+	virtual FNTimelineEventDelegate& OnEventChanged() override;
 
 	/**
 	 * It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
@@ -52,26 +52,26 @@ public:
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual bool Attached(TSharedPtr<NEventInterface> Event) override;
+	virtual bool Attached(const TSharedPtr<INEventInterface>& Event) override;
 
 	/**
 	 * Same as Attached(TSharedPtr<NEventInterface> Event) but for a collection of objects.
 	 *
 	 * @see NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 	 */
-	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override;
+	virtual void Attached(const TArray<TSharedPtr<INEventInterface>>& EventsCollection) override;
 
 	/**
 	 * This should be called only by its friend NTimelineManager
 	 * or a decorator to maintain consistency with its manager.
-	 * @copydoc NTimelineInterface::SetTickInterval()
+	 * @copydoc INTimelineInterface::SetTickInterval()
 	 */
-	virtual void SetTickInterval(float _TickInterval) override;
+	virtual void SetTickInterval(const float& InTickInterval) override;
 
-	virtual void SetCurrentTime(float _CurrentTime) override;
+	virtual void SetCurrentTime(const float& InCurrentTime) override;
 	virtual float GetCurrentTime() const override;
 
-	virtual void SetLabel(FName _Label) override;
+	virtual void SetLabel(const FName& InLabel) override;
 	virtual FName GetLabel() const override;
 
 	/**
@@ -81,14 +81,13 @@ public:
 	virtual void Clear() override;
 
 	/**
-	 * @copydoc NTimelineInterface::NotifyTick()
+	 * @copydoc INTimelineInterface::NotifyTick()
 	 * It uses internally GetTickInterval() to increment time.
 	 */
 	virtual void NotifyTick() override;
-	virtual void PreDelete() override;
 	virtual void Archive(FArchive& Ar) override;
-	virtual TArray<TSharedPtr<NEventInterface>> GetEvents() override;
-	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override;
+	virtual TArray<TSharedPtr<INEventInterface>> GetEvents() const override;
+	virtual TSharedPtr<INEventInterface> GetEvent(const FString& InUID) const override;
 
 protected:
 	/** The name of this timeline */
@@ -108,16 +107,7 @@ protected:
 	/**
 	 * This to allow inherited adapters to have a default constructor
 	 */
-	NTimeline() {};
-
-	/** In case of specialisation needs to avoid the attach process in some cases */
-	virtual bool BeforeOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime)
-	{
-		return true;
-	};
-
-	/** If needed to make some stats, analytics, trigger error,... */
-	virtual void AfterOnAttached(TSharedPtr<NEventInterface> Event, const float AttachedTime) {}
+	FNTimeline() {};
 
 	/**
 	 * This is the value required by a timer manager to know
@@ -125,22 +115,22 @@ protected:
 	 * The NotifyTick use this method to add time on CurrentTime
 	 * at each call.
 	 */
-	virtual const float GetTickInterval() const;
+	float GetTickInterval() const;
 
 	/**
 	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
 	 * @warning the Event should be used internally only to avoid nullptr reference
 	 */
-	virtual void OnExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
+	void OnExpired(const TSharedPtr<INEventInterface>& Event, const float& ExpiredTime, const int32& Index);
 
 private:
 	/**
 	 * Collection of each Events attached to the timeline.
-	 * These event tuples are made to keep traces of what happens during game sessions.
+	 * These event structs are made to keep traces of what happens during game sessions.
 	 * They could be used for stats or user feedbacks for instance.
 	 * > Important notes:
-	 * Inside the tuple, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
+	 * Inside the struct, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
 	 */
 	TArray<FNEventSave> SavedEvents;
-	TMap<FString, TSharedPtr<NEventInterface>> Events;
+	TMap<FString, TSharedPtr<INEventInterface>> Events;
 };

@@ -30,7 +30,7 @@
  * - player init a bomb and it should explosed in a determined time.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager : public UNGameLifeTimelineManager
+class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager final : public UNGameLifeTimelineManager
 {
 	GENERATED_BODY()
 public:
@@ -38,13 +38,10 @@ public:
 	 * Attaches event on level changes
 	 * @copydoc UNGameLifeTimelineManager::Init()
 	 */
-	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
+	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 
 	/** This method to clear and reload timeline when level changed */
 	void OnLevelRemoved(ULevel* Level, UWorld* World);
-
-	/** @copydoc OnLevelRemoved */
-	void OnLevelAdded(ULevel* Level, UWorld* World);
 
 	/** @copydoc OnLevelRemoved */
 	void OnLevelChanged();

@@ -25,7 +25,7 @@
 /**
  * This class is used for tests only
  */
-class TimelineManagerTickableOnPauseFake : public NTimelineManager, public FTickableGameObject
+class FNTimelineManagerTickableOnPauseFake final : public FNTimelineManager, public FTickableGameObject
 {
 public:
 	float Counter = 0;
@@ -33,7 +33,7 @@ public:
 	float LastTimeTick = 0;
 	UWorld* World;
 
-	TimelineManagerTickableOnPauseFake(UWorld* _World)
+	FNTimelineManagerTickableOnPauseFake(UWorld* _World)
 	{
 		World = _World;
 	}
@@ -57,7 +57,7 @@ public:
 		return State != ENTimelineTimerState::Played ? false : true;
 	}
 
-	virtual void onNotifyTimelineTickBefore() override
+	virtual void OnNotifyTimelineTickBefore() override
 	{
 		Counter++;
 		UE_LOG(LogTemp, Display, TEXT("%s - tick %f"), ANSI_TO_TCHAR(__FUNCTION__), Counter);

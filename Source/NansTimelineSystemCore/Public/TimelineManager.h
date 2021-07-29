@@ -16,8 +16,8 @@
 
 #include "CoreMinimal.h"
 
-class NEventInterface;
-class NTimelineInterface;
+class INEventInterface;
+class INTimelineInterface;
 
 /** Enum for the NTimelineManager::State */
 enum class ENTimelineTimerState : uint8
@@ -37,24 +37,24 @@ enum class ENTimelineTimerState : uint8
  * @see NTimelineInterface
  * @see NTimeline
  */
-class NANSTIMELINESYSTEMCORE_API NTimelineManager
+class NANSTIMELINESYSTEMCORE_API FNTimelineManager
 {
-	friend class NTimelineInterface;
+	friend class INTimelineInterface;
 
 public:
 	/** Calls the Init() method. */
-	NTimelineManager();
+	FNTimelineManager();
 
 	/** Calls Clear() and release Timeline TSharedPtr */
-	virtual ~NTimelineManager();
+	virtual ~FNTimelineManager();
 
 	/**
-	 * Instanciate the embeded NTimeline
+	 * Instantiate the embedded NTimeline
 	 *
-	 * @param _TickInterval - Interval time between tick in sec
-	 * @param _Label - Name of the Timeline.
+	 * @param InTickInterval - Interval time between tick in sec
+	 * @param InLabel - Name of the Timeline.
 	 */
-	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None);
+	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None);
 
 	/** This pause the timeline ticking */
 	virtual void Pause();
@@ -71,14 +71,14 @@ public:
 	/** Get the actual state. */
 	ENTimelineTimerState GetState() const;
 
-	/** Get the tick interval which a timermanager should use to process */
+	/** Get the tick interval which a timeline manager should use to process */
 	float GetTickInterval() const;
 
 	/** Defined the desired ticking interval */
-	virtual void SetTickInterval(float _TickInterval);
+	virtual void SetTickInterval(const float& InTickInterval);
 
 	/** Get the coupled NTimelineInterface */
-	TSharedPtr<NTimelineInterface> GetTimeline() const;
+	TSharedPtr<INTimelineInterface> GetTimeline() const;
 
 	/**
 	* Adds an event to the timeline object,
@@ -86,22 +86,20 @@ public:
 	*
 	* @param Event - An Event object you want to saved to the associated timeline.
 	*/
-	virtual void AddEvent(TSharedPtr<NEventInterface> Event);
+	virtual void AddEvent(const TSharedPtr<INEventInterface>& Event);
 
 	/**
 	* Creates a new Event and use this timeline as the outer for this new object.
 	*
-	* @param Class - The derived class of your choice
-	* @param Name - The label of the event, can be usefull for user stats & feedback
-	* @param Duration - The time this event is active, 0 to almost INFINI (0 means undeterminated time)
+	* @param Name - The label of the event, can be useful for user stats & feedback
+	* @param Duration - The time this event is active, 0 to almost INFINI (0 means undetermined time)
 	* @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 	*/
-	virtual TSharedPtr<NEventInterface> CreateNewEvent(FName Name, float Duration = 0.f, float Delay = 0.f) const;
+	virtual TSharedPtr<INEventInterface> CreateNewEvent(const FName& Name, const float& Duration = 0.f,
+		const float& Delay = 0.f) const;
 
-	TSharedPtr<NEventInterface> GetEvent(FString _UID);
-	const TArray<TSharedPtr<NEventInterface>> GetEvents() const;
-
-
+	TSharedPtr<INEventInterface> GetEvent(const FString& InUID) const;
+	TArray<TSharedPtr<INEventInterface>> GetEvents() const;
 	virtual void PreDelete();
 	virtual void Archive(FArchive& Ar);
 
@@ -119,14 +117,14 @@ protected:
 	 * This should be used to make some checks right before ticking.
 	 * So here you can manipulate State property to (not)allow ticking.
 	 */
-	virtual void onValidateTimelineTick() {}
+	virtual void OnValidateTimelineTick() {}
 
 	/** This method is call immediately before ticking */
-	virtual void onNotifyTimelineTickBefore() {}
+	virtual void OnNotifyTimelineTickBefore() {}
 
 	/** This method is call immediately after ticking */
-	virtual void onNotifyTimelineTickAfter() {}
+	virtual void OnNotifyTimelineTickAfter() {}
 
 	/** The coupled timeline */
-	TSharedPtr<NTimelineInterface> Timeline;
+	TSharedPtr<INTimelineInterface> Timeline;
 };

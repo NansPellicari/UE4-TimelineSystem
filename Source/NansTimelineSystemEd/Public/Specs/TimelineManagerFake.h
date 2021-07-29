@@ -22,19 +22,19 @@
 /**
  * This class is used for tests only
  */
-class NTimelineManagerFake : public NTimelineManager
+class FNTimelineManagerFake final : public FNTimelineManager
 {
 public:
 	FTimerHandle TimerHandle;
 	FTimerDelegate TimerDelegate;
 	float Counter = 0;
 
-	NTimelineManagerFake()
+	FNTimelineManagerFake()
 	{
-		TimerDelegate = FTimerDelegate::CreateRaw(this, &NTimelineManagerFake::TimerTick);
+		TimerDelegate = FTimerDelegate::CreateRaw(this, &FNTimelineManagerFake::TimerTick);
 	}
 
-	virtual void onNotifyTimelineTickBefore() override
+	virtual void OnNotifyTimelineTickBefore() override
 	{
 		Counter++;
 		UE_LOG(LogTemp, Display, TEXT("%s - tick %f"), ANSI_TO_TCHAR(__FUNCTION__), Counter);

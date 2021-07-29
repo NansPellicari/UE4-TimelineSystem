@@ -20,32 +20,32 @@
 
 #include "Event.h"
 
-NTimeline::NTimeline(NTimelineManager* TimelineTimer, FName _Label)
+FNTimeline::FNTimeline(FNTimelineManager& TimelineManager, const FName& InLabel)
 {
-	static int32 Counter;
-	TimelineTimer->SetTickInterval(GetTickInterval());
-	Label = _Label;
-	if (_Label == NAME_None)
+	TimelineManager.SetTickInterval(GetTickInterval());
+	Label = InLabel;
+	if (InLabel == NAME_None)
 	{
+		static int32 Counter;
 		Label = FName(*FString::Format(TEXT("Timeline_{0}"), {Counter++}));
 	}
 }
 
-NTimeline::~NTimeline()
+FNTimeline::~FNTimeline()
 {
 	SavedEvents.Empty();
-	EventExpired.Clear();
+	EventChanged.Clear();
 }
 
-void NTimeline::Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection)
+void FNTimeline::Attached(const TArray<TSharedPtr<INEventInterface>>& EventsCollection)
 {
-	for (auto Event : EventsCollection)
+	for (TSharedPtr<INEventInterface, ESPMode::Fast> Event : EventsCollection)
 	{
 		Attached(Event);
 	}
 }
 
-bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
+bool FNTimeline::Attached(const TSharedPtr<INEventInterface>& Event)
 {
 	for (int32 Index = 0; Index < SavedEvents.Num(); ++Index)
 	{
@@ -68,9 +68,8 @@ bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 		}
 	}
 
-
-	bool bCanAttached = BeforeOnAttached(Event, CurrentTime);
-	if (bCanAttached)
+	EventChanged.Broadcast(Event, ENTimelineEvent::BeforeAttached, CurrentTime, -1);
+	if (Event->IsAttachable())
 	{
 		FNEventSave Record =
 			FNEventSave(
@@ -81,6 +80,7 @@ bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 				Event->GetEventLabel(),
 				0.f
 			);
+		Event->SetAttachedTime(CurrentTime);
 		if (Event->GetDelay() <= 0.f)
 		{
 			Event->Start(CurrentTime);
@@ -88,12 +88,12 @@ bool NTimeline::Attached(TSharedPtr<NEventInterface> Event)
 		}
 		SavedEvents.Add(Record);
 		Events.Add(Event->GetUID(), Event);
-		AfterOnAttached(Event, CurrentTime);
+		EventChanged.Broadcast(Event, ENTimelineEvent::AfterAttached, CurrentTime, -1);
 	}
-	return bCanAttached;
+	return Event->IsAttachable();
 }
 
-void NTimeline::NotifyTick()
+void FNTimeline::NotifyTick()
 {
 	CurrentTime += GetTickInterval();
 
@@ -106,14 +106,13 @@ void NTimeline::NotifyTick()
 			continue;
 		}
 
-		TSharedPtr<NEventInterface> Event = *Events.Find(EventRecord.UID);
+		TSharedPtr<INEventInterface> Event = *Events.Find(EventRecord.UID);
 
 		// This allow to manage manual expiration elsewhere
 		if (Event->IsExpired() && Event->GetStartedAt() >= 0.f)
 		{
 			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
-			Events.FindAndRemoveChecked(EventRecord.UID);
 			continue;
 		}
 
@@ -139,74 +138,73 @@ void NTimeline::NotifyTick()
 		{
 			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
-			// TODO refacto: should be great to have this here
-			// Event->PreDelete();
-			Events.FindAndRemoveChecked(EventRecord.UID);
 		}
 	}
 }
 
-void NTimeline::OnExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
+void FNTimeline::OnExpired(const TSharedPtr<INEventInterface>& Event, const float& ExpiredTime, const int32& Index)
 {
-	EventExpired.Broadcast(Event, ExpiredTime, Index);
+	Event->SetExpiredTime(ExpiredTime);
+	EventChanged.Broadcast(Event, ENTimelineEvent::Expired, ExpiredTime, Index);
+	Events.FindAndRemoveChecked(Event->GetUID());
 }
 
-FNTimelineEventDelegate& NTimeline::OnEventExpired()
+FNTimelineEventDelegate& FNTimeline::OnEventChanged()
 {
-	return EventExpired;
+	return EventChanged;
 }
 
-const float NTimeline::GetTickInterval() const
+float FNTimeline::GetTickInterval() const
 {
 	return TickInterval;
 }
 
-void NTimeline::SetTickInterval(float _TickInterval)
+void FNTimeline::SetTickInterval(const float& InTickInterval)
 {
-	TickInterval = _TickInterval;
+	TickInterval = InTickInterval;
 }
 
-void NTimeline::SetCurrentTime(float _CurrentTime)
+void FNTimeline::SetCurrentTime(const float& InCurrentTime)
 {
-	CurrentTime = _CurrentTime;
+	CurrentTime = InCurrentTime;
 }
 
-float NTimeline::GetCurrentTime() const
+float FNTimeline::GetCurrentTime() const
 {
 	return CurrentTime;
 }
 
-void NTimeline::SetLabel(FName _Label)
+void FNTimeline::SetLabel(const FName& InLabel)
 {
-	Label = _Label;
+	Label = InLabel;
 }
 
-FName NTimeline::GetLabel() const
+FName FNTimeline::GetLabel() const
 {
 	return Label;
 }
 
-void NTimeline::Clear()
+void FNTimeline::Clear()
 {
 	SavedEvents.Empty();
 	Events.Empty();
 	CurrentTime = 0;
 }
 
-TSharedPtr<NEventInterface> NTimeline::GetEvent(FString _UID)
+TSharedPtr<INEventInterface> FNTimeline::GetEvent(const FString& InUID) const
 {
-	TSharedPtr<NEventInterface> Event;
-	if (Events.Contains(_UID))
+	TSharedPtr<INEventInterface> Event;
+	if (Events.Contains(InUID))
 	{
-		Event = *Events.Find(_UID);
+		Event = *Events.Find(InUID);
 	}
 	else
 	{
 		for (const auto& SavedEvent : SavedEvents)
 		{
-			if (SavedEvent.UID == _UID)
+			if (SavedEvent.UID == InUID)
 			{
-				Event = MakeShareable(new NEvent(SavedEvent));
+				Event = MakeShareable(new FNEvent(SavedEvent));
 				break;
 			}
 		}
@@ -214,20 +212,14 @@ TSharedPtr<NEventInterface> NTimeline::GetEvent(FString _UID)
 	return Event;
 }
 
-TArray<TSharedPtr<NEventInterface>> NTimeline::GetEvents()
+TArray<TSharedPtr<INEventInterface>> FNTimeline::GetEvents() const
 {
-	TArray<TSharedPtr<NEventInterface>> ReturnedEvents;
+	TArray<TSharedPtr<INEventInterface>> ReturnedEvents;
 	Events.GenerateValueArray(ReturnedEvents);
 	return ReturnedEvents;
 }
 
-
-void NTimeline::PreDelete()
-{
-	Clear();
-}
-
-void NTimeline::Archive(FArchive& Ar)
+void FNTimeline::Archive(FArchive& Ar)
 {
 	if (Ar.IsLoading())
 	{
@@ -243,7 +235,7 @@ void NTimeline::Archive(FArchive& Ar)
 	{
 		for (const FNEventSave& EventSaved : SavedEvents)
 		{
-			TSharedPtr<NEventInterface> Event = MakeShareable(new NEvent(EventSaved));
+			TSharedPtr<INEventInterface> Event = MakeShareable(new FNEvent(EventSaved));
 			Attached(Event);
 		}
 	}

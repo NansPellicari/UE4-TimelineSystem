@@ -19,9 +19,9 @@
 
 UNRealLifeTimelineManager::UNRealLifeTimelineManager() {}
 
-void UNRealLifeTimelineManager::Init(float _TickInterval, FName _Label)
+void UNRealLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
-	Super::Init(_TickInterval, _Label);
+	Super::Init(InTickInterval, InLabel);
 	// Real life timer should be always in play state.
 	State = ENTimelineTimerState::Played;
 	if (CreationTime == 0)
@@ -35,7 +35,7 @@ void UNRealLifeTimelineManager::Init(float _TickInterval, FName _Label)
 void UNRealLifeTimelineManager::Tick(float DeltaTime)
 {
 	// this ensure to always get the real time delta (in case of slowmo).
-	float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
+	const float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
 	TotalLifeTime += RealDelta;
 	if (TotalLifeTime - LastTimeTick >= GetTickInterval())
 	{

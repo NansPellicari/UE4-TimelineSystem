@@ -20,7 +20,7 @@
 #include "ConfiguredTimeline.generated.h"
 
 /**
- * This struct to create Configured Timeline and ease Timeline instanciation.
+ * This struct to create Configured Timeline and ease Timeline instantiation.
  * This allows to associated a Timeline Name to a class.
  */
 USTRUCT(BlueprintType)
@@ -28,7 +28,6 @@ struct NANSTIMELINESYSTEMUE4_API FConfiguredTimeline
 {
 	GENERATED_BODY()
 
-public:
 	/**
 	 * This allows to retrieve easily a timeline.
 	 * This is used by the SConfiguredTimelinePin as a combobox.

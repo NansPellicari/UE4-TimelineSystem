@@ -16,7 +16,6 @@
 
 #include "Config/TimelineConfig.h"
 #include "CoreMinimal.h"
-#include "Engine/GameInstance.h"
 
 #include "TimelineClient.generated.h"
 

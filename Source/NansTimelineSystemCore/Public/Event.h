@@ -17,53 +17,60 @@
 #include "CoreMinimal.h"
 #include "EventInterface.h"
 
-
 /**
  * @see NEventInterface
  */
-class NANSTIMELINESYSTEMCORE_API NEvent : public NEventInterface
+class NANSTIMELINESYSTEMCORE_API FNEvent : public INEventInterface
 {
 public:
 	/** Default ctor */
-	NEvent();
+	FNEvent();
 
-	/** Ctor to gives directly a name for this event and an Id (optionnal). */
-	NEvent(FName _Label, FString _UId = FString(""));
-	NEvent(FNEventSave Record);
+	/** Ctor to gives directly a name for this event and an Id (optional). */
+	FNEvent(const FName& InLabel, const FString& InUId = FString(""));
+	/** Ctor to init an Event from saved data. */
+	FNEvent(const FNEventSave& Record);
 
 	/** Default dtor */
-	virtual ~NEvent() {};
+	virtual ~FNEvent() override = default;
 
 	FNEventDelegate EventStart;
-	/**
-	 * @copydoc NEventInterface::IsExpired()
-	 * It is computed with Duration and LocalTime
-	 */
+
+	// ~ Begin INEventInterface overrides
 	virtual bool IsExpired() const override;
-	virtual const float GetLocalTime() const override;
-	virtual const float GetStartedAt() const override;
+	virtual float GetLocalTime() const override;
+	virtual float GetAttachedTime() const override;
+	virtual void SetAttachedTime(const float& InLocalTime) override;
+	virtual void SetAttachable(const bool& bInIsAttachable) override;
+	virtual bool IsAttachable() const override;
+	virtual float GetStartedAt() const override;
 	virtual float GetDuration() const override;
-	virtual void Start(float StartTime) override;
+	virtual void Start(const float& StartTime) override;
 	virtual void Stop() override;
 	virtual float GetDelay() const override;
-	virtual const FString GetUID() const override;
-	virtual void SetUID(FString _UId) override;
-	virtual const FName GetEventLabel() const override;
-	virtual void SetLocalTime(float _LocalTime) override;
-	virtual void SetDuration(float _Duration) override;
-	virtual void SetDelay(float _Delay) override;
-	virtual void SetEventLabel(FName _EventLabel) override;
-	virtual void NotifyAddTime(float NewTime) override;
+	virtual FString GetUID() const override;
+	virtual float GetExpiredTime() const override;
+	virtual void SetUID(const FString& InUId) override;
+	virtual FName GetEventLabel() const override;
+	virtual void SetLocalTime(const float& InLocalTime) override;
+	virtual void SetDuration(const float& InDuration) override;
+	virtual void SetDelay(const float& InDelay) override;
+	virtual void SetEventLabel(const FName& InEventLabel) override;
+	virtual void SetExpiredTime(const float& InLocalTime) override;
+	virtual void NotifyAddTime(const float& NewTime) override;
 	virtual void Clear() override;
 	virtual FNEventDelegate& OnStart() override;
-	virtual void PreDelete() override;
+	// ~ End INEventInterface overrides
 
 protected:
 	FName Label = NAME_None;
+	float AttachedTime = 0.f;
 	float LocalTime = 0.f;
 	float StartedAt = -1.f;
+	float ExpiredTime = -1.f;
 	float Duration = 0.f;
 	float Delay = 0.f;
 	FString UId;
 	bool bActivated = false;
+	bool bIsAttachable = true;
 };

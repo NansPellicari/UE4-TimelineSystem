@@ -23,8 +23,6 @@
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Runtime/Engine/Public/Tests/AutomationCommon.h"
-#include "Runtime/Engine/Public/Tickable.h"
 #include "Specs/TimelineManagerFake.h"
 #include "Specs/TimelineManagerTickableOnPauseFake.h"
 #include "TimerManager.h"
@@ -40,7 +38,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
-	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
+	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
 	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
@@ -80,7 +78,7 @@ bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
-	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
+	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
 	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
@@ -120,7 +118,7 @@ bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
-	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
+	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
 	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 
 	// Begin test
@@ -160,7 +158,7 @@ bool FTimelineTestTimerManagerGamePause::RunTest(const FString& Parameters)
 	const double StartTime = FPlatformTime::Seconds();
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game, true);
 	UGameInstance* GI = World->GetGameInstance();
-	TimelineManagerTickableOnPauseFake* TimelineManager = new TimelineManagerTickableOnPauseFake(World);
+	FNTimelineManagerTickableOnPauseFake* TimelineManager = new FNTimelineManagerTickableOnPauseFake(World);
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
@@ -216,7 +214,7 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 		return false;
 	}
 
-	NTimelineManagerFake* TimelineManager = new NTimelineManagerFake();
+	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
 	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
 	CollectGarbage(EObjectFlags::RF_NoFlags);
 	// Begin test

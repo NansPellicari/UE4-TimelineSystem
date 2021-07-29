@@ -43,7 +43,7 @@ bool FRealLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNRealLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNRealLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -104,7 +104,7 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNRealLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNRealLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -161,7 +161,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNRealLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNRealLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -179,7 +179,7 @@ bool FRealLifeTimelineManagerSerializationDiffObjTest::RunTest(const FString& Pa
 		FBufferArchive ToBinary;
 		TimelineManager->Serialize(ToBinary);
 		TimelineManager->ConditionalBeginDestroy();
-		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNRealLifeTimelineManager* NewTimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 			UNRealLifeTimelineManager>(
 			FakeObject,
 			1.f,
@@ -233,7 +233,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNRealLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNRealLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNRealLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -274,7 +274,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		TimelineManager->ConditionalBeginDestroy();
 		NTestWorld::Tick(World);
 
-		UNRealLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNRealLifeTimelineManager* NewTimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 			UNRealLifeTimelineManager>(
 			FakeObject,
 			1.f,
@@ -302,14 +302,14 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("1st event should not be null"),
 				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetEvent(NewTimelineManager->
-					GetEventViews()[0]->GetUID()).IsValid()
+						GetEventViews()[0]->GetUID()).IsValid()
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("2nd event should not be null"),
 				NewTimelineManager->GetEvent(
 					NewTimelineManager->
-					GetEventViews()[1]->GetUID()
-				).IsValid()
+						GetEventViews()[1]->GetUID()
+					).IsValid()
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("1st event live since 3 secs"),

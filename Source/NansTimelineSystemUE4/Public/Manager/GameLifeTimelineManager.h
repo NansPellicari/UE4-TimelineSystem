@@ -40,9 +40,10 @@ public:
 
 	/**
 	 * It creates the timer with a FTimerManager and attached TimerDelegate to it.
-	 * @param _Label - Name of the timer
+	 * @param InTickInterval - The tick interval in seconds 
+	 * @param InLabel - Name of the timer
 	 */
-	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
+	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 
 	/**
 	 * clears timer + unbind delegate + invalidate handle.

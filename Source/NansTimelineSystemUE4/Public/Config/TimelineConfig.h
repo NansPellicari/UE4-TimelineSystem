@@ -21,7 +21,7 @@
 #include "TimelineConfig.generated.h"
 
 /**
- * This struct to create Configured Timeline and ease Timeline instanciation.
+ * This struct to create Configured Timeline and ease Timeline instantiation.
  * This allows to associated a Timeline Name to a class.
  */
 USTRUCT(BlueprintType)
@@ -47,7 +47,7 @@ public:
 };
 
 /**
- * A simple configuration to ease timeline instanciation for developpers.
+ * A simple configuration to ease timeline instantiation for developpers.
  */
 UCLASS(config = Game, defaultconfig, meta = (DisplayName = "Nans Timeline"))
 class NANSTIMELINESYSTEMUE4_API UNTimelineConfig : public UDeveloperSettings

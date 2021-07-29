@@ -41,7 +41,7 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNGameLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNGameLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -104,7 +104,7 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNGameLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNGameLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -164,7 +164,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNGameLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNGameLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNGameLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -194,7 +194,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 			EObjectFlags::RF_MarkAsRootSet
 		);
 		NewFakeObject->SetMyWorld(NewWorld);
-		UNGameLifeTimelineManager* NewTimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+		UNGameLifeTimelineManager* NewTimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 			UNGameLifeTimelineManager>(
 			NewFakeObject,
 			1.f,

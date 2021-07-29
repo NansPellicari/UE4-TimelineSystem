@@ -41,7 +41,7 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNLevelLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNLevelLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -109,7 +109,7 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNLevelLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNLevelLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -173,7 +173,7 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 	// RF_MarkAsRootSet to avoid deletion when GC passes
 	UFakeObject* FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 	FakeObject->SetMyWorld(World);
-	UNLevelLifeTimelineManager* TimelineManager = UNTimelineManagerDecoratorFactory::CreateObject<
+	UNLevelLifeTimelineManager* TimelineManager = FNTimelineManagerDecoratorFactory::CreateObject<
 		UNLevelLifeTimelineManager>(
 		FakeObject,
 		1.f,
@@ -204,7 +204,7 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 		);
 		NewFakeObject->SetMyWorld(NewWorld);
 		UNLevelLifeTimelineManager* NewTimelineManager =
-			UNTimelineManagerDecoratorFactory::CreateObject<UNLevelLifeTimelineManager>(
+			FNTimelineManagerDecoratorFactory::CreateObject<UNLevelLifeTimelineManager>(
 				NewFakeObject,
 				1.f,
 				FName("DiffTimelineLabel"),

@@ -20,11 +20,11 @@
 
 UNLevelLifeTimelineManager::UNLevelLifeTimelineManager() {}
 
-void UNLevelLifeTimelineManager::Init(float _TickInterval, FName _Label)
+void UNLevelLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
-	Super::Init(_TickInterval, _Label);
+	Super::Init(InTickInterval, InLabel);
 	// Save it here cause we clear all datas when level events are triggered.
-	Label = _Label;
+	Label = InLabel;
 #if WITH_EDITOR
 	GetWorld()->OnSelectedLevelsChanged().AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
 #endif

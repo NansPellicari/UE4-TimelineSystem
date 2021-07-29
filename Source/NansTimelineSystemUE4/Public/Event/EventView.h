@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/Public/EventInterface.h"
+#include "EventInterface.h"
 
 #include "EventView.generated.h"
 
@@ -24,22 +24,22 @@
  * This is a readonly object.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public NEventInterface
+class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEventInterface
 {
 	GENERATED_BODY()
 public:
 	UNEventView() {}
-	void Init(TSharedPtr<NEventInterface> _Event);
+	void Init(TSharedPtr<INEventInterface> _Event);
 
-	// BEGIN NEventInterface overrides
+	// BEGIN INEventInterface overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
-	virtual const float GetLocalTime() const override;
+	virtual float GetLocalTime() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
-	virtual const float GetStartedAt() const override;
+	virtual float GetStartedAt() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetDuration() const override;
@@ -48,40 +48,51 @@ public:
 	virtual float GetDelay() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
-	virtual const FName GetEventLabel() const override;
+	virtual FName GetEventLabel() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
-	virtual void SetEventLabel(FName _EventLabel) override;
+	virtual void SetEventLabel(const FName& InEventLabel) override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
-	virtual const FString GetUID() const override;
+	virtual FString GetUID() const override;
+	
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual float GetAttachedTime() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual bool IsAttachable() const override;
+
+	
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual float GetExpiredTime() const override;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event")
 	void OnStartEvent(const UNEventView* StartedEvent, const float& StartTime);
 
 	// View object = no alteration 
-	virtual void Start(float StartTime) override {}
+	virtual void Start(const float& StartTime) override {}
 	virtual void Stop() override {}
-	virtual void NotifyAddTime(float NewTime) override {}
+	virtual void NotifyAddTime(const float& NewTime) override {}
 	virtual FNEventDelegate& OnStart() override;
-	virtual void SetUID(FString _UId) override {}
-	virtual void SetLocalTime(float _LocalTime) override {}
-	virtual void SetDuration(float _Duration) override {}
-	virtual void SetDelay(float _Delay) override {}
+	virtual void SetUID(const FString& InUId) override {}
+	virtual void SetLocalTime(const float& InLocalTime) override {}
+	virtual void SetDuration(const float& InDuration) override {}
+	virtual void SetDelay(const float& InDelay) override {}
 	virtual void Clear() override {}
-	virtual void PreDelete() override {}
-	// END NEventInterface overrides
-
+	virtual void SetAttachedTime(const float& InLocalTime) override {}
+	virtual void SetExpiredTime(const float& InLocalTime) override {}
+	virtual void SetAttachable(const bool& bInIsAttachable) override {};
+	// END INEventInterface overrides
 	virtual void BeginDestroy() override;
 
-	TSharedPtr<NEventInterface> GetEvent();
+	TSharedPtr<INEventInterface> GetEvent();
 
 private:
 	/**
 	 * The actual decorator is for this object.
 	 * It should be instantiate on a ctor or a dedicated init function
 	 */
-	TSharedPtr<NEventInterface> Event;
+	TSharedPtr<INEventInterface> Event;
 
-	void WhenOnStart(NEventInterface*, const float& StartTime);
+	void WhenOnStart(INEventInterface*, const float& StartTime);
 };

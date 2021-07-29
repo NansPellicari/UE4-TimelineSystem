@@ -14,10 +14,11 @@
 
 #include "Event/EventView.h"
 
-#include "NansTimelineSystemCore/Public/Event.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
+#include "Event.h"
 
-void UNEventView::Init(TSharedPtr<NEventInterface> _Event)
+#define CHECK_EVENT checkf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))
+
+void UNEventView::Init(TSharedPtr<INEventInterface> _Event)
 {
 	Event = _Event;
 	Event->OnStart().AddUObject(this, &UNEventView::WhenOnStart);
@@ -25,65 +26,83 @@ void UNEventView::Init(TSharedPtr<NEventInterface> _Event)
 
 bool UNEventView::IsExpired() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->IsExpired();
 }
 
-const float UNEventView::GetLocalTime() const
+float UNEventView::GetLocalTime() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetLocalTime();
 }
 
-const float UNEventView::GetStartedAt() const
+float UNEventView::GetStartedAt() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetStartedAt();
 }
 
 float UNEventView::GetDuration() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetDuration();
 }
 
 float UNEventView::GetDelay() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetDelay();
 }
 
-const FName UNEventView::GetEventLabel() const
+FName UNEventView::GetEventLabel() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetEventLabel();
 }
 
-const FString UNEventView::GetUID() const
+FString UNEventView::GetUID() const
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->GetUID();
+}
+
+float UNEventView::GetAttachedTime() const
+{
+	CHECK_EVENT;
+	return Event->GetAttachedTime();
+}
+
+bool UNEventView::IsAttachable() const
+{
+	CHECK_EVENT;
+	return Event->IsAttachable();
+}
+
+float UNEventView::GetExpiredTime() const
+{
+	CHECK_EVENT;
+	return Event->GetExpiredTime();
 }
 
 FNEventDelegate& UNEventView::OnStart()
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event->OnStart();
 }
 
-void UNEventView::SetEventLabel(FName _EventLabel)
+void UNEventView::SetEventLabel(const FName& InEventLabel)
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
-	Event->SetEventLabel(_EventLabel);
+	CHECK_EVENT;
+	Event->SetEventLabel(InEventLabel);
 }
 
-TSharedPtr<NEventInterface> UNEventView::GetEvent()
+TSharedPtr<INEventInterface> UNEventView::GetEvent()
 {
-	checkf(Event.IsValid(), TEXT("An NEvent object is madatory! Please use Init before anything else!"));
+	CHECK_EVENT;
 	return Event;
 }
 
-void UNEventView::WhenOnStart(NEventInterface* StartedEvent, const float& StartTime)
+void UNEventView::WhenOnStart(INEventInterface* StartedEvent, const float& StartTime)
 {
 	OnStartEvent(this, StartTime);
 }
