@@ -15,12 +15,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Misc/NansAssertionMacros.h"
 #include "TimelineManager.h"
 
 #include "TimelineManagerDecorator.generated.h"
 
-struct FNEventRecord;
 class UNEventView;
 
 /**
@@ -79,14 +79,14 @@ namespace FNTimelineManagerDecoratorFactory
 };
 
 /**
- * This is the abstract decorator that every Timeline manager shoulds override.
- * It brings all core functionnalities for blueprint or UE4 c++ paradigm.
+ * This is the abstract decorator that every Timeline manager should override.
+ * It brings all core functionalities for blueprint or UE4 c++ paradigm.
  *
  * As the close relation between NTimelineManager and NTimeline classes (core lib),
  * This class is coupled with UNTimelineDecorator.
  * @see UNTimelineDecorator
  *
- * To ease blueprint usages, most of the UNTimelineDecorator public functionnalities
+ * To ease blueprint usages, most of the UNTimelineDecorator public functionalities
  * are accessible here. This class works as a pass-through too for UNTimelineDecorator.
  *
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
@@ -99,7 +99,11 @@ public:
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
-#endif	  // WITH_EDITORONLY_DATA
+#endif // WITH_EDITORONLY_DATA
+
+	/** The interval retrieved from the timeline. */
+	UPROPERTY(EditInstanceOnly, Category= "NansTimeline|Manager")
+	float TickInterval = 1.f;
 
 	// BEGIN NTimelineManager overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
@@ -110,9 +114,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
-
-	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	virtual void SetTickInterval(const float& InTickInterval) override;
 
 	/**
 	 * The embedded timeline is created as subobject in the ctor.
@@ -134,7 +135,7 @@ public:
 	 */
 	virtual void Serialize(FArchive& Ar) override;
 
-	/** This call the UNTimelineDecorator::BeginDestroy() too. */
+	/** This calls FNTimelineManager::Clear(). */
 	virtual void BeginDestroy() override;
 	// END UObject overrides
 
@@ -147,9 +148,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
 
-	/** A pass-through for the embedded UNTimelineDecorator::GetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
+
+	/** A pass-through for the embedded FNTimeline::SetLabel() */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	void SetLabel(const FName& Name);
 
 	// @formatter:off
 	/**
@@ -163,10 +167,7 @@ public:
 protected:
 	/**
 	 * Protected ctor to force instantiation with CreateObject() methods (factory methods).
-	 *
-	 * It instanciates the embeded timeline with CreateDefaultSubobject().
+	 * It instantiates the embedded timeline with CreateDefaultSubobject().
 	 */
 	UNTimelineManagerDecorator();
-
-private:
 };

@@ -14,25 +14,15 @@
 
 #include "Manager/TimelineManagerDecorator.h"
 
-#include "Timeline.h"
 #include "Event/EventView.h"
 
-UNTimelineManagerDecorator::UNTimelineManagerDecorator()
-{
-	Timeline = MakeShareable(new FNTimeline(*this, FName(TEXT("MyTimeline"))));
-}
+UNTimelineManagerDecorator::UNTimelineManagerDecorator() : FNTimelineManager() {}
 
 void UNTimelineManagerDecorator::Init(const float& InTickInterval, const FName& InLabel)
 {
 	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerDecorator need a world to live"));
 	TickInterval = InTickInterval;
-	Timeline->SetTickInterval(InTickInterval);
-	Timeline->SetLabel(InLabel);
-}
-
-float UNTimelineManagerDecorator::GetCurrentTime() const
-{
-	return Timeline->GetCurrentTime();
+	FNTimelineManager::Init(InTickInterval, InLabel);
 }
 
 void UNTimelineManagerDecorator::Pause()
@@ -50,15 +40,10 @@ void UNTimelineManagerDecorator::Stop()
 	FNTimelineManager::Stop();
 }
 
-void UNTimelineManagerDecorator::SetTickInterval(const float& InTickInterval)
-{
-	FNTimelineManager::SetTickInterval(InTickInterval);
-}
-
 TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
 {
 	TArray<UNEventView*> EventRecords;
-	for (auto& Event : GetEvents())
+	for (auto& Event : GetTimeline()->GetEvents())
 	{
 		auto EventView = NewObject<UNEventView>();
 		EventView->Init(Event);
@@ -69,14 +54,26 @@ TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
 
 UNEventView* UNTimelineManagerDecorator::GetEventView(const FString& InUID)
 {
-	auto Event = NewObject<UNEventView>();
-	Event->Init(GetEvent(InUID));
-	return Event;
+	UNEventView* EventView = NewObject<UNEventView>();
+	const TSharedPtr<INEventInterface> Event = GetTimeline()->GetEvent(InUID);
+	if (!Event.IsValid()) return nullptr;
+	EventView->Init(Event);
+	return EventView;
+}
+
+float UNTimelineManagerDecorator::GetCurrentTime() const
+{
+	return GetTimeline()->GetCurrentTime();
 }
 
 FName UNTimelineManagerDecorator::GetLabel() const
 {
-	return Timeline->GetLabel();
+	return GetTimeline()->GetLabel();
+}
+
+void UNTimelineManagerDecorator::SetLabel(const FName& Name)
+{
+	GetTimeline()->SetLabel(Name);
 }
 
 void UNTimelineManagerDecorator::CreateAndAddNewEvent(FName Name, float Duration, float Delay)
@@ -84,7 +81,7 @@ void UNTimelineManagerDecorator::CreateAndAddNewEvent(FName Name, float Duration
 	const TSharedPtr<INEventInterface> Object = CreateNewEvent(Name, Duration, Delay);
 	if (!Object.IsValid()) return;
 
-	FNTimelineManager::AddEvent(Object);
+	GetTimeline()->Attached(Object);
 }
 
 void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
@@ -96,6 +93,6 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 
 void UNTimelineManagerDecorator::BeginDestroy()
 {
-	PreDelete();
+	Clear();
 	Super::BeginDestroy();
 }

@@ -16,8 +16,9 @@
 
 #include "CoreMinimal.h"
 
+#include "Timeline.h"
+
 class INEventInterface;
-class INTimelineInterface;
 
 /** Enum for the NTimelineManager::State */
 enum class ENTimelineTimerState : uint8
@@ -31,7 +32,7 @@ enum class ENTimelineTimerState : uint8
  * This class is the client for the NTimelineInterface object.
  * Its goal is to decoupled client interface with timeline management.
  *
- * - NTimelineInterface manages time computation, notify events accordingly and save all states
+ * - FNTimeline manages time computation, notify events accordingly and save all event states
  * - NTimelineManager manages client controls.
  *
  * @see NTimelineInterface
@@ -39,8 +40,6 @@ enum class ENTimelineTimerState : uint8
  */
 class NANSTIMELINESYSTEMCORE_API FNTimelineManager
 {
-	friend class INTimelineInterface;
-
 public:
 	/** Calls the Init() method. */
 	FNTimelineManager();
@@ -71,22 +70,8 @@ public:
 	/** Get the actual state. */
 	ENTimelineTimerState GetState() const;
 
-	/** Get the tick interval which a timeline manager should use to process */
-	float GetTickInterval() const;
-
-	/** Defined the desired ticking interval */
-	virtual void SetTickInterval(const float& InTickInterval);
-
 	/** Get the coupled NTimelineInterface */
-	TSharedPtr<INTimelineInterface> GetTimeline() const;
-
-	/**
-	* Adds an event to the timeline object,
-	* it works as a pass-through for UNTimelineDecorator::Attached(UNEventView* Event)
-	*
-	* @param Event - An Event object you want to saved to the associated timeline.
-	*/
-	virtual void AddEvent(const TSharedPtr<INEventInterface>& Event);
+	TSharedPtr<FNTimeline> GetTimeline() const;
 
 	/**
 	* Creates a new Event and use this timeline as the outer for this new object.
@@ -98,20 +83,22 @@ public:
 	virtual TSharedPtr<INEventInterface> CreateNewEvent(const FName& Name, const float& Duration = 0.f,
 		const float& Delay = 0.f) const;
 
-	TSharedPtr<INEventInterface> GetEvent(const FString& InUID) const;
-	TArray<TSharedPtr<INEventInterface>> GetEvents() const;
-	virtual void PreDelete();
+	/** @returns a FNTimelineEventDelegate ref which is broadcast when an event changes. */
+	FNTimelineEventDelegate& OnEventChanged() const;
+
+	/**
+	 * Gives the opportunity to clean data.
+	 * This calls Timeline::Clear()
+	 */
+	virtual void Clear();
+
+	/** Saves/loads State in archive + calls Timeline::Archive() */
 	virtual void Archive(FArchive& Ar);
 
 protected:
-	/** The interval retrieved from the timeline. */
-	float TickInterval = 1.f;
 
 	/** The actual state */
 	ENTimelineTimerState State = ENTimelineTimerState::Stopped;
-
-	/** Calls NTimeline::Clear()  */
-	virtual void Clear();
 
 	/**
 	 * This should be used to make some checks right before ticking.
@@ -126,5 +113,5 @@ protected:
 	virtual void OnNotifyTimelineTickAfter() {}
 
 	/** The coupled timeline */
-	TSharedPtr<INTimelineInterface> Timeline;
+	TSharedRef<FNTimeline> Timeline;
 };

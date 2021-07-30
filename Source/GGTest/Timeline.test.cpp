@@ -7,11 +7,6 @@
 
 #include <iostream>
 
-class TimelineTimerManagerFake : public FNTimelineManager
-{
-public:
-};
-
 class FNEventFake : public FNEvent
 {
 public:
@@ -44,13 +39,12 @@ public:
 class NansTimelineSystemCoreTimelineTest : public ::testing::Test
 {
 protected:
-	TimelineTimerManagerFake* Timer;
+	FNTimelineManager* Timer;
 	TArray<TSharedPtr<FNEventFake>> Events;
 
 	void SetUp() override
 	{
-		Timer = new TimelineTimerManagerFake();
-		Timer->SetTickInterval(1.f);
+		Timer = new FNTimelineManager();
 		Events = {
 			MakeShareable(new FNEventFake(FName("event 0"), 0)),
 			MakeShareable(new FNEventFake(FName("event 1"), 2.f)),
@@ -63,19 +57,19 @@ protected:
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ICanCreateAndDestroyTimelineAndTimelineManager)
 {
-	TimelineTimerManagerFake* TimelineManager = new TimelineTimerManagerFake();
+	FNTimelineManager* TimelineManager = new FNTimelineManager();
 	delete TimelineManager;
 }
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldGetAValidTimelineAfterInstanciationAndATickInterval)
 {
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
-	ASSERT_NE(Timer->GetTickInterval(), 0);
+	ASSERT_NE(Timer->GetTimeline()->GetTickInterval(), 0);
 }
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldIncrementItsCurrentTimeWhenTimerTickAndOnlyWhenIsPlaying)
 {
-	float TickInterval = Timer->GetTickInterval();
+	float TickInterval = Timer->GetTimeline()->GetTickInterval();
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
 	Timer->TimerTick();
 	// just to be sure in case of a wrong incrementation computation
@@ -195,7 +189,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageEventWhichHasBeenExpiredM
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageAHigherTickFrequency)
 {
-	Timer->SetTickInterval(0.5f);
+	Timer->Init(0.5f);
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
 	Timer->Play();
 	Timer->TimerTick(); // should be 0.5sec
@@ -217,7 +211,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventExpired)
 {
 	bool Test = false;
 	FString UID = Events[1]->GetUID();
-	Timer->GetTimeline()->OnEventChanged().AddLambda(
+	Timer->OnEventChanged().AddLambda(
 		[&Test, &UID](TSharedPtr<INEventInterface> Event, const ENTimelineEvent& EventName, const float& ExpiredTime,
 		const int32& Index)
 		{

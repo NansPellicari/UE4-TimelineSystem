@@ -47,7 +47,6 @@ public:
 
 	/**
 	 * clears timer + unbind delegate + invalidate handle.
-	 * @copydoc UNTimelineManagerDecorator::Clear()
 	 */
 	virtual void Clear() override;
 

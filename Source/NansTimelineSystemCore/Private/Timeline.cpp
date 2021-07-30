@@ -14,21 +14,19 @@
 
 #include "Timeline.h"
 
-#include "TimelineManager.h"
-
-#include <iostream>
-
+#include "EventInterface.h"
 #include "Event.h"
 
-FNTimeline::FNTimeline(FNTimelineManager& TimelineManager, const FName& InLabel)
+int32 FNTimeline::Counter = 0;
+
+FNTimeline::FNTimeline()
 {
-	TimelineManager.SetTickInterval(GetTickInterval());
+	Label = FName(*FString::Format(TEXT("Timeline_{0}"), {Counter++}));
+}
+
+FNTimeline::FNTimeline(const FName& InLabel)
+{
 	Label = InLabel;
-	if (InLabel == NAME_None)
-	{
-		static int32 Counter;
-		Label = FName(*FString::Format(TEXT("Timeline_{0}"), {Counter++}));
-	}
 }
 
 FNTimeline::~FNTimeline()
@@ -58,13 +56,11 @@ bool FNTimeline::Attached(const TSharedPtr<INEventInterface>& Event)
 			{
 				return false;
 			}
-			else
-			{
-				// Add object from Serialized data
-				Events.Add(Event->GetUID(), Event);
 
-				return true;
-			}
+			// Add object from Serialized data
+			Events.Add(Event->GetUID(), Event);
+
+			return true;
 		}
 	}
 
@@ -147,11 +143,6 @@ void FNTimeline::OnExpired(const TSharedPtr<INEventInterface>& Event, const floa
 	Event->SetExpiredTime(ExpiredTime);
 	EventChanged.Broadcast(Event, ENTimelineEvent::Expired, ExpiredTime, Index);
 	Events.FindAndRemoveChecked(Event->GetUID());
-}
-
-FNTimelineEventDelegate& FNTimeline::OnEventChanged()
-{
-	return EventChanged;
 }
 
 float FNTimeline::GetTickInterval() const

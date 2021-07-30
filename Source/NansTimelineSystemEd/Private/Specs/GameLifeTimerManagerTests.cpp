@@ -124,12 +124,12 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TimelineManager->Init(1.f, FName("ChangeLabel")); // try to change label to checks if rewrite with the archive
+		TimelineManager->SetLabel(FName("ChangedLabel")); // try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label changed"),
 			TimelineManager->GetLabel(),
-			FName("ChangeLabel")
+			FName("ChangedLabel")
 		);
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
@@ -178,7 +178,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(), 3);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -206,7 +206,7 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
 		NewTimelineManager->Serialize(FromBinary);
-		TEST_LE(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), NewTimelineManager->GetEvents().Num(), 3);
+		TEST_LE(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), NewTimelineManager->GetTimeline()->GetEvents().Num(), 3);
 	}
 	// End test
 

@@ -45,7 +45,7 @@ public:
 	virtual void Tick(float DeltaTime)
 	{
 		TotalLifeTime += DeltaTime;
-		if (FMath::IsNearlyEqual(TotalLifeTime - LastTimeTick, GetTickInterval(), 0.001f))
+		if (FMath::IsNearlyEqual(TotalLifeTime - LastTimeTick, GetTimeline()->GetTickInterval(), 0.001f))
 		{
 			LastTimeTick = TotalLifeTime;
 			TimerTick();
