@@ -236,11 +236,15 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
 {
 	bool Test = false;
 	FString UID = Events[2]->GetUID();
-	Events[2]->OnStart().AddLambda(
-		[&Test, &UID](INEventInterface* Event, const float& StartTime)
+	Timer->OnEventChanged().AddLambda(
+		[&Test, &UID](TSharedPtr<INEventInterface> Event, const ENTimelineEvent& EventName, const float& EventTime,
+		const int32& Index)
 		{
-			EXPECT_EQ(StartTime, 3.f);
-			Test = true;
+			if (EventName == ENTimelineEvent::Start && UID == Event->GetUID())
+			{
+				EXPECT_EQ(EventTime, 3.f);
+				Test = true;
+			}
 		}
 	);
 

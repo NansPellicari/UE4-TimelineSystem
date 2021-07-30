@@ -16,7 +16,6 @@
 
 #include "CoreMinimal.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FNEventDelegate, class INEventInterface*, const float&);
 
 struct NANSTIMELINESYSTEMCORE_API FNEventSave
 {
@@ -172,7 +171,4 @@ public:
 
 	/** This should reset all data */
 	virtual void Clear() = 0;
-
-	/** @returns a FNTimelineEventDelegate ref which is broadcast when an event expires. */
-	virtual FNEventDelegate& OnStart() = 0;
 };

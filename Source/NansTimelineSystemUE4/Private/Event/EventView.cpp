@@ -21,7 +21,6 @@
 void UNEventView::Init(TSharedPtr<INEventInterface> _Event)
 {
 	Event = _Event;
-	Event->OnStart().AddUObject(this, &UNEventView::WhenOnStart);
 }
 
 bool UNEventView::IsExpired() const
@@ -84,12 +83,6 @@ float UNEventView::GetExpiredTime() const
 	return Event->GetExpiredTime();
 }
 
-FNEventDelegate& UNEventView::OnStart()
-{
-	CHECK_EVENT;
-	return Event->OnStart();
-}
-
 void UNEventView::SetEventLabel(const FName& InEventLabel)
 {
 	CHECK_EVENT;
@@ -102,16 +95,10 @@ TSharedPtr<INEventInterface> UNEventView::GetEvent()
 	return Event;
 }
 
-void UNEventView::WhenOnStart(INEventInterface* StartedEvent, const float& StartTime)
-{
-	OnStartEvent(this, StartTime);
-}
-
 void UNEventView::BeginDestroy()
 {
 	if (Event.IsValid())
 	{
-		Event->OnStart().RemoveAll(this);
 		// cause it is only a view object,
 		// it will not altered object by calling PreDelete or clear.
 		Event.Reset();

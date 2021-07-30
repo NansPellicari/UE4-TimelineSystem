@@ -142,7 +142,6 @@ void FNEvent::Start(const float& StartTime)
 {
 	StartedAt = StartTime;
 	bActivated = true;
-	EventStart.Broadcast(this, StartedAt);
 }
 
 void FNEvent::Stop()
@@ -153,11 +152,6 @@ void FNEvent::Stop()
 void FNEvent::NotifyAddTime(const float& NewTime)
 {
 	LocalTime += NewTime;
-}
-
-FNEventDelegate& FNEvent::OnStart()
-{
-	return EventStart;
 }
 
 void FNEvent::Clear()

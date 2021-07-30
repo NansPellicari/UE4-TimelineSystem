@@ -34,8 +34,6 @@ public:
 	/** Default dtor */
 	virtual ~FNEvent() override = default;
 
-	FNEventDelegate EventStart;
-
 	// ~ Begin INEventInterface overrides
 	virtual bool IsExpired() const override;
 	virtual float GetLocalTime() const override;
@@ -59,7 +57,6 @@ public:
 	virtual void SetExpiredTime(const float& InLocalTime) override;
 	virtual void NotifyAddTime(const float& NewTime) override;
 	virtual void Clear() override;
-	virtual FNEventDelegate& OnStart() override;
 	// ~ End INEventInterface overrides
 
 protected:

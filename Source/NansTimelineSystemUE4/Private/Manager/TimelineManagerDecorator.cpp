@@ -23,6 +23,8 @@ void UNTimelineManagerDecorator::Init(const float& InTickInterval, const FName& 
 	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerDecorator need a world to live"));
 	TickInterval = InTickInterval;
 	FNTimelineManager::Init(InTickInterval, InLabel);
+
+	OnEventChanged().AddUObject(this, &UNTimelineManagerDecorator::OnEventChangedDelegate);
 }
 
 void UNTimelineManagerDecorator::Pause()
@@ -38,6 +40,14 @@ void UNTimelineManagerDecorator::Play()
 void UNTimelineManagerDecorator::Stop()
 {
 	FNTimelineManager::Stop();
+}
+
+void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEventInterface> Event,
+	const ENTimelineEvent& EventName, const float& ExpiredTime, const int32& Index)
+{
+	auto EventView = NewObject<UNEventView>();
+	EventView->Init(Event);
+	OnBPEventChanged(EventView, ExpiredTime);
 }
 
 TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
@@ -93,6 +103,7 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 
 void UNTimelineManagerDecorator::BeginDestroy()
 {
+	OnEventChanged().RemoveAll(this);
 	Clear();
 	Super::BeginDestroy();
 }

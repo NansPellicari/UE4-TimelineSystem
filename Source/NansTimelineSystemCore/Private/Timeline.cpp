@@ -81,6 +81,7 @@ bool FNTimeline::Attached(const TSharedPtr<INEventInterface>& Event)
 		{
 			Event->Start(CurrentTime);
 			Record.StartedAt = CurrentTime;
+			EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, -1);
 		}
 		SavedEvents.Add(Record);
 		Events.Add(Event->GetUID(), Event);
@@ -124,6 +125,7 @@ void FNTimeline::NotifyTick()
 		{
 			Event->Start(CurrentTime);
 			EventRecord.StartedAt = CurrentTime;
+			EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, -1);
 			continue;
 		}
 

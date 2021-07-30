@@ -115,6 +115,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
 
+	void OnEventChangedDelegate(TSharedPtr<INEventInterface> Event, const ENTimelineEvent& EventName,
+		const float& ExpiredTime, const int32& Index);
 	/**
 	 * The embedded timeline is created as subobject in the ctor.
 	 * So this just gives the Label to the timeline.
@@ -154,6 +156,12 @@ public:
 	/** A pass-through for the embedded FNTimeline::SetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	void SetLabel(const FName& Name);
+
+	UFUNCTION(
+		BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event",
+		meta = (DisplayName = "On Event Changed")
+	)
+	void OnBPEventChanged(const UNEventView* StartedEvent, const float& EventTime);
 
 	// @formatter:off
 	/**

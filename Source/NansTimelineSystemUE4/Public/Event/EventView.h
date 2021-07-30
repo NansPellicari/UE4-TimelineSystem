@@ -55,25 +55,20 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual FString GetUID() const override;
-	
+
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetAttachedTime() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsAttachable() const override;
 
-	
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetExpiredTime() const override;
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnStartEvent(const UNEventView* StartedEvent, const float& StartTime);
 
 	// View object = no alteration 
 	virtual void Start(const float& StartTime) override {}
 	virtual void Stop() override {}
 	virtual void NotifyAddTime(const float& NewTime) override {}
-	virtual FNEventDelegate& OnStart() override;
 	virtual void SetUID(const FString& InUId) override {}
 	virtual void SetLocalTime(const float& InLocalTime) override {}
 	virtual void SetDuration(const float& InDuration) override {}
@@ -93,6 +88,4 @@ private:
 	 * It should be instantiate on a ctor or a dedicated init function
 	 */
 	TSharedPtr<INEventInterface> Event;
-
-	void WhenOnStart(INEventInterface*, const float& StartTime);
 };
