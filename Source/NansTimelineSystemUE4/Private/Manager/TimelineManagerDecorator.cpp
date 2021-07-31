@@ -42,7 +42,7 @@ void UNTimelineManagerDecorator::Stop()
 	FNTimelineManager::Stop();
 }
 
-void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEventInterface> Event,
+void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<FNEvent> Event,
 	const ENTimelineEvent& EventName, const float& ExpiredTime, const int32& Index)
 {
 	auto EventView = NewObject<UNEventView>();
@@ -65,7 +65,7 @@ TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
 UNEventView* UNTimelineManagerDecorator::GetEventView(const FString& InUID)
 {
 	UNEventView* EventView = NewObject<UNEventView>();
-	const TSharedPtr<INEventInterface> Event = GetTimeline()->GetEvent(InUID);
+	const TSharedPtr<FNEvent> Event = GetTimeline()->GetEvent(InUID);
 	if (!Event.IsValid()) return nullptr;
 	EventView->Init(Event);
 	return EventView;
@@ -88,7 +88,7 @@ void UNTimelineManagerDecorator::SetLabel(const FName& Name)
 
 void UNTimelineManagerDecorator::CreateAndAddNewEvent(FName Name, float Duration, float Delay)
 {
-	const TSharedPtr<INEventInterface> Object = CreateNewEvent(Name, Duration, Delay);
+	const TSharedPtr<FNEvent> Object = CreateNewEvent(Name, Duration, Delay);
 	if (!Object.IsValid()) return;
 
 	GetTimeline()->Attached(Object);

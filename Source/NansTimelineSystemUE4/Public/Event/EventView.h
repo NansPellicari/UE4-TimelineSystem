@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EventInterface.h"
+#include "Event.h"
 
 #include "EventView.generated.h"
 
@@ -24,14 +24,14 @@
  * This is a readonly object.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEventInterface
+class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public FNEvent
 {
 	GENERATED_BODY()
 public:
 	UNEventView() {}
-	void Init(TSharedPtr<INEventInterface> _Event);
+	void Init(const TSharedPtr<FNEvent>& InEvent);
 
-	// BEGIN INEventInterface overrides
+	// BEGIN FNEvent overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
@@ -76,16 +76,18 @@ public:
 	virtual void Clear() override {}
 	virtual void SetAttachedTime(const float& InLocalTime) override {}
 	virtual void SetExpiredTime(const float& InLocalTime) override {}
-	virtual void SetAttachable(const bool& bInIsAttachable) override {};
-	// END INEventInterface overrides
+	virtual void SetAttachable(const bool& bInIsAttachable) override {}
+	virtual void Archive(FArchive& Ar) override {}
+	// END FNEvent overrides
+
 	virtual void BeginDestroy() override;
 
-	TSharedPtr<INEventInterface> GetEvent();
+	TSharedPtr<FNEvent> GetEvent();
 
 private:
 	/**
 	 * The actual decorator is for this object.
 	 * It should be instantiate on a ctor or a dedicated init function
 	 */
-	TSharedPtr<INEventInterface> Event;
+	TSharedPtr<FNEvent> Event;
 };

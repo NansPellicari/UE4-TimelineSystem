@@ -14,7 +14,6 @@
 
 #include "TimelineManager.h"
 
-#include "Event.h"
 #include "Timeline.h"
 #include "Math/UnitConversion.h"
 
@@ -68,7 +67,7 @@ void FNTimelineManager::Stop()
 	State = ENTimelineTimerState::Stopped;
 }
 
-TSharedPtr<INEventInterface> FNTimelineManager::CreateNewEvent(const FName& Name, const float& Duration,
+TSharedPtr<FNEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const float& Duration,
 	const float& Delay) const
 {
 	FName NewName = Name;

@@ -18,7 +18,7 @@
 
 #include "Timeline.h"
 
-class INEventInterface;
+class FNEvent;
 
 /** Enum for the NTimelineManager::State */
 enum class ENTimelineTimerState : uint8
@@ -80,7 +80,7 @@ public:
 	* @param Duration - The time this event is active, 0 to almost INFINI (0 means undetermined time)
 	* @param Delay - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 	*/
-	virtual TSharedPtr<INEventInterface> CreateNewEvent(const FName& Name, const float& Duration = 0.f,
+	virtual TSharedPtr<FNEvent> CreateNewEvent(const FName& Name, const float& Duration = 0.f,
 		const float& Delay = 0.f) const;
 
 	/** @returns a FNTimelineEventDelegate ref which is broadcast when an event changes. */

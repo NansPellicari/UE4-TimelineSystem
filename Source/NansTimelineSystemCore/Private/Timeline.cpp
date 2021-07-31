@@ -14,7 +14,6 @@
 
 #include "Timeline.h"
 
-#include "EventInterface.h"
 #include "Event.h"
 
 int32 FNTimeline::Counter = 0;
@@ -31,89 +30,66 @@ FNTimeline::FNTimeline(const FName& InLabel)
 
 FNTimeline::~FNTimeline()
 {
-	SavedEvents.Empty();
+	Events.Empty();
 	EventChanged.Clear();
 }
 
-void FNTimeline::Attached(const TArray<TSharedPtr<INEventInterface>>& EventsCollection)
+void FNTimeline::Attached(const TArray<TSharedPtr<FNEvent>>& EventsCollection)
 {
-	for (TSharedPtr<INEventInterface, ESPMode::Fast> Event : EventsCollection)
+	for (TSharedPtr<FNEvent, ESPMode::Fast> Event : EventsCollection)
 	{
 		Attached(Event);
 	}
 }
 
-bool FNTimeline::Attached(const TSharedPtr<INEventInterface>& Event)
+bool FNTimeline::Attached(const TSharedPtr<FNEvent>& Event)
 {
-	for (int32 Index = 0; Index < SavedEvents.Num(); ++Index)
-	{
-		FNEventSave& EventRecord = SavedEvents[Index];
-		// manage unique event or event from Serialized data
-		if (EventRecord.UID == Event->GetUID())
-		{
-			// Only add unique event
-			if (Events.Contains(EventRecord.UID))
-			{
-				return false;
-			}
-
-			// Add object from Serialized data
-			Events.Add(Event->GetUID(), Event);
-
-			return true;
-		}
-	}
-
 	EventChanged.Broadcast(Event, ENTimelineEvent::BeforeAttached, CurrentTime, -1);
 	if (Event->IsAttachable())
 	{
-		FNEventSave Record =
-			FNEventSave(
-				Event->GetUID(),
-				CurrentTime,
-				Event->GetDelay(),
-				Event->GetDuration(),
-				Event->GetEventLabel(),
-				0.f
-			);
 		Event->SetAttachedTime(CurrentTime);
+
+		Events.Add(Event);
+		// TODO remove this unuseful index
+		const int32 NewIndex = Events.Num() + 1;
+
 		if (Event->GetDelay() <= 0.f)
 		{
-			Event->Start(CurrentTime);
-			Record.StartedAt = CurrentTime;
-			EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, -1);
+			StartEvent(Event, NewIndex);
 		}
-		SavedEvents.Add(Record);
-		Events.Add(Event->GetUID(), Event);
-		EventChanged.Broadcast(Event, ENTimelineEvent::AfterAttached, CurrentTime, -1);
+
+		EventChanged.Broadcast(Event, ENTimelineEvent::AfterAttached, CurrentTime, NewIndex);
 	}
 	return Event->IsAttachable();
+}
+
+void FNTimeline::StartEvent(const TSharedPtr<FNEvent>& Event, const int32& Index) const
+{
+	Event->Start(CurrentTime);
+	EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, Index);
 }
 
 void FNTimeline::NotifyTick()
 {
 	CurrentTime += GetTickInterval();
 
-	for (int32 Index = 0; Index < SavedEvents.Num(); ++Index)
+	// TODO remove this index not useful anymore
+	int32 Index = 0;
+	// TODO Create an list of expired events to save
+	TArray<TSharedPtr<FNEvent>> EventsToRemoved;
+	for (const TSharedPtr<FNEvent>& Event : Events)
 	{
-		FNEventSave& EventRecord = SavedEvents[Index];
-
-		if (!Events.Contains(EventRecord.UID))
-		{
-			continue;
-		}
-
-		TSharedPtr<INEventInterface> Event = *Events.Find(EventRecord.UID);
+		Index++;
 
 		// This allow to manage manual expiration elsewhere
 		if (Event->IsExpired() && Event->GetStartedAt() >= 0.f)
 		{
-			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
+			EventsToRemoved.Add(Event);
 			continue;
 		}
 
-		const float AttachedAt = EventRecord.AttachedTime;
+		const float AttachedAt = Event->GetAttachedTime();
 		const float IntervalAttachedAt = CurrentTime - AttachedAt;
 
 		if (Event->GetDelay() > 0 && Event->GetDelay() > IntervalAttachedAt)
@@ -123,28 +99,30 @@ void FNTimeline::NotifyTick()
 
 		if (Event->GetStartedAt() < 0.f)
 		{
-			Event->Start(CurrentTime);
-			EventRecord.StartedAt = CurrentTime;
-			EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, -1);
+			StartEvent(Event, Index);
 			continue;
 		}
 
 		Event->NotifyAddTime(GetTickInterval());
-		EventRecord.LocalTime = Event->GetLocalTime();
 
 		if (Event->IsExpired())
 		{
-			EventRecord.ExpiredTime = CurrentTime;
 			OnExpired(Event, CurrentTime, Index);
+			EventsToRemoved.Add(Event);
 		}
 	}
+
+	for (TSharedPtr<FNEvent> EventToRemoved : EventsToRemoved)
+	{
+		Events.Remove(EventToRemoved);
+	}
+	EventsToRemoved.Empty();
 }
 
-void FNTimeline::OnExpired(const TSharedPtr<INEventInterface>& Event, const float& ExpiredTime, const int32& Index)
+void FNTimeline::OnExpired(const TSharedPtr<FNEvent>& Event, const float& ExpiredTime, const int32& Index) const
 {
 	Event->SetExpiredTime(ExpiredTime);
 	EventChanged.Broadcast(Event, ENTimelineEvent::Expired, ExpiredTime, Index);
-	Events.FindAndRemoveChecked(Event->GetUID());
 }
 
 float FNTimeline::GetTickInterval() const
@@ -179,37 +157,19 @@ FName FNTimeline::GetLabel() const
 
 void FNTimeline::Clear()
 {
-	SavedEvents.Empty();
 	Events.Empty();
 	CurrentTime = 0;
 }
 
-TSharedPtr<INEventInterface> FNTimeline::GetEvent(const FString& InUID) const
+TSharedPtr<FNEvent> FNTimeline::GetEvent(const FString& InUID) const
 {
-	TSharedPtr<INEventInterface> Event;
-	if (Events.Contains(InUID))
-	{
-		Event = *Events.Find(InUID);
-	}
-	else
-	{
-		for (const auto& SavedEvent : SavedEvents)
-		{
-			if (SavedEvent.UID == InUID)
-			{
-				Event = MakeShareable(new FNEvent(SavedEvent));
-				break;
-			}
-		}
-	}
+	TSharedPtr<FNEvent> Event = *Events.FindByKey(InUID);
 	return Event;
 }
 
-TArray<TSharedPtr<INEventInterface>> FNTimeline::GetEvents() const
+TArray<TSharedPtr<FNEvent>> FNTimeline::GetEvents() const
 {
-	TArray<TSharedPtr<INEventInterface>> ReturnedEvents;
-	Events.GenerateValueArray(ReturnedEvents);
-	return ReturnedEvents;
+	return Events;
 }
 
 void FNTimeline::Archive(FArchive& Ar)
@@ -222,14 +182,22 @@ void FNTimeline::Archive(FArchive& Ar)
 	Ar << Label;
 	Ar << CurrentTime;
 	Ar << TickInterval;
-	Ar << SavedEvents;
+
+	int32 NumEvents = Events.Num();
+	Ar << NumEvents;
 
 	if (Ar.IsLoading())
 	{
-		for (const FNEventSave& EventSaved : SavedEvents)
+		Events.Reserve(NumEvents);
+		for (int32 Idx = 0; Idx < NumEvents; Idx++)
 		{
-			TSharedPtr<INEventInterface> Event = MakeShareable(new FNEvent(EventSaved));
-			Attached(Event);
+			Events.Add(MakeShared<FNEvent>());
 		}
+	}
+	
+	for (int32 Idx = 0; Idx < NumEvents; Idx++)
+	{
+		TSharedPtr<FNEvent> Event = Events[Idx];
+		Event->Archive(Ar);
 	}
 }

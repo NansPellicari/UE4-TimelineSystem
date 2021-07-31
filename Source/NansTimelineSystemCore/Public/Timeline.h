@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EventInterface.h"
+#include "Event.h"
 
 class FNTimelineManager;
 
@@ -42,12 +42,11 @@ enum class ENTimelineEvent : uint8
 
 DECLARE_MULTICAST_DELEGATE_FourParams(
 	FNTimelineEventDelegate,
-	TSharedPtr<INEventInterface> /** Event */,
+	TSharedPtr<FNEvent> /** Event */,
 	const ENTimelineEvent& /** EventName */,
 	const float& /** ExpiredTime */,
 	const int32& /** Index */
 );
-
 
 /**
  * @see NTimelineInterface
@@ -58,7 +57,7 @@ class NANSTIMELINESYSTEMCORE_API FNTimeline final
 	friend class FNTimelineManager;
 public:
 	FNTimeline();
-	
+
 	/**
 	 * @param InLabel - (optional) The name of this timeline. If not provided it creates a name with a static incremented value.
 	 */
@@ -74,14 +73,14 @@ public:
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	bool Attached(const TSharedPtr<INEventInterface>& Event);
+	bool Attached(const TSharedPtr<FNEvent>& Event);
 
 	/**
-	 * Same as Attached(TSharedPtr<NEventInterface> Event) but for a collection of objects.
+	 * Same as Attached(TSharedPtr<FNEvent> Event) but for a collection of objects.
 	 *
-	 * @see FNTimeline::Attached(TSharedPtr<NEventInterface> Event)
+	 * @see FNTimeline::Attached(TSharedPtr<FNEvent> Event)
 	 */
-	void Attached(const TArray<TSharedPtr<INEventInterface>>& EventsCollection);
+	void Attached(const TArray<TSharedPtr<FNEvent>>& EventsCollection);
 
 	/**
 	* This is the value required by a timer manager to know
@@ -116,15 +115,15 @@ public:
 	void Archive(FArchive& Ar);
 
 	/** @returns Get the list of all events saved in this timeline */
-	TArray<TSharedPtr<INEventInterface>> GetEvents() const;
+	TArray<TSharedPtr<FNEvent>> GetEvents() const;
 
 	/**
 	* Get an event by its UID
 	* @returns the event found or invalid TSharedPtr
 	*/
-	TSharedPtr<INEventInterface> GetEvent(const FString& InUID) const;
+	TSharedPtr<FNEvent> GetEvent(const FString& InUID) const;
 
-protected:
+private:
 	/** The name of this timeline */
 	FName Label;
 
@@ -148,17 +147,16 @@ protected:
 	void SetTickInterval(const float& InTickInterval);
 
 	/**
-	 * Should be used only for serialization because it is internnaly computed with NotifyTick()
+	 * Should be used only for serialization because it is internally computed with NotifyTick()
 	 * @param InCurrentTime - Time in secs
 	 */
 	void SetCurrentTime(const float& InCurrentTime);
-	
 
-	/**
-	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
-	 * @warning the Event should be used internally only to avoid nullptr reference
-	 */
-	void OnExpired(const TSharedPtr<INEventInterface>& Event, const float& ExpiredTime, const int32& Index);
+	/** This is used to managed and event when it expires */
+	void OnExpired(const TSharedPtr<FNEvent>& Event, const float& ExpiredTime, const int32& Index) const;
+
+	/** This is used to managed and event when it starts */
+	void StartEvent(const TSharedPtr<FNEvent>& Event, const int32& Index) const;
 
 	/**
 	 * This manages to notify every events saved in this timeline with the new time added.
@@ -166,12 +164,8 @@ protected:
 	 */
 	void NotifyTick();
 
-private:
-	/** TODO remove this and simplify Event object */
-	TArray<FNEventSave> SavedEvents;
-
 	/** Collection of each Events attached to the timeline. */
-	TMap<FString, TSharedPtr<INEventInterface>> Events;
+	TArray<TSharedPtr<FNEvent>> Events;
 
 	/** @see FTimeline() */
 	FNTimelineEventDelegate EventChanged;

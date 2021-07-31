@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemCore/Public/Event.h"
+#include "Event.h"
 
 FNEvent::FNEvent()
 {
@@ -33,19 +33,6 @@ FNEvent::FNEvent(const FName& InLabel, const FString& InUId)
 	{
 		UId = FGuid::NewGuid().ToString();
 	}
-}
-
-FNEvent::FNEvent(const FNEventSave& Record)
-{
-	UId = Record.UID;
-	AttachedTime = Record.AttachedTime;
-	Delay = Record.Delay;
-	Duration = Record.Duration;
-	LocalTime = Record.LocalTime;
-	StartedAt = Record.StartedAt;
-	Label = Record.Label;
-	ExpiredTime = Record.ExpiredTime;
-	bActivated = Record.ExpiredTime <= 0.f;
 }
 
 bool FNEvent::IsExpired() const
@@ -161,4 +148,17 @@ void FNEvent::Clear()
 	StartedAt = -1.f;
 	Duration = 0.f;
 	Delay = 0.f;
+}
+
+void FNEvent::Archive(FArchive& Ar)
+{
+	Ar << UId;
+	Ar << AttachedTime;
+	Ar << Delay;
+	Ar << Duration;
+	Ar << LocalTime;
+	Ar << StartedAt;
+	Ar << Label;
+	Ar << ExpiredTime;
+	Ar << bActivated;
 }

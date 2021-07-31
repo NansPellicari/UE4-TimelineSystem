@@ -302,15 +302,12 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		{
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("1st event should not be null"),
-				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetTimeline()->GetEvent(NewTimelineManager->
-						GetEventViews()[0]->GetUID()).IsValid()
+				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetTimeline()->GetEvent(
+					NewTimelineManager->GetEventViews()[0]->GetUID()).IsValid()
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("2nd event should not be null"),
-				NewTimelineManager->GetTimeline()->GetEvent(
-					NewTimelineManager->
-						GetEventViews()[1]->GetUID()
-					).IsValid()
+				NewTimelineManager->GetTimeline()->GetEvent(NewTimelineManager->GetEventViews()[1]->GetUID()).IsValid()
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("1st event live since 3 secs"),

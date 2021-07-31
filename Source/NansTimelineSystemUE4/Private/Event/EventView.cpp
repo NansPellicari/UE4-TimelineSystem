@@ -14,13 +14,11 @@
 
 #include "Event/EventView.h"
 
-#include "Event.h"
-
 #define CHECK_EVENT checkf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))
 
-void UNEventView::Init(TSharedPtr<INEventInterface> _Event)
+void UNEventView::Init(const TSharedPtr<FNEvent>& InEvent)
 {
-	Event = _Event;
+	Event = InEvent;
 }
 
 bool UNEventView::IsExpired() const
@@ -89,7 +87,7 @@ void UNEventView::SetEventLabel(const FName& InEventLabel)
 	Event->SetEventLabel(InEventLabel);
 }
 
-TSharedPtr<INEventInterface> UNEventView::GetEvent()
+TSharedPtr<FNEvent> UNEventView::GetEvent()
 {
 	CHECK_EVENT;
 	return Event;
