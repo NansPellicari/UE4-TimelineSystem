@@ -15,18 +15,14 @@
 #include "CoreMinimal.h"
 #include "Engine/DebugCameraController.h"
 #include "Engine/Engine.h"
-#include "Engine/EngineBaseTypes.h"
 #include "Engine/EngineTypes.h"
-#include "EngineGlobals.h"
 #include "Misc/AutomationTest.h"
 #include "NansTimelineSystemUE4/Public/Manager/GameLifeTimelineManager.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
-#include "TimerManager.h"
 
 // TODO make specs instead of these
 // @formatter:off

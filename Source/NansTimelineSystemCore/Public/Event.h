@@ -16,45 +16,75 @@
 
 #include "CoreMinimal.h"
 
+class INEvent
+{
+public:
+	/** Default dtor */
+	virtual ~INEvent() = default;
+	/** It indicates if the event expired. */
+	virtual bool IsExpired() const = 0;
+
+	/** Returns the localTime since the events has been attached (+ delay if > 0) to a timeline */
+	virtual float GetLocalTime() const = 0;
+
+	/** The time relative to the timeline this event has been attached to. */
+	virtual float GetAttachedTime() const = 0;
+
+	/** The time relative to the timeline this event has been attached to + its start delay. */
+	virtual float GetStartedAt() const = 0;
+
+	/** The duration this event should live */
+	virtual float GetDuration() const = 0;
+
+	/** The delay before this event starts */
+	virtual float GetDelay() const = 0;
+
+	/** Retrieve the unique ID generated or given in ctor */
+	virtual FString GetUID() const = 0;
+
+	/**
+	* The time relative to the timeline this event has been expired,
+	* should return -1 if this event has no duration.
+	*/
+	virtual float GetExpiredTime() const = 0;
+
+	/** Getter for Label */
+	virtual FName GetEventLabel() const = 0;
+
+	/** Timeline use this to know if this event can be attached on. */
+	virtual bool IsAttachable() const = 0;
+
+	/**
+	* A setter for the label.
+	*
+	* @param InEventLabel - A name to identify easily the event
+	*/
+	virtual void SetEventLabel(const FName& InEventLabel) = 0;
+};
+
 /**
  * An interface to manage events which can be attached to a timeline.
  */
-class NANSTIMELINESYSTEMCORE_API FNEvent
+class NANSTIMELINESYSTEMCORE_API FNEvent : public INEvent
 {
 public:
 	FNEvent();
 	/** Ctor to gives directly a name for this event and an Id (optional). */
 	FNEvent(const FName& InLabel, const FString& InUId = FString(""));
 
-	/** Default dtor */
-	virtual ~FNEvent() = default;
-
-	/** It indicates if the event expired. */
-	virtual bool IsExpired() const;
-
-	/** Returns the localTime since the events has been attached (+ delay if > 0) to a timeline */
-	virtual float GetLocalTime() const;
-
-	/** The time relative to the timeline this event has been attached to. */
-	virtual float GetAttachedTime() const;
-
-	/** The time relative to the timeline this event has been attached to + its start delay. */
-	virtual float GetStartedAt() const;
-
-	/** The duration this event should live */
-	virtual float GetDuration() const;
-
-	/** The delay before this event starts */
-	virtual float GetDelay() const;
-
-	/** Retrieve the unique ID generated or given in ctor */
-	virtual FString GetUID() const;
-
-	/**
-	 * The time relative to the timeline this event has been expired,
-	 * should return -1 if this event has no duration.
-	 */
-	virtual float GetExpiredTime() const;
+	// ~ Begin INEvent overrides
+	virtual bool IsExpired() const override;
+	virtual float GetLocalTime() const override;
+	virtual float GetAttachedTime() const override;
+	virtual float GetStartedAt() const override;
+	virtual float GetDuration() const override;
+	virtual float GetDelay() const override;
+	virtual FString GetUID() const override;
+	virtual float GetExpiredTime() const override;
+	virtual FName GetEventLabel() const override;
+	virtual bool IsAttachable() const override;
+	virtual void SetEventLabel(const FName& InEventLabel) override;
+	// ~ End INEvent overrides
 
 	/**
 	 * This should be used only on serialization process
@@ -62,9 +92,6 @@ public:
 	 * @param InUId - Should be a unique FString, see ctor
 	 */
 	virtual void SetUID(const FString& InUId);
-
-	/** Getter for Label */
-	virtual FName GetEventLabel() const;
 
 	/** Set the time this event is attached to timeline, should be used only by a FNTimeline. */
 	virtual void SetAttachedTime(const float& InLocalTime);
@@ -76,9 +103,6 @@ public:
 	 * @param bInIsAttachable - boolean to defined is attachable capability
 	 */
 	virtual void SetAttachable(const bool& bInIsAttachable);
-
-	/** Timeline use this to know if this event can be attached on. */
-	virtual bool IsAttachable() const;
 
 	/**
 	 * Set the expired time for this event.
@@ -108,13 +132,6 @@ public:
 	 * @param InDelay - Time in secs
 	 */
 	virtual void SetDelay(const float& InDelay);
-
-	/**
-	 * A setter for the label.
-	 *
-	 * @param InEventLabel - A name to identify easily the event
-	 */
-	virtual void SetEventLabel(const FName& InEventLabel);
 
 	/**
 	 * This should be used only by NTimeline or serialization.

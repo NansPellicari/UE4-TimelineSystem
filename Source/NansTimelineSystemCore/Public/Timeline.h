@@ -19,6 +19,11 @@
 
 class FNTimelineManager;
 
+#if !defined(UENUM)
+#define UENUM()
+#endif
+
+UENUM()
 enum class ENTimelineEvent : uint8
 {
 	/**

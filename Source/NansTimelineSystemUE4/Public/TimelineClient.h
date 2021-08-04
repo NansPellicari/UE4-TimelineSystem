@@ -40,7 +40,7 @@ public:
 	UNTimelineClient();
 
 	/**
-	 * This method allows to instanciate all Timeline from the config: FConfiguredTimeline.
+	 * This method allows to instantiate all Timeline from the config: FConfiguredTimeline.
 	 *
 	 * @see FConfiguredTimeline
 	 */
@@ -71,10 +71,8 @@ public:
 	virtual void Serialize(FArchive& Ar) override;
 
 protected:
-	void InstanciateTimelinesFromConfig();
-
 	/**
-	 * Collection of timelines instanciated by InstanciateTimelinesFromConfig()
+	 * Collection of timelines instantiated in Init()
 	 */
 	UPROPERTY(SkipSerialization)
 	TMap<FName, UNTimelineManagerDecorator*> TimelinesCollection;

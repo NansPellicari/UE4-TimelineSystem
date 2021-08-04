@@ -29,7 +29,6 @@ struct NANSTIMELINESYSTEMUE4_API FConfiguredTimelineConf
 {
 	GENERATED_BODY()
 
-public:
 	/**
 	 * This allows to retrieve easily a timeline.
 	 * This is used by the SConfiguredTimelinePin as a combobox.
@@ -44,6 +43,10 @@ public:
 	/** You can use this to add more or less frequency between each tick. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
 	float TickInterval = 1.f;
+
+	/** Will debug this timeline */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
+	bool bDebug = false;
 };
 
 /**
@@ -58,7 +61,7 @@ public:
 	TArray<FConfiguredTimelineConf> ConfiguredTimeline;
 
 	/**
-	 * Retrieve config from developpers choices.
+	 * Retrieve config from developers choices.
 	 */
 	static void GetConfigs(TArray<FConfiguredTimelineConf>& ShareableNames)
 	{
@@ -68,7 +71,4 @@ public:
 			ShareableNames.Add(Config);
 		}
 	}
-
-protected:
-private:
 };

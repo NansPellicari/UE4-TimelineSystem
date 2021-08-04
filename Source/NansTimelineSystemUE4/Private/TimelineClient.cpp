@@ -25,8 +25,11 @@ void UNTimelineClient::Init()
 
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerDecorator* Timeline = FNTimelineManagerDecoratorFactory::CreateObject<UNTimelineManagerDecorator>(
-			this, Conf.TimelineClass, Conf.TickInterval, Conf.Name);
+		UNTimelineManagerDecorator* Timeline = FNTimelineManagerDecoratorFactory::CreateObject<
+			UNTimelineManagerDecorator>(
+			this, Conf.TimelineClass, Conf.TickInterval, Conf.Name
+		);
+		Timeline->bDebug = Conf.bDebug;
 		Timeline->Play();
 
 		TimelinesCollection.Add(Conf.Name, Timeline);
@@ -80,10 +83,12 @@ void UNTimelineClient::Serialize(FArchive& Ar)
 		UNTimelineManagerDecorator* Timeline = GetTimeline(Name);
 		if (Timeline == nullptr)
 		{
-			UE_LOG(LogTemp,
+			UE_LOG(
+				LogTemp,
 				Error,
 				TEXT("The timeline %s does not exists anymore, it can imply a binary shift on unserialization"),
-				*Name.ToString());
+				*Name.ToString()
+			);
 			continue;
 		}
 

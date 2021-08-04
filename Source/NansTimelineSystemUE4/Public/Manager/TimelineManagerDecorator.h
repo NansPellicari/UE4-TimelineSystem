@@ -23,6 +23,8 @@
 
 class UNEventView;
 
+FString EnumToString(const ENTimelineEvent& Value);
+
 /**
  * This class is a factory to managed properly UNTimelineManagerDecorator instantiation.
  */
@@ -96,10 +98,8 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, pub
 {
 	GENERATED_BODY()
 public:
-#if WITH_EDITORONLY_DATA
 	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
-#endif // WITH_EDITORONLY_DATA
 
 	/** The interval retrieved from the timeline. */
 	UPROPERTY(EditInstanceOnly, Category= "NansTimeline|Manager")
@@ -116,7 +116,7 @@ public:
 	virtual void Stop() override;
 
 	void OnEventChangedDelegate(TSharedPtr<FNEvent> Event, const ENTimelineEvent& EventName,
-		const float& ExpiredTime, const int32& Index);
+		const float& LocalTime, const int32& Index);
 	/**
 	 * The embedded timeline is created as subobject in the ctor.
 	 * So this just gives the Label to the timeline.
@@ -145,7 +145,7 @@ public:
 	TArray<UNEventView*> GetEventViews() const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	UNEventView* GetEventView(const FString& InUID);
+	UNEventView* GetEventView(const FString& InUID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
@@ -169,7 +169,7 @@ public:
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	void CreateAndAddNewEvent(FName Name, float Duration = 0, float Delay = 0);
+	void CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventView> InClass = nullptr);
 	// @formatter:on
 
 protected:
@@ -178,4 +178,7 @@ protected:
 	 * It instantiates the embedded timeline with CreateDefaultSubobject().
 	 */
 	UNTimelineManagerDecorator();
+
+	UPROPERTY(SkipSerialization)
+	TMap<FString, UNEventView*> EventViews;
 };

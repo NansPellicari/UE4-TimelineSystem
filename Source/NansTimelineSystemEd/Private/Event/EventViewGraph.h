@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemUE4.h"
+#pragma once
 
-DEFINE_LOG_CATEGORY(LogTimelineSystem);
+#include "CoreMinimal.h"
+#include "EventViewGraph.generated.h"
 
-#define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
-
-void FNansTimelineSystemUE4Module::StartupModule() {}
-
-void FNansTimelineSystemUE4Module::ShutdownModule() {}
-
-#undef LOCTEXT_NAMESPACE
-
-IMPLEMENT_MODULE(FNansTimelineSystemUE4Module, NansTimelineSystemUE4)
+/** A dedicated graph for UNEventView used for UNEventViewBlueprint creation. */
+UCLASS(MinimalAPI)
+class UNEventViewGraph : public UEdGraph
+{
+	GENERATED_BODY()
+};

@@ -24,14 +24,14 @@
  * This is a readonly object.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public FNEvent
+class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEvent
 {
 	GENERATED_BODY()
 public:
 	UNEventView() {}
 	void Init(const TSharedPtr<FNEvent>& InEvent);
 
-	// BEGIN FNEvent overrides
+	// BEGIN INEvent overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
@@ -65,23 +65,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetExpiredTime() const override;
 
-	// View object = no alteration 
-	virtual void Start(const float& StartTime) override {}
-	virtual void Stop() override {}
-	virtual void NotifyAddTime(const float& NewTime) override {}
-	virtual void SetUID(const FString& InUId) override {}
-	virtual void SetLocalTime(const float& InLocalTime) override {}
-	virtual void SetDuration(const float& InDuration) override {}
-	virtual void SetDelay(const float& InDelay) override {}
-	virtual void Clear() override {}
-	virtual void SetAttachedTime(const float& InLocalTime) override {}
-	virtual void SetExpiredTime(const float& InLocalTime) override {}
-	virtual void SetAttachable(const bool& bInIsAttachable) override {}
-	virtual void Archive(FArchive& Ar) override {}
-	// END FNEvent overrides
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnInit();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnStart(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnBeforeAttached(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnAfterAttached(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnExpired(float InLocalTime = -1.f);
+	// END INEvent overrides
 
 	virtual void BeginDestroy() override;
-
 	TSharedPtr<FNEvent> GetEvent();
 
 private:
@@ -90,4 +90,25 @@ private:
 	 * It should be instantiate on a ctor or a dedicated init function
 	 */
 	TSharedPtr<FNEvent> Event;
+};
+
+/**
+ * A UNEventViewBlueprint is essentially a specialized Blueprint whose graphs control an UNEventView.
+ * The UNEventView factory should pick this for you automatically
+ */
+UCLASS(BlueprintType)
+class NANSTIMELINESYSTEMUE4_API UNEventViewBlueprint : public UBlueprint
+{
+	GENERATED_BODY()
+public:
+#if WITH_EDITOR
+
+	// UBlueprint interface
+	inline virtual bool SupportedByDefaultBlueprintFactory() const override;
+	// End of UBlueprint interface
+
+	/** Returns the most base gameplay ability blueprint for a given blueprint (if it is inherited from another ability blueprint, returning null if only native / non-ability BP classes are it's parent) */
+	static UNEventViewBlueprint* FindRootEventViewBlueprint(UNEventViewBlueprint* DerivedBlueprint);
+
+#endif
 };
