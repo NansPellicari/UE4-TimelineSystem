@@ -117,7 +117,7 @@ void UNTimelineManagerDecorator::SetLabel(const FName& Name)
 	GetTimeline()->SetLabel(Name);
 }
 
-void UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDuration, float InDelay,
+UNEventView* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDuration, float InDelay,
 	TSubclassOf<UNEventView> InClass)
 {
 	UClass* ChildClass;
@@ -131,13 +131,14 @@ void UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDura
 	}
 
 	const TSharedPtr<FNEvent> Object = CreateNewEvent(InName, InDuration, InDelay);
-	if (!Object.IsValid()) return;
+	if (!Object.IsValid()) return nullptr;
 
 	UNEventView* EventView = NewObject<UNEventView>(this, ChildClass);
 	EventView->Init(Object);
 	EventViews.Add(Object->GetUID(), EventView);
 
 	GetTimeline()->Attached(Object);
+	return EventView;
 }
 
 void UNTimelineManagerDecorator::Serialize(FArchive& Ar)

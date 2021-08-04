@@ -169,7 +169,7 @@ public:
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	void CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventView> InClass = nullptr);
+	UNEventView* CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventView> InClass = nullptr);
 	// @formatter:on
 
 protected:
