@@ -212,7 +212,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventExpired)
 	bool Test = false;
 	FString UID = Events[1]->GetUID();
 	Timer->OnEventChanged().AddLambda(
-		[&Test, &UID](TSharedPtr<FNEvent> Event, const ENTimelineEvent& EventName, const float& ExpiredTime,
+		[&Test, &UID](TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName, const float& ExpiredTime,
 		const int32& Index)
 		{
 			if (EventName == ENTimelineEvent::Expired)
@@ -237,7 +237,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
 	bool Test = false;
 	FString UID = Events[2]->GetUID();
 	Timer->OnEventChanged().AddLambda(
-		[&Test, &UID](TSharedPtr<FNEvent> Event, const ENTimelineEvent& EventName, const float& EventTime,
+		[&Test, &UID](TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName, const float& EventTime,
 		const int32& Index)
 		{
 			if (EventName == ENTimelineEvent::Start && UID == Event->GetUID())

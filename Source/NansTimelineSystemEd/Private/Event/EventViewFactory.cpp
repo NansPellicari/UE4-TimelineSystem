@@ -102,6 +102,9 @@ UObject* UNEventViewFactory::FactoryCreateNew(UClass* InClass, UObject* InParent
 					NewBP, NewGraph, FName(TEXT("OnStart")), UNEventView::StaticClass(), NodePositionY
 				);
 				FKismetEditorUtilities::AddDefaultEventNode(
+					NewBP, NewGraph, FName(TEXT("OnTick")), UNEventView::StaticClass(), NodePositionY
+				);
+				FKismetEditorUtilities::AddDefaultEventNode(
 					NewBP, NewGraph, FName(TEXT("OnExpired")), UNEventView::StaticClass(), NodePositionY
 				);
 			}

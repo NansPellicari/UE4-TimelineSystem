@@ -16,6 +16,9 @@
 
 #include "CoreMinimal.h"
 
+/**
+* An interface to manage events which can be attached to a timeline.
+*/
 class INEvent
 {
 public:
@@ -43,9 +46,9 @@ public:
 	virtual FString GetUID() const = 0;
 
 	/**
-	* The time relative to the timeline this event has been expired,
-	* should return -1 if this event has no duration.
-	*/
+	 * The time relative to the timeline this event has been expired,
+	 * should return -1 if this event has no duration.
+	 */
 	virtual float GetExpiredTime() const = 0;
 
 	/** Getter for Label */
@@ -55,16 +58,71 @@ public:
 	virtual bool IsAttachable() const = 0;
 
 	/**
-	* A setter for the label.
-	*
-	* @param InEventLabel - A name to identify easily the event
-	*/
+	 * A setter for the label.
+	 * @param InEventLabel - A name to identify easily the event
+	 */
 	virtual void SetEventLabel(const FName& InEventLabel) = 0;
+
+	/** Set the time this event is attached to timeline, should be used only by a FNTimeline. */
+	virtual void SetAttachedTime(const float& InLocalTime) = 0;
+
+	/**
+	 * This can be useful to avoid an Event to be attached to a timeline.
+	 * @see FNTimeline::Attached()
+	 * @see ENTimelineEvent::BeforeAttached
+	 * @param bInIsAttachable - boolean to defined is attachable capability
+	 */
+	virtual void SetAttachable(const bool& bInIsAttachable) = 0;
+
+	/**
+	 * Set the expired time for this event.
+	 * It is called by the FNTimeline.
+	 * @param InLocalTime - the time relative to the timeline
+	 */
+	virtual void SetExpiredTime(const float& InLocalTime) = 0;
+
+	/**
+	 * A setter for the duration.
+	 *
+	 * @param InDuration - Time in secs
+	 */
+	virtual void SetDuration(const float& InDuration) = 0;
+
+	/**
+	 * A setter for the delay.
+	 *
+	 * @param InDelay - Time in secs
+	 */
+	virtual void SetDelay(const float& InDelay) = 0;
+
+	/**
+	 * This should be used only by NTimeline or serialization.
+	 *
+	 * @param StartTime - Time in secs
+	 */
+	virtual void Start(const float& StartTime) = 0;
+
+	/** This can stop the event and make it expires to its next tick. */
+	virtual void Stop() = 0;
+
+	/**
+	 * Increments LocalTime
+	 * @param NewTime - in Milliseconds
+	 */
+	virtual void AddTime(const float& NewTime) = 0;
+
+	/** This should reset all data */
+	virtual void Clear() = 0;
+
+	virtual void Archive(FArchive& Ar) = 0;
+
+	friend bool operator==(const TSharedPtr<INEvent>& Event, const FString& InUId)
+	{
+		return InUId == Event->GetUID();
+	}
 };
 
-/**
- * An interface to manage events which can be attached to a timeline.
- */
+/** A concrete implementation basically used by FNTimeline  */
 class NANSTIMELINESYSTEMCORE_API FNEvent : public INEvent
 {
 public:
@@ -84,82 +142,17 @@ public:
 	virtual FName GetEventLabel() const override;
 	virtual bool IsAttachable() const override;
 	virtual void SetEventLabel(const FName& InEventLabel) override;
+	virtual void SetAttachedTime(const float& InLocalTime) override;
+	virtual void SetAttachable(const bool& bInIsAttachable) override;
+	virtual void SetExpiredTime(const float& InLocalTime) override;
+	virtual void SetDuration(const float& InDuration) override;
+	virtual void SetDelay(const float& InDelay) override;
+	virtual void Start(const float& StartTime) override;
+	virtual void Stop() override;
+	virtual void AddTime(const float& NewTime) override;
+	virtual void Clear() override;
+	virtual void Archive(FArchive& Ar) override;
 	// ~ End INEvent overrides
-
-	/**
-	 * This should be used only on serialization process
-	 *
-	 * @param InUId - Should be a unique FString, see ctor
-	 */
-	virtual void SetUID(const FString& InUId);
-
-	/** Set the time this event is attached to timeline, should be used only by a FNTimeline. */
-	virtual void SetAttachedTime(const float& InLocalTime);
-
-	/**
-	 * This can be useful to avoid an Event to be attached to a timeline.
-	 * @see FNTimeline::Attached()
-	 * @see ENTimelineEvent::BeforeAttached
-	 * @param bInIsAttachable - boolean to defined is attachable capability
-	 */
-	virtual void SetAttachable(const bool& bInIsAttachable);
-
-	/**
-	 * Set the expired time for this event.
-	 * It is called by the FNTimeline.
-	 * @param InLocalTime - the time relative to the timeline
-	 */
-	virtual void SetExpiredTime(const float& InLocalTime);
-
-	/**
-	 * This setter should be carefully used,
-	 * all the computation time should be calculated internally
-	 * with the NotifyAddTime().
-	 *
-	 * @param InLocalTime - Time in secs
-	 */
-	virtual void SetLocalTime(const float& InLocalTime);
-	/**
-	 * A setter for the duration.
-	 *
-	 * @param InDuration - Time in secs
-	 */
-	virtual void SetDuration(const float& InDuration);
-
-	/**
-	 * A setter for the delay.
-	 *
-	 * @param InDelay - Time in secs
-	 */
-	virtual void SetDelay(const float& InDelay);
-
-	/**
-	 * This should be used only by NTimeline or serialization.
-	 *
-	 * @param StartTime - Time in secs
-	 */
-	virtual void Start(const float& StartTime);
-
-	/**
-	 * This can stop the event and make it expires to its next tick.
-	 */
-	virtual void Stop();
-
-	/**
-	 * Increments LocalTime
-	 * @param NewTime - in Milliseconds
-	 */
-	virtual void NotifyAddTime(const float& NewTime);
-
-	/** This should reset all data */
-	virtual void Clear();
-
-	virtual void Archive(FArchive& Ar);
-
-	friend bool operator==(const TSharedPtr<FNEvent>& Event, const FString& InUId)
-	{
-		return InUId == Event->GetUID();
-	}
 
 protected:
 	// TODO add this possibility later

@@ -55,7 +55,7 @@ struct FParamEventChanged
 	float InLocalTime = -1.f;
 };
 
-void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<FNEvent> Event,
+void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEvent> Event,
 	const ENTimelineEvent& EventName, const float& LocalTime, const int32& Index)
 {
 	UNEventView* EventView = EventViews.FindRef(Event->GetUID());
@@ -130,7 +130,7 @@ UNEventView* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, floa
 		ChildClass = UNEventView::StaticClass();
 	}
 
-	const TSharedPtr<FNEvent> Object = CreateNewEvent(InName, InDuration, InDelay);
+	const TSharedPtr<INEvent> Object = CreateNewEvent(InName, InDuration, InDelay);
 	if (!Object.IsValid()) return nullptr;
 
 	UNEventView* EventView = NewObject<UNEventView>(this, ChildClass);
@@ -175,7 +175,7 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 			Ar << Id;
 			Ar << PathClass;
 
-			TSharedPtr<FNEvent> Event = Timeline->GetEvent(Id);
+			TSharedPtr<INEvent> Event = Timeline->GetEvent(Id);
 
 			if (ensureMsgf(
 				Event.IsValid(), TEXT("Event with Uid (\"%s\") can't be retrieved during serialization."), *Id

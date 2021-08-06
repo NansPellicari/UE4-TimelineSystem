@@ -115,7 +115,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
 
-	void OnEventChangedDelegate(TSharedPtr<FNEvent> Event, const ENTimelineEvent& EventName,
+	void OnEventChangedDelegate(TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName,
 		const float& LocalTime, const int32& Index);
 	/**
 	 * The embedded timeline is created as subobject in the ctor.

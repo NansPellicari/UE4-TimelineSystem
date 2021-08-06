@@ -41,13 +41,16 @@ enum class ENTimelineEvent : uint8
 	/** This event should be triggered when an event expired. */
 	Expired,
 
-	/**  */
+	/** This event should be triggered when it starts */
 	Start,
+
+	/** This event should be triggered when ticked */
+	Tick,
 };
 
 DECLARE_MULTICAST_DELEGATE_FourParams(
 	FNTimelineEventDelegate,
-	TSharedPtr<FNEvent> /** Event */,
+	TSharedPtr<INEvent> /** Event */,
 	const ENTimelineEvent& /** EventName */,
 	const float& /** ExpiredTime */,
 	const int32& /** Index */
@@ -78,14 +81,14 @@ public:
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	bool Attached(const TSharedPtr<FNEvent>& Event);
+	bool Attached(const TSharedPtr<INEvent>& Event);
 
 	/**
-	 * Same as Attached(TSharedPtr<FNEvent> Event) but for a collection of objects.
+	 * Same as Attached(TSharedPtr<INEvent> Event) but for a collection of objects.
 	 *
-	 * @see FNTimeline::Attached(TSharedPtr<FNEvent> Event)
+	 * @see FNTimeline::Attached(TSharedPtr<INEvent> Event)
 	 */
-	void Attached(const TArray<TSharedPtr<FNEvent>>& EventsCollection);
+	void Attached(const TArray<TSharedPtr<INEvent>>& EventsCollection);
 
 	/**
 	* This is the value required by a timer manager to know
@@ -120,13 +123,13 @@ public:
 	void Archive(FArchive& Ar);
 
 	/** @returns Get the list of all events saved in this timeline */
-	TArray<TSharedPtr<FNEvent>> GetEvents() const;
+	TArray<TSharedPtr<INEvent>> GetEvents() const;
 
 	/**
 	* Get an event by its UID
 	* @returns the event found or invalid TSharedPtr
 	*/
-	TSharedPtr<FNEvent> GetEvent(const FString& InUID) const;
+	TSharedPtr<INEvent> GetEvent(const FString& InUID) const;
 
 private:
 	/** The name of this timeline */
@@ -157,11 +160,17 @@ private:
 	 */
 	void SetCurrentTime(const float& InCurrentTime);
 
-	/** This is used to managed and event when it expires */
-	void OnExpired(const TSharedPtr<FNEvent>& Event, const float& ExpiredTime, const int32& Index) const;
+	/**
+	 * This is used to managed and event when it expires.
+	 * Triggers ENTimelineEvent::Expired event with EventChanged
+	 */
+	void OnExpired(const TSharedPtr<INEvent>& Event, const float& ExpiredTime, const int32& Index) const;
 
-	/** This is used to managed and event when it starts */
-	void StartEvent(const TSharedPtr<FNEvent>& Event, const int32& Index) const;
+	/**
+	 * This is used to managed and event when it starts.
+	 * Triggers ENTimelineEvent::Start event with EventChanged
+	 */
+	void StartEvent(const TSharedPtr<INEvent>& Event, const int32& Index) const;
 
 	/**
 	 * This manages to notify every events saved in this timeline with the new time added.
@@ -170,7 +179,7 @@ private:
 	void NotifyTick();
 
 	/** Collection of each Events attached to the timeline. */
-	TArray<TSharedPtr<FNEvent>> Events;
+	TArray<TSharedPtr<INEvent>> Events;
 
 	/** @see FTimeline() */
 	FNTimelineEventDelegate EventChanged;

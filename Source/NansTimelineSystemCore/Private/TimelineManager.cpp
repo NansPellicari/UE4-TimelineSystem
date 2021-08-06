@@ -67,7 +67,7 @@ void FNTimelineManager::Stop()
 	State = ENTimelineTimerState::Stopped;
 }
 
-TSharedPtr<FNEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const float& Duration,
+TSharedPtr<INEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const float& Duration,
 	const float& Delay) const
 {
 	FName NewName = Name;
@@ -79,7 +79,7 @@ TSharedPtr<FNEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const f
 		NewName = FName(*EvtLabel);
 	}
 
-	TSharedPtr<FNEvent> Object = MakeShareable(new FNEvent(NewName));
+	TSharedPtr<INEvent> Object = MakeShared<FNEvent>(NewName);
 	if (Duration > 0)
 	{
 		Object->SetDuration(Duration);

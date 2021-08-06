@@ -29,7 +29,7 @@ class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEvent
 	GENERATED_BODY()
 public:
 	UNEventView() {}
-	void Init(const TSharedPtr<FNEvent>& InEvent);
+	void Init(const TSharedPtr<INEvent>& InEvent);
 
 	// BEGIN INEvent overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
@@ -65,6 +65,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetExpiredTime() const override;
 
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual void Stop() override;
+
+	virtual void SetAttachedTime(const float& InLocalTime) override {}
+	virtual void SetAttachable(const bool& bInIsAttachable) override {}
+	virtual void SetExpiredTime(const float& InLocalTime) override {}
+	virtual void SetDuration(const float& InDuration) override {}
+	virtual void SetDelay(const float& InDelay) override {}
+	virtual void Start(const float& StartTime) override {}
+	virtual void AddTime(const float& NewTime) override {}
+	virtual void Clear() override {}
+	virtual void Archive(FArchive& Ar) override {}
+	// END INEvent overrides
+	
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
 	void OnInit();
 
@@ -79,17 +93,19 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
 	void OnExpired(float InLocalTime = -1.f);
-	// END INEvent overrides
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnTick(float InLocalTime = -1.f);
 
 	virtual void BeginDestroy() override;
-	TSharedPtr<FNEvent> GetEvent();
+	TSharedPtr<INEvent> GetEvent();
 
 private:
 	/**
-	 * The actual decorator is for this object.
-	 * It should be instantiate on a ctor or a dedicated init function
+	 * The actual decorated object.
+	 * It is passed in the #Init() function
 	 */
-	TSharedPtr<FNEvent> Event;
+	TSharedPtr<INEvent> Event;
 };
 
 /**

@@ -17,7 +17,7 @@
 #define CHECK_EVENT_V() if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return;
 #define CHECK_EVENT(ReturnValue) if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return ReturnValue;
 
-void UNEventView::Init(const TSharedPtr<FNEvent>& InEvent)
+void UNEventView::Init(const TSharedPtr<INEvent>& InEvent)
 {
 	Event = InEvent;
 	OnInit();
@@ -83,13 +83,19 @@ float UNEventView::GetExpiredTime() const
 	return Event->GetExpiredTime();
 }
 
+void UNEventView::Stop()
+{
+	CHECK_EVENT_V();
+	return Event->Stop();
+}
+
 void UNEventView::SetEventLabel(const FName& InEventLabel)
 {
 	CHECK_EVENT_V();
 	Event->SetEventLabel(InEventLabel);
 }
 
-TSharedPtr<FNEvent> UNEventView::GetEvent()
+TSharedPtr<INEvent> UNEventView::GetEvent()
 {
 	CHECK_EVENT(nullptr);
 	return Event;

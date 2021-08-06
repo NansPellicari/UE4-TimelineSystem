@@ -34,15 +34,15 @@ FNTimeline::~FNTimeline()
 	EventChanged.Clear();
 }
 
-void FNTimeline::Attached(const TArray<TSharedPtr<FNEvent>>& EventsCollection)
+void FNTimeline::Attached(const TArray<TSharedPtr<INEvent>>& EventsCollection)
 {
-	for (TSharedPtr<FNEvent, ESPMode::Fast> Event : EventsCollection)
+	for (TSharedPtr<INEvent, ESPMode::Fast> Event : EventsCollection)
 	{
 		Attached(Event);
 	}
 }
 
-bool FNTimeline::Attached(const TSharedPtr<FNEvent>& Event)
+bool FNTimeline::Attached(const TSharedPtr<INEvent>& Event)
 {
 	EventChanged.Broadcast(Event, ENTimelineEvent::BeforeAttached, CurrentTime, -1);
 	if (Event->IsAttachable())
@@ -63,7 +63,7 @@ bool FNTimeline::Attached(const TSharedPtr<FNEvent>& Event)
 	return Event->IsAttachable();
 }
 
-void FNTimeline::StartEvent(const TSharedPtr<FNEvent>& Event, const int32& Index) const
+void FNTimeline::StartEvent(const TSharedPtr<INEvent>& Event, const int32& Index) const
 {
 	Event->Start(CurrentTime);
 	EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, Index);
@@ -76,12 +76,12 @@ void FNTimeline::NotifyTick()
 	// TODO remove this index not useful anymore
 	int32 Index = 0;
 	// TODO Create an list of expired events to save
-	TArray<TSharedPtr<FNEvent>> EventsToRemoved;
-	for (const TSharedPtr<FNEvent>& Event : Events)
+	TArray<TSharedPtr<INEvent>> EventsToRemoved;
+	for (const TSharedPtr<INEvent>& Event : Events)
 	{
 		Index++;
 
-		// This allow to manage manual expiration elsewhere
+		// This allow to manage manual expiration elsewhere using the INEvent::Stop() function
 		if (Event->IsExpired() && Event->GetStartedAt() >= 0.f)
 		{
 			OnExpired(Event, CurrentTime, Index);
@@ -103,23 +103,25 @@ void FNTimeline::NotifyTick()
 			continue;
 		}
 
-		Event->NotifyAddTime(GetTickInterval());
+		Event->AddTime(GetTickInterval());
+		EventChanged.Broadcast(Event, ENTimelineEvent::Tick, CurrentTime, Index);
 
 		if (Event->IsExpired())
 		{
+			Event->Stop();
 			OnExpired(Event, CurrentTime, Index);
 			EventsToRemoved.Add(Event);
 		}
 	}
 
-	for (TSharedPtr<FNEvent> EventToRemoved : EventsToRemoved)
+	for (TSharedPtr<INEvent> EventToRemoved : EventsToRemoved)
 	{
 		Events.Remove(EventToRemoved);
 	}
 	EventsToRemoved.Empty();
 }
 
-void FNTimeline::OnExpired(const TSharedPtr<FNEvent>& Event, const float& ExpiredTime, const int32& Index) const
+void FNTimeline::OnExpired(const TSharedPtr<INEvent>& Event, const float& ExpiredTime, const int32& Index) const
 {
 	Event->SetExpiredTime(ExpiredTime);
 	EventChanged.Broadcast(Event, ENTimelineEvent::Expired, ExpiredTime, Index);
@@ -161,13 +163,13 @@ void FNTimeline::Clear()
 	CurrentTime = 0;
 }
 
-TSharedPtr<FNEvent> FNTimeline::GetEvent(const FString& InUID) const
+TSharedPtr<INEvent> FNTimeline::GetEvent(const FString& InUID) const
 {
-	TSharedPtr<FNEvent> Event = *Events.FindByKey(InUID);
+	TSharedPtr<INEvent> Event = *Events.FindByKey(InUID);
 	return Event;
 }
 
-TArray<TSharedPtr<FNEvent>> FNTimeline::GetEvents() const
+TArray<TSharedPtr<INEvent>> FNTimeline::GetEvents() const
 {
 	return Events;
 }
@@ -194,10 +196,10 @@ void FNTimeline::Archive(FArchive& Ar)
 			Events.Add(MakeShared<FNEvent>());
 		}
 	}
-	
+
 	for (int32 Idx = 0; Idx < NumEvents; Idx++)
 	{
-		TSharedPtr<FNEvent> Event = Events[Idx];
+		TSharedPtr<INEvent> Event = Events[Idx];
 		Event->Archive(Ar);
 	}
 }

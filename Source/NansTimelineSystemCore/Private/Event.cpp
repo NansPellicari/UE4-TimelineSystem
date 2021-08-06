@@ -95,16 +95,6 @@ float FNEvent::GetExpiredTime() const
 	return ExpiredTime;
 }
 
-void FNEvent::SetUID(const FString& InUId)
-{
-	UId = InUId;
-}
-
-void FNEvent::SetLocalTime(const float& InLocalTime)
-{
-	LocalTime = InLocalTime;
-}
-
 void FNEvent::SetDuration(const float& InDuration)
 {
 	Duration = InDuration;
@@ -136,7 +126,7 @@ void FNEvent::Stop()
 	bActivated = false;
 }
 
-void FNEvent::NotifyAddTime(const float& NewTime)
+void FNEvent::AddTime(const float& NewTime)
 {
 	LocalTime += NewTime;
 }
