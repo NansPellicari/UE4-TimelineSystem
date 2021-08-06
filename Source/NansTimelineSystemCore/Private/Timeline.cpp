@@ -31,6 +31,7 @@ FNTimeline::FNTimeline(const FName& InLabel)
 FNTimeline::~FNTimeline()
 {
 	Events.Empty();
+	ExpiredEvents.Empty();
 	EventChanged.Clear();
 }
 
@@ -75,7 +76,6 @@ void FNTimeline::NotifyTick()
 
 	// TODO remove this index not useful anymore
 	int32 Index = 0;
-	// TODO Create an list of expired events to save
 	TArray<TSharedPtr<INEvent>> EventsToRemoved;
 	for (const TSharedPtr<INEvent>& Event : Events)
 	{
@@ -116,6 +116,7 @@ void FNTimeline::NotifyTick()
 
 	for (TSharedPtr<INEvent> EventToRemoved : EventsToRemoved)
 	{
+		ExpiredEvents.Add(EventToRemoved);
 		Events.Remove(EventToRemoved);
 	}
 	EventsToRemoved.Empty();
@@ -165,13 +166,20 @@ void FNTimeline::Clear()
 
 TSharedPtr<INEvent> FNTimeline::GetEvent(const FString& InUID) const
 {
-	TSharedPtr<INEvent> Event = *Events.FindByKey(InUID);
+	const TSharedPtr<INEvent>* EventPtr = Events.FindByKey(InUID);
+	if (EventPtr == nullptr) return nullptr;
+	TSharedPtr<INEvent> Event = *EventPtr;
 	return Event;
 }
 
 TArray<TSharedPtr<INEvent>> FNTimeline::GetEvents() const
 {
 	return Events;
+}
+
+TArray<TSharedPtr<INEvent>> FNTimeline::GetExpiredEvents() const
+{
+	return ExpiredEvents;
 }
 
 void FNTimeline::Archive(FArchive& Ar)

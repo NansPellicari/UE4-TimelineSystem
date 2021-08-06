@@ -24,6 +24,7 @@ class FNTimelineManager;
 #endif
 
 UENUM()
+
 enum class ENTimelineEvent : uint8
 {
 	/**
@@ -125,6 +126,9 @@ public:
 	/** @returns Get the list of all events saved in this timeline */
 	TArray<TSharedPtr<INEvent>> GetEvents() const;
 
+	/** @returns Get the list of all events expired in this timeline */
+	TArray<TSharedPtr<INEvent>> GetExpiredEvents() const;
+
 	/**
 	* Get an event by its UID
 	* @returns the event found or invalid TSharedPtr
@@ -180,6 +184,9 @@ private:
 
 	/** Collection of each Events attached to the timeline. */
 	TArray<TSharedPtr<INEvent>> Events;
+
+	/** Collection of each Events attached to the timeline. */
+	TArray<TSharedPtr<INEvent>> ExpiredEvents;
 
 	/** @see FTimeline() */
 	FNTimelineEventDelegate EventChanged;

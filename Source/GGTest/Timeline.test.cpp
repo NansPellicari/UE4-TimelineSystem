@@ -107,15 +107,15 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageCorrectlyDifferentEvents)
 	EXPECT_EQ(Events[1]->GetLocalTime(), 2.f);
 	EXPECT_TRUE(Events[1]->IsExpired());
 	// means it has been removed from the timeline events collection
-	EXPECT_TRUE(Events[1].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[1]->GetUID()).IsValid());
 	EXPECT_EQ(Events[2]->GetStartedAt(), 3.f);
 	EXPECT_FALSE(Events[2]->IsExpired());
-	EXPECT_FALSE(Events[2].IsUnique());
+	EXPECT_TRUE(Timer->GetTimeline()->GetEvent(Events[2]->GetUID()).IsValid());
 	Timer->TimerTick(); // 4 sec
 	EXPECT_TRUE(Events[2]->IsExpired());
-	EXPECT_TRUE(Events[2].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[2]->GetUID()).IsValid());
 	EXPECT_TRUE(Events[4]->IsExpired());
-	EXPECT_TRUE(Events[4].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[4]->GetUID()).IsValid());
 	Timer->TimerTick(); // 5 sec
 	EXPECT_TRUE(Events[3]->IsExpired());
 	Timer->TimerTick(); // 6 sec
@@ -182,7 +182,7 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageEventWhichHasBeenExpiredM
 	Events[0]->SetExpired();
 	Timer->TimerTick();
 	EXPECT_TRUE(Events[0]->IsExpired());
-	EXPECT_TRUE(Events[0].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[0]->GetUID()).IsValid());
 	EXPECT_EQ(Events[0]->GetStartedAt(), 0);
 	EXPECT_NE(Events[0]->GetLocalTime(), 2.f);
 }
