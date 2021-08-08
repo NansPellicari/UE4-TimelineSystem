@@ -29,7 +29,7 @@ UFactory* FAssetTypeActions_NEventViewBlueprint::GetFactoryForBlueprintType(UBlu
 
 FText FAssetTypeActions_NEventViewBlueprint::GetName() const
 {
-	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_NEventViewBlueprint", "Event View Blueprint");
+	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_NEventViewBlueprint", "Timeline Event View");
 }
 
 FColor FAssetTypeActions_NEventViewBlueprint::GetTypeColor() const

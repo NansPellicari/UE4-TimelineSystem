@@ -15,6 +15,7 @@
 #include "NansTimelineSystemEd.h"
 
 #include "AssetToolsModule.h"
+#include "NansTimelineSystemStyle.h"
 #include "Customization/ConfiguredTimelineCustomization.h"
 #include "Event/AssetTypeActions_NEventViewBlueprint.h"
 #include "Modules/ModuleManager.h"
@@ -38,6 +39,8 @@ void FNansTimelineSystemEdModule::StartupModule()
 		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FNConfiguredTimelineCustomization::MakeInstance)
 	);
 
+	FNansTimelineSystemStyle::Initialize();
+
 	// Register the EventViewBlueprint editor asset type actions.
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
@@ -55,6 +58,8 @@ void FNansTimelineSystemEdModule::ShutdownModule()
 		);
 		PropertyModule.UnregisterCustomPropertyTypeLayout("ConfiguredTimeline");
 	}
+
+	FNansTimelineSystemStyle::Shutdown();
 }
 
 #undef LOCTEXT_NAMESPACE
