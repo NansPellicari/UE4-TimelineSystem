@@ -15,81 +15,127 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EventInterface.h"
-#include "TimelineInterface.h"
+#include "Event.h"
 
-struct FNEventSave;
 class FNTimelineManager;
+
+#if !defined(UENUM)
+#define UENUM()
+#endif
+
+UENUM()
+
+enum class ENTimelineEvent : uint8
+{
+	/**
+	* This event should be triggered right before an event is attached to a timeline.
+	* This way it can offer the opportunity to avoid an event to be attached in a dedicated logic.
+	*/
+	BeforeAttached,
+
+	/**
+	* This event should be triggered right after an event is attached to a timeline.
+	* This way it can offer the opportunity to create some stats or else...
+	*/
+	AfterAttached,
+
+	/** This event should be triggered when an event expired. */
+	Expired,
+
+	/** This event should be triggered when it starts */
+	Start,
+
+	/** This event should be triggered when ticked */
+	Tick,
+};
+
+DECLARE_MULTICAST_DELEGATE_FourParams(
+	FNTimelineEventDelegate,
+	TSharedPtr<INEvent> /** Event */,
+	const ENTimelineEvent& /** EventName */,
+	const float& /** ExpiredTime */,
+	const int32& /** Index */
+);
 
 /**
  * @see NTimelineInterface
  */
-class NANSTIMELINESYSTEMCORE_API FNTimeline final : public INTimelineInterface
+class NANSTIMELINESYSTEMCORE_API FNTimeline final
 {
+	/** Only the FNTimelineManager can tick a timeline object */
 	friend class FNTimelineManager;
-
 public:
+	FNTimeline();
+
 	/**
-	 * A Timeline can't exists with a manager.
-	 * This constructor guaranties the necessary coupling & behavior consistency.
-	 *
-	 * @param TimelineManager - Timer which manage all time behavior (tick, pause, stop, play,...)
 	 * @param InLabel - (optional) The name of this timeline. If not provided it creates a name with a static incremented value.
 	 */
-	FNTimeline(FNTimelineManager& TimelineManager, const FName& InLabel = NAME_None);
+	FNTimeline(const FName& InLabel);
 
 	/** Empty events array */
-	virtual ~FNTimeline() override;
-
-	/** @see OnExpired() */
-	FNTimelineEventDelegate EventChanged;
-
-	virtual FNTimelineEventDelegate& OnEventChanged() override;
+	~FNTimeline();
 
 	/**
+	 * Attached an event to this timeline. 
 	 * It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached
 	 * and AfterOnAttached() for any custom usages
 	 *
 	 * @param Event - The event you want to put in the timeline stream
 	 */
-	virtual bool Attached(const TSharedPtr<INEventInterface>& Event) override;
+	bool Attached(const TSharedPtr<INEvent>& Event);
 
 	/**
-	 * Same as Attached(TSharedPtr<NEventInterface> Event) but for a collection of objects.
+	 * Same as Attached(TSharedPtr<INEvent> Event) but for a collection of objects.
 	 *
-	 * @see NTimeline::Attached(TSharedPtr<NEventInterface> Event)
+	 * @see FNTimeline::Attached(TSharedPtr<INEvent> Event)
 	 */
-	virtual void Attached(const TArray<TSharedPtr<INEventInterface>>& EventsCollection) override;
+	void Attached(const TArray<TSharedPtr<INEvent>>& EventsCollection);
 
 	/**
-	 * This should be called only by its friend NTimelineManager
-	 * or a decorator to maintain consistency with its manager.
-	 * @copydoc INTimelineInterface::SetTickInterval()
+	* This is the value required by a timer manager to know
+	* the tick frequency for this timeline (given by NTimelineManager).
+	* The NotifyTick use this method to add time on CurrentTime
+	* at each call.
+	*/
+	float GetTickInterval() const;
+
+	/** Retrieve the current time since this timeline exists and play */
+	float GetCurrentTime() const;
+
+	/**
+	 * Give a name to this timeline
+	 * @param InLabel - The name
 	 */
-	virtual void SetTickInterval(const float& InTickInterval) override;
+	void SetLabel(const FName& InLabel);
 
-	virtual void SetCurrentTime(const float& InCurrentTime) override;
-	virtual float GetCurrentTime() const override;
-
-	virtual void SetLabel(const FName& InLabel) override;
-	virtual FName GetLabel() const override;
+	/** Return the actual name */
+	FName GetLabel() const;
 
 	/**
 	 * This completely reset every events.
 	 * It should be used with caution.
 	 */
-	virtual void Clear() override;
+	void Clear();
 
 	/**
-	 * @copydoc INTimelineInterface::NotifyTick()
-	 * It uses internally GetTickInterval() to increment time.
-	 */
-	virtual void NotifyTick() override;
-	virtual void Archive(FArchive& Ar) override;
-	virtual TArray<TSharedPtr<INEventInterface>> GetEvents() const override;
-	virtual TSharedPtr<INEventInterface> GetEvent(const FString& InUID) const override;
+	* Offer the opportunities to save data in a binary object.
+	* @param Ar - Archive where we need to save or load data.
+	*/
+	void Archive(FArchive& Ar);
 
-protected:
+	/** @returns Get the list of all events saved in this timeline */
+	TArray<TSharedPtr<INEvent>> GetEvents() const;
+
+	/** @returns Get the list of all events expired in this timeline */
+	TArray<TSharedPtr<INEvent>> GetExpiredEvents() const;
+
+	/**
+	* Get an event by its UID
+	* @returns the event found or invalid TSharedPtr
+	*/
+	TSharedPtr<INEvent> GetEvent(const FString& InUID) const;
+
+private:
 	/** The name of this timeline */
 	FName Label;
 
@@ -105,32 +151,46 @@ protected:
 	float CurrentTime = 0.f;
 
 	/**
-	 * This to allow inherited adapters to have a default constructor
+	 * Defined the tick interval for this timeline.
+	 * This should be called only by its friend INTimelineManagerInterface
+	 * or a decorator to maintain consistency with its manager.
+	 * @param InTickInterval - Time in secs
 	 */
-	FNTimeline() {};
+	void SetTickInterval(const float& InTickInterval);
 
 	/**
-	 * This is the value required by a timer manager to know
-	 * the tick frequency for this timeline (given by NTimelineManager).
-	 * The NotifyTick use this method to add time on CurrentTime
-	 * at each call.
+	 * Should be used only for serialization because it is internally computed with NotifyTick()
+	 * @param InCurrentTime - Time in secs
 	 */
-	float GetTickInterval() const;
+	void SetCurrentTime(const float& InCurrentTime);
 
 	/**
-	 * Use Event SharedPtr with caution, it's pointer is reset just after this method is called.
-	 * @warning the Event should be used internally only to avoid nullptr reference
+	 * This is used to managed and event when it expires.
+	 * Triggers ENTimelineEvent::Expired event with EventChanged
 	 */
-	void OnExpired(const TSharedPtr<INEventInterface>& Event, const float& ExpiredTime, const int32& Index);
+	void OnExpired(const TSharedPtr<INEvent>& Event, const float& ExpiredTime, const int32& Index) const;
 
-private:
 	/**
-	 * Collection of each Events attached to the timeline.
-	 * These event structs are made to keep traces of what happens during game sessions.
-	 * They could be used for stats or user feedbacks for instance.
-	 * > Important notes:
-	 * Inside the struct, the shared pointer is destroyed when event expires to avoid unnecessary memory allocations.
+	 * This is used to managed and event when it starts.
+	 * Triggers ENTimelineEvent::Start event with EventChanged
 	 */
-	TArray<FNEventSave> SavedEvents;
-	TMap<FString, TSharedPtr<INEventInterface>> Events;
+	void StartEvent(const TSharedPtr<INEvent>& Event, const int32& Index) const;
+
+	/**
+	 * This manages to notify every events saved in this timeline with the new time added.
+	 * It uses internally GetTickInterval() to increment time.
+	 */
+	void NotifyTick();
+
+	/** Collection of each Events attached to the timeline. */
+	TArray<TSharedPtr<INEvent>> Events;
+
+	/** Collection of each Events attached to the timeline. */
+	TArray<TSharedPtr<INEvent>> ExpiredEvents;
+
+	/** @see FTimeline() */
+	FNTimelineEventDelegate EventChanged;
+
+	// This is global to avoid similar generated name when retrieved from archive
+	static int32 Counter;
 };

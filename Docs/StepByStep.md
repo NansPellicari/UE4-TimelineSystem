@@ -1,25 +1,30 @@
 # Getting started - a step by step guide
+<a id="markdown-getting-started---a-step-by-step-guide" name="getting-started---a-step-by-step-guide"></a>
+
 
 <!-- TOC -->
 
--   [1. Installation](#1-installation)
-    -   [1.1. Clone plugins](#11-clone-plugins)
-    -   [1.2. Add plugins in your game dependencies](#12-add-plugins-in-your-game-dependencies)
-    -   [1.3. Use TimelineGameInstance and TimelineClient](#13-use-timelinegameinstance-and-timelineclient)
--   [2. Usages](#2-usages)
-    -   [2.1. Configure Timelines](#21-configure-timelines)
-    -   [2.2. Add Event](#22-add-event)
-    -   [2.3. Get & display](#23-get--display)
+- [1. Installation](#1-installation)
+    - [1.1. Clone plugins](#11-clone-plugins)
+    - [1.2. Add plugins in your game dependencies](#12-add-plugins-in-your-game-dependencies)
+    - [1.3. Use TimelineGameSubSystem and TimelineClient](#13-use-timelinegamesubsystem-and-timelineclient)
+- [2. Usages](#2-usages)
+    - [2.1. Configure Timelines](#21-configure-timelines)
+    - [2.2. Create EventView asset](#22-create-eventview-asset)
+    - [2.3. Add Event](#23-add-event)
+    - [2.4. Get & display](#24-get--display)
 
 <!-- /TOC -->
 
-<a id="markdown-1-installation" name="1-installation"></a>
-
 ## 1. Installation
+<a id="markdown-installation" name="installation"></a>
 
-<a id="markdown-11-clone-plugins" name="11-clone-plugins"></a>
+
+Here you will have a step by step guide, but if you prefer to dive into an already made project, please go to https://github.com/NansPellicari/UE4-Test-NansTimelineSystem
 
 ### 1.1. Clone plugins
+<a id="markdown-clone-plugins" name="clone-plugins"></a>
+
 
 First, go to your `Plugins` directory and clone project:
 
@@ -45,9 +50,9 @@ git submodule add git@github.com:NansPellicari/UE4-CoreHelpers.git Plugins/NansC
 
 ```
 
-<a id="markdown-12-add-plugins-in-your-game-dependencies" name="12-add-plugins-in-your-game-dependencies"></a>
-
 ### 1.2. Add plugins in your game dependencies
+<a id="markdown-add-plugins-in-your-game-dependencies" name="add-plugins-in-your-game-dependencies"></a>
+
 
 > :warning: I considered you have an Editor Module next to your project. If not, read this:  
 > https://ue4community.wiki/legacy/creating-an-editor-module-x64nt5g3  
@@ -75,7 +80,7 @@ In your `<MyProject>.uproject` file add these lines:
 }
 ```
 
-in your `Source/<MyProject>.Target.cs`:
+in your `Source/<MyProject>. Target.cs` :
 
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
@@ -87,7 +92,7 @@ ExtraModuleNames.AddRange(new string[] {
 });
 ```
 
-in your `Source/<MyProject>Editor.Target.cs`:
+in your `Source/<MyProject>Editor. Target.cs` :
 
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
@@ -100,7 +105,7 @@ ExtraModuleNames.AddRange(new string[] {
 });
 ```
 
-And be sure to have these in your project public dependencies (in `Source/<MyProject>/<MyProject>.Build.cs`):
+And be sure to have these in your project public dependencies (in `Source/<MyProject>/<MyProject>. Build.cs` ):
 
 ```csharp
 PublicDependencyModuleNames.AddRange(new string[] {
@@ -112,7 +117,7 @@ PublicDependencyModuleNames.AddRange(new string[] {
 });
 ```
 
-And be sure to have these in your EditorModule public dependencies (in `Source/<MyProject>Editor/<MyProject>Editor.Build.cs`):
+And be sure to have these in your EditorModule public dependencies (in `Source/<MyProject>Editor/<MyProject>Editor. Build.cs` ):
 
 ```csharp
 PublicDependencyModuleNames.AddRange(new string[] {
@@ -130,92 +135,37 @@ PublicDependencyModuleNames.AddRange(new string[] {
 });
 ```
 
-<a id="markdown-13-use-timelinegameinstance-and-timelineclient" name="13-use-timelinegameinstance-and-timelineclient"></a>
+### 1.3. Use TimelineGameSubSystem and TimelineClient
+<a id="markdown-use-timelinegamesubsystem-and-timelineclient" name="use-timelinegamesubsystem-and-timelineclient"></a>
 
-### 1.3. Use TimelineGameInstance and TimelineClient
 
-`UNTimelineGameInstance` is an interface you can use with blueprint or c++:
+[UTimelineGameSubsystem](./Source/NansTimelineSystemUE4/Public/TimelineGameSubsystem.h) is the interface you can use with blueprint or c++:
 
 **> Blueprint**
 
-First create a new Blueprint which inherit from a `UGameInstance` and open blueprint **class settings**:
+It is a [GameInstance subsystem](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/Subsystems/).
 
-![gi-class-settings-btn.png](./img/gi-class-settings-btn.png)
-
-Add the `NTimelineGameInstance` interface:
-
-![gi-class-settings-interface-choice.png](./img/gi-class-settings-interface-choice.png)
-
-Override the `UGameInstance::init()` method + add a new variable of `NTimelineClient` Type:
-
-![Override Timeline Init](./img/gi-class-settings-override-init.png)
-
-Override the interface method:
-
-![Override Timeline method](./img/gi-class-settings-interface-method.png)
-
-![Override Timeline get Timeline](./img/gi-class-settings-override-gettimeline.png)
-
-![Override Timeline get Client](./img/gi-class-settings-override-gettimelineclient.png)
+![GameInstance subsystem](./img/gi-game-instance-subsystem.png)
 
 **> c++**
 
-Here an example of a `UGameInstance` class which implements it:
-
 ```cpp
-// I regroup all in MyGameInstance.h file for simplicity sake.
-#pragma once
+UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+if (!World) return nullptr;
 
-#include "CoreMinimal.h"
-#include "Engine/GameInstance.h"
-#include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
-#include "NansTimelineSystemUE4/Public/TimelineClient.h"
-#include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
+UGameInstance* GI = World->GetGameInstance();
 
-#include "MyGameInstance.generated.h"
+UTimelineGameSubsystem* MySubsystem = GI->GetSubsystem<UTimelineGameSubsystem>();
 
-UCLASS()
-class UE4TIMELINE_API UMyGameInstance : public UGameInstance, public INTimelineGameInstance
-{
-	GENERATED_BODY()
-public:
-	UMyGameInstance(){};
-
-	// BEGIN UGameInstance override
-	virtual void Init() override
-	{
-		Super::Init();
-		Client = NewObject<UNTimelineClient>(this, FName(TEXT("MyTimelineClient")));
-		Client->Init();
-	}
-	// END UGameInstance override
-
-	// BEGIN INTimelineGameInstance override
-	virtual UNTimelineManagerDecorator* GetTimeline_Implementation(FConfiguredTimeline Config) const override
-	{
-		return Client->GetTimeline(Config);
-	}
-
-	virtual UNTimelineClient* GetTimelineClient_Implementation() const override
-	{
-		return TimelineClient;
-	}
-	// END INTimelineGameInstance override
-
-protected:
-	UPROPERTY()
-	UNTimelineClient* Client;
-};
 ```
 
-<a id="markdown-2-usages" name="2-usages"></a>
-
 ## 2. Usages
+<a id="markdown-usages" name="usages"></a>
 
-<a id="markdown-21-configure-timelines" name="21-configure-timelines"></a>
 
 ### 2.1. Configure Timelines
+<a id="markdown-configure-timelines" name="configure-timelines"></a>
+
 
 Go to your **project** settings:
 
@@ -229,17 +179,22 @@ then **add** new timeline and configure its **name, tick interval and class** fo
 
 ![add timelines](./img/stepbystep-timeline-add.png)
 
-<a id="markdown-22-add-event" name="22-add-event"></a>
+### 2.2. Create EventView asset
+<a id="markdown-create-eventview-asset" name="create-eventview-asset"></a>
 
-### 2.2. Add Event
+![Create EventView asset](./img/stepbystep-event-create-1.png)
+
+### 2.3. Add Event
+<a id="markdown-add-event" name="add-event"></a>
+
 
 You should use a timeline manager's function
 
 ![add event from manager](./img/stepbystep-event-add-1.png)
 
-<a id="markdown-23-get--display" name="23-get--display"></a>
+### 2.4. Get & display
+<a id="markdown-get--display" name="get--display"></a>
 
-### 2.3. Get & display
 
 ![event display](./img/stepbystep-event-display.png)
 

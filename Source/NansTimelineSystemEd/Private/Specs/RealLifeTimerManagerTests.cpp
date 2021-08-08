@@ -121,12 +121,13 @@ bool FRealLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		TimelineManager->Serialize(ToBinary);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TimelineManager->Init(1.f, FName("ChangeLabel")); // try to change label to checks if rewrite with the archive
+		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
+		TimelineManager->SetLabel(FName("ChangedLabel")); // try to change label to checks if rewrite with the archive
 		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label changed"),
 			TimelineManager->GetLabel(),
-			FName("ChangeLabel")
+			FName("ChangedLabel")
 		);
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
@@ -301,15 +302,12 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		{
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("1st event should not be null"),
-				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetEvent(NewTimelineManager->
-						GetEventViews()[0]->GetUID()).IsValid()
+				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetTimeline()->GetEvent(
+					NewTimelineManager->GetEventViews()[0]->GetUID()).IsValid()
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("2nd event should not be null"),
-				NewTimelineManager->GetEvent(
-					NewTimelineManager->
-						GetEventViews()[1]->GetUID()
-					).IsValid()
+				NewTimelineManager->GetTimeline()->GetEvent(NewTimelineManager->GetEventViews()[1]->GetUID()).IsValid()
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("1st event live since 3 secs"),

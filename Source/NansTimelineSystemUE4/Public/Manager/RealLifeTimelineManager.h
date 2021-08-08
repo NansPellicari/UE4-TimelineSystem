@@ -33,7 +33,7 @@ class NANSTIMELINESYSTEMUE4_API UNRealLifeTimelineManager final : public UNTimel
 	GENERATED_BODY()
 public:
 	/** This do nothing. Excepts in our deepest dreams, we can't altered time in real life!! */
-	virtual void Pause() override{};
+	virtual void Pause() override{}
 
 	/** @copydoc Pause() */
 	virtual void Play() override{};

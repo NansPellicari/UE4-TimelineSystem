@@ -14,9 +14,6 @@
 
 #include "Manager/RealLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
-#include "TimerManager.h"
-
 UNRealLifeTimelineManager::UNRealLifeTimelineManager() {}
 
 void UNRealLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
@@ -37,9 +34,9 @@ void UNRealLifeTimelineManager::Tick(float DeltaTime)
 	// this ensure to always get the real time delta (in case of slowmo).
 	const float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
 	TotalLifeTime += RealDelta;
-	if (TotalLifeTime - LastTimeTick >= GetTickInterval())
+	if (TotalLifeTime - LastTimeTick >= GetTimeline()->GetTickInterval())
 	{
-		LastTimeTick += GetTickInterval();
+		LastTimeTick += GetTimeline()->GetTickInterval();
 		TimerTick();
 	}
 	LastPlayTime = FDateTime::Now();
@@ -77,8 +74,8 @@ void UNRealLifeTimelineManager::Serialize(FArchive& Ar)
 		TotalLifeTime = (LastPlayTime - CreationTime).GetTotalSeconds();
 		LastTimeTick = TotalLifeTime;
 		// Recover lost time since last save game
-		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds() / GetTickInterval();
-		const float SliceTime = GetTickInterval() / 10;
+		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds() / GetTimeline()->GetTickInterval();
+		const float SliceTime = GetTimeline()->GetTickInterval() / 10;
 
 		// Tick to notify timeline until it reaches the actual time.
 		while (MissingLifeTime > 0)

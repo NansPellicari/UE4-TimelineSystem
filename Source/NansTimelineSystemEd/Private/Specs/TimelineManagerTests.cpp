@@ -39,7 +39,7 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
-	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTimeline()->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -49,9 +49,9 @@ bool FTimelineTestCounterIncrease::RunTest(const FString& Parameters)
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("TimerExists called with a pending timer"), TimerManager.TimerExists(TimelineManager->TimerHandle));
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("IsTimerActive called with a pending timer"), TimerManager.IsTimerActive(TimelineManager->TimerHandle));
 		TEST_FALSE(TEST_TEXT_FN_DETAILS("IsTimerPaused called with a pending timer"), TimerManager.IsTimerPaused(TimelineManager->TimerHandle));
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRate called with a pending timer"), (TimerManager.GetTimerRate(TimelineManager->TimerHandle) == TimelineManager->GetTickInterval()));
+		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRate called with a pending timer"), (TimerManager.GetTimerRate(TimelineManager->TimerHandle) == TimelineManager->GetTimeline()->GetTickInterval()));
 		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerElapsed called with a pending timer"), (TimerManager.GetTimerElapsed(TimelineManager->TimerHandle) == 0.f));
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRemaining called with a pending timer"), (TimerManager.GetTimerRemaining(TimelineManager->TimerHandle) == TimelineManager->GetTickInterval()));
+		TEST_TRUE(TEST_TEXT_FN_DETAILS("GetTimerRemaining called with a pending timer"), (TimerManager.GetTimerRemaining(TimelineManager->TimerHandle) == TimelineManager->GetTimeline()->GetTickInterval()));
 		// @formatter:on
 
 		// small tick to move the timer from the pending list to the active list, the timer will start counting time after this tick
@@ -79,7 +79,7 @@ bool FTimelineTestPauseAndPlay::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
-	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTimeline()->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -119,7 +119,7 @@ bool FTimelineTestTimerManagerPauseAndPlay::RunTest(const FString& Parameters)
 	UWorld* World = NTestWorld::CreateAndPlay(EWorldType::Game);
 	FTimerManager& TimerManager = World->GetTimerManager();
 	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
-	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTimeline()->GetTickInterval(), true);
 
 	// Begin test
 	{
@@ -215,7 +215,7 @@ bool FTimelineTestTimerManagerGamePauseWithController::RunTest(const FString& Pa
 	}
 
 	FNTimelineManagerFake* TimelineManager = new FNTimelineManagerFake();
-	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTickInterval(), true);
+	TimerManager.SetTimer(TimelineManager->TimerHandle, TimelineManager->TimerDelegate, TimelineManager->GetTimeline()->GetTickInterval(), true);
 	CollectGarbage(EObjectFlags::RF_NoFlags);
 	// Begin test
 	{

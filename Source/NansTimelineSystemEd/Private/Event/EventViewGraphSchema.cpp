@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemUE4.h"
+#include "EventViewGraphSchema.h"
 
-DEFINE_LOG_CATEGORY(LogTimelineSystem);
+#include "Kismet2/BlueprintEditorUtils.h"
 
-#define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
+UK2Node_VariableGet* UNEventViewGraphSchema::SpawnVariableGetNode(const FVector2D GraphPosition,
+	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
+{
+	return Super::SpawnVariableGetNode(GraphPosition, ParentGraph, VariableName, Source);
+}
 
-void FNansTimelineSystemUE4Module::StartupModule() {}
-
-void FNansTimelineSystemUE4Module::ShutdownModule() {}
-
-#undef LOCTEXT_NAMESPACE
-
-IMPLEMENT_MODULE(FNansTimelineSystemUE4Module, NansTimelineSystemUE4)
+UK2Node_VariableSet* UNEventViewGraphSchema::SpawnVariableSetNode(const FVector2D GraphPosition,
+	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
+{
+	return Super::SpawnVariableSetNode(GraphPosition, ParentGraph, VariableName, Source);
+}

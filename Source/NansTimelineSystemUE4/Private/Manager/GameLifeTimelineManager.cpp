@@ -25,7 +25,7 @@ void UNGameLifeTimelineManager::Init(const float& InTickInterval, const FName& I
 	Super::Init(InTickInterval, InLabel);
 	TimerDelegate = FTimerDelegate::CreateUObject(this, &UNGameLifeTimelineManager::TimerTick);
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-	TimerManager.SetTimer(TimerHandle, TimerDelegate, GetTickInterval(), true);
+	TimerManager.SetTimer(TimerHandle, TimerDelegate, GetTimeline()->GetTickInterval(), true);
 }
 
 void UNGameLifeTimelineManager::Clear()
@@ -37,5 +37,6 @@ void UNGameLifeTimelineManager::Clear()
 	}
 	TimerDelegate.Unbind();
 	TimerHandle.Invalidate();
+	GetTimeline()->Clear();
 	Super::Clear();
 }

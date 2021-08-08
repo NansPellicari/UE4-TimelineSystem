@@ -7,11 +7,6 @@
 
 #include <iostream>
 
-class TimelineTimerManagerFake : public FNTimelineManager
-{
-public:
-};
-
 class FNEventFake : public FNEvent
 {
 public:
@@ -44,13 +39,12 @@ public:
 class NansTimelineSystemCoreTimelineTest : public ::testing::Test
 {
 protected:
-	TimelineTimerManagerFake* Timer;
+	FNTimelineManager* Timer;
 	TArray<TSharedPtr<FNEventFake>> Events;
 
 	void SetUp() override
 	{
-		Timer = new TimelineTimerManagerFake();
-		Timer->SetTickInterval(1.f);
+		Timer = new FNTimelineManager();
 		Events = {
 			MakeShareable(new FNEventFake(FName("event 0"), 0)),
 			MakeShareable(new FNEventFake(FName("event 1"), 2.f)),
@@ -63,19 +57,19 @@ protected:
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ICanCreateAndDestroyTimelineAndTimelineManager)
 {
-	TimelineTimerManagerFake* TimelineManager = new TimelineTimerManagerFake();
+	FNTimelineManager* TimelineManager = new FNTimelineManager();
 	delete TimelineManager;
 }
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldGetAValidTimelineAfterInstanciationAndATickInterval)
 {
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
-	ASSERT_NE(Timer->GetTickInterval(), 0);
+	ASSERT_NE(Timer->GetTimeline()->GetTickInterval(), 0);
 }
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldIncrementItsCurrentTimeWhenTimerTickAndOnlyWhenIsPlaying)
 {
-	float TickInterval = Timer->GetTickInterval();
+	float TickInterval = Timer->GetTimeline()->GetTickInterval();
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
 	Timer->TimerTick();
 	// just to be sure in case of a wrong incrementation computation
@@ -113,15 +107,15 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageCorrectlyDifferentEvents)
 	EXPECT_EQ(Events[1]->GetLocalTime(), 2.f);
 	EXPECT_TRUE(Events[1]->IsExpired());
 	// means it has been removed from the timeline events collection
-	EXPECT_TRUE(Events[1].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[1]->GetUID()).IsValid());
 	EXPECT_EQ(Events[2]->GetStartedAt(), 3.f);
 	EXPECT_FALSE(Events[2]->IsExpired());
-	EXPECT_FALSE(Events[2].IsUnique());
+	EXPECT_TRUE(Timer->GetTimeline()->GetEvent(Events[2]->GetUID()).IsValid());
 	Timer->TimerTick(); // 4 sec
 	EXPECT_TRUE(Events[2]->IsExpired());
-	EXPECT_TRUE(Events[2].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[2]->GetUID()).IsValid());
 	EXPECT_TRUE(Events[4]->IsExpired());
-	EXPECT_TRUE(Events[4].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[4]->GetUID()).IsValid());
 	Timer->TimerTick(); // 5 sec
 	EXPECT_TRUE(Events[3]->IsExpired());
 	Timer->TimerTick(); // 6 sec
@@ -188,14 +182,14 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageEventWhichHasBeenExpiredM
 	Events[0]->SetExpired();
 	Timer->TimerTick();
 	EXPECT_TRUE(Events[0]->IsExpired());
-	EXPECT_TRUE(Events[0].IsUnique());
+	EXPECT_FALSE(Timer->GetTimeline()->GetEvent(Events[0]->GetUID()).IsValid());
 	EXPECT_EQ(Events[0]->GetStartedAt(), 0);
 	EXPECT_NE(Events[0]->GetLocalTime(), 2.f);
 }
 
 TEST_F(NansTimelineSystemCoreTimelineTest, ShouldManageAHigherTickFrequency)
 {
-	Timer->SetTickInterval(0.5f);
+	Timer->Init(0.5f);
 	ASSERT_TRUE(Timer->GetTimeline().IsValid());
 	Timer->Play();
 	Timer->TimerTick(); // should be 0.5sec
@@ -217,8 +211,8 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventExpired)
 {
 	bool Test = false;
 	FString UID = Events[1]->GetUID();
-	Timer->GetTimeline()->OnEventChanged().AddLambda(
-		[&Test, &UID](TSharedPtr<INEventInterface> Event, const ENTimelineEvent& EventName, const float& ExpiredTime,
+	Timer->OnEventChanged().AddLambda(
+		[&Test, &UID](TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName, const float& ExpiredTime,
 		const int32& Index)
 		{
 			if (EventName == ENTimelineEvent::Expired)
@@ -242,11 +236,15 @@ TEST_F(NansTimelineSystemCoreTimelineTest, ShouldTriggerAnEventWhenEventStart)
 {
 	bool Test = false;
 	FString UID = Events[2]->GetUID();
-	Events[2]->OnStart().AddLambda(
-		[&Test, &UID](INEventInterface* Event, const float& StartTime)
+	Timer->OnEventChanged().AddLambda(
+		[&Test, &UID](TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName, const float& EventTime,
+		const int32& Index)
 		{
-			EXPECT_EQ(StartTime, 3.f);
-			Test = true;
+			if (EventName == ENTimelineEvent::Start && UID == Event->GetUID())
+			{
+				EXPECT_EQ(EventTime, 3.f);
+				Test = true;
+			}
 		}
 	);
 

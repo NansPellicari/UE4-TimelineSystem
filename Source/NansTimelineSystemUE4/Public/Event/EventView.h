@@ -15,7 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EventInterface.h"
+#include "Event.h"
 
 #include "EventView.generated.h"
 
@@ -24,14 +24,14 @@
  * This is a readonly object.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEventInterface
+class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEvent
 {
 	GENERATED_BODY()
 public:
 	UNEventView() {}
-	void Init(TSharedPtr<INEventInterface> _Event);
+	void Init(const TSharedPtr<INEvent>& InEvent);
 
-	// BEGIN INEventInterface overrides
+	// BEGIN INEvent overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsExpired() const override;
 
@@ -55,44 +55,76 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual FString GetUID() const override;
-	
+
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetAttachedTime() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual bool IsAttachable() const override;
 
-	
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
 	virtual float GetExpiredTime() const override;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnStartEvent(const UNEventView* StartedEvent, const float& StartTime);
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
+	virtual void Stop() override;
 
-	// View object = no alteration 
-	virtual void Start(const float& StartTime) override {}
-	virtual void Stop() override {}
-	virtual void NotifyAddTime(const float& NewTime) override {}
-	virtual FNEventDelegate& OnStart() override;
-	virtual void SetUID(const FString& InUId) override {}
-	virtual void SetLocalTime(const float& InLocalTime) override {}
+	virtual void SetAttachedTime(const float& InLocalTime) override {}
+	virtual void SetAttachable(const bool& bInIsAttachable) override {}
+	virtual void SetExpiredTime(const float& InLocalTime) override {}
 	virtual void SetDuration(const float& InDuration) override {}
 	virtual void SetDelay(const float& InDelay) override {}
+	virtual void Start(const float& StartTime) override {}
+	virtual void AddTime(const float& NewTime) override {}
 	virtual void Clear() override {}
-	virtual void SetAttachedTime(const float& InLocalTime) override {}
-	virtual void SetExpiredTime(const float& InLocalTime) override {}
-	virtual void SetAttachable(const bool& bInIsAttachable) override {};
-	// END INEventInterface overrides
-	virtual void BeginDestroy() override;
+	virtual void Archive(FArchive& Ar) override {}
+	// END INEvent overrides
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnInit();
 
-	TSharedPtr<INEventInterface> GetEvent();
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnStart(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnBeforeAttached(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnAfterAttached(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnExpired(float InLocalTime = -1.f);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnTick(float InLocalTime = -1.f);
+
+	virtual void BeginDestroy() override;
+	TSharedPtr<INEvent> GetEvent();
 
 private:
 	/**
-	 * The actual decorator is for this object.
-	 * It should be instantiate on a ctor or a dedicated init function
+	 * The actual decorated object.
+	 * It is passed in the #Init() function
 	 */
-	TSharedPtr<INEventInterface> Event;
+	TSharedPtr<INEvent> Event;
+};
 
-	void WhenOnStart(INEventInterface*, const float& StartTime);
+/**
+ * A UNEventViewBlueprint is essentially a specialized Blueprint whose graphs control an UNEventView.
+ * The UNEventView factory should pick this for you automatically
+ */
+UCLASS(BlueprintType)
+class NANSTIMELINESYSTEMUE4_API UNEventViewBlueprint : public UBlueprint
+{
+	GENERATED_BODY()
+public:
+#if WITH_EDITOR
+
+	// UBlueprint interface
+	inline virtual bool SupportedByDefaultBlueprintFactory() const override;
+	// End of UBlueprint interface
+
+	/** Returns the most base gameplay ability blueprint for a given blueprint (if it is inherited from another ability blueprint, returning null if only native / non-ability BP classes are it's parent) */
+	static UNEventViewBlueprint* FindRootEventViewBlueprint(UNEventViewBlueprint* DerivedBlueprint);
+
+#endif
 };

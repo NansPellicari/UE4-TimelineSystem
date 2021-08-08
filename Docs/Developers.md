@@ -1,50 +1,56 @@
 # Developers
+<a id="markdown-developers" name="developers"></a>
 
 Get the full documentation of the [API here](Api.md).
 
 <!-- TOC -->
 
--   [1. Dependencies](#1-dependencies)
-    -   [1.1. for docs](#11-for-docs)
--   [2. Design decisions](#2-design-decisions)
-    -   [2.1. Core & UE4 separation](#21-core--ue4-separation)
--   [3. How to override, create my own Event, Timeline, etc...](#3-how-to-override-create-my-own-event-timeline-etc)
-    -   [3.1. TimelineManager](#31-timelinemanager)
-    -   [3.2. Timeline](#32-timeline)
-    -   [3.3. Event](#33-event)
--   [4. Special case: Load game](#4-special-case-load-game)
-    -   [4.1. Create USaveGame Object](#41-create-usavegame-object)
-    -   [4.2. Copy/Paste to override UE functions](#42-copypaste-to-override-ue-functions)
-    -   [4.3. Trigger Save/Load](#43-trigger-saveload)
--   [5. Testing](#5-testing)
-    -   [5.1. Launch UE4 tests](#51-launch-ue4-tests)
-    -   [5.2. Make Google Tests works](#52-make-google-tests-works)
--   [6. Contributing](#6-contributing)
+- [1. Dependencies](#1-dependencies)
+    - [1.1. Plugins](#11-plugins)
+    - [1.2. for docs](#12-for-docs)
+- [2. Design decisions](#2-design-decisions)
+    - [2.1. Core & UE4 separation](#21-core--ue4-separation)
+- [3. How to override, create my own Event, Timeline, etc...](#3-how-to-override-create-my-own-event-timeline-etc)
+    - [3.1. TimelineManager](#31-timelinemanager)
+    - [3.2. Timeline](#32-timeline)
+    - [3.3. Event](#33-event)
+- [4. Special case: Load game](#4-special-case-load-game)
+    - [4.1. Create USaveGame Object](#41-create-usavegame-object)
+    - [4.2. Copy/Paste to override UE functions](#42-copypaste-to-override-ue-functions)
+    - [4.3. Trigger Save/Load](#43-trigger-saveload)
+- [5. Testing](#5-testing)
+    - [5.1. Launch UE4 tests](#51-launch-ue4-tests)
+    - [5.2. Make Google Tests works](#52-make-google-tests-works)
+- [6. Contributing](#6-contributing)
 
 <!-- /TOC -->
 
-<a id="markdown-1-dependencies" name="1-dependencies"></a>
 
 ## 1. Dependencies
+<a id="markdown-dependencies" name="dependencies"></a>
 
-<a id="markdown-11-for-docs" name="11-for-docs"></a>
+### 1.1. Plugins
+<a id="markdown-plugins" name="plugins"></a>
+Those specified in the main readme + [UE4-GoogleTest](https://github.com/NansPellicari/UE4-GoogleTest)
 
-### 1.1. for docs
+
+### 1.2. for docs
+<a id="markdown-for-docs" name="for-docs"></a>
 
 -   [node](https://nodejs.org/en/download/) + npm (installed by default with node-js)
 -   [Doxygen](http://www.doxygen.nl/download.html)
 
 > [What I used for API documentation](https://sourcey.com/articles/generating-beautiful-cpp-markdown-documentation-with-moxygen)
 
-<a id="markdown-2-design-decisions" name="2-design-decisions"></a>
 
 ## 2. Design decisions
+<a id="markdown-design-decisions" name="design-decisions"></a>
 
 My goal was to create the most extensible plugin as possible and keep things simple and readable as inspired by [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) philosophy and [SOLID principles](https://en.wikipedia.org/wiki/SOLID).
 
-<a id="markdown-21-core--ue4-separation" name="21-core--ue4-separation"></a>
 
 ### 2.1. Core & UE4 separation
+<a id="markdown-core--ue4-separation" name="core--ue4-separation"></a>
 
 **> Core** module manage every "basic" functionnalities:
 
@@ -62,9 +68,9 @@ My goal was to create the most extensible plugin as possible and keep things sim
 -   it manages **serialization** for the whole system
 -   it provides an interface for your **GameInstance** to work with the [TimelineClient](../Source/NansTimelineSystemUE4/Public/TimelineClient.h) object, this makes the glue with configurations, blueprint functions and serialization for savegame.
 
-<a id="markdown-3-how-to-override-create-my-own-event-timeline-etc" name="3-how-to-override-create-my-own-event-timeline-etc"></a>
 
 ## 3. How to override, create my own Event, Timeline, etc...
+<a id="markdown-how-to-override-create-my-own-event-timeline-etc" name="how-to-override-create-my-own-event-timeline-etc"></a>
 
 First, I create the whole structure to be the most extensible.  
 To doing it, we have to consider **3** basics elements:
@@ -76,48 +82,48 @@ To doing it, we have to consider **3** basics elements:
 Each of these **Core** classes in `Source/NansTimelineSystemCore` have their **decorator(s)** in the `Source/NansTimelineSystemUE4`.  
 The most preferable way to extend them, it's to create your own decorators or override existants decorators.
 
-<a id="markdown-31-timelinemanager" name="31-timelinemanager"></a>
 
 ### 3.1. TimelineManager
+<a id="markdown-timelinemanager" name="timelinemanager"></a>
 
 It can be easily decorated, see [Source/NansTimelineSystemUE4/Public/Manager/\*](../Source/NansTimelineSystemUE4/Public/Manager/) for examples.  
 The easy way is to override the base decorator [TimelineManagerDecorator](../Source/NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h).  
 You can create your own manager for your game specificities.
 
-<a id="markdown-32-timeline" name="32-timeline"></a>
 
 ### 3.2. Timeline
+<a id="markdown-timeline" name="timeline"></a>
 
-This class and it's decorator should not be overrided, they provide the basic functionnalities to manage events and serialization, they work more as extended queues rather than client object with complex usage.
+This class should not be overrided, it provides the basic functionnalities to manage events and serialization, it works more as extended queues rather than client object with complex usage.
 
-<a id="markdown-33-event" name="33-event"></a>
 
 ### 3.3. Event
+<a id="markdown-event" name="event"></a>
 
-You **should** create decorator for it, the best way its to extend the [EventDecorator](../Source/NansTimelineSystemUE4/Public/Event/EventDecorator.h) class.  
+You **should** create an asset for it based on the [EventView](../Source/NansTimelineSystemUE4/Public/Event/EventView.h) class.  
 You can create a **blueprint** child based on it or a **c++** override.
 
 > To make your data saveable, don't forget to use `UPROPERTY(SaveGame)` in your dedicated fields,  
 > or in your blueprint details panel:  
 > ![blueprint savegame](./img/savegame-prop.png)
 
-<a id="markdown-4-special-case-load-game" name="4-special-case-load-game"></a>
 
 ## 4. Special case: Load game
+<a id="markdown-special-case-load-game" name="special-case-load-game"></a>
 
 **Load** is a bit tricky here, because we need to pass a `UWorld` object to the `USaveGame` object to retrieve `UNTimelineManager` from the `UGameInstance`.  
 As I explain [here](https://answers.unrealengine.com/questions/958879/what-is-the-best-way-to-populate-usavegame-on-load.html) the actual code (UE4.25) doesn't allow it with the standard approach.
 
-<a id="markdown-41-create-usavegame-object" name="41-create-usavegame-object"></a>
 
 ### 4.1. Create USaveGame Object
+<a id="markdown-create-usavegame-object" name="create-usavegame-object"></a>
 
 First you can follow [this UE4 doc page](https://docs.unrealengine.com/en-US/Gameplay/SaveGame/index.html) to create your own.
 Then you have to add a public `UObject* WorldContextObject` property and add these lines:
 
 ```cpp
 // at the top of the file
-#include "NansTimelineSystemUE4/Public/TimelineGameInstance.h"
+#include "NansTimelineSystemUE4/Public/TimelineGameSubsystem.h"
 #include "Runtime/Engine/Classes/Engine/GameInstance.h"
 
 // in your `Serialize()` method
@@ -127,18 +133,15 @@ if (WorldContextObject->GetWorld()->GetGameInstance() == nullptr) return;
 
 // To retrieve the c++ layer of the interface
 UGameInstance* GI = WorldContextObject->GetWorld()->GetGameInstance());
-if (!GI->GetClass()->ImplementsInterface(UNTimelineGameInstance::StaticClass()))
-{
-    UE_LOG(LogTemp, Error, TEXT("Your game instance should implements INTimelineGameInstance"));
-    return;
-}
-INTimelineGameInstance::Execute_GetTimelineClient(GI)->Serialize(Ar);
+UTimelineGameSubsystem* MySubsystem = GI->GetSubsystem<UTimelineGameSubsystem>();
+
+MySubsystem->GetTimelineClient()->Serialize(Ar);
 
 ```
 
-<a id="markdown-42-copypaste-to-override-ue-functions" name="42-copypaste-to-override-ue-functions"></a>
 
 ### 4.2. Copy/Paste to override UE functions
+<a id="markdown-copypaste-to-override-ue-functions" name="copypaste-to-override-ue-functions"></a>
 
 > /!\ Important note:  
 > Due to UE4 license limitation, I can't copy/paste too much engine's code here.  
@@ -158,7 +161,7 @@ UFUNCTION(..., meta = (WorldContext = "WorldContextObject",...))
 LoadGameFromMemory(...,WorldContext WorldContextObject);
 ```
 
--   `LoadGameFromMemory()` is the c++ function that `LoadGameFromSlot()` should call and this is where you can add the world to the `USaveGame` object. Just between the [USaveGame instanciation](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2102) and the call of [Serialize()](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2105) method you need to add:
+-   `LoadGameFromMemory()` is the c++ function that `LoadGameFromSlot()` should call and this is where you can add the world to the `USaveGame` object. Just between the [USaveGame instantiation](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2102) and the call of [Serialize()](https://github.com/EpicGames/UnrealEngine/blob/42d84f7d1f9c2147ad109179f268fd1542b2ccd2/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp#L2105) method you need to add:
 
 ```cpp
 // USaveGame instanciation
@@ -183,17 +186,17 @@ and from the [UGameplayStatics](https://github.com/EpicGames/UnrealEngine/blob/4
 
 In [this post](https://answers.unrealengine.com/questions/958879/what-is-the-best-way-to-populate-usavegame-on-load.html) I've suggested 2 ways to simplify this process, but I still don't have any response.
 
-<a id="markdown-43-trigger-saveload" name="43-trigger-saveload"></a>
 
 ### 4.3. Trigger Save/Load
+<a id="markdown-trigger-saveload" name="trigger-saveload"></a>
 
 Now you can use you special function to load game:
 
 ![save & load](./img/save-load.png)
 
-<a id="markdown-5-testing" name="5-testing"></a>
 
 ## 5. Testing
+<a id="markdown-testing" name="testing"></a>
 
 They are 2 kinds of tests in this project:
 
@@ -203,9 +206,9 @@ They are 2 kinds of tests in this project:
 In my workflow I use this project template https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv to simplify all the testing settings, tests launches and to get nice reports.  
 I invite you to using it if you want to [contribute](#6-contributing) to this project or quick testing these features.
 
-<a id="markdown-51-launch-ue4-tests" name="51-launch-ue4-tests"></a>
 
 ### 5.1. Launch UE4 tests
+<a id="markdown-launch-ue4-tests" name="launch-ue4-tests"></a>
 
 All tests definitions begin with `Nans.TimelineSystem`, and for all plugins I made or will made tests defs are prefixed with `Nans` for simplicity sake.
 
@@ -216,9 +219,9 @@ If you don't want to use my [template](https://github.com/NansPellicari/UE4-TPL-
 UE4Editor-Cmd.exe "<YourProjectPath>\YourProject.uproject" -unattended -nopause -NullRHI -ExecCmds="Automation RunTests Nans.TimelineSystem; quit" -TestExit="Automation Test Queue Empty" -log -log=RunTests.log -ReportOutputPath="<YourProjectPath>\TheFolderYouWantForReports"
 ```
 
-<a id="markdown-52-make-google-tests-works" name="52-make-google-tests-works"></a>
 
 ### 5.2. Make Google Tests works
+<a id="markdown-make-google-tests-works" name="make-google-tests-works"></a>
 
 After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv following the [Step by step guide](https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv#3-step-by-step-guide), you have to download this repo and dependencies as git submodules using this:
 
@@ -241,9 +244,9 @@ After that you just have to link tests located into the `GGTest` folder of the p
 
 And that it!
 
-<a id="markdown-6-contributing" name="6-contributing"></a>
 
 ## 6. Contributing
+<a id="markdown-contributing" name="contributing"></a>
 
 You are very welcome if you want to contribute.
 I explain in [CONTRIBUTING.md](../CONTRIBUTING.md) what is the most comfortable way to me you can contribute.

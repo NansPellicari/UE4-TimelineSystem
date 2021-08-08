@@ -12,7 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "TimelineGameInstance.h"
+#pragma once
 
-#include "Manager/TimelineManagerDecorator.h"
-#include "TimelineClient.h"
+#include "CoreMinimal.h"
+#include "EventViewGraph.generated.h"
+
+/** A dedicated graph for UNEventView used for UNEventViewBlueprint creation. */
+UCLASS(MinimalAPI)
+class UNEventViewGraph : public UEdGraph
+{
+	GENERATED_BODY()
+};

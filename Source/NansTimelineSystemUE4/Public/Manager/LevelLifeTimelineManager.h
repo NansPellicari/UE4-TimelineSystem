@@ -23,11 +23,11 @@
 /**
  * It tracks game session but refreshes when level changed.
  *
- * It could be usefull for level bonus/malus attribution during a level session, or create a sheduled event.
+ * It could be useful for level bonus/malus attribution during a level session, or create a scheduled event.
  *
  * For example:
  * - a player character take drugs and his capacities are altered for an amount of time
- * - player init a bomb and it should explosed in a determined time.
+ * - player init a bomb and it should explode in a determined time.
  */
 UCLASS(Blueprintable)
 class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager final : public UNGameLifeTimelineManager
@@ -59,14 +59,14 @@ protected:
 	/** Default ctor */
 	UNLevelLifeTimelineManager();
 
-	/** WIP */
+	/** TODO WIP */
 	void SaveDataAndClear();
 
-	/** Used for savegame */
+	/** Used for save game object */
 	UPROPERTY()
 	FName Label;
 
-	/** Used for savegame to make a sanity check (verify if current world is the same as the load game) */
+	/** Used for save game to make a sanity check (verify if current world is the same as the load game) */
 	UPROPERTY()
 	FString LevelName;
 

@@ -35,6 +35,8 @@ namespace UnrealBuildTool.Rules
 					"EditorWidgets",
 					"PropertyEditor",
 					"DetailCustomizations",
+					"AssetTools",
+					"Projects",
 					"NansCoreHelpers",
 					"NansUE4TestsHelpers",
 					"NansTimelineSystemCore",

@@ -14,6 +14,10 @@
 
 #include "NansTimelineSystemEd.h"
 
+#include "AssetToolsModule.h"
+#include "NansTimelineSystemStyle.h"
+#include "Customization/ConfiguredTimelineCustomization.h"
+#include "Event/AssetTypeActions_NEventViewBlueprint.h"
 #include "Modules/ModuleManager.h"
 #include "Pin/TimelinePinFactory.h"
 #include "PropertyEditor/Public/PropertyEditorModule.h"
@@ -30,8 +34,17 @@ void FNansTimelineSystemEdModule::StartupModule()
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
 	// Custom properties
-	PropertyModule.RegisterCustomPropertyTypeLayout("ConfiguredTimeline",
-		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FNConfiguredTimelineCustomization::MakeInstance));
+	PropertyModule.RegisterCustomPropertyTypeLayout(
+		"ConfiguredTimeline",
+		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FNConfiguredTimelineCustomization::MakeInstance)
+	);
+
+	FNansTimelineSystemStyle::Initialize();
+
+	// Register the EventViewBlueprint editor asset type actions.
+	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+
+	AssetTools.RegisterAssetTypeActions(MakeShared<FAssetTypeActions_NEventViewBlueprint>());
 }
 
 void FNansTimelineSystemEdModule::ShutdownModule()
@@ -40,9 +53,13 @@ void FNansTimelineSystemEdModule::ShutdownModule()
 	if (FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
 	{
 		// unregister properties
-		FPropertyEditorModule& PropertyModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+		FPropertyEditorModule& PropertyModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>(
+			"PropertyEditor"
+		);
 		PropertyModule.UnregisterCustomPropertyTypeLayout("ConfiguredTimeline");
 	}
+
+	FNansTimelineSystemStyle::Shutdown();
 }
 
 #undef LOCTEXT_NAMESPACE

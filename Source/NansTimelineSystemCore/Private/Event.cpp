@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemCore/Public/Event.h"
+#include "Event.h"
 
 FNEvent::FNEvent()
 {
@@ -33,19 +33,6 @@ FNEvent::FNEvent(const FName& InLabel, const FString& InUId)
 	{
 		UId = FGuid::NewGuid().ToString();
 	}
-}
-
-FNEvent::FNEvent(const FNEventSave& Record)
-{
-	UId = Record.UID;
-	AttachedTime = Record.AttachedTime;
-	Delay = Record.Delay;
-	Duration = Record.Duration;
-	LocalTime = Record.LocalTime;
-	StartedAt = Record.StartedAt;
-	Label = Record.Label;
-	ExpiredTime = Record.ExpiredTime;
-	bActivated = Record.ExpiredTime <= 0.f;
 }
 
 bool FNEvent::IsExpired() const
@@ -108,16 +95,6 @@ float FNEvent::GetExpiredTime() const
 	return ExpiredTime;
 }
 
-void FNEvent::SetUID(const FString& InUId)
-{
-	UId = InUId;
-}
-
-void FNEvent::SetLocalTime(const float& InLocalTime)
-{
-	LocalTime = InLocalTime;
-}
-
 void FNEvent::SetDuration(const float& InDuration)
 {
 	Duration = InDuration;
@@ -142,7 +119,6 @@ void FNEvent::Start(const float& StartTime)
 {
 	StartedAt = StartTime;
 	bActivated = true;
-	EventStart.Broadcast(this, StartedAt);
 }
 
 void FNEvent::Stop()
@@ -150,14 +126,9 @@ void FNEvent::Stop()
 	bActivated = false;
 }
 
-void FNEvent::NotifyAddTime(const float& NewTime)
+void FNEvent::AddTime(const float& NewTime)
 {
 	LocalTime += NewTime;
-}
-
-FNEventDelegate& FNEvent::OnStart()
-{
-	return EventStart;
 }
 
 void FNEvent::Clear()
@@ -167,4 +138,17 @@ void FNEvent::Clear()
 	StartedAt = -1.f;
 	Duration = 0.f;
 	Delay = 0.f;
+}
+
+void FNEvent::Archive(FArchive& Ar)
+{
+	Ar << UId;
+	Ar << AttachedTime;
+	Ar << Delay;
+	Ar << Duration;
+	Ar << LocalTime;
+	Ar << StartedAt;
+	Ar << Label;
+	Ar << ExpiredTime;
+	Ar << bActivated;
 }
