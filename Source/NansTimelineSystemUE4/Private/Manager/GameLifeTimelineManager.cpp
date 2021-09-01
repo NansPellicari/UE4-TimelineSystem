@@ -35,8 +35,8 @@ void UNGameLifeTimelineManager::Clear()
 		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 		TimerManager.ClearTimer(TimerHandle);
 	}
+
 	TimerDelegate.Unbind();
 	TimerHandle.Invalidate();
-	GetTimeline()->Clear();
-	Super::Clear();
+	UNTimelineManagerDecorator::Clear();
 }

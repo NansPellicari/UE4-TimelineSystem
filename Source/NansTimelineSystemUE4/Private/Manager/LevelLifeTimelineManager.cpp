@@ -99,5 +99,5 @@ void UNLevelLifeTimelineManager::Clear()
 		GetWorld()->OnSelectedLevelsChanged().RemoveAll(this);
 	}
 #endif
-	Super::Clear();
+	UNGameLifeTimelineManager::Clear();
 }

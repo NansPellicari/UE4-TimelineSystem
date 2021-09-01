@@ -145,6 +145,9 @@ public:
 	TArray<UNEventView*> GetEventViews() const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	TArray<UNEventView*> GetExpiredEventViews() const;
+
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	UNEventView* GetEventView(const FString& InUID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
@@ -172,13 +175,22 @@ public:
 	UNEventView* CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventView> InClass = nullptr);
 	// @formatter:on
 
+	/** Remove all EventViews and ExpiredEventViews */
+	virtual void Clear() override;
+	
 protected:
 	/**
 	 * Protected ctor to force instantiation with CreateObject() methods (factory methods).
 	 * It instantiates the embedded timeline with CreateDefaultSubobject().
 	 */
 	UNTimelineManagerDecorator();
+	
+	UPROPERTY(BlueprintReadOnly, Category= "NansTimeline|Manager")
+	FDateTime StartedAt = -1.f;
 
 	UPROPERTY(SkipSerialization)
 	TMap<FString, UNEventView*> EventViews;
+	
+	UPROPERTY(SkipSerialization)
+	TMap<FString, UNEventView*> ExpiredEventViews;
 };

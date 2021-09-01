@@ -161,12 +161,21 @@ FName FNTimeline::GetLabel() const
 void FNTimeline::Clear()
 {
 	Events.Empty();
+	ExpiredEvents.Empty();
 	CurrentTime = 0;
 }
 
 TSharedPtr<INEvent> FNTimeline::GetEvent(const FString& InUID) const
 {
 	const TSharedPtr<INEvent>* EventPtr = Events.FindByKey(InUID);
+	if (EventPtr == nullptr) return nullptr;
+	TSharedPtr<INEvent> Event = *EventPtr;
+	return Event;
+}
+
+TSharedPtr<INEvent> FNTimeline::GetExpiredEvent(const FString& InUID) const
+{
+	const TSharedPtr<INEvent>* EventPtr = ExpiredEvents.FindByKey(InUID);
 	if (EventPtr == nullptr) return nullptr;
 	TSharedPtr<INEvent> Event = *EventPtr;
 	return Event;
@@ -194,7 +203,10 @@ void FNTimeline::Archive(FArchive& Ar)
 	Ar << TickInterval;
 
 	int32 NumEvents = Events.Num();
+	int32 NumExpiredEvents = ExpiredEvents.Num();
+
 	Ar << NumEvents;
+	Ar << NumExpiredEvents;
 
 	if (Ar.IsLoading())
 	{
@@ -203,11 +215,23 @@ void FNTimeline::Archive(FArchive& Ar)
 		{
 			Events.Add(MakeShared<FNEvent>());
 		}
+
+		ExpiredEvents.Reserve(NumExpiredEvents);
+		for (int32 Idx = 0; Idx < NumExpiredEvents; Idx++)
+		{
+			ExpiredEvents.Add(MakeShared<FNEvent>());
+		}
 	}
 
 	for (int32 Idx = 0; Idx < NumEvents; Idx++)
 	{
 		TSharedPtr<INEvent> Event = Events[Idx];
+		Event->Archive(Ar);
+	}
+
+	for (int32 Idx = 0; Idx < NumExpiredEvents; Idx++)
+	{
+		TSharedPtr<INEvent> Event = ExpiredEvents[Idx];
 		Event->Archive(Ar);
 	}
 }
