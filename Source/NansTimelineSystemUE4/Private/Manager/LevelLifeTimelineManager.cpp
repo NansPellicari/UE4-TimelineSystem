@@ -14,9 +14,8 @@
 
 #include "Manager/LevelLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
-#include "TimerManager.h"
+#include "NansTimelineSystemUE4.h"
 
 UNLevelLifeTimelineManager::UNLevelLifeTimelineManager() {}
 
@@ -36,7 +35,7 @@ void UNLevelLifeTimelineManager::Init(const float& InTickInterval, const FName& 
 void UNLevelLifeTimelineManager::OnLevelChanged()
 {
 #if WITH_EDITOR
-	if (bDebug) UE_LOG(LogTemp, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
+	if (bDebug) UE_LOG(LogTimelineSystem, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
 	Init(TickInterval, Label);
@@ -45,7 +44,7 @@ void UNLevelLifeTimelineManager::OnLevelChanged()
 void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
 {
 #if WITH_EDITOR
-	if (bDebug) UE_LOG(LogTemp, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
+	if (bDebug) UE_LOG(LogTimelineSystem, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
 	Init(TickInterval, Label);

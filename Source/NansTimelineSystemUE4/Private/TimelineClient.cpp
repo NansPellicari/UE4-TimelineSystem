@@ -15,6 +15,7 @@
 #include "TimelineClient.h"
 
 #include "Manager/TimelineManagerDecorator.h"
+#include "NansTimelineSystemUE4.h"
 
 UNTimelineClient::UNTimelineClient() {}
 
@@ -45,7 +46,7 @@ UNTimelineManagerDecorator* UNTimelineClient::GetTimeline(FName Name) const
 {
 	if (!TimelinesCollection.Contains(Name))
 	{
-		UE_LOG(LogTemp, Error, TEXT("\"%s\" not exists in UNTimelineClient::TimelinesCollection"), *Name.ToString());
+		UE_LOG(LogTimelineSystem, Error, TEXT("\"%s\" not exists in UNTimelineClient::TimelinesCollection"), *Name.ToString());
 		return nullptr;
 	}
 
@@ -84,7 +85,7 @@ void UNTimelineClient::Serialize(FArchive& Ar)
 		if (Timeline == nullptr)
 		{
 			UE_LOG(
-				LogTemp,
+				LogTimelineSystem,
 				Error,
 				TEXT("The timeline %s does not exists anymore, it can imply a binary shift on unserialization"),
 				*Name.ToString()

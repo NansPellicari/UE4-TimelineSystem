@@ -27,4 +27,5 @@ public:
 
 protected:
 	TSharedPtr<FTimelinePinFactory> TimelinePinFactory;
+	
 };

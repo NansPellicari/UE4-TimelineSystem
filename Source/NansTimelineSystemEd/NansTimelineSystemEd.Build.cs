@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+
 namespace UnrealBuildTool.Rules
 {
 	public class NansTimelineSystemEd : ModuleRules
@@ -29,6 +31,7 @@ namespace UnrealBuildTool.Rules
 					"GraphEditor",
 					"Slate",
 					"SlateCore",
+					"InputCore",
 					"EditorStyle",
 					"Kismet",
 					"KismetCompiler",
@@ -44,14 +47,20 @@ namespace UnrealBuildTool.Rules
 				});
 
 			PublicIncludePaths.AddRange(
-				new string[] {
+				new string[]
+				{
 					ModuleDirectory + "/Public"
-			});
+				});
+
+			// Thanks to https://answers.unrealengine.com/questions/258689/how-to-include-private-header-files-of-other-modul.html
+			string EnginePath = Path.GetFullPath(Target.RelativeEnginePath);
 
 			PrivateIncludePaths.AddRange(
-				new string[] {
+				new string[]
+				{
+					Path.Combine(EnginePath, "Source/Developer/LogVisualizer/Private"),
 					ModuleDirectory + "/Private"
-			});
+				});
 		}
 	}
 }

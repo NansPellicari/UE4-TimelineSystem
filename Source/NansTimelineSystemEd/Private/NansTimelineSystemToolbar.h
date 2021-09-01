@@ -14,21 +14,21 @@
 
 #pragma once
 
-#include "Styling/ISlateStyle.h"
-#include "Styling/SlateStyle.h"
-
-class FNansTimelineSystemStyle
+class FNansTimelineSystemToolbar
 {
 public:
 	static void Initialize();
 
 	static void Shutdown();
 
-	static const ISlateStyle& Get();
+	void Register();
+	void Unregister();
 
-	static FName GetStyleSetName();
+	void MyButton_Clicked() const;
+	void AddToolbarExtension(FToolBarBuilder& builder) const;
 
 private:
-	static TSharedRef<FSlateStyleSet> Create();
-	static TSharedPtr<FSlateStyleSet> StyleInstance;
+	static TSharedPtr<FNansTimelineSystemToolbar> Instance;
+	TSharedPtr<FExtender> ToolbarExtender;
+	TSharedPtr<const FExtensionBase> Extension;
 };

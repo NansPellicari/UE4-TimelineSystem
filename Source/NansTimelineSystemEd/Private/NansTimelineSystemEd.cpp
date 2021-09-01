@@ -16,6 +16,7 @@
 
 #include "AssetToolsModule.h"
 #include "NansTimelineSystemStyle.h"
+#include "NansTimelineSystemToolbar.h"
 #include "Customization/ConfiguredTimelineCustomization.h"
 #include "Event/AssetTypeActions_NEventViewBlueprint.h"
 #include "Modules/ModuleManager.h"
@@ -45,6 +46,8 @@ void FNansTimelineSystemEdModule::StartupModule()
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
 	AssetTools.RegisterAssetTypeActions(MakeShared<FAssetTypeActions_NEventViewBlueprint>());
+
+	FNansTimelineSystemToolbar::Initialize();
 }
 
 void FNansTimelineSystemEdModule::ShutdownModule()
