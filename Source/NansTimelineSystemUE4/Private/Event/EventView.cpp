@@ -101,6 +101,29 @@ TSharedPtr<INEvent> UNEventView::GetEvent()
 	return Event;
 }
 
+#if WITH_EDITOR
+FColor UNEventView::GetDebugColor_Implementation() const
+{
+	return FColor(255, 140, 255, 255);
+}
+
+FString UNEventView::GetDebugTooltipText_Implementation() const
+{
+	FString TooltipBuilder;
+	TooltipBuilder += FString::Format(TEXT("Name: {0}"), {GetEventLabel().ToString()});
+	if (IsExpired())
+	{
+		TooltipBuilder += TEXT(" (expired)");
+	}
+	TooltipBuilder += FString::Format(TEXT("\nAttached at: {0}"), {GetAttachedTime()});
+	TooltipBuilder += FString::Format(TEXT("\nStarted at: {0}"), {GetStartedAt()});
+	TooltipBuilder += FString::Format(TEXT("\nDuration: {0}"), {GetDuration()});
+	TooltipBuilder += FString::Format(TEXT("\nDelay: {0}"), {GetDelay()});
+	TooltipBuilder += FString::Format(TEXT("\nUId: {0}"), {GetUID()});
+	return TooltipBuilder;
+}
+#endif
+
 void UNEventView::BeginDestroy()
 {
 	if (Event.IsValid())

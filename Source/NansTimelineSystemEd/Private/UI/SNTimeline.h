@@ -75,12 +75,6 @@ private:
 	int32 LastRowNum = -1;
 	static const FSlateBrush* FillImage;
 	static constexpr FColor TimelineColor = FColor(140, 255, 255, 255);
-	static constexpr FColor EventColor = FColor(255, 140, 255, 255);
-	static constexpr FColor PreEventColor = FColor(255, 140, 255, 100);
-	static constexpr FColor EventExpiredColor = FColor(125, 125, 125, 255);
-	static constexpr FColor PreEventExpiredColor = FColor(125, 125, 125, 100);
-	static constexpr FColor EventScheduledColor = FColor(255, 140, 255, 150);
-	static constexpr FColor PreEventScheduledColor = FColor(255, 140, 255, 50);
 	static constexpr ESlateDrawEffect DrawEffects = ESlateDrawEffect::None;
 	static constexpr float TimelineHeight = 2.0f;
 	static constexpr float EventHeight = 10.f;

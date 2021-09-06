@@ -25,12 +25,6 @@
 // const FSlateBrush* FillImage = Logger.GetBrush("LogVisualizer.LogBar.EntryDefault");
 const FSlateBrush* SNTimeline::FillImage = FEditorStyle::GetBrush("Profiler.LineGraphArea");
 constexpr FColor SNTimeline::TimelineColor;
-constexpr FColor SNTimeline::EventColor;
-constexpr FColor SNTimeline::PreEventColor;
-constexpr FColor SNTimeline::EventExpiredColor;
-constexpr FColor SNTimeline::PreEventExpiredColor;
-constexpr FColor SNTimeline::EventScheduledColor;
-constexpr FColor SNTimeline::PreEventScheduledColor;
 constexpr ESlateDrawEffect SNTimeline::DrawEffects;
 constexpr float SNTimeline::TimelineHeight;
 constexpr float SNTimeline::EventHeight;
@@ -162,18 +156,7 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 			LastRowNum = CurrentRowNum;
 			LastSlotNum = CurrentSlotNum;
 			const UNEventView* EventFound = TimelineRows[CurrentTimelineName].Rows[LastRowNum].Slots[LastSlotNum].Event;
-			FString TooltipBuilder;
-			TooltipBuilder += FString::Format(TEXT("Name: {0}"), {EventFound->GetEventLabel().ToString()});
-			if (EventFound->IsExpired())
-			{
-				TooltipBuilder += TEXT(" (expired)");
-			}
-			TooltipBuilder += FString::Format(TEXT("\nAttached at: {0}"), {EventFound->GetAttachedTime()});
-			TooltipBuilder += FString::Format(TEXT("\nStarted at: {0}"), {EventFound->GetStartedAt()});
-			TooltipBuilder += FString::Format(TEXT("\nDuration: {0}"), {EventFound->GetDuration()});
-			TooltipBuilder += FString::Format(TEXT("\nDelay: {0}"), {EventFound->GetDelay()});
-			TooltipBuilder += FString::Format(TEXT("\nUId: {0}"), {EventFound->GetUID()});
-			SetToolTipText(FText::AsCultureInvariant(TooltipBuilder));
+			SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
 		}
 		return FReply::Handled();
 	}
@@ -190,19 +173,21 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event, TArray
 	// This for events that are forward the end of the current timeline (in the future),
 	// otherwise they will not have a width cause it is calculate with the end position of the timeline bar.
 	float EventWidth = EventStartedAt >= 0 ? EndPos - EventStartedAt : 10.f;
-	FColor Color = EventColor;
-	FColor PreColor = PreEventColor;
+	FColor Color = Event->GetDebugColor();
+	FColor PreColor = Color.WithAlpha(Color.A / 2);
 
 	if (Event->GetStartedAt() <= 0)
 	{
-		Color = EventScheduledColor;
-		PreColor = PreEventScheduledColor;
+		Color = Color.WithAlpha(Color.A / 1.5);
+		PreColor = PreColor.WithAlpha(PreColor.A / 1.5);
 	}
 
 	if (Event->IsExpired())
 	{
-		Color = EventExpiredColor;
-		PreColor = PreEventExpiredColor;
+		constexpr float Alpha = 0.6f;
+		// Lerp to Gray
+		Color = (FLinearColor(Color) + Alpha * (FLinearColor::Gray - Color)).ToFColor(false);
+		PreColor = (FLinearColor(PreColor) + Alpha * (FLinearColor::Gray - PreColor)).ToFColor(false);;
 	}
 
 	FEventSlot Slot(Event);

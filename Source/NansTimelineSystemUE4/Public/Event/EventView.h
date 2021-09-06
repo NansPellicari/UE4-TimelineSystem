@@ -100,6 +100,14 @@ public:
 	virtual void BeginDestroy() override;
 	TSharedPtr<INEvent> GetEvent();
 
+#if WITH_EDITOR
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NansTimeline|Event|Debug")
+	FString GetDebugTooltipText() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "NansTimeline|Event|Debug")
+	FColor GetDebugColor() const;
+#endif
+
 private:
 	/**
 	 * The actual decorated object.
