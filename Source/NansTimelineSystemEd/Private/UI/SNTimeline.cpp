@@ -21,8 +21,6 @@
 #define LOCTEXT_NAMESPACE "NansTimelineSystemEd"
 
 // NB: These have to be here until C++17 allows inline variables
-// const ISlateStyle& Logger = FLogVisualizerStyle::Get();
-// const FSlateBrush* FillImage = Logger.GetBrush("LogVisualizer.LogBar.EntryDefault");
 const FSlateBrush* SNTimeline::FillImage = FEditorStyle::GetBrush("Profiler.LineGraphArea");
 constexpr FColor SNTimeline::TimelineColor;
 constexpr ESlateDrawEffect SNTimeline::DrawEffects;
@@ -34,7 +32,7 @@ constexpr float SNTimeline::PaddingHorizontal;
 
 TMap<FName, FTimelineData> SNTimeline::TimelineRows;
 
-bool FEventsRow::AddSlot(const FEventSlot& InSlot)
+bool FEventsRow::AddSlot(FEventSlot&& InSlot)
 {
 	bool bHasPosition = true;
 	if (Slots.Num() > 0)
@@ -52,6 +50,56 @@ bool FEventsRow::AddSlot(const FEventSlot& InSlot)
 	return bHasPosition;
 }
 
+FEventSlot* FEventsRow::IsEventAdded(const UNEventView* Event)
+{
+	FEventSlot* EventSlot = nullptr;
+	for (FEventSlot& Slot : Slots)
+	{
+		if (Event == Slot.Event)
+		{
+			EventSlot = &Slot;
+		}
+	}
+	return EventSlot;
+}
+
+FEventSlot* FTimelineData::IsEventAdded(const UNEventView* Event)
+{
+	FEventSlot* EventSlot = nullptr;
+	for (FEventsRow& Row : Rows)
+	{
+		EventSlot = Row.IsEventAdded(Event);
+		if (EventSlot != nullptr) break;
+	}
+	return EventSlot;
+}
+
+void FTimelineData::AddSlot(FEventSlot&& Slot)
+{
+	bool bIsInRow = false;
+
+	if (IsEventAdded(Slot.Event) != nullptr)
+	{
+		return;
+	}
+
+	for (FEventsRow& Row : Rows)
+	{
+		if (Row.AddSlot(MoveTemp(Slot)))
+		{
+			bIsInRow = true;
+			break;
+		}
+	}
+
+	if (!bIsInRow)
+	{
+		FEventsRow NewRow = FEventsRow();
+		NewRow.AddSlot(MoveTemp(Slot));
+		Rows.Add(NewRow);
+	}
+}
+
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void SNTimeline::Construct(const FArguments& InArgs) {}
@@ -60,25 +108,44 @@ SNTimeline::~SNTimeline()
 {
 	if (CurrentTimelineName != NAME_None && TimelineRows.Contains(CurrentTimelineName))
 	{
-		TimelineRows.Remove(CurrentTimelineName);
+		if (TimelineRows[CurrentTimelineName].Owners == 1)
+		{
+			TimelineRows.Remove(CurrentTimelineName);
+		}
+		else
+		{
+			TimelineRows[CurrentTimelineName].Owners--;
+		}
 	}
 }
 
 void SNTimeline::ChangeTimeline(UNTimelineManagerDecorator* Timeline)
 {
-	if (CurrentTimelineName != NAME_None && TimelineRows.Contains(CurrentTimelineName))
+	if (CurrentTimelineName != NAME_None
+		&& TimelineRows.Contains(CurrentTimelineName))
 	{
-		TimelineRows.Remove(CurrentTimelineName);
+		if (TimelineRows[CurrentTimelineName].Owners == 1)
+		{
+			TimelineRows.Remove(CurrentTimelineName);
+		}
+		else
+		{
+			TimelineRows[CurrentTimelineName].Owners--;
+		}
 	}
 
-	LastRowNum = -1;
-	LastSlotNum = -1;
+	CurrentRowNum = -1;
+	CurrentSlotNum = -1;
 
 	if (IsValid(Timeline))
 	{
 		CurrentTimeline = Timeline;
 		CurrentTimelineName = CurrentTimeline->GetLabel();
-		TimelineRows.Add(CurrentTimelineName, FTimelineData());
+		if (!TimelineRows.Contains(CurrentTimelineName))
+		{
+			TimelineRows.Add(CurrentTimelineName, FTimelineData());
+		}
+		TimelineRows[CurrentTimelineName].Owners++;
 	}
 }
 
@@ -94,7 +161,7 @@ FVector2D SNTimeline::ComputeDesiredSize(float) const
 
 	if (bIsTimeline && TimelineRows.Contains(CurrentTimelineName))
 	{
-		YSize += (EventHeight + MarginVertical) * TimelineRows[CurrentTimelineName].MaxRows;
+		YSize += (EventHeight + MarginVertical) * TimelineRows[CurrentTimelineName].Rows.Num();
 		XSize = TimelineRows[CurrentTimelineName].MaxTime > Time
 					? TimelineRows[CurrentTimelineName].MaxTime * UnitSecs
 					: Time * UnitSecs;
@@ -114,8 +181,8 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 	int32 RowNum = 0;
 	int32 SlotNum = 0;
 
-	int32 CurrentSlotNum = -1;
-	int32 CurrentRowNum = -1;
+	int32 ChosenSlotNum = -1;
+	int32 ChosenRowNum = -1;
 
 	for (const FEventsRow& Row : TimelineRows[CurrentTimelineName].Rows)
 	{
@@ -140,8 +207,8 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 
 			if (CursorPos.X > + RowXMin && CursorPos.X <= RowXMax)
 			{
-				CurrentSlotNum = SlotNum;
-				CurrentRowNum = RowNum;
+				ChosenSlotNum = SlotNum;
+				ChosenRowNum = RowNum;
 				break;
 			}
 			SlotNum++;
@@ -149,30 +216,37 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 		RowNum++;
 	}
 
-	if (CurrentRowNum > -1 && CurrentSlotNum > -1)
+	if (ChosenRowNum > -1 && ChosenSlotNum > -1)
 	{
-		if (CurrentRowNum != LastRowNum || CurrentSlotNum != LastSlotNum)
+		if (ChosenRowNum != CurrentRowNum || ChosenSlotNum != CurrentSlotNum)
 		{
-			LastRowNum = CurrentRowNum;
-			LastSlotNum = CurrentSlotNum;
-			const UNEventView* EventFound = TimelineRows[CurrentTimelineName].Rows[LastRowNum].Slots[LastSlotNum].Event;
+			CurrentRowNum = ChosenRowNum;
+			CurrentSlotNum = ChosenSlotNum;
+			const UNEventView* EventFound = TimelineRows[CurrentTimelineName].Rows[CurrentRowNum].Slots[CurrentSlotNum].
+				Event;
 			SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
 		}
 		return FReply::Handled();
 	}
 
-	LastRowNum = -1;
-	LastSlotNum = -1;
+	CurrentRowNum = -1;
+	CurrentSlotNum = -1;
 	SetToolTipText(FText::AsCultureInvariant(TEXT("")));
 	return FReply::Unhandled();
 }
 
-void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event, TArray<FEventsRow>& Rows) const
+void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event) const
 {
+	FEventSlot Slot(Event);
 	float EventStartedAt = Event->GetStartedAt() >= 0.f ? UnitSecs * Event->GetStartedAt() : -1.f;
 	// This for events that are forward the end of the current timeline (in the future),
 	// otherwise they will not have a width cause it is calculate with the end position of the timeline bar.
-	float EventWidth = EventStartedAt >= 0 ? EndPos - EventStartedAt : 10.f;
+	Slot.Size = EventStartedAt >= 0 ? EndPos - EventStartedAt : 10.f;
+	if (Event->GetDuration() > 0)
+	{
+		Slot.Size = UnitSecs * Event->GetDuration();
+	}
+
 	FColor Color = Event->GetDebugColor();
 	FColor PreColor = Color.WithAlpha(Color.A / 2);
 
@@ -190,8 +264,6 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event, TArray
 		PreColor = (FLinearColor(PreColor) + Alpha * (FLinearColor::Gray - PreColor)).ToFColor(false);;
 	}
 
-	FEventSlot Slot(Event);
-
 	if (Event->GetDelay() > 0)
 	{
 		const float DelayStartedAt = Event->GetAttachedTime() * UnitSecs;
@@ -203,40 +275,20 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event, TArray
 		Slot.PreSize = DelayWidth;
 	}
 
-	if (Event->GetDuration() > 0)
-	{
-		EventWidth = UnitSecs * Event->GetDuration();
-	}
-
 	Slot.Color = Color;
 	Slot.Offset = EventStartedAt;
-	Slot.Size = EventWidth;
-	bool bIsInRow = false;
+
+	FTimelineData& TimelineData = TimelineRows[CurrentTimelineName];
 
 	// This to allow drawing events in the future
 	{
-		const float EventEndedAt = (EventStartedAt + EventWidth) / UnitSecs;
-		FTimelineData& TimelineData = TimelineRows[CurrentTimelineName];
+		const float EventEndedAt = (EventStartedAt + Slot.Size) / UnitSecs;
 		TimelineData.MaxTime = TimelineData.MaxTime < EventEndedAt
 								   ? EventEndedAt
 								   : TimelineData.MaxTime;
 	}
 
-	for (FEventsRow& Row : Rows)
-	{
-		if (Row.AddSlot(Slot))
-		{
-			bIsInRow = true;
-			break;
-		}
-	}
-
-	if (!bIsInRow)
-	{
-		FEventsRow NewRow = FEventsRow();
-		NewRow.AddSlot(Slot);
-		Rows.Add(NewRow);
-	}
+	TimelineData.AddSlot(MoveTemp(Slot));
 }
 
 int32 SNTimeline::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect,
@@ -275,20 +327,19 @@ int32 SNTimeline::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeome
 	NewYPos = EventHeight;
 
 	const TArray<UNEventView*> ExpiredEvents = CurrentTimeline->GetExpiredEventViews();
+	const TArray<UNEventView*> Events = CurrentTimeline->GetEventViews();
 
 	FTimelineData& TimelineData = TimelineRows[CurrentTimelineName];
 	TimelineData.Rows.Init(FEventsRow(), 6);
 
 	for (const UNEventView* Event : ExpiredEvents)
 	{
-		CreateSlot(EndPos, Event, TimelineData.Rows);
+		CreateSlot(EndPos, Event);
 	}
-
-	const TArray<UNEventView*> Events = CurrentTimeline->GetEventViews();
 
 	for (const UNEventView* Event : Events)
 	{
-		CreateSlot(EndPos, Event, TimelineData.Rows);
+		CreateSlot(EndPos, Event);
 	}
 
 	for (FEventsRow& Row : TimelineData.Rows)
@@ -332,8 +383,6 @@ int32 SNTimeline::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeome
 		YPos += NewYPos + MarginVertical;
 		NewYPos = EventHeight;
 	}
-
-	TimelineRows[CurrentTimelineName].MaxRows = TimelineData.Rows.Num();
 
 	return RetLayerId;
 }

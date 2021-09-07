@@ -19,8 +19,6 @@
 #include "TimelineGameSubsystem.h"
 #include "Config/TimelineConfig.h"
 #include "Widgets/Layout/SScrollBox.h"
-#include "Widgets/Views/STableViewBase.h"
-#include "Widgets/Views/STableRow.h"
 
 #define LOCTEXT_NAMESPACE "NansTimelineSystemEd"
 
@@ -55,14 +53,18 @@ void SWindowTimeline::Construct(const FArguments& InArgs)
 	[
 		SNew(SVerticalBox)
 		+ SVerticalBox::Slot() // The buttons row
-		.HAlign(HAlign_Center).VAlign(VAlign_Top).AutoHeight().Padding(20.f)
+		.HAlign(HAlign_Center).VAlign(VAlign_Top).AutoHeight().Padding(10.f)
 		[
-			SNew(SListView<TSharedPtr<FName>>)
-			// .ItemHeight(24)
-			.SelectionMode(ESelectionMode::Single)
-			.ListItemsSource(&TimelineNames)
-			.OnGenerateRow(this, &SWindowTimeline::OnGenerateRowForList)
+			SAssignNew(TimelineComboBox, SComboBox<TSharedPtr<FName> >)
+			.OptionsSource(&TimelineNames)
+			.OnGenerateWidget(this, &SWindowTimeline::OnGenerateTimelineNamesComboBox)
+			.ContentPadding(2.0f)
 			.OnSelectionChanged(this, &SWindowTimeline::OnTimelineChanged)
+			.Content()
+			[
+				SNew(STextBlock)
+				.Text(this, &SWindowTimeline::CreateTimelineNamesComboBoxContent)
+			]
 		]
 		+ SVerticalBox::Slot() // The chosen timeline's name
 		.HAlign(HAlign_Center).VAlign(VAlign_Top).AutoHeight().Padding(20.f, 10.f)
@@ -119,6 +121,26 @@ void SWindowTimeline::Construct(const FArguments& InArgs)
 	FWorldDelegates::OnStartGameInstance.AddRaw(this, &SWindowTimeline::OnGameInstanceStart);
 }
 
+FText SWindowTimeline::CreateTimelineNamesComboBoxContent() const
+{
+	const bool bHasSelectedItem = TimelineComboBox.IsValid() && TimelineComboBox->GetSelectedItem().IsValid();
+
+	if (bHasSelectedItem)
+	{
+		return FText::FromName(*TimelineComboBox->GetSelectedItem());
+	}
+	else
+	{
+		return LOCTEXT("TimelineNotSelected", "None");
+	}
+}
+
+TSharedRef<SWidget> SWindowTimeline::OnGenerateTimelineNamesComboBox(TSharedPtr<FName> InItem) const
+{
+	return SNew(STextBlock)
+		   .Text(FText::FromName(*InItem));
+}
+
 void SWindowTimeline::OnGameInstanceStart(UGameInstance* GI)
 {
 	if (GEditor->PlayWorld != nullptr && GEditor->PlayWorld->IsGameWorld())
@@ -157,15 +179,6 @@ FText SWindowTimeline::BuildText() const
 		);
 	}
 	return Text;
-}
-
-TSharedRef<ITableRow> SWindowTimeline::OnGenerateRowForList(TSharedPtr<FName> InItem,
-	const TSharedRef<STableViewBase>& OwnerTable) const
-{
-	return SNew(STableRow<TSharedPtr<FName>>, OwnerTable)
-		   [
-			   SNew(STextBlock).Text(FText::FromName(*InItem))
-		   ];
 }
 
 float SWindowTimeline::GetScrollBarSize(const EOrientation& Orientation) const
