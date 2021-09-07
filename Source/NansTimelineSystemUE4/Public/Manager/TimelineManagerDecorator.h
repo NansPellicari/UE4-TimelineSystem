@@ -84,12 +84,11 @@ namespace FNTimelineManagerDecoratorFactory
  * This is the abstract decorator that every Timeline manager should override.
  * It brings all core functionalities for blueprint or UE4 c++ paradigm.
  *
- * As the close relation between NTimelineManager and NTimeline classes (core lib),
- * This class is coupled with UNTimelineDecorator.
- * @see UNTimelineDecorator
+ * As the close relation between FNTimelineManager and FNTimeline classes (core lib),
+ * This class is coupled with FNTimeline.
  *
- * To ease blueprint usages, most of the UNTimelineDecorator public functionalities
- * are accessible here. This class works as a pass-through too for UNTimelineDecorator.
+ * To ease blueprint usages, most of the FNTimeline public functionalities
+ * are accessible here. This class works as a pass-through too for FNTimeline.
  *
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
  */
@@ -100,10 +99,6 @@ class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, pub
 public:
 	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
-
-	/** The interval retrieved from the timeline. */
-	UPROPERTY(EditInstanceOnly, Category= "NansTimeline|Manager")
-	float TickInterval = 1.f;
 
 	// BEGIN NTimelineManager overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
@@ -119,8 +114,9 @@ public:
 		const float& LocalTime, const int32& Index);
 	/**
 	 * The embedded timeline is created as subobject in the ctor.
-	 * So this just gives the Label to the timeline.
-	 * @see UNTimelineManagerDecorator()
+	 * So this just to register the listener for FNTimelineManager::OnEventChange()
+	 * and checks if GetWorld() is available. 
+	 * @see FNTimelineManager()
 	 *
 	 * @param InTickInterval - Interval time between tick in sec
 	 * @param InLabel - Name of the Timeline.
@@ -130,29 +126,38 @@ public:
 
 	// BEGIN UObject overrides
 	/**
-	 * It's the starting link of serialization chain for all embedded decorators.
-	 * This calls UNTimelineDecorator::Serialize().
+	 * This will trigger the FNTimelineManager::Archive() chain
+	 * + save specific data from all EventBases & ExpiredEventBases's UObject or Blueprint.
 	 *
 	 * @param Ar - the FArchive used for serialization as usual.
 	 */
 	virtual void Serialize(FArchive& Ar) override;
 
-	/** This calls FNTimelineManager::Clear(). */
+	/** This calls FNTimelineManager::Clear() + release FNTimelineManager::OnEventChanged() listener. */
 	virtual void BeginDestroy() override;
 	// END UObject overrides
 
+	/** Get an array from the EventBases Map */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	TArray<UNEventBase*> GetEvents() const;
 
+	/** Get an array from the ExpiredEventBases Map */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	TArray<UNEventBase*> GetExpiredEvents() const;
 
+	/** Get one event from EventBases by its UUID, nullptr if not found */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	UNEventBase* GetEvent(const FString& InUID) const;
+	
+	/** Get one expired event from ExpiredEventBases by its UUID, nullptr if not found */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	UNEventBase* GetExpiredEvent(const FString& InUID) const;
 
+	/** A pass-through for the embedded FNTimeline::GetCurrentTime() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
 
+	/** A pass-through for the embedded FNTimeline::GetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
 
@@ -160,13 +165,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	void SetLabel(const FName& Name);
 
-	UFUNCTION(
-		BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event",
-		meta = (DisplayName = "On Event Changed")
-	)
+	// @formatter:off
+	/**
+	 * If you want to override this class in Blueprint you can access any event changes here.
+	 * @see UNTimelineManagerDecorator::OnEventChangedDelegate()
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event", meta = (DisplayName = "On Event Changed"))
 	void OnBPEventChanged(const UNEventBase* StartedEvent, const float& EventTime);
 
-	// @formatter:off
 	/**
 	 * Attaches the event to the timeline stream
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
@@ -188,9 +194,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category= "NansTimeline|Manager")
 	FDateTime StartedAt = -1.f;
 
+	/** This is the decorated list of FNTimeline::Events */
 	UPROPERTY(SkipSerialization)
 	TMap<FString, UNEventBase*> EventBases;
 	
+	/** This is the decorated list of FNTimeline::ExpiredEvents */
 	UPROPERTY(SkipSerialization)
 	TMap<FString, UNEventBase*> ExpiredEventBases;
 };

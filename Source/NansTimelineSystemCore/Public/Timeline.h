@@ -183,9 +183,8 @@ private:
 
 	/**
 	 * This manages to notify every events saved in this timeline with the new time added.
-	 * It uses internally GetTickInterval() to increment time.
 	 */
-	void NotifyTick();
+	void NotifyTick(const float& InDeltaTime);
 
 	/** Collection of each Events attached to the timeline. */
 	TArray<TSharedPtr<INEvent>> Events;

@@ -31,10 +31,14 @@ public:
 
 	FNTimelineManagerFake()
 	{
-		TimerDelegate = FTimerDelegate::CreateRaw(this, &FNTimelineManagerFake::TimerTick);
+		TimerDelegate = FTimerDelegate::CreateRaw(this, &FNTimelineManagerFake::OnTimerTick);
 	}
 
-	virtual void OnNotifyTimelineTickBefore() override
+	void OnTimerTick()
+	{
+		TimerTick(GetTimeline()->GetTickInterval());
+	}
+	virtual void OnNotifyTimelineTickBefore(const float& InDeltaTime) override
 	{
 		Counter++;
 		UE_LOG(LogTemp, Display, TEXT("%s - tick %f"), ANSI_TO_TCHAR(__FUNCTION__), Counter);

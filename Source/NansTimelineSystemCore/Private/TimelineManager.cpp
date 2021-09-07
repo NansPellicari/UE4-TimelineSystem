@@ -21,14 +21,14 @@ FNTimelineManager::FNTimelineManager() : Timeline(MakeShared<FNTimeline>()) {}
 
 FNTimelineManager::~FNTimelineManager() {}
 
-void FNTimelineManager::TimerTick()
+void FNTimelineManager::TimerTick(const float& InDeltaTime)
 {
-	OnValidateTimelineTick();
+	OnValidateTimelineTick(InDeltaTime);
 	if (State == ENTimelineTimerState::Played)
 	{
-		OnNotifyTimelineTickBefore();
-		Timeline->NotifyTick();
-		OnNotifyTimelineTickAfter();
+		OnNotifyTimelineTickBefore(InDeltaTime);
+		Timeline->NotifyTick(InDeltaTime);
+		OnNotifyTimelineTickAfter(InDeltaTime);
 	}
 }
 

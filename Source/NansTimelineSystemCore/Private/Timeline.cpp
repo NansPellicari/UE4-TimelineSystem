@@ -70,9 +70,9 @@ void FNTimeline::StartEvent(const TSharedPtr<INEvent>& Event, const int32& Index
 	EventChanged.Broadcast(Event, ENTimelineEvent::Start, CurrentTime, Index);
 }
 
-void FNTimeline::NotifyTick()
+void FNTimeline::NotifyTick(const float& InDeltaTime)
 {
-	CurrentTime += GetTickInterval();
+	CurrentTime += InDeltaTime;
 
 	// TODO remove this index not useful anymore
 	int32 Index = 0;
@@ -103,7 +103,7 @@ void FNTimeline::NotifyTick()
 			continue;
 		}
 
-		Event->AddTime(GetTickInterval());
+		Event->AddTime(InDeltaTime);
 		EventChanged.Broadcast(Event, ENTimelineEvent::Tick, CurrentTime, Index);
 
 		if (Event->IsExpired())

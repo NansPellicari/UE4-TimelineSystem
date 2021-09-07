@@ -291,6 +291,7 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventBase* Event) const
 	{
 		Color = Color.WithAlpha(Color.A / 1.5);
 		PreColor = PreColor.WithAlpha(PreColor.A / 1.5);
+		EventStartedAt = (Event->GetAttachedTime() + Event->GetDelay()) * UnitSecs;
 	}
 
 	if (Event->IsExpired())
@@ -304,7 +305,6 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventBase* Event) const
 	if (Event->GetDelay() > 0)
 	{
 		const float DelayStartedAt = Event->GetAttachedTime() * UnitSecs;
-		EventStartedAt = (Event->GetAttachedTime() + Event->GetDelay()) * UnitSecs;
 		const float DelayWidth = EventStartedAt - DelayStartedAt;
 
 		Slot.PreColor = PreColor;

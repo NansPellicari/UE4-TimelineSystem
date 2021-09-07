@@ -94,12 +94,6 @@ protected:
 	/** It tracks time (FDateTime) since it has been created */
 	FDateTime LastPlayTime;
 
-	/**
-	 * It tracks time (FDateTime) since timeline has been ticked
-	 * @see Tick() for usage.
-	 */
-	float LastTimeTick = 0;
-
 	/** Default ctor */
 	UNRealLifeTimelineManager();
 

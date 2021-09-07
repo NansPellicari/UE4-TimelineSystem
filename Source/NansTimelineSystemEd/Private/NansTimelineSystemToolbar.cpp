@@ -74,7 +74,7 @@ void FNansTimelineSystemToolbar::MyButton_Clicked() const
 													 .SupportsMinimize(false);
 
 	TimelineSystemWindow->SetContent(SNew(SWindowTimeline));
-	
+
 	IMainFrameModule& MainFrameModule =
 		FModuleManager::LoadModuleChecked<IMainFrameModule>
 		(TEXT("MainFrame"));

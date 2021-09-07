@@ -21,15 +21,15 @@ UNLevelLifeTimelineManager::UNLevelLifeTimelineManager() {}
 
 void UNLevelLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
+	SaveTime = 0.f;
 	Super::Init(InTickInterval, InLabel);
 	// Save it here cause we clear all datas when level events are triggered.
 	Label = InLabel;
 	
-	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
 	FWorldDelegates::LevelRemovedFromWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
 }
 
-void UNLevelLifeTimelineManager::OnLevelChanged(UWorld* LoadedWorld)
+void UNLevelLifeTimelineManager::InternalLevelLoad(UWorld* LoadedWorld)
 {
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTimelineSystem, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -64,8 +64,8 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
-		// This is just a safety check, but it shoulds never happens.
-		// The savegame shoulds associate the level (UWorld) AND this timeline
+		// This is just a safety check, but it should never happens.
+		// The savegame should associate the level (UWorld) AND this timeline
 		if (LevelName.IsEmpty()) bShouldBeCleared = true;
 		if (GetWorld() == nullptr) bShouldBeCleared = true;
 		if (GetWorld() != nullptr && GetWorld()->GetName() != LevelName) bShouldBeCleared = true;
@@ -84,14 +84,5 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 void UNLevelLifeTimelineManager::BeginDestroy()
 {
 	FWorldDelegates::LevelRemovedFromWorld.RemoveAll(this);
-	FWorldDelegates::LevelAddedToWorld.RemoveAll(this);
-
-#if WITH_EDITOR
-	if (IsValid(GetWorld()))
-	{
-		GetWorld()->OnSelectedLevelsChanged().RemoveAll(this);
-	}
-#endif
-	
 	Super::BeginDestroy();
 }
