@@ -69,7 +69,7 @@ void FNansTimelineSystemToolbar::MyButton_Clicked() const
 {
 	const TSharedRef<SWindow> TimelineSystemWindow = SNew(SWindow)
 													 .Title(FText::FromString(TEXT("Timeline System Window")))
-													 .ClientSize(FVector2D(800, 400))
+													 .ClientSize(FVector2D(800, 200))
 													 .SupportsMaximize(false)
 													 .SupportsMinimize(false);
 

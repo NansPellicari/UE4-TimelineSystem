@@ -81,7 +81,11 @@ public:
 		SLATE_ARGUMENT(UNTimelineManagerDecorator*, Timeline)
 	SLATE_END_ARGS()
 
-	/** Constructs this widget with InArgs */
+	/**
+	 * Constructs this widget with InArgs and listen
+	 * FWorldDelegates::OnWorldBeginTearDown + FWorldDelegates::OnStartGameInstance
+	 * to change bShouldComputeSize values. 
+	 */
 	void Construct(const FArguments& InArgs);
 
 	/** Clear TimelineRows if no other owners */
@@ -122,6 +126,13 @@ private:
 	*/
 	int32 CurrentRowNum = -1;
 
+	/** @see SNTimeline::Construct() */
+	FDelegateHandle DelegateStartGameHandle;
+	/** @see SNTimeline::Construct() */
+	FDelegateHandle DelegateEndGameHandle;
+	/** @see SNTimeline::Construct() */
+	FDelegateHandle DelegateLoadMapHandle;
+
 	/**
 	 * This allows to share data:
 	 * - saved or modified in const methods
@@ -129,6 +140,13 @@ private:
 	 * @see SNTimeline::OnPaint()
 	 */
 	static TMap<FName, FTimelineData> TimelineRows;
+
+	/**
+	 * Informs SNTimeline::ComputeDesiredSize() if it should compute.
+	 * Allows to be called only when a game is playing to avoid getting non-valid timeline for computation.
+	 */
+	bool bShouldComputeSize = true;
+
 	// Constants
 	static const FSlateBrush* FillImage;
 	static constexpr FColor TimelineColor = FColor(140, 255, 255, 255);

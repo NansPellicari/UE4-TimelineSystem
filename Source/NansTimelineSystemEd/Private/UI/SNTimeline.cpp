@@ -102,10 +102,44 @@ void FTimelineData::AddSlot(FEventSlot&& Slot)
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void SNTimeline::Construct(const FArguments& InArgs) {}
+void SNTimeline::Construct(const FArguments& InArgs)
+{
+	DelegateEndGameHandle = FWorldDelegates::OnWorldBeginTearDown.AddLambda(
+		[this](UWorld* World)
+		{
+			if (World != nullptr && World->IsGameWorld())
+			{
+				bShouldComputeSize = false;
+			}
+		}
+	);
+
+	DelegateLoadMapHandle = FCoreUObjectDelegates::PostLoadMapWithWorld.AddLambda(
+		[this](UWorld* World)
+		{
+			if (World != nullptr && World->IsGameWorld())
+			{
+				bShouldComputeSize = true;
+			}
+		}
+	);
+	DelegateStartGameHandle = FWorldDelegates::OnStartGameInstance.AddLambda(
+		[this](UGameInstance* GameInstance)
+		{
+			if (GEditor->PlayWorld != nullptr && GEditor->PlayWorld->IsGameWorld())
+			{
+				bShouldComputeSize = true;
+			}
+		}
+	);
+}
 
 SNTimeline::~SNTimeline()
 {
+	DelegateEndGameHandle.Reset();
+	DelegateStartGameHandle.Reset();
+	DelegateLoadMapHandle.Reset();
+
 	if (CurrentTimelineName != NAME_None && TimelineRows.Contains(CurrentTimelineName))
 	{
 		if (TimelineRows[CurrentTimelineName].Owners == 1)
@@ -153,19 +187,22 @@ FVector2D SNTimeline::ComputeDesiredSize(float) const
 {
 	float YSize = 4.f;
 	float XSize = 500.f;
-	const bool bIsDecoTimeline = IsValid(CurrentTimeline) && !CurrentTimeline->HasAnyFlags(
-									 RF_BeginDestroyed | RF_FinishDestroyed
-								 );
-	const bool bIsTimeline = bIsDecoTimeline && CurrentTimeline->GetTimeline().IsValid();
-	const float Time = bIsTimeline ? CurrentTimeline->GetCurrentTime() : 0;
-
-	if (bIsTimeline && TimelineRows.Contains(CurrentTimelineName))
+	if (IsInGameThread() && bShouldComputeSize)
 	{
-		YSize += (EventHeight + MarginVertical) * TimelineRows[CurrentTimelineName].Rows.Num();
-		XSize = TimelineRows[CurrentTimelineName].MaxTime > Time
-					? TimelineRows[CurrentTimelineName].MaxTime * UnitSecs
-					: Time * UnitSecs;
-		XSize = FMath::Max(XSize, 500.f);
+		const bool bIsDecoTimeline = IsValid(CurrentTimeline) && !CurrentTimeline->HasAnyFlags(
+										 RF_BeginDestroyed | RF_FinishDestroyed
+									 );
+		const bool bIsTimeline = bIsDecoTimeline && CurrentTimeline->GetTimeline().IsValid();
+		const float Time = bIsTimeline ? CurrentTimeline->GetCurrentTime() : 0;
+
+		if (bIsTimeline && TimelineRows.Contains(CurrentTimelineName))
+		{
+			YSize += (EventHeight + MarginVertical) * TimelineRows[CurrentTimelineName].Rows.Num();
+			XSize = TimelineRows[CurrentTimelineName].MaxTime > Time
+						? TimelineRows[CurrentTimelineName].MaxTime * UnitSecs
+						: Time * UnitSecs;
+			XSize = FMath::Max(XSize, 500.f);
+		}
 	}
 	return FVector2D(XSize, YSize);
 }
