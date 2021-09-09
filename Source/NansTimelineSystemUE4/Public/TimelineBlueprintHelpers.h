@@ -43,4 +43,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "Get a NansTimeline by its configured name", Keywords = "Timeline get"), Category = "NansTimeline")
 	static UNTimelineManagerDecorator* GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline);
 	// @formatter:on
+
+	// @formatter:off
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Compare NansTimeline name", Keywords = "Timeline compare"), Category = "NansTimeline")
+	static bool Compare(const FConfiguredTimeline Timeline1, const FConfiguredTimeline Timeline2);
+	// @formatter:on
+
+	// @formatter:off
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get NansTimeline name", Keywords = "Timeline get name"), Category = "NansTimeline")
+	static FName GetName(const FConfiguredTimeline Timeline);
+	// @formatter:on
 };

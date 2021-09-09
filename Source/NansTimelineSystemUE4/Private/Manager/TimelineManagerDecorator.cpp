@@ -53,10 +53,11 @@ void UNTimelineManagerDecorator::Stop()
 	FNTimelineManager::Stop();
 }
 
-struct FParamEventChanged
+struct FParamsEventChanged
 {
-	FParamEventChanged() {};
 	float InLocalTime = -1.f;
+	UWorld* InWorld = nullptr;
+	APlayerController* InPlayer = nullptr;
 };
 
 void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEvent> Event,
@@ -75,8 +76,12 @@ void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEvent> Even
 
 	if (Func != nullptr)
 	{
-		FParamEventChanged Param;
+		bool bSupported = true;
+		FParamsEventChanged Param;
 		Param.InLocalTime = LocalTime;
+		Param.InWorld = GetWorldChecked(bSupported);
+		Param.InPlayer = Param.InWorld->GetFirstPlayerController();
+
 		UE_DEBUG_LOG(
 			LogTimelineSystem, Display, TEXT("FuncName \"%s\" for event \"%s\" will be called at %f secs"), *FuncName,
 			*EventView->GetEventLabel().ToString(), LocalTime
@@ -152,7 +157,7 @@ UNEventView* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, floa
 	if (!Object.IsValid()) return nullptr;
 
 	UNEventView* EventView = NewObject<UNEventView>(this, ChildClass);
-	EventView->Init(Object);
+	EventView->Init(Object, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
 	EventViews.Add(Object->GetUID(), EventView);
 
 	GetTimeline()->Attached(Object);
@@ -223,7 +228,7 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 				UClass* Class = ConstructorHelpersInternal::FindOrLoadClass(PathClass, UNEventView::StaticClass());
 				UNEventView* Object = NewObject<UNEventView>(this, Class);
 				Object->Serialize(Ar);
-				Object->Init(Event);
+				Object->Init(Event, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
 				EventViews.Emplace(Id, Object);
 			}
 		}
@@ -246,7 +251,7 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 				UClass* Class = ConstructorHelpersInternal::FindOrLoadClass(PathClass, UNEventView::StaticClass());
 				UNEventView* Object = NewObject<UNEventView>(this, Class);
 				Object->Serialize(Ar);
-				Object->Init(Event);
+				Object->Init(Event, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
 				ExpiredEventViews.Emplace(Id, Object);
 			}
 		}

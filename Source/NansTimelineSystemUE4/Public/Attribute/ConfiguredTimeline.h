@@ -38,4 +38,19 @@ struct NANSTIMELINESYSTEMUE4_API FConfiguredTimeline
 	/** The Configured Timeline class */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
 	TSubclassOf<UNTimelineManagerDecorator> TimelineClass;
+
+	FORCEINLINE void Serialize(FArchive& Ar)
+	{
+		Ar << Name << TimelineClass;
+	}
+
+	FORCEINLINE uint32 GetTypeHash() const
+	{
+		return HashCombine(::GetTypeHash(Name), ::GetTypeHash(TimelineClass));
+	}
 };
+
+FORCEINLINE uint32 GetTypeHash(const FConfiguredTimeline& Timeline)
+{
+	return Timeline.GetTypeHash();
+}

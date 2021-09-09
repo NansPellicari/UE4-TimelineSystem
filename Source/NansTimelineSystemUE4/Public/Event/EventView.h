@@ -21,15 +21,14 @@
 
 /**
  * This is only a view object used to retrieve events from blueprint.
- * This is a readonly object.
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, meta=(ShowWorldContextPin))
 class NANSTIMELINESYSTEMUE4_API UNEventView : public UObject, public INEvent
 {
 	GENERATED_BODY()
 public:
 	UNEventView() {}
-	void Init(const TSharedPtr<INEvent>& InEvent);
+	void Init(const TSharedPtr<INEvent>& InEvent, const float& InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
 	// BEGIN INEvent overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Event")
@@ -78,24 +77,66 @@ public:
 	virtual void Clear() override {}
 	virtual void Archive(FArchive& Ar) override {}
 	// END INEvent overrides
-	
-	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnInit();
 
+	/**
+	 * @param InLocalTime - the time (in seconds) from the timeline start.
+	 *     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	 *     @see UNTimelineManagerDecorator::Serialize()
+	 * @param InWorld - the world of the timeline that trigger this event
+	 * @param InPlayer - The current player.
+	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnStart(float InLocalTime = -1.f);
+	void OnInit(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
+	/**
+	* @param InLocalTime - the time (in seconds) from the timeline start.
+	*     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	*     @see UNTimelineManagerDecorator::Serialize()
+	* @param InWorld - the world of the timeline that trigger this event
+	* @param InPlayer - The current player.
+	*/
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnBeforeAttached(float InLocalTime = -1.f);
+	void OnStart(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
+	/**
+	* @param InLocalTime - the time (in seconds) from the timeline start.
+	*     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	*     @see UNTimelineManagerDecorator::Serialize()
+	* @param InWorld - the world of the timeline that trigger this event
+	* @param InPlayer - The current player.
+	*/
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnAfterAttached(float InLocalTime = -1.f);
+	void OnBeforeAttached(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
+	/**
+	* @param InLocalTime - the time (in seconds) from the timeline start.
+	*     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	*     @see UNTimelineManagerDecorator::Serialize()
+	* @param InWorld - the world of the timeline that trigger this event
+	* @param InPlayer - The current player.
+	*/
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnExpired(float InLocalTime = -1.f);
+	void OnAfterAttached(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
+	/**
+	* @param InLocalTime - the time (in seconds) from the timeline start.
+	*     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	*     @see UNTimelineManagerDecorator::Serialize()
+	* @param InWorld - the world of the timeline that trigger this event
+	* @param InPlayer - The current player.
+	*/
 	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
-	void OnTick(float InLocalTime = -1.f);
+	void OnExpired(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
+
+	/**
+	* @param InLocalTime - the time (in seconds) from the timeline start.
+	*     /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events.
+	*     @see UNTimelineManagerDecorator::Serialize()
+	* @param InWorld - the world of the timeline that trigger this event
+	* @param InPlayer - The current player.
+	*/
+	UFUNCTION(BlueprintImplementableEvent, Category = "NansTimeline|Event")
+	void OnTick(float InLocalTime, UWorld* InWorld, APlayerController* InPlayer);
 
 	virtual void BeginDestroy() override;
 	TSharedPtr<INEvent> GetEvent();

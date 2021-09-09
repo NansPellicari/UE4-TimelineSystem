@@ -17,10 +17,10 @@
 #define CHECK_EVENT_V() if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return;
 #define CHECK_EVENT(ReturnValue) if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return ReturnValue;
 
-void UNEventView::Init(const TSharedPtr<INEvent>& InEvent)
+void UNEventView::Init(const TSharedPtr<INEvent>& InEvent, const float& InLocalTime, UWorld* InWorld, APlayerController* InPlayer)
 {
 	Event = InEvent;
-	OnInit();
+	OnInit(InLocalTime, InWorld, InPlayer);
 }
 
 bool UNEventView::IsExpired() const

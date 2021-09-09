@@ -32,3 +32,13 @@ UNTimelineManagerDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* Wor
 
 	return MySubsystem->GetTimeline(Timeline);
 }
+
+bool UNTimelineBlueprintHelpers::Compare(const FConfiguredTimeline Timeline1, const FConfiguredTimeline Timeline2)
+{
+	return Timeline1.Name == Timeline2.Name;
+}
+
+FName UNTimelineBlueprintHelpers::GetName(const FConfiguredTimeline Timeline)
+{
+	return Timeline.Name;
+}
