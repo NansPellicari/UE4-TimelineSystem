@@ -12,36 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event/EventViewFactory.h"
+#include "Event/EventFactory.h"
 
 #include "BlueprintEditorSettings.h"
-#include "EventViewGraph.h"
-#include "EventViewGraphSchema.h"
-#include "Event/EventView.h"
+#include "EventGraph.h"
+#include "EventGraphSchema.h"
+#include "Event/EventBase.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Tools/BaseAssetToolkit.h"
 #include "AssetTypeCategories.h"
 
-#define LOCTEXT_NAMESPACE "EventViewFactory"
+#define LOCTEXT_NAMESPACE "EventFactory"
 
-UNEventViewFactory::UNEventViewFactory()
+UNEventFactory::UNEventFactory()
 {
 	bCreateNew = true;
 	bEditAfterNew = true;
-	SupportedClass = UNEventViewBlueprint::StaticClass();
-	ParentClass = UNEventView::StaticClass();
+	SupportedClass = UNEventBaseBlueprint::StaticClass();
+	ParentClass = UNEventBase::StaticClass();
 }
 
-UObject* UNEventViewFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
+UObject* UNEventFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
 	UObject* Context, FFeedbackContext* Warn)
 {
-	// Make sure we are trying to factory a EventView blueprint, then create and init one
-	check(InClass->IsChildOf(UNEventViewBlueprint::StaticClass()));
+	// Make sure we are trying to factory an EventBase blueprint, then create and init one
+	check(InClass->IsChildOf(UNEventBaseBlueprint::StaticClass()));
 
 	if (ParentClass == nullptr
 		|| !FKismetEditorUtilities::CanCreateBlueprintOfClass(ParentClass)
-		|| !ParentClass->IsChildOf(UNEventView::StaticClass()))
+		|| !ParentClass->IsChildOf(UNEventBase::StaticClass()))
 	{
 		FFormatNamedArguments Args;
 		Args.Add(
@@ -51,30 +51,30 @@ UObject* UNEventViewFactory::FactoryCreateNew(UClass* InClass, UObject* InParent
 		FMessageDialog::Open(
 			EAppMsgType::Ok, FText::Format(
 				LOCTEXT(
-					"CannotCreateEventViewBlueprint",
-					"Cannot create a Event View Blueprint based on the class '{ClassName}'."
+					"CannotCreateEventBlueprint",
+					"Cannot create a Event Blueprint based on the class '{ClassName}'."
 				), Args
 			)
 		);
 		return nullptr;
 	}
 
-	UNEventViewBlueprint* NewBP = CastChecked<UNEventViewBlueprint>(
+	UNEventBaseBlueprint* NewBP = CastChecked<UNEventBaseBlueprint>(
 		FKismetEditorUtilities::CreateBlueprint(
-			ParentClass, InParent, InName, EBlueprintType::BPTYPE_Normal, UNEventViewBlueprint::StaticClass(),
+			ParentClass, InParent, InName, EBlueprintType::BPTYPE_Normal, UNEventBaseBlueprint::StaticClass(),
 			UBlueprintGeneratedClass::StaticClass(), NAME_None
 		)
 	);
 
 	if (NewBP)
 	{
-		UNEventViewBlueprint* EventBP = UNEventViewBlueprint::FindRootEventViewBlueprint(NewBP);
+		UNEventBaseBlueprint* EventBP = UNEventBaseBlueprint::FindRootEventBlueprint(NewBP);
 		if (EventBP == nullptr)
 		{
-			// Only allow a EventView ability graph if there isn't one in a parent blueprint
+			// Only allow an EventBase ability graph if there isn't one in a parent blueprint
 			UEdGraph* NewGraph = FBlueprintEditorUtils::CreateNewGraph(
-				NewBP, TEXT("Event View Graph"), UNEventViewGraph::StaticClass(),
-				UNEventViewGraphSchema::StaticClass()
+				NewBP, TEXT("Event View Graph"), UNEventGraph::StaticClass(),
+				UNEventGraphSchema::StaticClass()
 			);
 
 #if WITH_EDITORONLY_DATA
@@ -93,19 +93,19 @@ UObject* UNEventViewFactory::FactoryCreateNew(UClass* InClass, UObject* InParent
 			{
 				int32 NodePositionY = 0;
 				FKismetEditorUtilities::AddDefaultEventNode(
-					NewBP, NewGraph, FName(TEXT("OnBeforeAttached")), UNEventView::StaticClass(), NodePositionY
+					NewBP, NewGraph, FName(TEXT("OnBeforeAttached")), UNEventBase::StaticClass(), NodePositionY
 				);
 				FKismetEditorUtilities::AddDefaultEventNode(
-					NewBP, NewGraph, FName(TEXT("OnAfterAttached")), UNEventView::StaticClass(), NodePositionY
+					NewBP, NewGraph, FName(TEXT("OnAfterAttached")), UNEventBase::StaticClass(), NodePositionY
 				);
 				FKismetEditorUtilities::AddDefaultEventNode(
-					NewBP, NewGraph, FName(TEXT("OnStart")), UNEventView::StaticClass(), NodePositionY
+					NewBP, NewGraph, FName(TEXT("OnStart")), UNEventBase::StaticClass(), NodePositionY
 				);
 				FKismetEditorUtilities::AddDefaultEventNode(
-					NewBP, NewGraph, FName(TEXT("OnTick")), UNEventView::StaticClass(), NodePositionY
+					NewBP, NewGraph, FName(TEXT("OnTick")), UNEventBase::StaticClass(), NodePositionY
 				);
 				FKismetEditorUtilities::AddDefaultEventNode(
-					NewBP, NewGraph, FName(TEXT("OnExpired")), UNEventView::StaticClass(), NodePositionY
+					NewBP, NewGraph, FName(TEXT("OnExpired")), UNEventBase::StaticClass(), NodePositionY
 				);
 			}
 		}
@@ -114,12 +114,12 @@ UObject* UNEventViewFactory::FactoryCreateNew(UClass* InClass, UObject* InParent
 	return NewBP;
 }
 
-bool UNEventViewFactory::ShouldShowInNewMenu() const
+bool UNEventFactory::ShouldShowInNewMenu() const
 {
 	return true;
 }
 
-uint32 UNEventViewFactory::GetMenuCategories() const
+uint32 UNEventFactory::GetMenuCategories() const
 {
 	return EAssetTypeCategories::Gameplay;
 }

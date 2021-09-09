@@ -10,7 +10,7 @@
     - [1.3. Use TimelineGameSubSystem and TimelineClient](#13-use-timelinegamesubsystem-and-timelineclient)
 - [2. Usages](#2-usages)
     - [2.1. Configure Timelines](#21-configure-timelines)
-    - [2.2. Create EventView asset](#22-create-eventview-asset)
+    - [2.2. Create an Event asset](#22-create-an-event-asset)
     - [2.3. Add Event](#23-add-event)
     - [2.4. Get & display](#24-get--display)
 
@@ -179,10 +179,10 @@ then **add** new timeline and configure its **name, tick interval and class** fo
 
 ![add timelines](./img/stepbystep-timeline-add.png)
 
-### 2.2. Create EventView asset
-<a id="markdown-create-eventview-asset" name="create-eventview-asset"></a>
+### 2.2. Create an Event asset
+<a id="markdown-create-an-event-asset" name="create-an-event-asset"></a>
 
-![Create EventView asset](./img/stepbystep-event-create-1.png)
+![Create an Event asset](./img/stepbystep-event-create-1.png)
 
 ### 2.3. Add Event
 <a id="markdown-add-event" name="add-event"></a>

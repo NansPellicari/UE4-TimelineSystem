@@ -64,12 +64,12 @@ TSharedRef< FSlateStyleSet > FNansTimelineSystemStyle::Create()
 		Style->SetContentRoot(FPaths::Combine(Plugin->GetBaseDir(), TEXT("Resources/AssetIcons")));
 	}
 
-	Style->Set("ClassIcon.NEventView", new IMAGE_BRUSH("NEventView_x16", Icon16x16));
-	Style->Set("ClassIcon.NEventViewBlueprint", new IMAGE_BRUSH("NEventView_x16", Icon16x16));
-	Style->Set("ClassThumbnail.NEventView", new IMAGE_BRUSH("NEventView_x64", Icon64x64));
-	Style->Set("ClassThumbnail.NEventViewBlueprint", new IMAGE_BRUSH("NEventView_x64", Icon64x64));
-	Style->Set("LevelEditor.TimelineSystemPanel", new IMAGE_BRUSH("NEventView_x64", Icon40x40));
-	Style->Set("LevelEditor.TimelineSystemPanel.Small", new IMAGE_BRUSH("NEventView_x64", Icon20x20));
+	Style->Set("ClassIcon.NEventBase", new IMAGE_BRUSH("NEvent_x16", Icon16x16));
+	Style->Set("ClassIcon.NEventBaseBlueprint", new IMAGE_BRUSH("NEvent_x16", Icon16x16));
+	Style->Set("ClassThumbnail.NEventBase", new IMAGE_BRUSH("NEvent_x64", Icon64x64));
+	Style->Set("ClassThumbnail.NEventBaseBlueprint", new IMAGE_BRUSH("NEvent_x64", Icon64x64));
+	Style->Set("LevelEditor.TimelineSystemPanel", new IMAGE_BRUSH("NEvent_x64", Icon40x40));
+	Style->Set("LevelEditor.TimelineSystemPanel.Small", new IMAGE_BRUSH("NEvent_x64", Icon20x20));
 
 	return Style;
 }

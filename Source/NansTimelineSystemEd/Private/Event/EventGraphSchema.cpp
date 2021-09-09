@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "EventViewGraphSchema.h"
+#include "EventGraphSchema.h"
 
 #include "Kismet2/BlueprintEditorUtils.h"
 
-UK2Node_VariableGet* UNEventViewGraphSchema::SpawnVariableGetNode(const FVector2D GraphPosition,
+UK2Node_VariableGet* UNEventGraphSchema::SpawnVariableGetNode(const FVector2D GraphPosition,
 	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
 {
 	return Super::SpawnVariableGetNode(GraphPosition, ParentGraph, VariableName, Source);
 }
 
-UK2Node_VariableSet* UNEventViewGraphSchema::SpawnVariableSetNode(const FVector2D GraphPosition,
+UK2Node_VariableSet* UNEventGraphSchema::SpawnVariableSetNode(const FVector2D GraphPosition,
 	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
 {
 	return Super::SpawnVariableSetNode(GraphPosition, ParentGraph, VariableName, Source);

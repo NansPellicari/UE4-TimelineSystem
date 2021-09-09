@@ -12,42 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event/AssetTypeActions_NEventViewBlueprint.h"
+#include "Event/AssetTypeActions_NEventBlueprint.h"
 
 #include "BlueprintEditor.h"
-#include "Event/EventView.h"
-#include "Event/EventViewFactory.h"
+#include "Event/EventBase.h"
+#include "Event/EventFactory.h"
 
-#define LOCTEXT_NAMESPACE "EventViewFactory"
+#define LOCTEXT_NAMESPACE "EventFactory"
 
-UFactory* FAssetTypeActions_NEventViewBlueprint::GetFactoryForBlueprintType(UBlueprint* InBlueprint) const
+UFactory* FAssetTypeActions_NEventBlueprint::GetFactoryForBlueprintType(UBlueprint* InBlueprint) const
 {
-	UNEventViewFactory* GameplayAbilitiesBlueprintFactory = NewObject<UNEventViewFactory>();
-	GameplayAbilitiesBlueprintFactory->ParentClass = TSubclassOf<UNEventView>(*InBlueprint->GeneratedClass);
+	UNEventFactory* GameplayAbilitiesBlueprintFactory = NewObject<UNEventFactory>();
+	GameplayAbilitiesBlueprintFactory->ParentClass = TSubclassOf<UNEventBase>(*InBlueprint->GeneratedClass);
 	return GameplayAbilitiesBlueprintFactory;
 }
 
-FText FAssetTypeActions_NEventViewBlueprint::GetName() const
+FText FAssetTypeActions_NEventBlueprint::GetName() const
 {
-	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_NEventViewBlueprint", "Timeline Event View");
+	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_NEventBlueprint", "Timeline Event");
 }
 
-FColor FAssetTypeActions_NEventViewBlueprint::GetTypeColor() const
+FColor FAssetTypeActions_NEventBlueprint::GetTypeColor() const
 {
 	return FColor::Yellow;
 }
 
-UClass* FAssetTypeActions_NEventViewBlueprint::GetSupportedClass() const
+UClass* FAssetTypeActions_NEventBlueprint::GetSupportedClass() const
 {
-	return UNEventViewBlueprint::StaticClass();
+	return UNEventBaseBlueprint::StaticClass();
 }
 
-uint32 FAssetTypeActions_NEventViewBlueprint::GetCategories()
+uint32 FAssetTypeActions_NEventBlueprint::GetCategories()
 {
 	return EAssetTypeCategories::Gameplay;
 }
 
-void FAssetTypeActions_NEventViewBlueprint::OpenAssetEditor(const TArray<UObject*>& InObjects,
+void FAssetTypeActions_NEventBlueprint::OpenAssetEditor(const TArray<UObject*>& InObjects,
 	TSharedPtr<IToolkitHost> EditWithinLevelEditor)
 {
 	const EToolkitMode::Type Mode = EditWithinLevelEditor.IsValid()
@@ -65,8 +65,8 @@ void FAssetTypeActions_NEventViewBlueprint::OpenAssetEditor(const TArray<UObject
 				bLetOpen = EAppReturnType::Yes == FMessageDialog::Open(
 							   EAppMsgType::YesNo,
 							   LOCTEXT(
-								   "FailedToLoadEventViewBlueprintWithContinue",
-								   "EventView Blueprint could not be loaded because it derives from an invalid class.  Check to make sure the parent class for this blueprint hasn't been removed! Do you want to continue (it can crash the editor)?"
+								   "FailedToLoadEventBlueprintWithContinue",
+								   "Event Blueprint could not be loaded because it derives from an invalid class.  Check to make sure the parent class for this blueprint hasn't been removed! Do you want to continue (it can crash the editor)?"
 							   )
 						   );
 			}
@@ -85,7 +85,7 @@ void FAssetTypeActions_NEventViewBlueprint::OpenAssetEditor(const TArray<UObject
 		{
 			FMessageDialog::Open(
 				EAppMsgType::Ok, LOCTEXT(
-					"FailedToLoadEventViewBlueprint",
+					"FailedToLoadEventBlueprint",
 					"Event View Blueprint could not be loaded because it derives from an invalid class.  Check to make sure the parent class for this blueprint hasn't been removed!"
 				)
 			);

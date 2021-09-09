@@ -21,7 +21,7 @@
 
 #include "TimelineManagerDecorator.generated.h"
 
-class UNEventView;
+class UNEventBase;
 
 FString EnumToString(const ENTimelineEvent& Value);
 
@@ -142,13 +142,13 @@ public:
 	// END UObject overrides
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	TArray<UNEventView*> GetEventViews() const;
+	TArray<UNEventBase*> GetEvents() const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	TArray<UNEventView*> GetExpiredEventViews() const;
+	TArray<UNEventBase*> GetExpiredEvents() const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	UNEventView* GetEventView(const FString& InUID) const;
+	UNEventBase* GetEvent(const FString& InUID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
@@ -164,7 +164,7 @@ public:
 		BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event",
 		meta = (DisplayName = "On Event Changed")
 	)
-	void OnBPEventChanged(const UNEventView* StartedEvent, const float& EventTime);
+	void OnBPEventChanged(const UNEventBase* StartedEvent, const float& EventTime);
 
 	// @formatter:off
 	/**
@@ -172,10 +172,10 @@ public:
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNEventView* CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventView> InClass = nullptr);
+	UNEventBase* CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventBase> InClass = nullptr);
 	// @formatter:on
 
-	/** Remove all EventViews and ExpiredEventViews */
+	/** Remove all EventBases and ExpiredEventBases */
 	virtual void Clear() override;
 	
 protected:
@@ -189,8 +189,8 @@ protected:
 	FDateTime StartedAt = -1.f;
 
 	UPROPERTY(SkipSerialization)
-	TMap<FString, UNEventView*> EventViews;
+	TMap<FString, UNEventBase*> EventBases;
 	
 	UPROPERTY(SkipSerialization)
-	TMap<FString, UNEventView*> ExpiredEventViews;
+	TMap<FString, UNEventBase*> ExpiredEventBases;
 };

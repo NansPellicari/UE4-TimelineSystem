@@ -16,7 +16,7 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
 
 |                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                       |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| I've decided to make all the code I developed for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm fulltime dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
+| I've decided to make most of the code I developed for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm full time dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
 
 <!-- TOC -->
 
@@ -86,7 +86,7 @@ As a client, it is your main interface.
 <a id="markdown---real-life" name="--real-life"></a>
 
 
-The intent of the **Real Life** timeline is to tracks times **since** the **first start of the game**.  
+The intent of the **Real Life** timeline is to track times **since** the **first start of the game**.  
 It is **not affected** by **time alterations** such as **play/pause** and **slow motion**.  
 After the game stops, it shoulds **replay** all the **missing time** on game reloading to **update** attached **Events states**.  
 As real life is, its state is always **Play**.  
@@ -118,8 +118,8 @@ You can easily create your own timeline manager. See [Developers docs](./Docs/De
 
 
 It is intended to be the most extensible as possible.  
-So in its actual state, it is just a base class which embeds the necessary data to managed its lifetime.  
-You can specialized it with a dedicated **Blueprint asset** or in **c++ classes** (creating a [Decorator](https://refactoring.guru/design-patterns/decorator) of the [UNEventView](./Source/NansTimelineSystemUE4/Public/Event/EventView.h)) to do what your want.  
+So in its actual state, it is just a base UObject which embeds the necessary data to managed its lifetime.  
+You can specialized it with a dedicated **Blueprint asset** or in **c++ classes** (creating a [Decorator](https://refactoring.guru/design-patterns/decorator) of the [UNEventBase](./Source/NansTimelineSystemUE4/Public/Event/EventBase.h)) to do what your want.  
 To get some examples:
 
 *   I create a **scheduled event** to **trigger a message** to motivate the player when it cumulates an amount of succeeded actions during a determinate range of time.
@@ -136,11 +136,11 @@ To maintain a short doc here, please read this page [here](./Docs/StepByStep.md)
 <a id="markdown-contributing-and-supporting" name="contributing-and-supporting"></a>
 
 
-I've decided to make all the code I developed for my games free to use and open source.  
+I've decided to make most of the code I developed for my games free to use and open source.  
 I am a true believer in the mindset that sharing and collaborating makes the world a better place.  
 I'll be very glad if you decided to help me to follow my dream.
 
 | How?                                                                                                                                                                               |                                                                                         With                                                                                         |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| **Donating**<br> Because I'm an independant developer/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                        | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
+| **Donating**<br> Because I'm an independent developer/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                        | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
 | **Contributing**<br> You are very welcome if you want to contribute. I explain [here](./CONTRIBUTING.md) in details what<br> is the most comfortable way to me you can contribute. |                                                                         [CONTRIBUTING.md](./CONTRIBUTING.md)                                                                         |

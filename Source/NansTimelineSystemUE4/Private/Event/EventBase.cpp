@@ -12,102 +12,103 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Event/EventView.h"
+#include "Event/EventBase.h"
 
 #define CHECK_EVENT_V() if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return;
 #define CHECK_EVENT(ReturnValue) if (!ensureMsgf(Event.IsValid(), TEXT("An NEvent object is mandatory! Please use Init before anything else!"))) return ReturnValue;
 
-void UNEventView::Init(const TSharedPtr<INEvent>& InEvent, const float& InLocalTime, UWorld* InWorld, APlayerController* InPlayer)
+void UNEventBase::Init(const TSharedPtr<INEvent>& InEvent, const float& InLocalTime, UWorld* InWorld,
+	APlayerController* InPlayer)
 {
 	Event = InEvent;
 	OnInit(InLocalTime, InWorld, InPlayer);
 }
 
-bool UNEventView::IsExpired() const
+bool UNEventBase::IsExpired() const
 {
 	CHECK_EVENT(false);
 	return Event->IsExpired();
 }
 
-float UNEventView::GetLocalTime() const
+float UNEventBase::GetLocalTime() const
 {
 	CHECK_EVENT(0);
 	return Event->GetLocalTime();
 }
 
-float UNEventView::GetStartedAt() const
+float UNEventBase::GetStartedAt() const
 {
 	CHECK_EVENT(0);
 	return Event->GetStartedAt();
 }
 
-float UNEventView::GetDuration() const
+float UNEventBase::GetDuration() const
 {
 	CHECK_EVENT(0);
 	return Event->GetDuration();
 }
 
-float UNEventView::GetDelay() const
+float UNEventBase::GetDelay() const
 {
 	CHECK_EVENT(0);
 	return Event->GetDelay();
 }
 
-FName UNEventView::GetEventLabel() const
+FName UNEventBase::GetEventLabel() const
 {
 	CHECK_EVENT(NAME_None);
 	return Event->GetEventLabel();
 }
 
-FString UNEventView::GetUID() const
+FString UNEventBase::GetUID() const
 {
 	CHECK_EVENT(TEXT(""));
 	return Event->GetUID();
 }
 
-float UNEventView::GetAttachedTime() const
+float UNEventBase::GetAttachedTime() const
 {
 	CHECK_EVENT(0);
 	return Event->GetAttachedTime();
 }
 
-bool UNEventView::IsAttachable() const
+bool UNEventBase::IsAttachable() const
 {
 	CHECK_EVENT(false);
 	return Event->IsAttachable();
 }
 
-float UNEventView::GetExpiredTime() const
+float UNEventBase::GetExpiredTime() const
 {
 	CHECK_EVENT(0);
 	return Event->GetExpiredTime();
 }
 
-void UNEventView::Stop()
+void UNEventBase::Stop()
 {
 	CHECK_EVENT_V();
 	return Event->Stop();
 }
 
-void UNEventView::SetEventLabel(const FName& InEventLabel)
+void UNEventBase::SetEventLabel(const FName& InEventLabel)
 {
 	CHECK_EVENT_V();
 	Event->SetEventLabel(InEventLabel);
 }
 
-TSharedPtr<INEvent> UNEventView::GetEvent()
+TSharedPtr<INEvent> UNEventBase::GetEvent()
 {
 	CHECK_EVENT(nullptr);
 	return Event;
 }
 
 #if WITH_EDITOR
-FColor UNEventView::GetDebugColor_Implementation() const
+FColor UNEventBase::GetDebugColor_Implementation() const
 {
 	return FColor(255, 140, 255, 255);
 }
 
-FString UNEventView::GetDebugTooltipText_Implementation() const
+FString UNEventBase::GetDebugTooltipText_Implementation() const
 {
 	FString TooltipBuilder;
 	TooltipBuilder += FString::Format(TEXT("Name: {0}"), {GetEventLabel().ToString()});
@@ -124,7 +125,7 @@ FString UNEventView::GetDebugTooltipText_Implementation() const
 }
 #endif
 
-void UNEventView::BeginDestroy()
+void UNEventBase::BeginDestroy()
 {
 	if (Event.IsValid())
 	{
@@ -136,21 +137,21 @@ void UNEventView::BeginDestroy()
 }
 
 #if WITH_EDITOR
-bool UNEventViewBlueprint::SupportedByDefaultBlueprintFactory() const
+bool UNEventBaseBlueprint::SupportedByDefaultBlueprintFactory() const
 {
 	return false;
 }
 
-/** Returns the most base UNEventView blueprint for a given blueprint (if it is inherited from another event blueprint, returning null if only native / non-event BP classes are it's parent) */
-UNEventViewBlueprint* UNEventViewBlueprint::FindRootEventViewBlueprint(UNEventViewBlueprint* DerivedBlueprint)
+/** Returns the most base UNEventBase blueprint for a given blueprint (if it is inherited from another event blueprint, returning null if only native / non-event BP classes are it's parent) */
+UNEventBaseBlueprint* UNEventBaseBlueprint::FindRootEventBlueprint(UNEventBaseBlueprint* DerivedBlueprint)
 {
-	UNEventViewBlueprint* ParentBP = nullptr;
+	UNEventBaseBlueprint* ParentBP = nullptr;
 
-	// Determine if there is a UNEventView blueprint in the ancestry of this class
+	// Determine if there is a UNEventBase blueprint in the ancestry of this class
 	for (UClass* ParentClass = DerivedBlueprint->ParentClass; ParentClass != UObject::StaticClass();
 		 ParentClass = ParentClass->GetSuperClass())
 	{
-		if (UNEventViewBlueprint* TestBP = Cast<UNEventViewBlueprint>(ParentClass->ClassGeneratedBy))
+		if (UNEventBaseBlueprint* TestBP = Cast<UNEventBaseBlueprint>(ParentClass->ClassGeneratedBy))
 		{
 			ParentBP = TestBP;
 		}

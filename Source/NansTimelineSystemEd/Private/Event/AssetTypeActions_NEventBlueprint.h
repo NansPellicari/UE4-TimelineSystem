@@ -17,8 +17,8 @@
 #include "CoreMinimal.h"
 #include "AssetTypeActions/AssetTypeActions_Blueprint.h"
 
-/** Allow to defined UNEventView asset and open it in blueprint editor. */
-class FAssetTypeActions_NEventViewBlueprint : public FAssetTypeActions_Blueprint
+/** Allow to defined UNEventBase asset and open it in blueprint editor. */
+class FAssetTypeActions_NEventBlueprint : public FAssetTypeActions_Blueprint
 {
 public:
 	// ~ Begin IAssetTypeActions overrides

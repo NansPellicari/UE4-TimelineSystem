@@ -21,7 +21,7 @@
 /** All details about an event to draw */
 struct FEventSlot
 {
-	FEventSlot(const UNEventView* InEvent) : Event(InEvent) {}
+	FEventSlot(const UNEventBase* InEvent) : Event(InEvent) {}
 	/** Represents the moment this event has been attached if it has a delay. */
 	float PreOffset = 0.f;
 	/** If there is, the size of the delay. */
@@ -35,7 +35,7 @@ struct FEventSlot
 	/** Color of the event. */
 	FColor Color;
 	/** Event associated to this slot. */
-	const UNEventView* Event;
+	const UNEventBase* Event;
 };
 
 /**
@@ -52,7 +52,7 @@ struct FEventsRow
 	 */
 	bool AddSlot(FEventSlot&& InSlot);
 	/** Checks if this event has been already added in any slot. */
-	FEventSlot* IsEventAdded(const UNEventView* Event);
+	FEventSlot* IsEventAdded(const UNEventBase* Event);
 };
 
 /**
@@ -68,7 +68,7 @@ struct FTimelineData
 	/** Used to know if it can be destroyed. */
 	int32 Owners = 0;
 	/** Checks if this event has been already added in any row's slot. */
-	FEventSlot* IsEventAdded(const UNEventView* Event);
+	FEventSlot* IsEventAdded(const UNEventBase* Event);
 	/** Try to put this slot in an available row (FEventsRow) or create a new one if not already added in a row. */
 	void AddSlot(FEventSlot&& Slot);
 };
@@ -101,7 +101,7 @@ public:
 	/**
 	 * Create a slot to draw (@see SNTimeline::OnPaint()) based on event data.
 	 */
-	void CreateSlot(float EndPos, const UNEventView* Event) const;
+	void CreateSlot(float EndPos, const UNEventBase* Event) const;
 
 	/** Will paint each event slots and timeline. */
 	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect,

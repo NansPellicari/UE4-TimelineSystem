@@ -28,7 +28,7 @@
 #include "Runtime/Engine/Public/Tests/AutomationCommon.h"
 #include "Serialization/BufferArchive.h"
 #include "TimerManager.h"
-#include "Event/EventView.h"
+#include "Event/EventBase.h"
 
 // TODO make specs instead of these
 // @formatter:off
@@ -249,24 +249,24 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Event live since 1 sec"),
-			TimelineManager->GetEventViews()[0]->GetLocalTime(),
+			TimelineManager->GetEvents()[0]->GetLocalTime(),
 			1.f
 		);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 1 Event in collection"), TimelineManager->GetEventViews().Num(), 1);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 1 Event in collection"), TimelineManager->GetEvents().Num(), 1);
 		TimelineManager->CreateAndAddNewEvent(FName("Ev2"));
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TimelineManager->CreateAndAddNewEvent(FName("Ev3"), 1.f);
 		NTestWorld::Tick(World);
 		// @formatter:off
-		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEventViews().Num(), 3);
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("1st event should have an automatic name"),FRegexMatcher(FRegexPattern("^EventView_[0-9]+"), TimelineManager->GetEventViews()[0]->GetEventLabel().ToString()).FindNext());
-		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event should have a choosen name"), TimelineManager->GetEventViews()[1]->GetEventLabel(), FName("Ev2"));
-		TEST_EQ(TEST_TEXT_FN_DETAILS("1st event live since 2 secs"), TimelineManager->GetEventViews()[0]->GetLocalTime(), 2.f);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event live since 1 sec"), TimelineManager->GetEventViews()[1]->GetLocalTime(), 1.f);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event get started at 1"), TimelineManager->GetEventViews()[1]->GetStartedAt(), 1.f);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("3rd event live since 0 sec"), TimelineManager->GetEventViews()[2]->GetLocalTime(), 0.f);
-		TEST_FALSE(TEST_TEXT_FN_DETAILS("3rd event is not expired"), TimelineManager->GetEventViews()[2]->IsExpired());
+		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);
+		TEST_TRUE(TEST_TEXT_FN_DETAILS("1st event should have an automatic name"),FRegexMatcher(FRegexPattern("^EventBase_[0-9]+"), TimelineManager->GetEvents()[0]->GetEventLabel().ToString()).FindNext());
+		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event should have a choosen name"), TimelineManager->GetEvents()[1]->GetEventLabel(), FName("Ev2"));
+		TEST_EQ(TEST_TEXT_FN_DETAILS("1st event live since 2 secs"), TimelineManager->GetEvents()[0]->GetLocalTime(), 2.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event live since 1 sec"), TimelineManager->GetEvents()[1]->GetLocalTime(), 1.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("2nd event get started at 1"), TimelineManager->GetEvents()[1]->GetStartedAt(), 1.f);
+		TEST_EQ(TEST_TEXT_FN_DETAILS("3rd event live since 0 sec"), TimelineManager->GetEvents()[2]->GetLocalTime(), 0.f);
+		TEST_FALSE(TEST_TEXT_FN_DETAILS("3rd event is not expired"), TimelineManager->GetEvents()[2]->IsExpired());
 		// @formatter:on
 
 		// Save in memory
@@ -294,49 +294,49 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS(
 				"There is 2 Events in collection retrieving from serialized data (cause the last expired)"),
-			NewTimelineManager->GetEventViews().Num(),
+			NewTimelineManager->GetEvents().Num(),
 			2
 		);
 
-		if (NewTimelineManager->GetEventViews().Num() > 0)
+		if (NewTimelineManager->GetEvents().Num() > 0)
 		{
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("1st event should not be null"),
-				NewTimelineManager->GetEventViews().Num() > 0 && NewTimelineManager->GetTimeline()->GetEvent(
-					NewTimelineManager->GetEventViews()[0]->GetUID()).IsValid()
+				NewTimelineManager->GetEvents().Num() > 0 && NewTimelineManager->GetTimeline()->GetEvent(
+					NewTimelineManager->GetEvents()[0]->GetUID()).IsValid()
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("2nd event should not be null"),
-				NewTimelineManager->GetTimeline()->GetEvent(NewTimelineManager->GetEventViews()[1]->GetUID()).IsValid()
+				NewTimelineManager->GetTimeline()->GetEvent(NewTimelineManager->GetEvents()[1]->GetUID()).IsValid()
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("1st event live since 3 secs"),
-				NewTimelineManager->GetEventViews()[0]->GetLocalTime(),
+				NewTimelineManager->GetEvents()[0]->GetLocalTime(),
 				3.f
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("1st event get started at 0"),
-				NewTimelineManager->GetEventViews()[0]->GetStartedAt(),
+				NewTimelineManager->GetEvents()[0]->GetStartedAt(),
 				0.f
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("2nd event live since 2sec"),
-				NewTimelineManager->GetEventViews()[1]->GetLocalTime(),
+				NewTimelineManager->GetEvents()[1]->GetLocalTime(),
 				2.f
 			);
 			TEST_EQ(
 				TEST_TEXT_FN_DETAILS("2nd event get started at 1"),
-				NewTimelineManager->GetEventViews()[1]->GetStartedAt(),
+				NewTimelineManager->GetEvents()[1]->GetStartedAt(),
 				1.f
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("3rd event is null"),
 				!NewTimelineManager->
-				GetEventViews().IsValidIndex(2)
+				GetEvents().IsValidIndex(2)
 			);
 			TEST_TRUE(
 				TEST_TEXT_FN_DETAILS("3rd event is expired"),
-				!NewTimelineManager->GetEventViews().IsValidIndex(2)
+				!NewTimelineManager->GetEvents().IsValidIndex(2)
 			);
 		}
 	}

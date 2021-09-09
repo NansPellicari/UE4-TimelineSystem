@@ -16,7 +16,7 @@
 
 #include "SlateOptMacros.h"
 #include "LogVisualizerStyle.h"
-#include "Event/EventView.h"
+#include "Event/EventBase.h"
 
 #define LOCTEXT_NAMESPACE "NansTimelineSystemEd"
 
@@ -50,7 +50,7 @@ bool FEventsRow::AddSlot(FEventSlot&& InSlot)
 	return bHasPosition;
 }
 
-FEventSlot* FEventsRow::IsEventAdded(const UNEventView* Event)
+FEventSlot* FEventsRow::IsEventAdded(const UNEventBase* Event)
 {
 	FEventSlot* EventSlot = nullptr;
 	for (FEventSlot& Slot : Slots)
@@ -63,7 +63,7 @@ FEventSlot* FEventsRow::IsEventAdded(const UNEventView* Event)
 	return EventSlot;
 }
 
-FEventSlot* FTimelineData::IsEventAdded(const UNEventView* Event)
+FEventSlot* FTimelineData::IsEventAdded(const UNEventBase* Event)
 {
 	FEventSlot* EventSlot = nullptr;
 	for (FEventsRow& Row : Rows)
@@ -259,7 +259,7 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 		{
 			CurrentRowNum = ChosenRowNum;
 			CurrentSlotNum = ChosenSlotNum;
-			const UNEventView* EventFound = TimelineRows[CurrentTimelineName].Rows[CurrentRowNum].Slots[CurrentSlotNum].
+			const UNEventBase* EventFound = TimelineRows[CurrentTimelineName].Rows[CurrentRowNum].Slots[CurrentSlotNum].
 				Event;
 			SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
 		}
@@ -272,7 +272,7 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 	return FReply::Unhandled();
 }
 
-void SNTimeline::CreateSlot(const float EndPos, const UNEventView* Event) const
+void SNTimeline::CreateSlot(const float EndPos, const UNEventBase* Event) const
 {
 	FEventSlot Slot(Event);
 	float EventStartedAt = Event->GetStartedAt() >= 0.f ? UnitSecs * Event->GetStartedAt() : -1.f;
@@ -363,18 +363,18 @@ int32 SNTimeline::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeome
 	YPos += NewYPos + MarginVertical;
 	NewYPos = EventHeight;
 
-	const TArray<UNEventView*> ExpiredEvents = CurrentTimeline->GetExpiredEventViews();
-	const TArray<UNEventView*> Events = CurrentTimeline->GetEventViews();
+	const TArray<UNEventBase*> ExpiredEvents = CurrentTimeline->GetExpiredEvents();
+	const TArray<UNEventBase*> Events = CurrentTimeline->GetEvents();
 
 	FTimelineData& TimelineData = TimelineRows[CurrentTimelineName];
 	TimelineData.Rows.Init(FEventsRow(), 6);
 
-	for (const UNEventView* Event : ExpiredEvents)
+	for (const UNEventBase* Event : ExpiredEvents)
 	{
 		CreateSlot(EndPos, Event);
 	}
 
-	for (const UNEventView* Event : Events)
+	for (const UNEventBase* Event : Events)
 	{
 		CreateSlot(EndPos, Event);
 	}

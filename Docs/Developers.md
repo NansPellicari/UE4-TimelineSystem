@@ -100,7 +100,7 @@ This class should not be overrided, it provides the basic functionnalities to ma
 ### 3.3. Event
 <a id="markdown-event" name="event"></a>
 
-You **should** create an asset for it based on the [EventView](../Source/NansTimelineSystemUE4/Public/Event/EventView.h) class.  
+You **should** create an asset for it based on the [UNEventBase](../Source/NansTimelineSystemUE4/Public/Event/EventBase.h) class.  
 You can create a **blueprint** child based on it or a **c++** override.
 
 > To make your data saveable, don't forget to use `UPROPERTY(SaveGame)` in your dedicated fields,  

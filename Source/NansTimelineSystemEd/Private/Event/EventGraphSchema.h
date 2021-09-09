@@ -15,12 +15,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
-#include "EventViewGraphSchema.generated.h"
+#include "EventGraphSchema.generated.h"
 
-/** A dedicated graph schema for UNEventView used for UNEventViewBlueprint creation. */
+/** A dedicated graph schema for UNEventBase used for UNEventBaseBlueprint creation. */
 UCLASS(MinimalAPI)
-class UNEventViewGraphSchema : public UEdGraphSchema_K2
+class UNEventGraphSchema : public UEdGraphSchema_K2
 {
 	GENERATED_BODY()
 	/**
