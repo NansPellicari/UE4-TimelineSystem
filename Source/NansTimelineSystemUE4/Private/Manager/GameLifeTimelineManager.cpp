@@ -14,7 +14,6 @@
 
 #include "Manager/GameLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "TimerManager.h"
 
@@ -28,7 +27,7 @@ void UNGameLifeTimelineManager::Init(const float& InTickInterval, const FName& I
 	TimerManager.SetTimer(TimerHandle, TimerDelegate, GetTimeline()->GetTickInterval(), true);
 }
 
-void UNGameLifeTimelineManager::Clear()
+void UNGameLifeTimelineManager::BeginDestroy()
 {
 	if (IsValid(GetWorld()))
 	{
@@ -38,5 +37,5 @@ void UNGameLifeTimelineManager::Clear()
 
 	TimerDelegate.Unbind();
 	TimerHandle.Invalidate();
-	UNTimelineManagerDecorator::Clear();
+	Super::BeginDestroy();
 }

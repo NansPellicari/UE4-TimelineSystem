@@ -24,21 +24,17 @@ void UNLevelLifeTimelineManager::Init(const float& InTickInterval, const FName& 
 	Super::Init(InTickInterval, InLabel);
 	// Save it here cause we clear all datas when level events are triggered.
 	Label = InLabel;
-#if WITH_EDITOR
-	GetWorld()->OnSelectedLevelsChanged().AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
-#endif
-
-	// FWorldDelegates::LevelAddedToWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
+	
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelChanged);
 	FWorldDelegates::LevelRemovedFromWorld.AddUObject(this, &UNLevelLifeTimelineManager::OnLevelRemoved);
 }
 
-void UNLevelLifeTimelineManager::OnLevelChanged()
+void UNLevelLifeTimelineManager::OnLevelChanged(UWorld* LoadedWorld)
 {
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTimelineSystem, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
-	Init(TickInterval, Label);
 }
 
 void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
@@ -47,7 +43,6 @@ void UNLevelLifeTimelineManager::OnLevelRemoved(ULevel* Level, UWorld* World)
 	if (bDebug) UE_LOG(LogTimelineSystem, Warning, TEXT("%s is called !!!"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 	SaveDataAndClear();
-	Init(TickInterval, Label);
 }
 
 void UNLevelLifeTimelineManager::SaveDataAndClear()
@@ -77,17 +72,16 @@ void UNLevelLifeTimelineManager::Serialize(FArchive& Ar)
 	}
 
 	// This have to be serialized even if wrong data has been retrieved
-	// (IsLoading() conditions above) to avoid a binary shift on unserialization.
+	// (IsLoading() conditions above) to avoid a binary shift on deserialization.
 	Super::Serialize(Ar);
 
 	if (bShouldBeCleared)
 	{
 		Clear();
-		Init(TickInterval, Label);
 	}
 }
 
-void UNLevelLifeTimelineManager::Clear()
+void UNLevelLifeTimelineManager::BeginDestroy()
 {
 	FWorldDelegates::LevelRemovedFromWorld.RemoveAll(this);
 	FWorldDelegates::LevelAddedToWorld.RemoveAll(this);
@@ -98,5 +92,6 @@ void UNLevelLifeTimelineManager::Clear()
 		GetWorld()->OnSelectedLevelsChanged().RemoveAll(this);
 	}
 #endif
-	UNGameLifeTimelineManager::Clear();
+	
+	Super::BeginDestroy();
 }
