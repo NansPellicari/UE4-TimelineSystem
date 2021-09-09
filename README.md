@@ -9,6 +9,8 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
 
 ![Nans Timeline System](./Docs/img/intro.png)
 
+![Nans Timeline System tools](./Docs/img/intro-tools.png)
+
 > Note:  
 > I've hesitated at first to use the word **"Timeline"** which is already used in the UE4 paradigm for animation (see [this](https://docs.unrealengine.com/en-US/Engine/Blueprints/UserGuide/Timelines/index.html)).  
 > The thing is, it's the most accurate word for the feature this plugin provides, 

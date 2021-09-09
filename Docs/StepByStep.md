@@ -13,6 +13,7 @@
     - [2.2. Create an Event asset](#22-create-an-event-asset)
     - [2.3. Add Event](#23-add-event)
     - [2.4. Get & display](#24-get--display)
+    - [2.5. Debug](#25-debug)
 
 <!-- /TOC -->
 
@@ -197,5 +198,17 @@ You should use a timeline manager's function
 
 
 ![event display](./img/stepbystep-event-display.png)
+
+### 2.5. Debug
+<a id="markdown-debug" name="debug"></a>
+
+Thanks to a **button** on the level editor toolbar, you can **open** a new **window** to **visualize events** on any **timeline**.
+
+![event display](./img/stepbystep-debug-window-button.png)
+
+Has you can see below, every **Event** attached to a timeline is now visible with some **utils info** on **mouse over**.
+
+![Nans Timeline System tools](./img/intro-tools.png)
+
 
 Enjoy :wink: !
