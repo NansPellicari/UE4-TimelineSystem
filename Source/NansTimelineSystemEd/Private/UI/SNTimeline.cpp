@@ -209,6 +209,11 @@ FVector2D SNTimeline::ComputeDesiredSize(float) const
 
 FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
+	if (!IsInGameThread() || !bShouldComputeSize)
+	{
+		return FReply::Unhandled();
+	}
+
 	if (!TimelineRows.Contains(CurrentTimelineName) || TimelineRows[CurrentTimelineName].Rows.Num() <= 0)
 	{
 		return FReply::Unhandled();
@@ -261,7 +266,11 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 			CurrentSlotNum = ChosenSlotNum;
 			const UNEventBase* EventFound = TimelineRows[CurrentTimelineName].Rows[CurrentRowNum].Slots[CurrentSlotNum].
 				Event;
-			SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
+
+			if (IsValid(EventFound))
+			{
+				SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
+			}
 		}
 		return FReply::Handled();
 	}
@@ -291,6 +300,7 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventBase* Event) const
 	{
 		Color = Color.WithAlpha(Color.A / 1.5);
 		PreColor = PreColor.WithAlpha(PreColor.A / 1.5);
+		EventStartedAt = (Event->GetAttachedTime() + Event->GetDelay()) * UnitSecs;
 	}
 
 	if (Event->IsExpired())
@@ -304,7 +314,6 @@ void SNTimeline::CreateSlot(const float EndPos, const UNEventBase* Event) const
 	if (Event->GetDelay() > 0)
 	{
 		const float DelayStartedAt = Event->GetAttachedTime() * UnitSecs;
-		EventStartedAt = (Event->GetAttachedTime() + Event->GetDelay()) * UnitSecs;
 		const float DelayWidth = EventStartedAt - DelayStartedAt;
 
 		Slot.PreColor = PreColor;

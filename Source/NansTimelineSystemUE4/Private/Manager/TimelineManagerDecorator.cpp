@@ -28,7 +28,6 @@ UNTimelineManagerDecorator::UNTimelineManagerDecorator() : FNTimelineManager() {
 void UNTimelineManagerDecorator::Init(const float& InTickInterval, const FName& InLabel)
 {
 	ensureMsgf(GetWorld() != nullptr, TEXT("A UNTimelineManagerDecorator need a world to live"));
-	TickInterval = InTickInterval;
 	FNTimelineManager::Init(InTickInterval, InLabel);
 
 	OnEventChanged().AddUObject(this, &UNTimelineManagerDecorator::OnEventChangedDelegate);
@@ -41,10 +40,6 @@ void UNTimelineManagerDecorator::Pause()
 
 void UNTimelineManagerDecorator::Play()
 {
-	if (StartedAt == -1.f)
-	{
-		StartedAt = FDateTime::Now();
-	}
 	FNTimelineManager::Play();
 }
 
@@ -120,6 +115,11 @@ TArray<UNEventBase*> UNTimelineManagerDecorator::GetExpiredEvents() const
 UNEventBase* UNTimelineManagerDecorator::GetEvent(const FString& InUID) const
 {
 	return EventBases.FindRef(InUID);
+}
+
+UNEventBase* UNTimelineManagerDecorator::GetExpiredEvent(const FString& InUID) const
+{
+	return ExpiredEventBases.FindRef(InUID);
 }
 
 float UNTimelineManagerDecorator::GetCurrentTime() const

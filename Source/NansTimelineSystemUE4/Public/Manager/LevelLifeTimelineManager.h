@@ -43,8 +43,7 @@ public:
 	/** This method to clear and reload timeline when level changed */
 	void OnLevelRemoved(ULevel* Level, UWorld* World);
 
-	/** @copydoc OnLevelRemoved */
-	void OnLevelChanged(UWorld* LoadedWorld);
+	virtual void InternalLevelLoad(UWorld* LoadedWorld) override;
 
 	/** This only saves level name and checks */
 	virtual void Serialize(FArchive& Ar) override;
@@ -65,6 +64,4 @@ protected:
 	/** Used for save game to make a sanity check (verify if current world is the same as the load game) */
 	UPROPERTY()
 	FString LevelName;
-
-private:
 };

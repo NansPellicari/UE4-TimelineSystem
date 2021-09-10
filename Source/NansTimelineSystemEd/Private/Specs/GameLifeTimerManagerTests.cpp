@@ -51,34 +51,37 @@ bool FGameLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), TimelineManager->GetCurrentTime(), 1.f);
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 1.f, 0.2f)
+		);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
+		);
 		TimelineManager->Pause();
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(
+		TEST_TRUE(
 			TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 2 after timeline manager paused"),
-			TimelineManager->GetCurrentTime(),
-			2.f
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
 		);
 		TimelineManager->Play();
 		NTestWorld::Tick(World);
-		TEST_EQ(
+		TEST_TRUE(
 			TEST_TEXT_FN_DETAILS("Timeline manager has been called still 3"),
-			TimelineManager->GetCurrentTime(),
-			3.f
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f)
 		);
 		UGameplayStatics::SetGamePaused(FakeObject, true);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_EQ(
+		TEST_TRUE(
 			TEST_TEXT_FN_DETAILS("Timeline manager count should stick to 3 after game paused"),
-			TimelineManager->GetCurrentTime(),
-			3.f
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f)
 		);
 	}
 	// End test
@@ -115,13 +118,19 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), TimelineManager->GetCurrentTime(), 2.f);
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
+		);
 		FBufferArchive ToBinary;
 		TimelineManager->Serialize(ToBinary);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TimelineManager->SetLabel(FName("ChangedLabel")); // try to change label to checks if rewrite with the archive
-		TEST_EQ(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), TimelineManager->GetCurrentTime(), 3.f);
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f)
+		);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label changed"),
 			TimelineManager->GetLabel(),
@@ -135,10 +144,9 @@ bool FGameLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& Pa
 			TimelineManager->GetLabel(),
 			FName("TestTimeline")
 		);
-		TEST_EQ(
+		TEST_TRUE(
 			TEST_TEXT_FN_DETAILS("Timeline should be the same as the last serialization"),
-			TimelineManager->GetCurrentTime(),
-			2.f
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
 		);
 	}
 	// End test
@@ -174,7 +182,10 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
 		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(), 3);
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(),
+			3
+		);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -202,7 +213,10 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
 		NewTimelineManager->Serialize(FromBinary);
-		TEST_LE(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), NewTimelineManager->GetTimeline()->GetEvents().Num(), 3);
+		TEST_LE(
+			TEST_TEXT_FN_DETAILS("There is 3 Events in collection"),
+			NewTimelineManager->GetTimeline()->GetEvents().Num(), 3
+		);
 	}
 	// End test
 

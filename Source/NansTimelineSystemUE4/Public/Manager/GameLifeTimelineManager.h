@@ -38,6 +38,8 @@ public:
 	/** Delegate required by the FTimerManager. It create a UObject delegate using UNGameLifeTimelineManager::TimerTick()  */
 	FTimerDelegate TimerDelegate;
 
+	void GameTimerTick();
+
 	/**
 	 * It creates the timer with a FTimerManager and attached TimerDelegate to it.
 	 * @param InTickInterval - The tick interval in seconds 
@@ -48,13 +50,21 @@ public:
 	/** Clears timer + unbind delegate + invalidate handle. */
 	virtual void BeginDestroy() override;
 
+	virtual void Clear() override;
+
+	/** Only used to reset the SaveTime when loading */
+	virtual void Serialize(FArchive& Ar) override;
+
 protected:
 	/** A default ctor for engine system */
 	UNGameLifeTimelineManager();
 
-	/** This is only used for savegame to keep time between sessions */
-	UPROPERTY(SaveGame)
-	float SaveTime;
+	void OnLevelLoad(UWorld* LoadedWorld);
 
+	/** This method to reset SaveTime when level changed */
+	virtual void InternalLevelLoad(UWorld* LoadedWorld);
+
+	/** Used to create an accurate delta time for ticks. */
+	float SaveTime;
 private:
 };

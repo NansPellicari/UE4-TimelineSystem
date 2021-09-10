@@ -21,6 +21,8 @@
 #include "Editor/MainFrame/Public/Interfaces/IMainFrameModule.h"
 #include "UI/SWindowTimeline.h"
 
+#define LOCTEXT_NAMESPACE "NansTimelineSystem"
+
 TSharedPtr<FNansTimelineSystemToolbar> FNansTimelineSystemToolbar::Instance = nullptr;
 
 void FNansTimelineSystemToolbar::Initialize()
@@ -58,6 +60,22 @@ void FNansTimelineSystemToolbar::Register()
 	LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(ToolbarExtender);
 }
 
+TSharedRef<SDockTab> FNansTimelineSystemToolbar::MakeTimelineTab() const
+{
+	TSharedRef<SDockTab> WidgetReflectorTab =
+		SNew(SDockTab)
+		.TabRole(ETabRole::NomadTab)
+		.Label(LOCTEXT("Label_WindowTimeline", "Nans Timeline"));
+	WidgetReflectorTab->SetContent(GetWindowTimeline(WidgetReflectorTab));
+	return WidgetReflectorTab;
+}
+
+TSharedRef<SWidget> FNansTimelineSystemToolbar::GetWindowTimeline(const TSharedRef<SDockTab>& InParentTab) const
+{
+	return SNew(SWindowTimeline)
+		   .ParentTab(InParentTab);
+}
+
 void FNansTimelineSystemToolbar::Unregister()
 {
 	ToolbarExtender->RemoveExtension(Extension.ToSharedRef());
@@ -67,29 +85,10 @@ void FNansTimelineSystemToolbar::Unregister()
 
 void FNansTimelineSystemToolbar::MyButton_Clicked() const
 {
-	const TSharedRef<SWindow> TimelineSystemWindow = SNew(SWindow)
-													 .Title(FText::FromString(TEXT("Timeline System Window")))
-													 .ClientSize(FVector2D(800, 200))
-													 .SupportsMaximize(false)
-													 .SupportsMinimize(false);
-
-	TimelineSystemWindow->SetContent(SNew(SWindowTimeline));
-	
-	IMainFrameModule& MainFrameModule =
-		FModuleManager::LoadModuleChecked<IMainFrameModule>
-		(TEXT("MainFrame"));
-	if (MainFrameModule.GetParentWindow().IsValid())
-	{
-		FSlateApplication::Get().AddWindowAsNativeChild
-		(
-			TimelineSystemWindow, MainFrameModule.GetParentWindow()
-			.ToSharedRef()
-		);
-	}
-	else
-	{
-		FSlateApplication::Get().AddWindow(TimelineSystemWindow);
-	}
+	// TODO check how to keep them inter sessions
+	FGlobalTabmanager::Get()->InsertNewDocumentTab(
+		TEXT("NansTimeline"), FTabManager::ESearchPreference::RequireClosedTab, MakeTimelineTab()
+	);
 }
 
 void FNansTimelineSystemToolbar::AddToolbarExtension(FToolBarBuilder& builder) const
@@ -106,3 +105,4 @@ void FNansTimelineSystemToolbar::AddToolbarExtension(FToolBarBuilder& builder) c
 		IconBrush, NAME_None
 	);
 }
+#undef LOCTEXT_NAMESPACE

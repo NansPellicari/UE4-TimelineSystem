@@ -31,6 +31,7 @@ class NANSTIMELINESYSTEMED_API SWindowTimeline : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SWindowTimeline) {}
+		SLATE_ARGUMENT(TSharedPtr<SDockTab>, ParentTab)
 	SLATE_END_ARGS()
 
 	virtual ~SWindowTimeline();
@@ -76,4 +77,6 @@ private:
 	TSharedPtr<FName> CurrentTimeline = MakeShared<FName>(NAME_None);
 	/** The combobox widget of the timelines choices */
 	TSharedPtr<SComboBox<TSharedPtr<FName>>> TimelineComboBox;
+
+	TSharedPtr<SDockTab> ParentTabPtr;
 };

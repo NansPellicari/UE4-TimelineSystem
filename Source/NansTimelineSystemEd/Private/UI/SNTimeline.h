@@ -48,7 +48,8 @@ struct FEventsRow
 	TArray<FEventSlot> Slots;
 	/**
 	 * Try to add the slot.
-	 * @return true if added or false if 1. , 2. no places available for it 
+	 * @param InSlot - the new slot to add
+	 * @return true if added or false if no places available for it 
 	 */
 	bool AddSlot(FEventSlot&& InSlot);
 	/** Checks if this event has been already added in any slot. */
@@ -96,10 +97,14 @@ public:
 
 	/** Compute the widget side depending on events and timeline data. */
 	virtual FVector2D ComputeDesiredSize(float) const override;
+
 	/** Manage tooltip to display event data. */
 	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
 	/**
 	 * Create a slot to draw (@see SNTimeline::OnPaint()) based on event data.
+	 * @param EndPos - the current end position of the timeline, required to compute infinite event size.
+	 * @param Event - the UNEventBase to draw
 	 */
 	void CreateSlot(float EndPos, const UNEventBase* Event) const;
 
@@ -107,19 +112,23 @@ public:
 	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect,
 		FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle,
 		bool bParentEnabled) const override;
+
 	/** Get the current timeline, can returns nullptr. */
 	UNTimelineManagerDecorator* GetCurrentTimeline() const;
 
 private:
 	/** The timeline the user chose for this panel. */
 	UNTimelineManagerDecorator* CurrentTimeline = nullptr;
+
 	/** The name of the current timeline, created to simplify the usage of TimelineRows. */
 	FName CurrentTimelineName = NAME_None;
+
 	/**
 	 * This is used for tooltip when mouse move.
 	 * @see SNTimeline::OnMouseMove()
 	 */
 	int32 CurrentSlotNum = -1;
+
 	/**
 	* This is used for tooltip when mouse move.
 	* @see SNTimeline::OnMouseMove()
@@ -128,8 +137,10 @@ private:
 
 	/** @see SNTimeline::Construct() */
 	FDelegateHandle DelegateStartGameHandle;
+
 	/** @see SNTimeline::Construct() */
 	FDelegateHandle DelegateEndGameHandle;
+
 	/** @see SNTimeline::Construct() */
 	FDelegateHandle DelegateLoadMapHandle;
 

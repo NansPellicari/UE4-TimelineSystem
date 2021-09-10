@@ -65,7 +65,7 @@ public:
 	virtual void Stop();
 
 	/** This checks the actual play state (ENTimelineTimerState) and tick the NTimelineInterface accordingly. */
-	virtual void TimerTick();
+	virtual void TimerTick(const float& InDeltaTime);
 
 	/** Get the actual state. */
 	ENTimelineTimerState GetState() const;
@@ -103,13 +103,13 @@ protected:
 	 * This should be used to make some checks right before ticking.
 	 * So here you can manipulate State property to (not)allow ticking.
 	 */
-	virtual void OnValidateTimelineTick() {}
+	virtual void OnValidateTimelineTick(const float& InDeltaTime) {}
 
 	/** This method is call immediately before ticking */
-	virtual void OnNotifyTimelineTickBefore() {}
+	virtual void OnNotifyTimelineTickBefore(const float& InDeltaTime) {}
 
 	/** This method is call immediately after ticking */
-	virtual void OnNotifyTimelineTickAfter() {}
+	virtual void OnNotifyTimelineTickAfter(const float& InDeltaTime) {}
 
 	/** The coupled timeline */
 	TSharedRef<FNTimeline> Timeline;

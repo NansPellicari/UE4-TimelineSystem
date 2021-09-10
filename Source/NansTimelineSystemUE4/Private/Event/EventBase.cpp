@@ -119,7 +119,8 @@ FString UNEventBase::GetDebugTooltipText_Implementation() const
 	TooltipBuilder += FString::Format(TEXT("\nAttached at: {0}"), {GetAttachedTime()});
 	TooltipBuilder += FString::Format(TEXT("\nStarted at: {0}"), {GetStartedAt()});
 	TooltipBuilder += FString::Format(TEXT("\nDuration: {0}"), {GetDuration()});
-	TooltipBuilder += FString::Format(TEXT("\nDelay: {0}"), {GetDelay()});
+	TooltipBuilder += FString::Format(TEXT("\nDelay(Expected): {0}"), {GetDelay()});
+	TooltipBuilder += FString::Format(TEXT("\nDelay(Real): {0}"), {GetStartedAt() - GetAttachedTime()});
 	TooltipBuilder += FString::Format(TEXT("\nUId: {0}"), {GetUID()});
 	return TooltipBuilder;
 }

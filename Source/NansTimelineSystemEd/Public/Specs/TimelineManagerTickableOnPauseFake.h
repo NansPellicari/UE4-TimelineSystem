@@ -48,7 +48,7 @@ public:
 		if (FMath::IsNearlyEqual(TotalLifeTime - LastTimeTick, GetTimeline()->GetTickInterval(), 0.001f))
 		{
 			LastTimeTick = TotalLifeTime;
-			TimerTick();
+			TimerTick(DeltaTime);
 		}
 	}
 
@@ -57,7 +57,7 @@ public:
 		return State != ENTimelineTimerState::Played ? false : true;
 	}
 
-	virtual void OnNotifyTimelineTickBefore() override
+	virtual void OnNotifyTimelineTickBefore(const float& InDeltaTime) override
 	{
 		Counter++;
 		UE_LOG(LogTemp, Display, TEXT("%s - tick %f"), ANSI_TO_TCHAR(__FUNCTION__), Counter);

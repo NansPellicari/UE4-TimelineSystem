@@ -25,7 +25,6 @@ void UNRealLifeTimelineManager::Init(const float& InTickInterval, const FName& I
 	{
 		CreationTime = FDateTime::Now();
 	}
-	LastTimeTick = TotalLifeTime;
 	LastPlayTime = FDateTime::Now();
 }
 
@@ -33,13 +32,12 @@ void UNRealLifeTimelineManager::Tick(float DeltaTime)
 {
 	// this ensure to always get the real time delta (in case of slowmo).
 	const float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
-	TotalLifeTime += RealDelta;
-	if (TotalLifeTime - LastTimeTick >= GetTimeline()->GetTickInterval())
+	if (RealDelta >= GetTimeline()->GetTickInterval())
 	{
-		LastTimeTick += GetTimeline()->GetTickInterval();
-		TimerTick();
+		TotalLifeTime += RealDelta;
+		TimerTick(RealDelta);
+		LastPlayTime = FDateTime::Now();
 	}
-	LastPlayTime = FDateTime::Now();
 }
 
 bool UNRealLifeTimelineManager::IsTickable() const
@@ -72,16 +70,16 @@ void UNRealLifeTimelineManager::Serialize(FArchive& Ar)
 	{
 		// Recover time between creation and last save game
 		TotalLifeTime = (LastPlayTime - CreationTime).GetTotalSeconds();
-		LastTimeTick = TotalLifeTime;
 		// Recover lost time since last save game
-		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds() / GetTimeline()->GetTickInterval();
-		const float SliceTime = GetTimeline()->GetTickInterval() / 10;
+		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds();
 
 		// Tick to notify timeline until it reaches the actual time.
 		while (MissingLifeTime > 0)
 		{
-			Tick(SliceTime);
-			MissingLifeTime -= SliceTime;
+			TimerTick(GetTimeline()->GetTickInterval());
+			MissingLifeTime -= GetTimeline()->GetTickInterval();
 		}
+		TotalLifeTime += (FDateTime::Now() - LastPlayTime).GetTotalSeconds();
+		LastPlayTime = FDateTime::Now();
 	}
 }
