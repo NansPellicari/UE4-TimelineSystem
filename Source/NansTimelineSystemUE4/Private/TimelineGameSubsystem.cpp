@@ -29,6 +29,11 @@ UNTimelineManagerDecorator* UTimelineGameSubsystem::GetTimeline(
 	return Client->GetTimeline(Timeline);
 }
 
+UNTimelineManagerDecorator* UTimelineGameSubsystem::GetTimeline(FName Timeline) const
+{
+	return Client->GetTimeline(Timeline);
+}
+
 UNTimelineClient* UTimelineGameSubsystem::GetTimelineClient() const
 {
 	return Client;

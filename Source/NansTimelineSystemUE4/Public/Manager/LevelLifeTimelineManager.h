@@ -36,7 +36,7 @@ class NANSTIMELINESYSTEMUE4_API UNLevelLifeTimelineManager final : public UNGame
 public:
 	/**
 	 * Attaches event on level changes
-	 * @copydoc UNGameLifeTimelineManager::Init()
+	 * @copydoc UNTimelineManagerDecorator::Init()
 	 */
 	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 
@@ -44,16 +44,12 @@ public:
 	void OnLevelRemoved(ULevel* Level, UWorld* World);
 
 	/** @copydoc OnLevelRemoved */
-	void OnLevelChanged();
-
-	/**
-	 * Removes all attached events
-	 * @copydoc UNGameLifeTimelineManager::Clear()
-	 */
-	virtual void Clear() override;
+	void OnLevelChanged(UWorld* LoadedWorld);
 
 	/** This only saves level name and checks */
 	virtual void Serialize(FArchive& Ar) override;
+
+	virtual void BeginDestroy() override;
 
 protected:
 	/** Default ctor */

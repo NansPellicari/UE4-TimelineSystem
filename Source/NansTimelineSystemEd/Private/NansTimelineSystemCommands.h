@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "EventViewGraphSchema.h"
+#pragma once
 
-#include "Kismet2/BlueprintEditorUtils.h"
+#include "Framework/Commands/Commands.h"
+#include "EditorStyleSet.h"
 
-UK2Node_VariableGet* UNEventViewGraphSchema::SpawnVariableGetNode(const FVector2D GraphPosition,
-	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
+class FNansTimelineSystemCommands : public TCommands<FNansTimelineSystemCommands>
 {
-	return Super::SpawnVariableGetNode(GraphPosition, ParentGraph, VariableName, Source);
-}
-
-UK2Node_VariableSet* UNEventViewGraphSchema::SpawnVariableSetNode(const FVector2D GraphPosition,
-	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
-{
-	return Super::SpawnVariableSetNode(GraphPosition, ParentGraph, VariableName, Source);
-}
+public:
+	FNansTimelineSystemCommands()
+		: TCommands<FNansTimelineSystemCommands>(
+			FName(TEXT("UE4_TimelineSystem")),
+			FText::FromString("Timeline System Commands"),
+			NAME_None,
+			FEditorStyle::GetStyleSetName()
+		) { };
+	virtual void RegisterCommands() override;
+	TSharedPtr<FUICommandInfo> MyButton;
+	TSharedPtr<FUICommandInfo> MyMenuButton;
+};

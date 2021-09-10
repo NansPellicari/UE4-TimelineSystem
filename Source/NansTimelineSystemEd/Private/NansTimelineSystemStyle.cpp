@@ -1,4 +1,16 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2020-present Nans Pellicari (nans.pellicari@gmail.com).
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #include "NansTimelineSystemStyle.h"
 
@@ -43,7 +55,7 @@ const FVector2D Icon16x16(16.0f, 16.0f);
 const FVector2D Icon12x12(12.0f, 12.0f);
 TSharedRef< FSlateStyleSet > FNansTimelineSystemStyle::Create()
 {
-	TSharedRef<FSlateStyleSet> Style = MakeShared<FSlateStyleSet>("DisplayClusterConfiguratorStyle");
+	TSharedRef<FSlateStyleSet> Style = MakeShared<FSlateStyleSet>("NansTimelineSystemStyle");
 
 	TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(TEXT("NansTimelineSystem"));
 	check(Plugin.IsValid());
@@ -52,10 +64,12 @@ TSharedRef< FSlateStyleSet > FNansTimelineSystemStyle::Create()
 		Style->SetContentRoot(FPaths::Combine(Plugin->GetBaseDir(), TEXT("Resources/AssetIcons")));
 	}
 
-	Style->Set("ClassIcon.NEventView", new IMAGE_BRUSH("NEventView_x16", Icon16x16));
-	Style->Set("ClassIcon.NEventViewBlueprint", new IMAGE_BRUSH("NEventView_x16", Icon16x16));
-	Style->Set("ClassThumbnail.NEventView", new IMAGE_BRUSH("NEventView_x64", Icon64x64));
-	Style->Set("ClassThumbnail.NEventViewBlueprint", new IMAGE_BRUSH("NEventView_x64", Icon64x64));
+	Style->Set("ClassIcon.NEventBase", new IMAGE_BRUSH("NEvent_x16", Icon16x16));
+	Style->Set("ClassIcon.NEventBaseBlueprint", new IMAGE_BRUSH("NEvent_x16", Icon16x16));
+	Style->Set("ClassThumbnail.NEventBase", new IMAGE_BRUSH("NEvent_x64", Icon64x64));
+	Style->Set("ClassThumbnail.NEventBaseBlueprint", new IMAGE_BRUSH("NEvent_x64", Icon64x64));
+	Style->Set("LevelEditor.TimelineSystemPanel", new IMAGE_BRUSH("NEvent_x64", Icon40x40));
+	Style->Set("LevelEditor.TimelineSystemPanel.Small", new IMAGE_BRUSH("NEvent_x64", Icon20x20));
 
 	return Style;
 }

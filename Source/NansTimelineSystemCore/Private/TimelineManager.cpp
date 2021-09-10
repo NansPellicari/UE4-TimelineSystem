@@ -75,7 +75,7 @@ TSharedPtr<INEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const f
 	if (NewName == NAME_None)
 	{
 		static int32 Counter;
-		const FString EvtLabel = FString::Format(TEXT("EventView_{0}"), {++Counter});
+		const FString EvtLabel = FString::Format(TEXT("EventBase_{0}"), {++Counter});
 		NewName = FName(*EvtLabel);
 	}
 

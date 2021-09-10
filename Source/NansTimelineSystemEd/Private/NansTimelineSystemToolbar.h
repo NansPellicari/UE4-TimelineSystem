@@ -14,12 +14,21 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "EventViewGraph.generated.h"
-
-/** A dedicated graph for UNEventView used for UNEventViewBlueprint creation. */
-UCLASS(MinimalAPI)
-class UNEventViewGraph : public UEdGraph
+class FNansTimelineSystemToolbar
 {
-	GENERATED_BODY()
+public:
+	static void Initialize();
+
+	static void Shutdown();
+
+	void Register();
+	void Unregister();
+
+	void MyButton_Clicked() const;
+	void AddToolbarExtension(FToolBarBuilder& builder) const;
+
+private:
+	static TSharedPtr<FNansTimelineSystemToolbar> Instance;
+	TSharedPtr<FExtender> ToolbarExtender;
+	TSharedPtr<const FExtensionBase> Extension;
 };

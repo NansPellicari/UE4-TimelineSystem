@@ -41,6 +41,13 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get a NansTimeline"), Category = "NansTimeline")
 	UNTimelineManagerDecorator* GetTimeline(FConfiguredTimeline Timeline) const;
 
+	/**
+	* A blueprint pass-through for UNTimelineClient::GetTimeline(FName Config).
+	*
+	* @param Timeline - name of the timeline
+	*/
+	UNTimelineManagerDecorator* GetTimeline(FName Timeline) const;
+
 	// @formatter:off
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get the NansTimeline client"), Category = "NansTimeline")
 	UNTimelineClient* GetTimelineClient() const;

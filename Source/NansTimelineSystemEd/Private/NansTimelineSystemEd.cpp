@@ -16,8 +16,9 @@
 
 #include "AssetToolsModule.h"
 #include "NansTimelineSystemStyle.h"
+#include "NansTimelineSystemToolbar.h"
 #include "Customization/ConfiguredTimelineCustomization.h"
-#include "Event/AssetTypeActions_NEventViewBlueprint.h"
+#include "Event/AssetTypeActions_NEventBlueprint.h"
 #include "Modules/ModuleManager.h"
 #include "Pin/TimelinePinFactory.h"
 #include "PropertyEditor/Public/PropertyEditorModule.h"
@@ -41,10 +42,12 @@ void FNansTimelineSystemEdModule::StartupModule()
 
 	FNansTimelineSystemStyle::Initialize();
 
-	// Register the EventViewBlueprint editor asset type actions.
+	// Register the EventBaseBlueprint editor asset type actions.
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
-	AssetTools.RegisterAssetTypeActions(MakeShared<FAssetTypeActions_NEventViewBlueprint>());
+	AssetTools.RegisterAssetTypeActions(MakeShared<FAssetTypeActions_NEventBlueprint>());
+
+	FNansTimelineSystemToolbar::Initialize();
 }
 
 void FNansTimelineSystemEdModule::ShutdownModule()

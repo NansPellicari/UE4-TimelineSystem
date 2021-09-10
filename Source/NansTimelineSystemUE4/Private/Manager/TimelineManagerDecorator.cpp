@@ -14,7 +14,7 @@
 
 #include "Manager/TimelineManagerDecorator.h"
 
-#include "Event/EventView.h"
+#include "Event/EventBase.h"
 #include "NansTimelineSystemUE4.h"
 
 FString EnumToString(const ENTimelineEvent& Value)
@@ -41,6 +41,10 @@ void UNTimelineManagerDecorator::Pause()
 
 void UNTimelineManagerDecorator::Play()
 {
+	if (StartedAt == -1.f)
+	{
+		StartedAt = FDateTime::Now();
+	}
 	FNTimelineManager::Play();
 }
 
@@ -49,76 +53,95 @@ void UNTimelineManagerDecorator::Stop()
 	FNTimelineManager::Stop();
 }
 
-struct FParamEventChanged
+struct FParamsEventChanged
 {
-	FParamEventChanged() {};
 	float InLocalTime = -1.f;
+	UWorld* InWorld = nullptr;
+	APlayerController* InPlayer = nullptr;
 };
 
 void UNTimelineManagerDecorator::OnEventChangedDelegate(TSharedPtr<INEvent> Event,
 	const ENTimelineEvent& EventName, const float& LocalTime, const int32& Index)
 {
-	UNEventView* EventView = EventViews.FindRef(Event->GetUID());
-	check(IsValid(EventView));
-	OnBPEventChanged(EventView, LocalTime);
+	UNEventBase* EventBase = EventBases.FindRef(Event->GetUID());
+	if (!ensure(IsValid(EventBase)))
+	{
+		return;
+	}
+
+	OnBPEventChanged(EventBase, LocalTime);
 
 	FString FuncName = FString::Printf(TEXT("On%s"), *EnumToString(EventName));
-	UFunction* Func = EventView->FindFunction(FName(FuncName));
+	UFunction* Func = EventBase->FindFunction(FName(FuncName));
 
 	if (Func != nullptr)
 	{
-		FParamEventChanged Param;
+		bool bSupported = true;
+		FParamsEventChanged Param;
 		Param.InLocalTime = LocalTime;
+		Param.InWorld = GetWorldChecked(bSupported);
+		Param.InPlayer = Param.InWorld->GetFirstPlayerController();
+
 		UE_DEBUG_LOG(
 			LogTimelineSystem, Display, TEXT("FuncName \"%s\" for event \"%s\" will be called at %f secs"), *FuncName,
-			*EventView->GetEventLabel().ToString(), LocalTime
+			*EventBase->GetEventLabel().ToString(), LocalTime
 		);
-		EventView->ProcessEvent(Func, &Param);
+		EventBase->ProcessEvent(Func, &Param);
 	}
 	else
 	{
 		UE_DEBUG_LOG(
 			LogTimelineSystem, Warning, TEXT("FuncName \"%s\" for event \"%s\" not exists"), *FuncName,
-			*EventView->GetEventLabel().ToString()
+			*EventBase->GetEventLabel().ToString()
 		);
 	}
 
 	if (EventName == ENTimelineEvent::Expired)
 	{
-		EventViews.Remove(Event->GetUID());
-		EventView->ConditionalBeginDestroy();
+		ExpiredEventBases.Add(Event->GetUID(), EventBase);
+		EventBases.Remove(Event->GetUID());
 	}
 }
 
-TArray<UNEventView*> UNTimelineManagerDecorator::GetEventViews() const
+TArray<UNEventBase*> UNTimelineManagerDecorator::GetEvents() const
 {
-	TArray<UNEventView*> EventRecords;
-	EventViews.GenerateValueArray(EventRecords);
+	TArray<UNEventBase*> EventRecords;
+	EventBases.GenerateValueArray(EventRecords);
 	return EventRecords;
 }
 
-UNEventView* UNTimelineManagerDecorator::GetEventView(const FString& InUID) const
+TArray<UNEventBase*> UNTimelineManagerDecorator::GetExpiredEvents() const
 {
-	return EventViews.FindRef(InUID);
+	TArray<UNEventBase*> EventRecords;
+	ExpiredEventBases.GenerateValueArray(EventRecords);
+	return EventRecords;
+}
+
+UNEventBase* UNTimelineManagerDecorator::GetEvent(const FString& InUID) const
+{
+	return EventBases.FindRef(InUID);
 }
 
 float UNTimelineManagerDecorator::GetCurrentTime() const
 {
+	check(GetTimeline().IsValid());
 	return GetTimeline()->GetCurrentTime();
 }
 
 FName UNTimelineManagerDecorator::GetLabel() const
 {
+	check(GetTimeline().IsValid());
 	return GetTimeline()->GetLabel();
 }
 
 void UNTimelineManagerDecorator::SetLabel(const FName& Name)
 {
+	check(GetTimeline().IsValid());
 	GetTimeline()->SetLabel(Name);
 }
 
-UNEventView* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDuration, float InDelay,
-	TSubclassOf<UNEventView> InClass)
+UNEventBase* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDuration, float InDelay,
+	TSubclassOf<UNEventBase> InClass)
 {
 	UClass* ChildClass;
 	if (InClass)
@@ -127,18 +150,32 @@ UNEventView* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, floa
 	}
 	else
 	{
-		ChildClass = UNEventView::StaticClass();
+		ChildClass = UNEventBase::StaticClass();
 	}
 
 	const TSharedPtr<INEvent> Object = CreateNewEvent(InName, InDuration, InDelay);
 	if (!Object.IsValid()) return nullptr;
 
-	UNEventView* EventView = NewObject<UNEventView>(this, ChildClass);
-	EventView->Init(Object);
-	EventViews.Add(Object->GetUID(), EventView);
+	UNEventBase* Event = NewObject<UNEventBase>(this, ChildClass);
+	Event->Init(Object, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
+	EventBases.Add(Object->GetUID(), Event);
 
 	GetTimeline()->Attached(Object);
-	return EventView;
+	return Event;
+}
+
+void UNTimelineManagerDecorator::Clear()
+{
+	for (const TTuple<FString, UNEventBase*>& Event : EventBases)
+	{
+		if (IsValid(GetWorld()) && IsValid(GetWorld()->GetFirstPlayerController()))
+		{
+			Event.Value->OnCleared(GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
+		}
+	}
+	EventBases.Empty();
+	ExpiredEventBases.Empty();
+	FNTimelineManager::Clear();
 }
 
 void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
@@ -148,17 +185,31 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 	Archive(Ar);
 
 	int32 NumEntries = 0;
+	int32 NumExpiredEntries = 0;
 
 	if (Ar.IsSaving())
 	{
-		NumEntries = EventViews.Num();
+		NumEntries = EventBases.Num();
+		NumExpiredEntries = ExpiredEventBases.Num();
 	}
 
 	Ar << NumEntries;
+	Ar << NumExpiredEntries;
 
 	if (Ar.IsSaving() && NumEntries > 0)
 	{
-		for (TTuple<FString, UNEventView*> Pair : EventViews)
+		for (TTuple<FString, UNEventBase*> Pair : EventBases)
+		{
+			Ar << Pair.Key;
+			FString PathClass = Pair.Value->GetClass()->GetPathName();
+			Ar << PathClass;
+			Pair.Value->Serialize(Ar);
+		}
+	}
+
+	if (Ar.IsSaving() && NumExpiredEntries > 0)
+	{
+		for (TTuple<FString, UNEventBase*> Pair : ExpiredEventBases)
 		{
 			Ar << Pair.Key;
 			FString PathClass = Pair.Value->GetClass()->GetPathName();
@@ -181,11 +232,34 @@ void UNTimelineManagerDecorator::Serialize(FArchive& Ar)
 				Event.IsValid(), TEXT("Event with Uid (\"%s\") can't be retrieved during serialization."), *Id
 			))
 			{
-				UClass* Class = ConstructorHelpersInternal::FindOrLoadClass(PathClass, UNEventView::StaticClass());
-				UNEventView* Object = NewObject<UNEventView>(this, Class);
+				UClass* Class = ConstructorHelpersInternal::FindOrLoadClass(PathClass, UNEventBase::StaticClass());
+				UNEventBase* Object = NewObject<UNEventBase>(this, Class);
 				Object->Serialize(Ar);
-				Object->Init(Event);
-				EventViews.Emplace(Id, Object);
+				Object->Init(Event, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
+				EventBases.Emplace(Id, Object);
+			}
+		}
+	}
+
+	if (Ar.IsLoading() && NumExpiredEntries > 0)
+	{
+		for (int32 I = 0; I < NumExpiredEntries; I ++)
+		{
+			FString Id, PathClass;
+			Ar << Id;
+			Ar << PathClass;
+
+			TSharedPtr<INEvent> Event = Timeline->GetExpiredEvent(Id);
+
+			if (ensureMsgf(
+				Event.IsValid(), TEXT("Event with Uid (\"%s\") can't be retrieved during serialization."), *Id
+			))
+			{
+				UClass* Class = ConstructorHelpersInternal::FindOrLoadClass(PathClass, UNEventBase::StaticClass());
+				UNEventBase* Object = NewObject<UNEventBase>(this, Class);
+				Object->Serialize(Ar);
+				Object->Init(Event, GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
+				ExpiredEventBases.Emplace(Id, Object);
 			}
 		}
 	}

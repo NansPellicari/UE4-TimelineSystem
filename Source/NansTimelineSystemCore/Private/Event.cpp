@@ -37,7 +37,7 @@ FNEvent::FNEvent(const FName& InLabel, const FString& InUId)
 
 bool FNEvent::IsExpired() const
 {
-	return !bActivated || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
+	return (!bActivated && GetStartedAt() > -1.f) || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
 };
 
 float FNEvent::GetLocalTime() const

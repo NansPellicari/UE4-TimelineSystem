@@ -45,10 +45,8 @@ public:
 	 */
 	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 
-	/**
-	 * clears timer + unbind delegate + invalidate handle.
-	 */
-	virtual void Clear() override;
+	/** Clears timer + unbind delegate + invalidate handle. */
+	virtual void BeginDestroy() override;
 
 protected:
 	/** A default ctor for engine system */

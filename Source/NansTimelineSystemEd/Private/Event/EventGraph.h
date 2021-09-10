@@ -14,21 +14,12 @@
 
 #pragma once
 
-#include "Styling/ISlateStyle.h"
-#include "Styling/SlateStyle.h"
+#include "CoreMinimal.h"
+#include "EventGraph.generated.h"
 
-class FNansTimelineSystemStyle
+/** A dedicated graph for UNEventBase used for UNEventBaseBlueprint creation. */
+UCLASS(MinimalAPI)
+class UNEventGraph : public UEdGraph
 {
-public:
-	static void Initialize();
-
-	static void Shutdown();
-
-	static const ISlateStyle& Get();
-
-	static FName GetStyleSetName();
-
-private:
-	static TSharedRef<FSlateStyleSet> Create();
-	static TSharedPtr<FSlateStyleSet> StyleInstance;
+	GENERATED_BODY()
 };

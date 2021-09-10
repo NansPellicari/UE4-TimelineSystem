@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "EventGraphSchema.h"
 
-#include "Styling/ISlateStyle.h"
-#include "Styling/SlateStyle.h"
+#include "Kismet2/BlueprintEditorUtils.h"
 
-class FNansTimelineSystemStyle
+UK2Node_VariableGet* UNEventGraphSchema::SpawnVariableGetNode(const FVector2D GraphPosition,
+	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
 {
-public:
-	static void Initialize();
+	return Super::SpawnVariableGetNode(GraphPosition, ParentGraph, VariableName, Source);
+}
 
-	static void Shutdown();
-
-	static const ISlateStyle& Get();
-
-	static FName GetStyleSetName();
-
-private:
-	static TSharedRef<FSlateStyleSet> Create();
-	static TSharedPtr<FSlateStyleSet> StyleInstance;
-};
+UK2Node_VariableSet* UNEventGraphSchema::SpawnVariableSetNode(const FVector2D GraphPosition,
+	class UEdGraph* ParentGraph, FName VariableName, UStruct* Source) const
+{
+	return Super::SpawnVariableSetNode(GraphPosition, ParentGraph, VariableName, Source);
+}

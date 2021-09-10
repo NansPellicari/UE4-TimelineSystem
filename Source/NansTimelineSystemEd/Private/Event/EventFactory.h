@@ -17,17 +17,17 @@
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
 
-#include "EventViewFactory.generated.h"
+#include "EventFactory.generated.h"
 
 /**
  * Allows to create a blueprint asset in the editor with default event nodes.
  */
 UCLASS(hidecategories=Object)
-class UNEventViewFactory : public UFactory
+class UNEventFactory : public UFactory
 {
 	GENERATED_BODY()
 public:
-	UNEventViewFactory();
+	UNEventFactory();
 
 	// ~ Begin UFactory overrides
 	virtual UObject* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
@@ -37,6 +37,6 @@ public:
 	// ~ End UFactory overrides
 
 	/** The parent class of the created blueprint */
-	UPROPERTY(EditAnywhere, Category="EventViewBlueprintFactory")
-	TSubclassOf<class UNEventView> ParentClass;
+	UPROPERTY(EditAnywhere, Category="EventBaseBlueprintFactory")
+	TSubclassOf<class UNEventBase> ParentClass;
 };

@@ -12,23 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "NansTimelineSystemCommands.h"
 
-#include "Styling/ISlateStyle.h"
-#include "Styling/SlateStyle.h"
-
-class FNansTimelineSystemStyle
+void FNansTimelineSystemCommands::RegisterCommands()
 {
-public:
-	static void Initialize();
-
-	static void Shutdown();
-
-	static const ISlateStyle& Get();
-
-	static FName GetStyleSetName();
-
-private:
-	static TSharedRef<FSlateStyleSet> Create();
-	static TSharedPtr<FSlateStyleSet> StyleInstance;
-};
+#define LOCTEXT_NAMESPACE ""
+	UI_COMMAND(
+		MyButton, "TimelineSystem", "TimelineSystem Toolbar Command", EUserInterfaceActionType::Button, FInputChord()
+	);
+	UI_COMMAND(
+		MyMenuButton, "TimelineSystem", "TimelineSystem Toolbar Command", EUserInterfaceActionType::Button, FInputChord()
+	);
+#undef LOCTEXT_NAMESPACE
+}

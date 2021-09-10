@@ -135,6 +135,11 @@ public:
 	*/
 	TSharedPtr<INEvent> GetEvent(const FString& InUID) const;
 
+	/**
+	* Get an event by its UID
+	* @returns the event found or invalid TSharedPtr
+	*/
+	TSharedPtr<INEvent> GetExpiredEvent(const FString& InUID) const;
 private:
 	/** The name of this timeline */
 	FName Label;
