@@ -38,6 +38,8 @@ void SWindowTimeline::Construct(const FArguments& InArgs)
 		TimelineNames.Add(MakeShared<FName>(TimelineConf.Name));
 	}
 
+	FWorldDelegates::OnStartGameInstance.AddRaw(this, &SWindowTimeline::OnGameInstanceStart);
+
 	HorizontalScrollBar = SNew(SScrollBar)
 						  .Orientation(Orient_Horizontal)
 						  .AlwaysShowScrollbar(true)
@@ -49,6 +51,9 @@ void SWindowTimeline::Construct(const FArguments& InArgs)
 						.AlwaysShowScrollbar(true)
 						.Visibility(EVisibility::Visible)
 						.Thickness(FVector2D(12.0f, 12.0f));
+
+	ParentTabPtr = InArgs._ParentTab;
+
 	ChildSlot
 	[
 		SNew(SVerticalBox)
@@ -118,7 +123,6 @@ void SWindowTimeline::Construct(const FArguments& InArgs)
 
 	HorizontalScrollBar->SetState(0.0f, 1.0f);
 	VerticalScrollBar->SetState(0.0f, 1.0f);
-	FWorldDelegates::OnStartGameInstance.AddRaw(this, &SWindowTimeline::OnGameInstanceStart);
 }
 
 FText SWindowTimeline::CreateTimelineNamesComboBoxContent() const
@@ -155,6 +159,9 @@ FText SWindowTimeline::BuildText() const
 	const UNTimelineManagerDecorator* Timeline = GetTimelineManager();
 	FText Text;
 
+	ParentTabPtr->SetLabel(
+		FText::Format(LOCTEXT("TabParentLabel", "{0} Timeline"), FText::FromName(*CurrentTimeline))
+	);
 	if (!World)
 	{
 		Text = FText::Format(
@@ -170,7 +177,7 @@ FText SWindowTimeline::BuildText() const
 			Opts.MinimumFractionalDigits = 2;
 			Opts.MaximumFractionalDigits = 2;
 			Time = FText::Format(
-				LOCTEXT("CanDebugTimelineTime", ", ({0}s)"), FText::AsNumber(Timeline->GetCurrentTime(), &Opts)
+				LOCTEXT("CanDebugTimelineTime", " ({0}s)"), FText::AsNumber(Timeline->GetCurrentTime(), &Opts)
 			).ToString();
 		}
 		Text = FText::Format(

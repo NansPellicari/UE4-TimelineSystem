@@ -209,6 +209,11 @@ FVector2D SNTimeline::ComputeDesiredSize(float) const
 
 FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
+	if (!IsInGameThread() || !bShouldComputeSize)
+	{
+		return FReply::Unhandled();
+	}
+
 	if (!TimelineRows.Contains(CurrentTimelineName) || TimelineRows[CurrentTimelineName].Rows.Num() <= 0)
 	{
 		return FReply::Unhandled();
@@ -261,7 +266,11 @@ FReply SNTimeline::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent&
 			CurrentSlotNum = ChosenSlotNum;
 			const UNEventBase* EventFound = TimelineRows[CurrentTimelineName].Rows[CurrentRowNum].Slots[CurrentSlotNum].
 				Event;
-			SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
+
+			if (IsValid(EventFound))
+			{
+				SetToolTipText(FText::AsCultureInvariant(EventFound->GetDebugTooltipText()));
+			}
 		}
 		return FReply::Handled();
 	}
