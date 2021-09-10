@@ -35,7 +35,8 @@
 	"Plugins": [
 		{
 			"Name": "NansUE4TestsHelpers",
-			"Enabled": true
+			"Enabled": true,
+			"Optional": true
 		},
 		{
 			"Name": "NansCoreHelpers",
