@@ -160,7 +160,7 @@ FText SWindowTimeline::BuildText() const
 	FText Text;
 
 	ParentTabPtr->SetLabel(
-		FText::Format(LOCTEXT("TabParentLabel", "{0} Timeline"), FText::FromName(*CurrentTimeline))
+		FText::Format(LOCTEXT("Label_WindowTimeline_Named", "{0} Timeline"), FText::FromName(*CurrentTimeline))
 	);
 	if (!World)
 	{
