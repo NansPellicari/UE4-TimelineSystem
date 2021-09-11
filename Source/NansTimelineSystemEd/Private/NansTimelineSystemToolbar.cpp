@@ -85,6 +85,23 @@ void FNansTimelineSystemToolbar::Unregister()
 
 void FNansTimelineSystemToolbar::MyButton_Clicked() const
 {
+	static bool HasRegisteredNansTimeline = false;
+	if (!HasRegisteredNansTimeline)
+	{
+		TSharedRef<FTabManager::FLayout> Layout = FTabManager::NewLayout("NansTimeline_Layout")
+			->AddArea
+			(
+				FTabManager::NewArea(720, 360)
+				->Split
+				(
+					FTabManager::NewStack()
+					->AddTab("NansTimeline", ETabState::ClosedTab)
+				)
+			);
+
+		FGlobalTabmanager::Get()->RestoreFrom(Layout, TSharedPtr<SWindow>());
+		HasRegisteredNansTimeline = true;
+	}
 	// TODO check how to keep them inter sessions
 	FGlobalTabmanager::Get()->InsertNewDocumentTab(
 		TEXT("NansTimeline"), FTabManager::ESearchPreference::RequireClosedTab, MakeTimelineTab()
