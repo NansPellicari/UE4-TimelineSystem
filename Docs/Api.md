@@ -2,60 +2,171 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`namespace `[`UNEventDecoratorFactory`](#namespaceUNEventDecoratorFactory) | Factory functions to help creating event decorators.
+`namespace `[`FNTimelineManagerDecoratorFactory`](#namespaceFNTimelineManagerDecoratorFactory) | This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instantiation.
+`namespace `[`UnrealBuildTool::Rules`](#namespaceUnrealBuildTool_1_1Rules) | 
+`class `[`FAssetTypeActions_NEventBlueprint`](#classFAssetTypeActions__NEventBlueprint) | Allow to defined [UNEventBase](#classUNEventBase) asset and open it in blueprint editor.
+`class `[`FNansTimelineSystemCommands`](#classFNansTimelineSystemCommands) | 
 `class `[`FNansTimelineSystemCoreModule`](#classFNansTimelineSystemCoreModule) | Required to create a UE4 module
+`class `[`FNansTimelineSystemEdModule`](#classFNansTimelineSystemEdModule) | 
+`class `[`FNansTimelineSystemStyle`](#classFNansTimelineSystemStyle) | 
+`class `[`FNansTimelineSystemToolbar`](#classFNansTimelineSystemToolbar) | 
 `class `[`FNansTimelineSystemUE4Module`](#classFNansTimelineSystemUE4Module) | Required to create a UE4 module
+`class `[`FNConfiguredTimelineCustomization`](#classFNConfiguredTimelineCustomization) | 
+`class `[`FNEvent`](#classFNEvent) | A concrete implementation basically used by [FNTimeline](#classFNTimeline)
+`class `[`FNTimeline`](#classFNTimeline) | **See also**: NTimelineInterface
+`class `[`FNTimelineManager`](#classFNTimelineManager) | This class is the client for the NTimelineInterface object. Its goal is to decoupled client interface with timeline management.
 `class `[`FTimelinePinFactory`](#classFTimelinePinFactory) | It is fully dedicated to make our custom Pin available for the Unreal Editor Graph.
-`class `[`INTimelineGameInstance`](#classINTimelineGameInstance) | This interface should be implemented by your GameInstance class or blueprint object. See ../README.md in step by step guide to see how to implements it.
+`class `[`INEvent`](#classINEvent) | An interface to manage events which can be attached to a timeline.
 `class `[`NansTimelineSystemCore`](#classNansTimelineSystemCore) | 
 `class `[`NansTimelineSystemUE4`](#classNansTimelineSystemUE4) | 
-`class `[`NEvent`](#classNEvent) | **See also**: [NEventInterface](#classNEventInterface)
-`class `[`NEventInterface`](#classNEventInterface) | An interface to manage events which can be attached to a timeline.
-`class `[`NTimeline`](#classNTimeline) | **See also**: [NTimelineInterface](#classNTimelineInterface)
-`class `[`NTimelineInterface`](#classNTimelineInterface) | Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManager](#classNTimelineManager) class is dedicated to handle it.
-`class `[`NTimelineManager`](#classNTimelineManager) | This class is the client for the [NTimelineInterface](#classNTimelineInterface) object. Its goal is to decoupled client interface with timeline management.
-`class `[`NUnrealEventProxy`](#classNUnrealEventProxy) | This class is just a pass-through to allows an [UNEventDecorator](#classUNEventDecorator) (a derived UObject) to be passed on the core system using TSharedPtr.
-`class `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy) | This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTimelineProxy) (a derived UObject) to be passed on the core system using TSharedPtr, and it manages [NUnrealEventProxy](#classNUnrealEventProxy) attachment .
 `class `[`SConfiguredTimelinePin`](#classSConfiguredTimelinePin) | This class allows to create a dedicated pin to get names from [UNTimelineConfig](#classUNTimelineConfig).
-`class `[`UNEventDecorator`](#classUNEventDecorator) | Base abstract class to create [NEventInterface](#classNEventInterface) decorators (Blueprint or c++).
+`class `[`SNTimeline`](#classSNTimeline) | This widget will draw timeline and events thanks to its [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) passed in.
+`class `[`SWindowTimeline`](#classSWindowTimeline) | The main window that embedded the timeline widget ([SNTimeline](#classSNTimeline)) and the timelines selector.
+`class `[`UNEventBase`](#classUNEventBase) | This is only a view object used to retrieve events from blueprint.
+`class `[`UNEventBaseBlueprint`](#classUNEventBaseBlueprint) | A [UNEventBaseBlueprint](#classUNEventBaseBlueprint) is essentially a specialized Blueprint whose graphs control an [UNEventBase](#classUNEventBase). The [UNEventBase](#classUNEventBase) factory should pick this for you automatically
+`class `[`UNEventFactory`](#classUNEventFactory) | Allows to create a blueprint asset in the editor with default event nodes.
+`class `[`UNEventGraph`](#classUNEventGraph) | A dedicated graph for [UNEventBase](#classUNEventBase) used for [UNEventBaseBlueprint](#classUNEventBaseBlueprint) creation.
+`class `[`UNEventGraphSchema`](#classUNEventGraphSchema) | A dedicated graph schema for [UNEventBase](#classUNEventBase) used for [UNEventBaseBlueprint](#classUNEventBaseBlueprint) creation.
 `class `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager) | This decorator is fitted to track time when player plays since the game is launched.
 `class `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager) | It tracks game session but refreshes when level changed.
 `class `[`UNRealLifeTimelineManager`](#classUNRealLifeTimelineManager) | It tracks realtime, it is not altered by pause or slowmo.
 `class `[`UNTimelineBlueprintHelpers`](#classUNTimelineBlueprintHelpers) | A simple Blueprint Library class to manage Timeline creation.
 `class `[`UNTimelineClient`](#classUNTimelineClient) | This class should be used by your GameInstance object. This object is the glue for all the timeline configuration and blueprint helpers.
-`class `[`UNTimelineConfig`](#classUNTimelineConfig) | A simple configuration to ease timeline instanciation for developpers.
-`class `[`UNTimelineDecorator`](#classUNTimelineDecorator) | The decorator for [NTimelineInterface](#classNTimelineInterface) object.
-`class `[`UNTimelineGameInstance`](#classUNTimelineGameInstance) | **See also**: [INTimelineGameInstance](#classINTimelineGameInstance)
-`class `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator) | This is the abstract decorator that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or UE4 c++ paradigm.
-`class `[`UNTimelineManagerDecoratorFactory`](#classUNTimelineManagerDecoratorFactory) | This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instanciation.
-`struct `[`FConfiguredTimeline`](#structFConfiguredTimeline) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
-`struct `[`FConfiguredTimelineConf`](#structFConfiguredTimelineConf) | This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
-`struct `[`FNEventRecord`](#structFNEventRecord) | This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) and a record object used for savegame.
+`class `[`UNTimelineConfig`](#classUNTimelineConfig) | A simple configuration to ease timeline instantiation for developpers.
+`class `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator) | This is the abstract decorator that every Timeline manager should override. It brings all core functionalities for blueprint or UE4 c++ paradigm.
+`class `[`UTimelineGameSubsystem`](#classUTimelineGameSubsystem) | 
+`struct `[`FConfiguredTimeline`](#structFConfiguredTimeline) | This struct to create Configured Timeline and ease Timeline instantiation. This allows to associated a Timeline Name to a class.
+`struct `[`FConfiguredTimelineConf`](#structFConfiguredTimelineConf) | This struct to create Configured Timeline and ease Timeline instantiation. This allows to associated a Timeline Name to a class.
+`struct `[`FEventSlot`](#structFEventSlot) | All details about an event to draw
+`struct `[`FEventsRow`](#structFEventsRow) | Saved data when timeline are paint. 
+`struct `[`FParamsEventChanged`](#structFParamsEventChanged) | 
+`struct `[`FTimelineData`](#structFTimelineData) | Saved data when timeline are paint. 
 
-# namespace `UNEventDecoratorFactory` <a id="namespaceUNEventDecoratorFactory"></a>
+# namespace `FNTimelineManagerDecoratorFactory` <a id="namespaceFNTimelineManagerDecoratorFactory"></a>
 
-Factory functions to help creating event decorators.
+This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instantiation.
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public template<>`  <br/>`static T * `[`CreateObject`](#namespaceUNEventDecoratorFactory_1acc8cc41bc9714c3d5e9839fde6ee21f1)`(UObject * Outer,const TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,EObjectFlags Flags)`            | This will instanciate a new Event decorator based on class [UNEventDecorator](#classUNEventDecorator). It uses [UNEventDecorator::Init()](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562) function too to have a fully initialized object.
+`public template<>`  <br/>`static T * `[`CreateObject`](#namespaceFNTimelineManagerDecoratorFactory_1a635b20a46982b89dd7bb4806bf352a41)`(UObject * Outer,const float & TickInterval,const FName & InLabel,const EObjectFlags & Flags)`            | Method to create a derived [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator).
+`public template<>`  <br/>`static T * `[`CreateObject`](#namespaceFNTimelineManagerDecoratorFactory_1ab68d66e806fab177fc5cc323867c8dc1)`(UObject * Outer,const UClass * Class,const float & TickInterval,const FName & InLabel,const EObjectFlags & Flags)`            | This method is a factory method to create a derived [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) with a specific UClass.
 
 ## Members
 
-#### `public template<>`  <br/>`static T * `[`CreateObject`](#namespaceUNEventDecoratorFactory_1acc8cc41bc9714c3d5e9839fde6ee21f1)`(UObject * Outer,const TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,EObjectFlags Flags)` <a id="namespaceUNEventDecoratorFactory_1acc8cc41bc9714c3d5e9839fde6ee21f1"></a>
+#### `public template<>`  <br/>`static T * `[`CreateObject`](#namespaceFNTimelineManagerDecoratorFactory_1a635b20a46982b89dd7bb4806bf352a41)`(UObject * Outer,const float & TickInterval,const FName & InLabel,const EObjectFlags & Flags)` <a id="namespaceFNTimelineManagerDecoratorFactory_1a635b20a46982b89dd7bb4806bf352a41"></a>
 
-This will instanciate a new Event decorator based on class [UNEventDecorator](#classUNEventDecorator). It uses [UNEventDecorator::Init()](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562) function too to have a fully initialized object.
+Method to create a derived [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator).
 
 #### Parameters
-* `Outer` - The UObject outer 
+* `Outer` - The outer of the new object. 
 
-* `Class` - A subclass of [UNEventDecorator](#classUNEventDecorator)
+* `TickInterval` - The interval between tick in sec 
 
-* `Name` - (optionnal) the name you want this event is called, it gives a generated ones if not provided 
+* `InLabel` - The name of this new Timeline 
 
-* `Flags` - Flag for GC management
+* `Flags` - The EObjectFlags for NewObject().
+
+#### `public template<>`  <br/>`static T * `[`CreateObject`](#namespaceFNTimelineManagerDecoratorFactory_1ab68d66e806fab177fc5cc323867c8dc1)`(UObject * Outer,const UClass * Class,const float & TickInterval,const FName & InLabel,const EObjectFlags & Flags)` <a id="namespaceFNTimelineManagerDecoratorFactory_1ab68d66e806fab177fc5cc323867c8dc1"></a>
+
+This method is a factory method to create a derived [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) with a specific UClass.
+
+#### Parameters
+* `Outer` - The outer of the new object. 
+
+* `Class` - The specific class we want our object will be. 
+
+* `TickInterval` - The interval between tick in sec 
+
+* `InLabel` - The name of this new Timeline 
+
+* `Flags` - The EObjectFlags for NewObject().
+
+# namespace `UnrealBuildTool::Rules` <a id="namespaceUnrealBuildTool_1_1Rules"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`class `[`UnrealBuildTool::Rules::NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd) | 
+
+# class `UnrealBuildTool::Rules::NansTimelineSystemEd` <a id="classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd"></a>
+
+```
+class UnrealBuildTool::Rules::NansTimelineSystemEd
+  : public ModuleRules
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656)`(ReadOnlyTargetRules Target)` | 
+
+## Members
+
+#### `public inline  `[`NansTimelineSystemEd`](#classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656)`(ReadOnlyTargetRules Target)` <a id="classUnrealBuildTool_1_1Rules_1_1NansTimelineSystemEd_1a413c3380b077138d08b887fa0e363656"></a>
+
+# class `FAssetTypeActions_NEventBlueprint` <a id="classFAssetTypeActions__NEventBlueprint"></a>
+
+```
+class FAssetTypeActions_NEventBlueprint
+  : public FAssetTypeActions_Blueprint
+```  
+
+Allow to defined [UNEventBase](#classUNEventBase) asset and open it in blueprint editor.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual FText `[`GetName`](#classFAssetTypeActions__NEventBlueprint_1a4d517f4029293744d5bba541d6479049)`() const` | 
+`public virtual FColor `[`GetTypeColor`](#classFAssetTypeActions__NEventBlueprint_1a63bfbdbacd5ceb04147a34c01eebea24)`() const` | 
+`public virtual UClass * `[`GetSupportedClass`](#classFAssetTypeActions__NEventBlueprint_1a802c1a8cbebd182e6e201f82b03ce713)`() const` | 
+`public virtual uint32 `[`GetCategories`](#classFAssetTypeActions__NEventBlueprint_1a7641d7f87c250c003085226b7a427553)`()` | 
+`public virtual void `[`OpenAssetEditor`](#classFAssetTypeActions__NEventBlueprint_1a570b341f2926f97805f225b3fbee1246)`(const TArray< UObject * > & InObjects,TSharedPtr< IToolkitHost > EditWithinLevelEditor)` | 
+`protected virtual UFactory * `[`GetFactoryForBlueprintType`](#classFAssetTypeActions__NEventBlueprint_1a95299c1c2bb25037ee23c08eacf11390)`(UBlueprint * InBlueprint) const` | 
+
+## Members
+
+#### `public virtual FText `[`GetName`](#classFAssetTypeActions__NEventBlueprint_1a4d517f4029293744d5bba541d6479049)`() const` <a id="classFAssetTypeActions__NEventBlueprint_1a4d517f4029293744d5bba541d6479049"></a>
+
+#### `public virtual FColor `[`GetTypeColor`](#classFAssetTypeActions__NEventBlueprint_1a63bfbdbacd5ceb04147a34c01eebea24)`() const` <a id="classFAssetTypeActions__NEventBlueprint_1a63bfbdbacd5ceb04147a34c01eebea24"></a>
+
+#### `public virtual UClass * `[`GetSupportedClass`](#classFAssetTypeActions__NEventBlueprint_1a802c1a8cbebd182e6e201f82b03ce713)`() const` <a id="classFAssetTypeActions__NEventBlueprint_1a802c1a8cbebd182e6e201f82b03ce713"></a>
+
+#### `public virtual uint32 `[`GetCategories`](#classFAssetTypeActions__NEventBlueprint_1a7641d7f87c250c003085226b7a427553)`()` <a id="classFAssetTypeActions__NEventBlueprint_1a7641d7f87c250c003085226b7a427553"></a>
+
+#### `public virtual void `[`OpenAssetEditor`](#classFAssetTypeActions__NEventBlueprint_1a570b341f2926f97805f225b3fbee1246)`(const TArray< UObject * > & InObjects,TSharedPtr< IToolkitHost > EditWithinLevelEditor)` <a id="classFAssetTypeActions__NEventBlueprint_1a570b341f2926f97805f225b3fbee1246"></a>
+
+#### `protected virtual UFactory * `[`GetFactoryForBlueprintType`](#classFAssetTypeActions__NEventBlueprint_1a95299c1c2bb25037ee23c08eacf11390)`(UBlueprint * InBlueprint) const` <a id="classFAssetTypeActions__NEventBlueprint_1a95299c1c2bb25037ee23c08eacf11390"></a>
+
+# class `FNansTimelineSystemCommands` <a id="classFNansTimelineSystemCommands"></a>
+
+```
+class FNansTimelineSystemCommands
+  : public TCommands< FNansTimelineSystemCommands >
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TSharedPtr< FUICommandInfo > `[`MyButton`](#classFNansTimelineSystemCommands_1a9fcea2c9c028fb563a18f3e293b0a044) | 
+`public TSharedPtr< FUICommandInfo > `[`MyMenuButton`](#classFNansTimelineSystemCommands_1a7996f047ed738d71b6f1a3abc8ccd5e8) | 
+`public inline  `[`FNansTimelineSystemCommands`](#classFNansTimelineSystemCommands_1a6f52a32a2d66ace5ae17357c1311743d)`()` | 
+`public virtual void `[`RegisterCommands`](#classFNansTimelineSystemCommands_1ad5abc77eaf97ca28e2bf4692d92c85a8)`()` | 
+
+## Members
+
+#### `public TSharedPtr< FUICommandInfo > `[`MyButton`](#classFNansTimelineSystemCommands_1a9fcea2c9c028fb563a18f3e293b0a044) <a id="classFNansTimelineSystemCommands_1a9fcea2c9c028fb563a18f3e293b0a044"></a>
+
+#### `public TSharedPtr< FUICommandInfo > `[`MyMenuButton`](#classFNansTimelineSystemCommands_1a7996f047ed738d71b6f1a3abc8ccd5e8) <a id="classFNansTimelineSystemCommands_1a7996f047ed738d71b6f1a3abc8ccd5e8"></a>
+
+#### `public inline  `[`FNansTimelineSystemCommands`](#classFNansTimelineSystemCommands_1a6f52a32a2d66ace5ae17357c1311743d)`()` <a id="classFNansTimelineSystemCommands_1a6f52a32a2d66ace5ae17357c1311743d"></a>
+
+#### `public virtual void `[`RegisterCommands`](#classFNansTimelineSystemCommands_1ad5abc77eaf97ca28e2bf4692d92c85a8)`()` <a id="classFNansTimelineSystemCommands_1ad5abc77eaf97ca28e2bf4692d92c85a8"></a>
 
 # class `FNansTimelineSystemCoreModule` <a id="classFNansTimelineSystemCoreModule"></a>
 
@@ -83,6 +194,61 @@ IModuleInterface implementation
 
 IModuleInterface implementation
 
+# class `FNansTimelineSystemEdModule` <a id="classFNansTimelineSystemEdModule"></a>
+
+```
+class FNansTimelineSystemEdModule
+  : public IModuleInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`StartupModule`](#classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d)`()` | IModuleInterface implementation
+`public virtual void `[`ShutdownModule`](#classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3)`()` | 
+`protected TSharedPtr< `[`FTimelinePinFactory`](#classFTimelinePinFactory)` > `[`TimelinePinFactory`](#classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e) | 
+
+## Members
+
+#### `public virtual void `[`StartupModule`](#classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d)`()` <a id="classFNansTimelineSystemEdModule_1a49b21fe1b5a7dee0314d2cc289f07a8d"></a>
+
+IModuleInterface implementation
+
+#### `public virtual void `[`ShutdownModule`](#classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3)`()` <a id="classFNansTimelineSystemEdModule_1a8ee1be78a281a4511196282c14af16a3"></a>
+
+#### `protected TSharedPtr< `[`FTimelinePinFactory`](#classFTimelinePinFactory)` > `[`TimelinePinFactory`](#classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e) <a id="classFNansTimelineSystemEdModule_1a96c035595ee1f1923ff00a3108f67a9e"></a>
+
+# class `FNansTimelineSystemStyle` <a id="classFNansTimelineSystemStyle"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
+# class `FNansTimelineSystemToolbar` <a id="classFNansTimelineSystemToolbar"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public void `[`Register`](#classFNansTimelineSystemToolbar_1aee3f698b7e4080ca3963278f0b3c6952)`()` | 
+`public void `[`Unregister`](#classFNansTimelineSystemToolbar_1a80c3a5baa8ce6fb179ac0baab7d21a20)`()` | 
+`public void `[`MyButton_Clicked`](#classFNansTimelineSystemToolbar_1aeb1a4e40720573d93e08eb2b3e2ce6a5)`() const` | 
+`public void `[`AddToolbarExtension`](#classFNansTimelineSystemToolbar_1a5040e609a1e58b856e329a5630cd3f68)`(FToolBarBuilder & builder) const` | 
+
+## Members
+
+#### `public void `[`Register`](#classFNansTimelineSystemToolbar_1aee3f698b7e4080ca3963278f0b3c6952)`()` <a id="classFNansTimelineSystemToolbar_1aee3f698b7e4080ca3963278f0b3c6952"></a>
+
+#### `public void `[`Unregister`](#classFNansTimelineSystemToolbar_1a80c3a5baa8ce6fb179ac0baab7d21a20)`()` <a id="classFNansTimelineSystemToolbar_1a80c3a5baa8ce6fb179ac0baab7d21a20"></a>
+
+#### `public void `[`MyButton_Clicked`](#classFNansTimelineSystemToolbar_1aeb1a4e40720573d93e08eb2b3e2ce6a5)`() const` <a id="classFNansTimelineSystemToolbar_1aeb1a4e40720573d93e08eb2b3e2ce6a5"></a>
+
+#### `public void `[`AddToolbarExtension`](#classFNansTimelineSystemToolbar_1a5040e609a1e58b856e329a5630cd3f68)`(FToolBarBuilder & builder) const` <a id="classFNansTimelineSystemToolbar_1a5040e609a1e58b856e329a5630cd3f68"></a>
+
 # class `FNansTimelineSystemUE4Module` <a id="classFNansTimelineSystemUE4Module"></a>
 
 ```
@@ -109,6 +275,431 @@ IModuleInterface implementation
 
 IModuleInterface implementation
 
+# class `FNConfiguredTimelineCustomization` <a id="classFNConfiguredTimelineCustomization"></a>
+
+```
+class FNConfiguredTimelineCustomization
+  : public IPropertyTypeCustomization
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`CustomizeHeader`](#classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | IPropertyTypeCustomization interface
+`public virtual void `[`CustomizeChildren`](#classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | 
+`protected void `[`OnAttributeSelected`](#classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` | 
+
+## Members
+
+#### `public virtual void `[`CustomizeHeader`](#classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNConfiguredTimelineCustomization_1a6cd2880bd321f564d53268e5d436699b"></a>
+
+IPropertyTypeCustomization interface
+
+#### `public virtual void `[`CustomizeChildren`](#classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNConfiguredTimelineCustomization_1aaa890957b685f2356c1ca343d98cc1ea"></a>
+
+#### `protected void `[`OnAttributeSelected`](#classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` <a id="classFNConfiguredTimelineCustomization_1a08693e1bd21a7222a2fd8def00235463"></a>
+
+# class `FNEvent` <a id="classFNEvent"></a>
+
+```
+class FNEvent
+  : public INEvent
+```  
+
+A concrete implementation basically used by [FNTimeline](#classFNTimeline)
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`FNEvent`](#classFNEvent_1abb17247bc26322d40d0995811c4383dc)`()` | 
+`public  `[`FNEvent`](#classFNEvent_1a4eaa1fa1bcdbba3b2480dad67dcae754)`(const FName & InLabel,const FString & InUId)` | Ctor to gives directly a name for this event and an Id (optional).
+`public virtual bool `[`IsExpired`](#classFNEvent_1a697cddde4278f9c60dc149d181b173e9)`() const` | It indicates if the event expired.
+`public virtual float `[`GetLocalTime`](#classFNEvent_1a8f7fed176c897f0e925fc6a66dd243fb)`() const` | Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
+`public virtual float `[`GetAttachedTime`](#classFNEvent_1a2f55c8171cc9885bd9eea917fd310acc)`() const` | The time relative to the timeline this event has been attached to.
+`public virtual float `[`GetStartedAt`](#classFNEvent_1aafec0b38229705448b87b71cf42cdf6b)`() const` | The time relative to the timeline this event has been attached to + its start delay.
+`public virtual float `[`GetDuration`](#classFNEvent_1a697fdce654a5c75f7a26e09dd179d2cc)`() const` | The duration this event should live
+`public virtual float `[`GetDelay`](#classFNEvent_1a7027d6ee8bd99db3d4c4b96895a7d925)`() const` | The delay before this event starts
+`public virtual FString `[`GetUID`](#classFNEvent_1aeb9e42151fa951667a4fb59cdfd99107)`() const` | Retrieve the unique ID generated or given in ctor
+`public virtual float `[`GetExpiredTime`](#classFNEvent_1ab9761dda1888eca490d0edfb0d9b21d6)`() const` | The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+`public virtual FName `[`GetEventLabel`](#classFNEvent_1a372c0b57e65e6058f957eca8eee84dbf)`() const` | Getter for Label
+`public virtual bool `[`IsAttachable`](#classFNEvent_1ad1814e824813ce21f0d0c7a79b7afb50)`() const` | Timeline use this to know if this event can be attached on.
+`public virtual void `[`SetEventLabel`](#classFNEvent_1af77646045222aaa9390540d5c0428bca)`(const FName & InEventLabel)` | A setter for the label. 
+`public virtual void `[`SetAttachedTime`](#classFNEvent_1a8a65b6f4c99d9f46d3b297fe7872e2fd)`(const float & InLocalTime)` | Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+`public virtual void `[`SetAttachable`](#classFNEvent_1a436502d2e3a45ea471ac493926fdc262)`(const bool & bInIsAttachable)` | This can be useful to avoid an Event to be attached to a timeline. 
+`public virtual void `[`SetExpiredTime`](#classFNEvent_1a58b3422dc0e4f290fb430819ab88e32e)`(const float & InLocalTime)` | Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
+`public virtual void `[`SetDuration`](#classFNEvent_1a8bfa4519eb19be809d803e4da5fd93e2)`(const float & InDuration)` | A setter for the duration.
+`public virtual void `[`SetDelay`](#classFNEvent_1a96e8b3ea40ecabb84fb508155874dcb8)`(const float & InDelay)` | A setter for the delay.
+`public virtual void `[`Start`](#classFNEvent_1abcdec459fc6ef977b6139d1d442628e9)`(const float & StartTime)` | This should be used only by NTimeline or serialization.
+`public virtual void `[`Stop`](#classFNEvent_1a5038a95a83e7a9bab802eb9b2b63a439)`()` | This can stop the event and make it expires to its next tick.
+`public virtual void `[`AddTime`](#classFNEvent_1a84f3c65805c537cfde95b5e94c36689c)`(const float & NewTime)` | Increments LocalTime 
+`public virtual void `[`Clear`](#classFNEvent_1aadee41191ba101a0fa78e106709ceb62)`()` | This should reset all data
+`public virtual void `[`Archive`](#classFNEvent_1a4d2592a135c4244f11ee89472366ded4)`(FArchive & Ar)` | 
+`protected FName `[`Label`](#classFNEvent_1a459d04df45a7dc744756994ce25ec5cf) | 
+`protected float `[`AttachedTime`](#classFNEvent_1a9143752f6f8a81f2bc49a189ae8ea180) | 
+`protected float `[`LocalTime`](#classFNEvent_1a58c81d2675c737a5d6c56f92ab2a2180) | 
+`protected float `[`StartedAt`](#classFNEvent_1a53656b7c1dcb37293192174eb533881a) | 
+`protected float `[`ExpiredTime`](#classFNEvent_1ad3388d91597e30800dda91a0a48d3d8e) | 
+`protected float `[`Duration`](#classFNEvent_1a9257e7f323feb52a0e5b5bd86e55aa06) | 
+`protected float `[`Delay`](#classFNEvent_1af4371014ad3d38c07f392bae66de0a65) | 
+`protected FString `[`UId`](#classFNEvent_1a5e35799863cc179e30638ae66bf6a482) | 
+`protected bool `[`bActivated`](#classFNEvent_1a94254b2e6a7362837f869a8ac6c93658) | 
+`protected bool `[`bIsAttachable`](#classFNEvent_1aaf24820f6bd170abe3267b8be8693b6d) | 
+
+## Members
+
+#### `public  `[`FNEvent`](#classFNEvent_1abb17247bc26322d40d0995811c4383dc)`()` <a id="classFNEvent_1abb17247bc26322d40d0995811c4383dc"></a>
+
+#### `public  `[`FNEvent`](#classFNEvent_1a4eaa1fa1bcdbba3b2480dad67dcae754)`(const FName & InLabel,const FString & InUId)` <a id="classFNEvent_1a4eaa1fa1bcdbba3b2480dad67dcae754"></a>
+
+Ctor to gives directly a name for this event and an Id (optional).
+
+#### `public virtual bool `[`IsExpired`](#classFNEvent_1a697cddde4278f9c60dc149d181b173e9)`() const` <a id="classFNEvent_1a697cddde4278f9c60dc149d181b173e9"></a>
+
+It indicates if the event expired.
+
+#### `public virtual float `[`GetLocalTime`](#classFNEvent_1a8f7fed176c897f0e925fc6a66dd243fb)`() const` <a id="classFNEvent_1a8f7fed176c897f0e925fc6a66dd243fb"></a>
+
+Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
+
+#### `public virtual float `[`GetAttachedTime`](#classFNEvent_1a2f55c8171cc9885bd9eea917fd310acc)`() const` <a id="classFNEvent_1a2f55c8171cc9885bd9eea917fd310acc"></a>
+
+The time relative to the timeline this event has been attached to.
+
+#### `public virtual float `[`GetStartedAt`](#classFNEvent_1aafec0b38229705448b87b71cf42cdf6b)`() const` <a id="classFNEvent_1aafec0b38229705448b87b71cf42cdf6b"></a>
+
+The time relative to the timeline this event has been attached to + its start delay.
+
+#### `public virtual float `[`GetDuration`](#classFNEvent_1a697fdce654a5c75f7a26e09dd179d2cc)`() const` <a id="classFNEvent_1a697fdce654a5c75f7a26e09dd179d2cc"></a>
+
+The duration this event should live
+
+#### `public virtual float `[`GetDelay`](#classFNEvent_1a7027d6ee8bd99db3d4c4b96895a7d925)`() const` <a id="classFNEvent_1a7027d6ee8bd99db3d4c4b96895a7d925"></a>
+
+The delay before this event starts
+
+#### `public virtual FString `[`GetUID`](#classFNEvent_1aeb9e42151fa951667a4fb59cdfd99107)`() const` <a id="classFNEvent_1aeb9e42151fa951667a4fb59cdfd99107"></a>
+
+Retrieve the unique ID generated or given in ctor
+
+#### `public virtual float `[`GetExpiredTime`](#classFNEvent_1ab9761dda1888eca490d0edfb0d9b21d6)`() const` <a id="classFNEvent_1ab9761dda1888eca490d0edfb0d9b21d6"></a>
+
+The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+
+#### `public virtual FName `[`GetEventLabel`](#classFNEvent_1a372c0b57e65e6058f957eca8eee84dbf)`() const` <a id="classFNEvent_1a372c0b57e65e6058f957eca8eee84dbf"></a>
+
+Getter for Label
+
+#### `public virtual bool `[`IsAttachable`](#classFNEvent_1ad1814e824813ce21f0d0c7a79b7afb50)`() const` <a id="classFNEvent_1ad1814e824813ce21f0d0c7a79b7afb50"></a>
+
+Timeline use this to know if this event can be attached on.
+
+#### `public virtual void `[`SetEventLabel`](#classFNEvent_1af77646045222aaa9390540d5c0428bca)`(const FName & InEventLabel)` <a id="classFNEvent_1af77646045222aaa9390540d5c0428bca"></a>
+
+A setter for the label. 
+#### Parameters
+* `InEventLabel` - A name to identify easily the event
+
+#### `public virtual void `[`SetAttachedTime`](#classFNEvent_1a8a65b6f4c99d9f46d3b297fe7872e2fd)`(const float & InLocalTime)` <a id="classFNEvent_1a8a65b6f4c99d9f46d3b297fe7872e2fd"></a>
+
+Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+
+#### `public virtual void `[`SetAttachable`](#classFNEvent_1a436502d2e3a45ea471ac493926fdc262)`(const bool & bInIsAttachable)` <a id="classFNEvent_1a436502d2e3a45ea471ac493926fdc262"></a>
+
+This can be useful to avoid an Event to be attached to a timeline. 
+**See also**: [FNTimeline::Attached()](#classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3)
+
+**See also**: [ENTimelineEvent::BeforeAttached](#Timeline_8h_1aca8212740df4678d46efc8cae12ab0c9ab0b87ce0c6e7571ffbd0f6408c4539be)
+
+#### Parameters
+* `bInIsAttachable` - boolean to defined is attachable capability
+
+#### `public virtual void `[`SetExpiredTime`](#classFNEvent_1a58b3422dc0e4f290fb430819ab88e32e)`(const float & InLocalTime)` <a id="classFNEvent_1a58b3422dc0e4f290fb430819ab88e32e"></a>
+
+Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
+#### Parameters
+* `InLocalTime` - the time relative to the timeline
+
+#### `public virtual void `[`SetDuration`](#classFNEvent_1a8bfa4519eb19be809d803e4da5fd93e2)`(const float & InDuration)` <a id="classFNEvent_1a8bfa4519eb19be809d803e4da5fd93e2"></a>
+
+A setter for the duration.
+
+#### Parameters
+* `InDuration` - Time in secs
+
+#### `public virtual void `[`SetDelay`](#classFNEvent_1a96e8b3ea40ecabb84fb508155874dcb8)`(const float & InDelay)` <a id="classFNEvent_1a96e8b3ea40ecabb84fb508155874dcb8"></a>
+
+A setter for the delay.
+
+#### Parameters
+* `InDelay` - Time in secs
+
+#### `public virtual void `[`Start`](#classFNEvent_1abcdec459fc6ef977b6139d1d442628e9)`(const float & StartTime)` <a id="classFNEvent_1abcdec459fc6ef977b6139d1d442628e9"></a>
+
+This should be used only by NTimeline or serialization.
+
+#### Parameters
+* `StartTime` - Time in secs
+
+#### `public virtual void `[`Stop`](#classFNEvent_1a5038a95a83e7a9bab802eb9b2b63a439)`()` <a id="classFNEvent_1a5038a95a83e7a9bab802eb9b2b63a439"></a>
+
+This can stop the event and make it expires to its next tick.
+
+#### `public virtual void `[`AddTime`](#classFNEvent_1a84f3c65805c537cfde95b5e94c36689c)`(const float & NewTime)` <a id="classFNEvent_1a84f3c65805c537cfde95b5e94c36689c"></a>
+
+Increments LocalTime 
+#### Parameters
+* `NewTime` - in Milliseconds
+
+#### `public virtual void `[`Clear`](#classFNEvent_1aadee41191ba101a0fa78e106709ceb62)`()` <a id="classFNEvent_1aadee41191ba101a0fa78e106709ceb62"></a>
+
+This should reset all data
+
+#### `public virtual void `[`Archive`](#classFNEvent_1a4d2592a135c4244f11ee89472366ded4)`(FArchive & Ar)` <a id="classFNEvent_1a4d2592a135c4244f11ee89472366ded4"></a>
+
+#### `protected FName `[`Label`](#classFNEvent_1a459d04df45a7dc744756994ce25ec5cf) <a id="classFNEvent_1a459d04df45a7dc744756994ce25ec5cf"></a>
+
+#### `protected float `[`AttachedTime`](#classFNEvent_1a9143752f6f8a81f2bc49a189ae8ea180) <a id="classFNEvent_1a9143752f6f8a81f2bc49a189ae8ea180"></a>
+
+#### `protected float `[`LocalTime`](#classFNEvent_1a58c81d2675c737a5d6c56f92ab2a2180) <a id="classFNEvent_1a58c81d2675c737a5d6c56f92ab2a2180"></a>
+
+#### `protected float `[`StartedAt`](#classFNEvent_1a53656b7c1dcb37293192174eb533881a) <a id="classFNEvent_1a53656b7c1dcb37293192174eb533881a"></a>
+
+#### `protected float `[`ExpiredTime`](#classFNEvent_1ad3388d91597e30800dda91a0a48d3d8e) <a id="classFNEvent_1ad3388d91597e30800dda91a0a48d3d8e"></a>
+
+#### `protected float `[`Duration`](#classFNEvent_1a9257e7f323feb52a0e5b5bd86e55aa06) <a id="classFNEvent_1a9257e7f323feb52a0e5b5bd86e55aa06"></a>
+
+#### `protected float `[`Delay`](#classFNEvent_1af4371014ad3d38c07f392bae66de0a65) <a id="classFNEvent_1af4371014ad3d38c07f392bae66de0a65"></a>
+
+#### `protected FString `[`UId`](#classFNEvent_1a5e35799863cc179e30638ae66bf6a482) <a id="classFNEvent_1a5e35799863cc179e30638ae66bf6a482"></a>
+
+#### `protected bool `[`bActivated`](#classFNEvent_1a94254b2e6a7362837f869a8ac6c93658) <a id="classFNEvent_1a94254b2e6a7362837f869a8ac6c93658"></a>
+
+#### `protected bool `[`bIsAttachable`](#classFNEvent_1aaf24820f6bd170abe3267b8be8693b6d) <a id="classFNEvent_1aaf24820f6bd170abe3267b8be8693b6d"></a>
+
+# class `FNTimeline` <a id="classFNTimeline"></a>
+
+**See also**: NTimelineInterface
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`FNTimeline`](#classFNTimeline_1a292eed4c83e4c12341b00e240133fa91)`()` | 
+`public  `[`FNTimeline`](#classFNTimeline_1aac1361e887fe554f1b82f5dc84c266b7)`(const FName & InLabel)` | #### Parameters
+`public  `[`~FNTimeline`](#classFNTimeline_1a575d6c7980276a7a3a2ac9f83d1abc81)`()` | Empty events array
+`public bool `[`Attached`](#classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3)`(const TSharedPtr< `[`INEvent`](#classINEvent)` > & Event)` | Attached an event to this timeline. It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached and AfterOnAttached() for any custom usages
+`public void `[`Attached`](#classFNTimeline_1ab0985b3570e72bd3666ed0b3d8c34eba)`(const TArray< TSharedPtr< `[`INEvent`](#classINEvent)` >> & EventsCollection)` | Same as Attached(TSharedPtr<INEvent> Event) but for a collection of objects.
+`public float `[`GetTickInterval`](#classFNTimeline_1a62d57ea19cb8ad1787ddc91bc32f20bb)`() const` | This is the value required by a timer manager to know the tick frequency for this timeline (given by NTimelineManager). The NotifyTick use this method to add time on CurrentTime at each call.
+`public float `[`GetCurrentTime`](#classFNTimeline_1a4aba63a32699e29b9e13df41c910cedf)`() const` | Retrieve the current time since this timeline exists and play
+`public void `[`SetLabel`](#classFNTimeline_1a423302167b09a6aa88872110f46171e3)`(const FName & InLabel)` | Give a name to this timeline 
+`public FName `[`GetLabel`](#classFNTimeline_1aa3479c309f3e4656f70f7c40175a9e59)`() const` | Return the actual name
+`public void `[`Clear`](#classFNTimeline_1a0007252237785f91de61d32339382436)`()` | This completely reset every events. It should be used with caution.
+`public void `[`Archive`](#classFNTimeline_1aa196425dd62d2e2745643f6ded78e1a1)`(FArchive & Ar)` | Offer the opportunities to save data in a binary object. 
+`public TArray< TSharedPtr< `[`INEvent`](#classINEvent)` > > `[`GetEvents`](#classFNTimeline_1aa52a754759c0d6cf7ef5d63149755144)`() const` | #### Returns
+`public TArray< TSharedPtr< `[`INEvent`](#classINEvent)` > > `[`GetExpiredEvents`](#classFNTimeline_1aaee25bde92af142eb632d73286edc32c)`() const` | #### Returns
+`public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetEvent`](#classFNTimeline_1a078b26a2c213c1a351ebc12e95ae6c1f)`(const FString & InUID) const` | Get an event by its UID 
+`public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetExpiredEvent`](#classFNTimeline_1a7e731705a5bb40eb36fdd69ea7807afa)`(const FString & InUID) const` | Get an event by its UID 
+
+## Members
+
+#### `public  `[`FNTimeline`](#classFNTimeline_1a292eed4c83e4c12341b00e240133fa91)`()` <a id="classFNTimeline_1a292eed4c83e4c12341b00e240133fa91"></a>
+
+#### `public  `[`FNTimeline`](#classFNTimeline_1aac1361e887fe554f1b82f5dc84c266b7)`(const FName & InLabel)` <a id="classFNTimeline_1aac1361e887fe554f1b82f5dc84c266b7"></a>
+
+#### Parameters
+* `InLabel` - (optional) The name of this timeline. If not provided it creates a name with a static incremented value.
+
+#### `public  `[`~FNTimeline`](#classFNTimeline_1a575d6c7980276a7a3a2ac9f83d1abc81)`()` <a id="classFNTimeline_1a575d6c7980276a7a3a2ac9f83d1abc81"></a>
+
+Empty events array
+
+#### `public bool `[`Attached`](#classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3)`(const TSharedPtr< `[`INEvent`](#classINEvent)` > & Event)` <a id="classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3"></a>
+
+Attached an event to this timeline. It creates a FEventTuple and calls BeforeOnAttached() to checks if it can be attached and AfterOnAttached() for any custom usages
+
+#### Parameters
+* `Event` - The event you want to put in the timeline stream
+
+#### `public void `[`Attached`](#classFNTimeline_1ab0985b3570e72bd3666ed0b3d8c34eba)`(const TArray< TSharedPtr< `[`INEvent`](#classINEvent)` >> & EventsCollection)` <a id="classFNTimeline_1ab0985b3570e72bd3666ed0b3d8c34eba"></a>
+
+Same as Attached(TSharedPtr<INEvent> Event) but for a collection of objects.
+
+**See also**: FNTimeline::Attached(TSharedPtr<INEvent> Event)
+
+#### `public float `[`GetTickInterval`](#classFNTimeline_1a62d57ea19cb8ad1787ddc91bc32f20bb)`() const` <a id="classFNTimeline_1a62d57ea19cb8ad1787ddc91bc32f20bb"></a>
+
+This is the value required by a timer manager to know the tick frequency for this timeline (given by NTimelineManager). The NotifyTick use this method to add time on CurrentTime at each call.
+
+#### `public float `[`GetCurrentTime`](#classFNTimeline_1a4aba63a32699e29b9e13df41c910cedf)`() const` <a id="classFNTimeline_1a4aba63a32699e29b9e13df41c910cedf"></a>
+
+Retrieve the current time since this timeline exists and play
+
+#### `public void `[`SetLabel`](#classFNTimeline_1a423302167b09a6aa88872110f46171e3)`(const FName & InLabel)` <a id="classFNTimeline_1a423302167b09a6aa88872110f46171e3"></a>
+
+Give a name to this timeline 
+#### Parameters
+* `InLabel` - The name
+
+#### `public FName `[`GetLabel`](#classFNTimeline_1aa3479c309f3e4656f70f7c40175a9e59)`() const` <a id="classFNTimeline_1aa3479c309f3e4656f70f7c40175a9e59"></a>
+
+Return the actual name
+
+#### `public void `[`Clear`](#classFNTimeline_1a0007252237785f91de61d32339382436)`()` <a id="classFNTimeline_1a0007252237785f91de61d32339382436"></a>
+
+This completely reset every events. It should be used with caution.
+
+#### `public void `[`Archive`](#classFNTimeline_1aa196425dd62d2e2745643f6ded78e1a1)`(FArchive & Ar)` <a id="classFNTimeline_1aa196425dd62d2e2745643f6ded78e1a1"></a>
+
+Offer the opportunities to save data in a binary object. 
+#### Parameters
+* `Ar` - Archive where we need to save or load data.
+
+#### `public TArray< TSharedPtr< `[`INEvent`](#classINEvent)` > > `[`GetEvents`](#classFNTimeline_1aa52a754759c0d6cf7ef5d63149755144)`() const` <a id="classFNTimeline_1aa52a754759c0d6cf7ef5d63149755144"></a>
+
+#### Returns
+Get the list of all events saved in this timeline
+
+#### `public TArray< TSharedPtr< `[`INEvent`](#classINEvent)` > > `[`GetExpiredEvents`](#classFNTimeline_1aaee25bde92af142eb632d73286edc32c)`() const` <a id="classFNTimeline_1aaee25bde92af142eb632d73286edc32c"></a>
+
+#### Returns
+Get the list of all events expired in this timeline
+
+#### `public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetEvent`](#classFNTimeline_1a078b26a2c213c1a351ebc12e95ae6c1f)`(const FString & InUID) const` <a id="classFNTimeline_1a078b26a2c213c1a351ebc12e95ae6c1f"></a>
+
+Get an event by its UID 
+#### Returns
+the event found or invalid TSharedPtr
+
+#### `public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetExpiredEvent`](#classFNTimeline_1a7e731705a5bb40eb36fdd69ea7807afa)`(const FString & InUID) const` <a id="classFNTimeline_1a7e731705a5bb40eb36fdd69ea7807afa"></a>
+
+Get an event by its UID 
+#### Returns
+the event found or invalid TSharedPtr
+
+# class `FNTimelineManager` <a id="classFNTimelineManager"></a>
+
+This class is the client for the NTimelineInterface object. Its goal is to decoupled client interface with timeline management.
+
+* [FNTimeline](#classFNTimeline) manages time computation, notify events accordingly and save all event states
+
+* NTimelineManager manages client controls.
+
+**See also**: NTimelineInterface 
+
+**See also**: NTimeline
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`FNTimelineManager`](#classFNTimelineManager_1a553a843d413c1226dd73e60a5c8a0f6c)`()` | Calls the [Init()](#classFNTimelineManager_1ae6588ae70ff8c962ad7e6a6e17b850ff) method.
+`public virtual  `[`~FNTimelineManager`](#classFNTimelineManager_1afec763fee5eab6211ecb71a98b919ce4)`()` | Calls [Clear()](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9) and release Timeline TSharedPtr
+`public virtual void `[`Init`](#classFNTimelineManager_1ae6588ae70ff8c962ad7e6a6e17b850ff)`(const float & InTickInterval,const FName & InLabel)` | Instantiate the embedded NTimeline
+`public virtual void `[`Pause`](#classFNTimelineManager_1adfdb9e277abe045ec3f39b1c82bae70a)`()` | This pause the timeline ticking
+`public virtual void `[`Play`](#classFNTimelineManager_1a8bdc6933d803163abc747edbbbe9f1ba)`()` | This (re)start the timeline ticking
+`public virtual void `[`Stop`](#classFNTimelineManager_1ad83ffc005aaa74249ba19b0a28bf183a)`()` | This pause the timeline ticking and reset the NTimeline::CurrentTime to 0
+`public virtual void `[`TimerTick`](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315)`()` | This checks the actual play state (ENTimelineTimerState) and tick the NTimelineInterface accordingly.
+`public `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classFNTimelineManager_1ad24477f989e6699240c908c899ac9cd3)`() const` | Get the actual state.
+`public TSharedPtr< `[`FNTimeline`](#classFNTimeline)` > `[`GetTimeline`](#classFNTimelineManager_1a30050f8bdc1a1b31b8856f1eedf0e8ca)`() const` | Get the coupled NTimelineInterface
+`public virtual TSharedPtr< `[`INEvent`](#classINEvent)` > `[`CreateNewEvent`](#classFNTimelineManager_1a70061c46504ac123676913fe30568d49)`(const FName & Name,const float & Duration,const float & Delay) const` | Creates a new Event and use this timeline as the outer for this new object.
+`public FNTimelineEventDelegate & `[`OnEventChanged`](#classFNTimelineManager_1a8333e517e06a022ecea528b1294d8f6c)`() const` | #### Returns
+`public virtual void `[`Clear`](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9)`()` | Gives the opportunity to clean data. This calls Timeline::Clear()
+`public virtual void `[`Archive`](#classFNTimelineManager_1abc88d207733c71ec4e1ea5ff004deb27)`(FArchive & Ar)` | Saves/loads State in archive + calls Timeline::Archive()
+`protected `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classFNTimelineManager_1ac9a97cad8711f1236457cdd6cdb1fa21) | The actual state
+`protected TSharedRef< `[`FNTimeline`](#classFNTimeline)` > `[`Timeline`](#classFNTimelineManager_1a0b5fd3b893fa54fe8d0c28c285f58fe2) | The coupled timeline
+`protected inline virtual void `[`OnValidateTimelineTick`](#classFNTimelineManager_1ac5b30d2a1019afa9e357cedf2de7d10f)`()` | This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
+`protected inline virtual void `[`OnNotifyTimelineTickBefore`](#classFNTimelineManager_1ad433f22ab3c704fd922f4feb65f1f881)`()` | This method is call immediately before ticking
+`protected inline virtual void `[`OnNotifyTimelineTickAfter`](#classFNTimelineManager_1a2e5b848bf8096cbfe7be5feb757cc0f7)`()` | This method is call immediately after ticking
+
+## Members
+
+#### `public  `[`FNTimelineManager`](#classFNTimelineManager_1a553a843d413c1226dd73e60a5c8a0f6c)`()` <a id="classFNTimelineManager_1a553a843d413c1226dd73e60a5c8a0f6c"></a>
+
+Calls the [Init()](#classFNTimelineManager_1ae6588ae70ff8c962ad7e6a6e17b850ff) method.
+
+#### `public virtual  `[`~FNTimelineManager`](#classFNTimelineManager_1afec763fee5eab6211ecb71a98b919ce4)`()` <a id="classFNTimelineManager_1afec763fee5eab6211ecb71a98b919ce4"></a>
+
+Calls [Clear()](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9) and release Timeline TSharedPtr
+
+#### `public virtual void `[`Init`](#classFNTimelineManager_1ae6588ae70ff8c962ad7e6a6e17b850ff)`(const float & InTickInterval,const FName & InLabel)` <a id="classFNTimelineManager_1ae6588ae70ff8c962ad7e6a6e17b850ff"></a>
+
+Instantiate the embedded NTimeline
+
+#### Parameters
+* `InTickInterval` - Interval time between tick in sec 
+
+* `InLabel` - Name of the Timeline.
+
+#### `public virtual void `[`Pause`](#classFNTimelineManager_1adfdb9e277abe045ec3f39b1c82bae70a)`()` <a id="classFNTimelineManager_1adfdb9e277abe045ec3f39b1c82bae70a"></a>
+
+This pause the timeline ticking
+
+#### `public virtual void `[`Play`](#classFNTimelineManager_1a8bdc6933d803163abc747edbbbe9f1ba)`()` <a id="classFNTimelineManager_1a8bdc6933d803163abc747edbbbe9f1ba"></a>
+
+This (re)start the timeline ticking
+
+#### `public virtual void `[`Stop`](#classFNTimelineManager_1ad83ffc005aaa74249ba19b0a28bf183a)`()` <a id="classFNTimelineManager_1ad83ffc005aaa74249ba19b0a28bf183a"></a>
+
+This pause the timeline ticking and reset the NTimeline::CurrentTime to 0
+
+#### `public virtual void `[`TimerTick`](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315)`()` <a id="classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315"></a>
+
+This checks the actual play state (ENTimelineTimerState) and tick the NTimelineInterface accordingly.
+
+#### `public `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classFNTimelineManager_1ad24477f989e6699240c908c899ac9cd3)`() const` <a id="classFNTimelineManager_1ad24477f989e6699240c908c899ac9cd3"></a>
+
+Get the actual state.
+
+#### `public TSharedPtr< `[`FNTimeline`](#classFNTimeline)` > `[`GetTimeline`](#classFNTimelineManager_1a30050f8bdc1a1b31b8856f1eedf0e8ca)`() const` <a id="classFNTimelineManager_1a30050f8bdc1a1b31b8856f1eedf0e8ca"></a>
+
+Get the coupled NTimelineInterface
+
+#### `public virtual TSharedPtr< `[`INEvent`](#classINEvent)` > `[`CreateNewEvent`](#classFNTimelineManager_1a70061c46504ac123676913fe30568d49)`(const FName & Name,const float & Duration,const float & Delay) const` <a id="classFNTimelineManager_1a70061c46504ac123676913fe30568d49"></a>
+
+Creates a new Event and use this timeline as the outer for this new object.
+
+#### Parameters
+* `Name` - The label of the event, can be useful for user stats & feedback 
+
+* `Duration` - The time this event is active, 0 to almost INFINI (0 means undetermined time) 
+
+* `Delay` - The time before this event start being active, 0 to almost INFINI (0 means "right now")
+
+#### `public FNTimelineEventDelegate & `[`OnEventChanged`](#classFNTimelineManager_1a8333e517e06a022ecea528b1294d8f6c)`() const` <a id="classFNTimelineManager_1a8333e517e06a022ecea528b1294d8f6c"></a>
+
+#### Returns
+a FNTimelineEventDelegate ref which is broadcast when an event changes.
+
+#### `public virtual void `[`Clear`](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9)`()` <a id="classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9"></a>
+
+Gives the opportunity to clean data. This calls Timeline::Clear()
+
+#### `public virtual void `[`Archive`](#classFNTimelineManager_1abc88d207733c71ec4e1ea5ff004deb27)`(FArchive & Ar)` <a id="classFNTimelineManager_1abc88d207733c71ec4e1ea5ff004deb27"></a>
+
+Saves/loads State in archive + calls Timeline::Archive()
+
+#### `protected `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classFNTimelineManager_1ac9a97cad8711f1236457cdd6cdb1fa21) <a id="classFNTimelineManager_1ac9a97cad8711f1236457cdd6cdb1fa21"></a>
+
+The actual state
+
+#### `protected TSharedRef< `[`FNTimeline`](#classFNTimeline)` > `[`Timeline`](#classFNTimelineManager_1a0b5fd3b893fa54fe8d0c28c285f58fe2) <a id="classFNTimelineManager_1a0b5fd3b893fa54fe8d0c28c285f58fe2"></a>
+
+The coupled timeline
+
+#### `protected inline virtual void `[`OnValidateTimelineTick`](#classFNTimelineManager_1ac5b30d2a1019afa9e357cedf2de7d10f)`()` <a id="classFNTimelineManager_1ac5b30d2a1019afa9e357cedf2de7d10f"></a>
+
+This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
+
+#### `protected inline virtual void `[`OnNotifyTimelineTickBefore`](#classFNTimelineManager_1ad433f22ab3c704fd922f4feb65f1f881)`()` <a id="classFNTimelineManager_1ad433f22ab3c704fd922f4feb65f1f881"></a>
+
+This method is call immediately before ticking
+
+#### `protected inline virtual void `[`OnNotifyTimelineTickAfter`](#classFNTimelineManager_1a2e5b848bf8096cbfe7be5feb757cc0f7)`()` <a id="classFNTimelineManager_1a2e5b848bf8096cbfe7be5feb757cc0f7"></a>
+
+This method is call immediately after ticking
+
 # class `FTimelinePinFactory` <a id="classFTimelinePinFactory"></a>
 
 ```
@@ -127,27 +718,145 @@ It is fully dedicated to make our custom Pin available for the Unreal Editor Gra
 
 ## Members
 
-# class `INTimelineGameInstance` <a id="classINTimelineGameInstance"></a>
+# class `INEvent` <a id="classINEvent"></a>
 
-This interface should be implemented by your GameInstance class or blueprint object. See ../README.md in step by step guide to see how to implements it.
+An interface to manage events which can be attached to a timeline.
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a8744c686532c01f502c3e2d452315597)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
-`public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` | 
+`public virtual  `[`~INEvent`](#classINEvent_1a3ebaa322a99cac6cf1e0096bb6a4449a)`() = default` | Default dtor
+`public bool `[`IsExpired`](#classINEvent_1a45b84115b6ed27335cbbed7391251b03)`() const` | It indicates if the event expired.
+`public float `[`GetLocalTime`](#classINEvent_1aa3fa1ae068130bd6fd550526ddfa3bff)`() const` | Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
+`public float `[`GetAttachedTime`](#classINEvent_1a4bc8c84a6c722d1537c59b2de86eefd7)`() const` | The time relative to the timeline this event has been attached to.
+`public float `[`GetStartedAt`](#classINEvent_1a424eda5d3c78bf57558f6de08b4ee457)`() const` | The time relative to the timeline this event has been attached to + its start delay.
+`public float `[`GetDuration`](#classINEvent_1ad7e7ea5568cb43569a9e7569c8ca9fca)`() const` | The duration this event should live
+`public float `[`GetDelay`](#classINEvent_1a0ef2ede82ad41c9fbee775000ed41e04)`() const` | The delay before this event starts
+`public FString `[`GetUID`](#classINEvent_1a34383374f442776a8cc3d23995000ba1)`() const` | Retrieve the unique ID generated or given in ctor
+`public float `[`GetExpiredTime`](#classINEvent_1a57ec3f315593ca147f92ef4523d4b9bb)`() const` | The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+`public FName `[`GetEventLabel`](#classINEvent_1a1e1329c0e181a83330612c99be93338d)`() const` | Getter for Label
+`public bool `[`IsAttachable`](#classINEvent_1a9eee0f6e927ad0a43e15fc2ec3fd99bd)`() const` | Timeline use this to know if this event can be attached on.
+`public void `[`SetEventLabel`](#classINEvent_1a3b179cbf6428629fd1c6e65486c73a1e)`(const FName & InEventLabel)` | A setter for the label. 
+`public void `[`SetAttachedTime`](#classINEvent_1a5f423390b1eeab2af1efc1fc5625525e)`(const float & InLocalTime)` | Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+`public void `[`SetAttachable`](#classINEvent_1ad29cc2132adfc9ad1f7e753afdfaa579)`(const bool & bInIsAttachable)` | This can be useful to avoid an Event to be attached to a timeline. 
+`public void `[`SetExpiredTime`](#classINEvent_1acd54f94a9c5f80fccf10c619e575c50e)`(const float & InLocalTime)` | Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
+`public void `[`SetDuration`](#classINEvent_1a0ed37bb3d4cb2c2d682f849990beed2c)`(const float & InDuration)` | A setter for the duration.
+`public void `[`SetDelay`](#classINEvent_1a9f25c14793ab9ba901e46c1cce5b3608)`(const float & InDelay)` | A setter for the delay.
+`public void `[`Start`](#classINEvent_1a75fd4d4ea2fb8705db3166a049c81a80)`(const float & StartTime)` | This should be used only by NTimeline or serialization.
+`public void `[`Stop`](#classINEvent_1ac37ad2fd82b26a2ad37b97b56065459e)`()` | This can stop the event and make it expires to its next tick.
+`public void `[`AddTime`](#classINEvent_1a3a4b22179bd1918c23025da917a62aac)`(const float & NewTime)` | Increments LocalTime 
+`public void `[`Clear`](#classINEvent_1a96197f5304308e63330b379b2f229a5f)`()` | This should reset all data
+`public void `[`Archive`](#classINEvent_1a48539b241642c63e4aa1f500553ddde7)`(FArchive & Ar)` | 
 
 ## Members
 
-#### `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classINTimelineGameInstance_1a8744c686532c01f502c3e2d452315597)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` <a id="classINTimelineGameInstance_1a8744c686532c01f502c3e2d452315597"></a>
+#### `public virtual  `[`~INEvent`](#classINEvent_1a3ebaa322a99cac6cf1e0096bb6a4449a)`() = default` <a id="classINEvent_1a3ebaa322a99cac6cf1e0096bb6a4449a"></a>
 
-A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+Default dtor
+
+#### `public bool `[`IsExpired`](#classINEvent_1a45b84115b6ed27335cbbed7391251b03)`() const` <a id="classINEvent_1a45b84115b6ed27335cbbed7391251b03"></a>
+
+It indicates if the event expired.
+
+#### `public float `[`GetLocalTime`](#classINEvent_1aa3fa1ae068130bd6fd550526ddfa3bff)`() const` <a id="classINEvent_1aa3fa1ae068130bd6fd550526ddfa3bff"></a>
+
+Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
+
+#### `public float `[`GetAttachedTime`](#classINEvent_1a4bc8c84a6c722d1537c59b2de86eefd7)`() const` <a id="classINEvent_1a4bc8c84a6c722d1537c59b2de86eefd7"></a>
+
+The time relative to the timeline this event has been attached to.
+
+#### `public float `[`GetStartedAt`](#classINEvent_1a424eda5d3c78bf57558f6de08b4ee457)`() const` <a id="classINEvent_1a424eda5d3c78bf57558f6de08b4ee457"></a>
+
+The time relative to the timeline this event has been attached to + its start delay.
+
+#### `public float `[`GetDuration`](#classINEvent_1ad7e7ea5568cb43569a9e7569c8ca9fca)`() const` <a id="classINEvent_1ad7e7ea5568cb43569a9e7569c8ca9fca"></a>
+
+The duration this event should live
+
+#### `public float `[`GetDelay`](#classINEvent_1a0ef2ede82ad41c9fbee775000ed41e04)`() const` <a id="classINEvent_1a0ef2ede82ad41c9fbee775000ed41e04"></a>
+
+The delay before this event starts
+
+#### `public FString `[`GetUID`](#classINEvent_1a34383374f442776a8cc3d23995000ba1)`() const` <a id="classINEvent_1a34383374f442776a8cc3d23995000ba1"></a>
+
+Retrieve the unique ID generated or given in ctor
+
+#### `public float `[`GetExpiredTime`](#classINEvent_1a57ec3f315593ca147f92ef4523d4b9bb)`() const` <a id="classINEvent_1a57ec3f315593ca147f92ef4523d4b9bb"></a>
+
+The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+
+#### `public FName `[`GetEventLabel`](#classINEvent_1a1e1329c0e181a83330612c99be93338d)`() const` <a id="classINEvent_1a1e1329c0e181a83330612c99be93338d"></a>
+
+Getter for Label
+
+#### `public bool `[`IsAttachable`](#classINEvent_1a9eee0f6e927ad0a43e15fc2ec3fd99bd)`() const` <a id="classINEvent_1a9eee0f6e927ad0a43e15fc2ec3fd99bd"></a>
+
+Timeline use this to know if this event can be attached on.
+
+#### `public void `[`SetEventLabel`](#classINEvent_1a3b179cbf6428629fd1c6e65486c73a1e)`(const FName & InEventLabel)` <a id="classINEvent_1a3b179cbf6428629fd1c6e65486c73a1e"></a>
+
+A setter for the label. 
+#### Parameters
+* `InEventLabel` - A name to identify easily the event
+
+#### `public void `[`SetAttachedTime`](#classINEvent_1a5f423390b1eeab2af1efc1fc5625525e)`(const float & InLocalTime)` <a id="classINEvent_1a5f423390b1eeab2af1efc1fc5625525e"></a>
+
+Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+
+#### `public void `[`SetAttachable`](#classINEvent_1ad29cc2132adfc9ad1f7e753afdfaa579)`(const bool & bInIsAttachable)` <a id="classINEvent_1ad29cc2132adfc9ad1f7e753afdfaa579"></a>
+
+This can be useful to avoid an Event to be attached to a timeline. 
+**See also**: [FNTimeline::Attached()](#classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3)
+
+**See also**: [ENTimelineEvent::BeforeAttached](#Timeline_8h_1aca8212740df4678d46efc8cae12ab0c9ab0b87ce0c6e7571ffbd0f6408c4539be)
 
 #### Parameters
-* `Timeline` - To allow having a combobox of configured timelines
+* `bInIsAttachable` - boolean to defined is attachable capability
 
-#### `public virtual `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetClient`](#classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad)`() const` <a id="classINTimelineGameInstance_1a927298bbbf2a61d86765e08eb2765aad"></a>
+#### `public void `[`SetExpiredTime`](#classINEvent_1acd54f94a9c5f80fccf10c619e575c50e)`(const float & InLocalTime)` <a id="classINEvent_1acd54f94a9c5f80fccf10c619e575c50e"></a>
+
+Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
+#### Parameters
+* `InLocalTime` - the time relative to the timeline
+
+#### `public void `[`SetDuration`](#classINEvent_1a0ed37bb3d4cb2c2d682f849990beed2c)`(const float & InDuration)` <a id="classINEvent_1a0ed37bb3d4cb2c2d682f849990beed2c"></a>
+
+A setter for the duration.
+
+#### Parameters
+* `InDuration` - Time in secs
+
+#### `public void `[`SetDelay`](#classINEvent_1a9f25c14793ab9ba901e46c1cce5b3608)`(const float & InDelay)` <a id="classINEvent_1a9f25c14793ab9ba901e46c1cce5b3608"></a>
+
+A setter for the delay.
+
+#### Parameters
+* `InDelay` - Time in secs
+
+#### `public void `[`Start`](#classINEvent_1a75fd4d4ea2fb8705db3166a049c81a80)`(const float & StartTime)` <a id="classINEvent_1a75fd4d4ea2fb8705db3166a049c81a80"></a>
+
+This should be used only by NTimeline or serialization.
+
+#### Parameters
+* `StartTime` - Time in secs
+
+#### `public void `[`Stop`](#classINEvent_1ac37ad2fd82b26a2ad37b97b56065459e)`()` <a id="classINEvent_1ac37ad2fd82b26a2ad37b97b56065459e"></a>
+
+This can stop the event and make it expires to its next tick.
+
+#### `public void `[`AddTime`](#classINEvent_1a3a4b22179bd1918c23025da917a62aac)`(const float & NewTime)` <a id="classINEvent_1a3a4b22179bd1918c23025da917a62aac"></a>
+
+Increments LocalTime 
+#### Parameters
+* `NewTime` - in Milliseconds
+
+#### `public void `[`Clear`](#classINEvent_1a96197f5304308e63330b379b2f229a5f)`()` <a id="classINEvent_1a96197f5304308e63330b379b2f229a5f"></a>
+
+This should reset all data
+
+#### `public void `[`Archive`](#classINEvent_1a48539b241642c63e4aa1f500553ddde7)`(FArchive & Ar)` <a id="classINEvent_1a48539b241642c63e4aa1f500553ddde7"></a>
 
 # class `NansTimelineSystemCore` <a id="classNansTimelineSystemCore"></a>
 
@@ -182,846 +891,6 @@ class NansTimelineSystemUE4
 ## Members
 
 #### `public inline  `[`NansTimelineSystemUE4`](#classNansTimelineSystemUE4_1a2afc62eae1322f281d15ae6fff754572)`(ReadOnlyTargetRules Target)` <a id="classNansTimelineSystemUE4_1a2afc62eae1322f281d15ae6fff754572"></a>
-
-# class `NEvent` <a id="classNEvent"></a>
-
-```
-class NEvent
-  : public NEventInterface
-```  
-
-**See also**: [NEventInterface](#classNEventInterface)
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public FNEventDelegate `[`EventStart`](#classNEvent_1a3363b57e254a8df6717d816804f0ced3) | 
-`public  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` | Default ctor
-`public  `[`NEvent`](#classNEvent_1a15c6d7063b5857607cfb0d91446d8241)`(FName _Label,FString _UId)` | Ctor to gives directly a name for this event and an Id (optionnal).
-`public inline virtual  `[`~NEvent`](#classNEvent_1a179af95c5b72caf083dc7dbbda577244)`()` | Default dtor
-`public virtual bool `[`IsExpired`](#classNEvent_1a035106bed5f526ecf68ae7b067e7beff)`() const` | It indicates if the event expired. It is computed with Duration and LocalTime
-`public virtual const float `[`GetLocalTime`](#classNEvent_1a74e7fae4f40337ca18e115280d7ebf7f)`() const` | Returns the localTime since the events has been attached (- delay) to a timeline
-`public virtual const float `[`GetStartedAt`](#classNEvent_1a65f998aadcef8a8036f977c5f5226eee)`() const` | The time relative to the timeline this event has been attached to + its start delay.
-`public virtual float `[`GetDuration`](#classNEvent_1a27aa249bec02b2132fff7b521731ee81)`() const` | The duration this event should live
-`public virtual void `[`Start`](#classNEvent_1a3ba279542a5aeddc86d924bbd4a12594)`(float StartTime)` | This should be used only by [NTimeline](#classNTimeline) or serialization.
-`public virtual void `[`Stop`](#classNEvent_1a551b1bf590ad30bce1b3f0ce44b0c91a)`()` | This can stop the event and make it expires to its next tick.
-`public virtual float `[`GetDelay`](#classNEvent_1afed25f6f7bbd624401803a76d530f18f)`() const` | The delay before this event starts
-`public virtual const FString `[`GetUID`](#classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c)`() const` | Retrieve the unique ID generated or given in ctor
-`public virtual void `[`SetUID`](#classNEvent_1aebeec7efe7cef04342d2b8e97ade8276)`(FString _UId)` | This should be used only on serialization process
-`public virtual const FName `[`GetEventLabel`](#classNEvent_1adefb1f4297e5e4b1342249b666396d9a)`() const` | Getter for Label
-`public virtual void `[`SetLocalTime`](#classNEvent_1a09ebad2d5cd8c97ec830b55f1c347c3b)`(float _LocalTime)` | This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNEvent_1aef073190e18a886364a0ce8f41dda052).
-`public virtual void `[`SetDuration`](#classNEvent_1aed6e1d3aed21e84fad370ab2d1734510)`(float _Duration)` | A setter for the duration.
-`public virtual void `[`SetDelay`](#classNEvent_1ad6bc835e40776921b793b182af400d69)`(float _Delay)` | A setter for the delay.
-`public virtual void `[`SetEventLabel`](#classNEvent_1ab5066c7e0d47be716f3d6b6e45a04298)`(FName _EventLabel)` | A setter for the label.
-`public virtual void `[`NotifyAddTime`](#classNEvent_1aef073190e18a886364a0ce8f41dda052)`(float NewTime)` | Increments LocalTime 
-`public virtual void `[`Clear`](#classNEvent_1a52fefc3a883f2db7366b96e24d8bfed2)`()` | This should reset all data
-`public virtual FNEventDelegate & `[`OnStart`](#classNEvent_1a9e84e286966a430c2fc58d534dd10333)`()` | #### Returns
-`protected FName `[`Label`](#classNEvent_1aca50001fe9723034e65be03e06d3f59e) | 
-`protected float `[`LocalTime`](#classNEvent_1a79caff85e8c98d0422a1e11dd47e27bb) | 
-`protected float `[`StartedAt`](#classNEvent_1ab7eaaeb61f9c50c2882acf67c8c80b40) | 
-`protected float `[`Duration`](#classNEvent_1a67fd9c10419486d8c1fda1a9a7b5f971) | 
-`protected float `[`Delay`](#classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d) | 
-`protected FString `[`UId`](#classNEvent_1ac660a2be16fdef80e7859f11a9324324) | 
-`protected bool `[`bActivated`](#classNEvent_1a6901924138c98ca09258e4d610904d81) | 
-
-## Members
-
-#### `public FNEventDelegate `[`EventStart`](#classNEvent_1a3363b57e254a8df6717d816804f0ced3) <a id="classNEvent_1a3363b57e254a8df6717d816804f0ced3"></a>
-
-#### `public  `[`NEvent`](#classNEvent_1aac75c1f215cd691c48e87495f2131686)`()` <a id="classNEvent_1aac75c1f215cd691c48e87495f2131686"></a>
-
-Default ctor
-
-#### `public  `[`NEvent`](#classNEvent_1a15c6d7063b5857607cfb0d91446d8241)`(FName _Label,FString _UId)` <a id="classNEvent_1a15c6d7063b5857607cfb0d91446d8241"></a>
-
-Ctor to gives directly a name for this event and an Id (optionnal).
-
-#### `public inline virtual  `[`~NEvent`](#classNEvent_1a179af95c5b72caf083dc7dbbda577244)`()` <a id="classNEvent_1a179af95c5b72caf083dc7dbbda577244"></a>
-
-Default dtor
-
-#### `public virtual bool `[`IsExpired`](#classNEvent_1a035106bed5f526ecf68ae7b067e7beff)`() const` <a id="classNEvent_1a035106bed5f526ecf68ae7b067e7beff"></a>
-
-It indicates if the event expired. It is computed with Duration and LocalTime
-
-#### `public virtual const float `[`GetLocalTime`](#classNEvent_1a74e7fae4f40337ca18e115280d7ebf7f)`() const` <a id="classNEvent_1a74e7fae4f40337ca18e115280d7ebf7f"></a>
-
-Returns the localTime since the events has been attached (- delay) to a timeline
-
-#### `public virtual const float `[`GetStartedAt`](#classNEvent_1a65f998aadcef8a8036f977c5f5226eee)`() const` <a id="classNEvent_1a65f998aadcef8a8036f977c5f5226eee"></a>
-
-The time relative to the timeline this event has been attached to + its start delay.
-
-#### `public virtual float `[`GetDuration`](#classNEvent_1a27aa249bec02b2132fff7b521731ee81)`() const` <a id="classNEvent_1a27aa249bec02b2132fff7b521731ee81"></a>
-
-The duration this event should live
-
-#### `public virtual void `[`Start`](#classNEvent_1a3ba279542a5aeddc86d924bbd4a12594)`(float StartTime)` <a id="classNEvent_1a3ba279542a5aeddc86d924bbd4a12594"></a>
-
-This should be used only by [NTimeline](#classNTimeline) or serialization.
-
-#### Parameters
-* `StartTime` - Time in secs
-
-#### `public virtual void `[`Stop`](#classNEvent_1a551b1bf590ad30bce1b3f0ce44b0c91a)`()` <a id="classNEvent_1a551b1bf590ad30bce1b3f0ce44b0c91a"></a>
-
-This can stop the event and make it expires to its next tick.
-
-#### `public virtual float `[`GetDelay`](#classNEvent_1afed25f6f7bbd624401803a76d530f18f)`() const` <a id="classNEvent_1afed25f6f7bbd624401803a76d530f18f"></a>
-
-The delay before this event starts
-
-#### `public virtual const FString `[`GetUID`](#classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c)`() const` <a id="classNEvent_1a902e03f2e33fd2a39e7b113c0bdc0f5c"></a>
-
-Retrieve the unique ID generated or given in ctor
-
-#### `public virtual void `[`SetUID`](#classNEvent_1aebeec7efe7cef04342d2b8e97ade8276)`(FString _UId)` <a id="classNEvent_1aebeec7efe7cef04342d2b8e97ade8276"></a>
-
-This should be used only on serialization process
-
-#### Parameters
-* `_UId` - Should be a unique FString, see ctor
-
-#### `public virtual const FName `[`GetEventLabel`](#classNEvent_1adefb1f4297e5e4b1342249b666396d9a)`() const` <a id="classNEvent_1adefb1f4297e5e4b1342249b666396d9a"></a>
-
-Getter for Label
-
-#### `public virtual void `[`SetLocalTime`](#classNEvent_1a09ebad2d5cd8c97ec830b55f1c347c3b)`(float _LocalTime)` <a id="classNEvent_1a09ebad2d5cd8c97ec830b55f1c347c3b"></a>
-
-This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNEvent_1aef073190e18a886364a0ce8f41dda052).
-
-#### Parameters
-* `_LocalTime` - Time in secs
-
-#### `public virtual void `[`SetDuration`](#classNEvent_1aed6e1d3aed21e84fad370ab2d1734510)`(float _Duration)` <a id="classNEvent_1aed6e1d3aed21e84fad370ab2d1734510"></a>
-
-A setter for the duration.
-
-#### Parameters
-* `_Duration` - Time in secs
-
-#### `public virtual void `[`SetDelay`](#classNEvent_1ad6bc835e40776921b793b182af400d69)`(float _Delay)` <a id="classNEvent_1ad6bc835e40776921b793b182af400d69"></a>
-
-A setter for the delay.
-
-#### Parameters
-* `_Delay` - Time in secs
-
-#### `public virtual void `[`SetEventLabel`](#classNEvent_1ab5066c7e0d47be716f3d6b6e45a04298)`(FName _EventLabel)` <a id="classNEvent_1ab5066c7e0d47be716f3d6b6e45a04298"></a>
-
-A setter for the label.
-
-#### Parameters
-* `_EventLabel` - A name to identify easily the event
-
-#### `public virtual void `[`NotifyAddTime`](#classNEvent_1aef073190e18a886364a0ce8f41dda052)`(float NewTime)` <a id="classNEvent_1aef073190e18a886364a0ce8f41dda052"></a>
-
-Increments LocalTime 
-#### Parameters
-* `NewTime` - in Millisecs
-
-#### `public virtual void `[`Clear`](#classNEvent_1a52fefc3a883f2db7366b96e24d8bfed2)`()` <a id="classNEvent_1a52fefc3a883f2db7366b96e24d8bfed2"></a>
-
-This should reset all data
-
-#### `public virtual FNEventDelegate & `[`OnStart`](#classNEvent_1a9e84e286966a430c2fc58d534dd10333)`()` <a id="classNEvent_1a9e84e286966a430c2fc58d534dd10333"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-#### `protected FName `[`Label`](#classNEvent_1aca50001fe9723034e65be03e06d3f59e) <a id="classNEvent_1aca50001fe9723034e65be03e06d3f59e"></a>
-
-#### `protected float `[`LocalTime`](#classNEvent_1a79caff85e8c98d0422a1e11dd47e27bb) <a id="classNEvent_1a79caff85e8c98d0422a1e11dd47e27bb"></a>
-
-#### `protected float `[`StartedAt`](#classNEvent_1ab7eaaeb61f9c50c2882acf67c8c80b40) <a id="classNEvent_1ab7eaaeb61f9c50c2882acf67c8c80b40"></a>
-
-#### `protected float `[`Duration`](#classNEvent_1a67fd9c10419486d8c1fda1a9a7b5f971) <a id="classNEvent_1a67fd9c10419486d8c1fda1a9a7b5f971"></a>
-
-#### `protected float `[`Delay`](#classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d) <a id="classNEvent_1a7bfe0f1f00c6781d84c8398bc0dc780d"></a>
-
-#### `protected FString `[`UId`](#classNEvent_1ac660a2be16fdef80e7859f11a9324324) <a id="classNEvent_1ac660a2be16fdef80e7859f11a9324324"></a>
-
-#### `protected bool `[`bActivated`](#classNEvent_1a6901924138c98ca09258e4d610904d81) <a id="classNEvent_1a6901924138c98ca09258e4d610904d81"></a>
-
-# class `NEventInterface` <a id="classNEventInterface"></a>
-
-An interface to manage events which can be attached to a timeline.
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public bool `[`IsExpired`](#classNEventInterface_1afd64986f323915c61ae5478764bde9de)`() const` | It indicates if the event expired.
-`public const float `[`GetLocalTime`](#classNEventInterface_1a77fbebce451091c6d6dda61a74f090d7)`() const` | Returns the localTime since the events has been attached (- delay) to a timeline
-`public const float `[`GetStartedAt`](#classNEventInterface_1a8452276ef3bb1621b5cd3b6eb38e2591)`() const` | The time relative to the timeline this event has been attached to + its start delay.
-`public float `[`GetDuration`](#classNEventInterface_1abb1b6c05e352b2dd0d8ad07401868851)`() const` | The duration this event should live
-`public float `[`GetDelay`](#classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086)`() const` | The delay before this event starts
-`public const FString `[`GetUID`](#classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d)`() const` | Retrieve the unique ID generated or given in ctor
-`public void `[`SetUID`](#classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8)`(FString _UId)` | This should be used only on serialization process
-`public const FName `[`GetEventLabel`](#classNEventInterface_1ade495738a17e98e110742533aa1752be)`() const` | Getter for Label
-`public void `[`SetLocalTime`](#classNEventInterface_1ac716c3624cae2ced48465c794cdb1032)`(float _LocalTime)` | This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNEventInterface_1adbb382a156b6da8d76c7bda9e3173b2e).
-`public void `[`SetDuration`](#classNEventInterface_1a58ca8d033bf9c8e21f0efb7b003fefd2)`(float _Duration)` | A setter for the duration.
-`public void `[`SetDelay`](#classNEventInterface_1afbcb8c5728d4d4c9257e43f78684d8ea)`(float _Delay)` | A setter for the delay.
-`public void `[`SetEventLabel`](#classNEventInterface_1ab2088d15c004fa01660411f87950cfa1)`(FName _EventLabel)` | A setter for the label.
-`public void `[`Start`](#classNEventInterface_1ab1ab56c02ce79c35c0c3d0acdad4e95b)`(float StartTime)` | This should be used only by [NTimeline](#classNTimeline) or serialization.
-`public void `[`Stop`](#classNEventInterface_1a6c83af198e905471876cb7c2e9fc1913)`()` | This can stop the event and make it expires to its next tick.
-`public void `[`NotifyAddTime`](#classNEventInterface_1adbb382a156b6da8d76c7bda9e3173b2e)`(float NewTime)` | Increments LocalTime 
-`public void `[`Clear`](#classNEventInterface_1a868685845638769e355b105eeefae196)`()` | This should reset all data
-`public FNEventDelegate & `[`OnStart`](#classNEventInterface_1a3dacc71ad39305135b406eec39a41444)`()` | #### Returns
-
-## Members
-
-#### `public bool `[`IsExpired`](#classNEventInterface_1afd64986f323915c61ae5478764bde9de)`() const` <a id="classNEventInterface_1afd64986f323915c61ae5478764bde9de"></a>
-
-It indicates if the event expired.
-
-#### `public const float `[`GetLocalTime`](#classNEventInterface_1a77fbebce451091c6d6dda61a74f090d7)`() const` <a id="classNEventInterface_1a77fbebce451091c6d6dda61a74f090d7"></a>
-
-Returns the localTime since the events has been attached (- delay) to a timeline
-
-#### `public const float `[`GetStartedAt`](#classNEventInterface_1a8452276ef3bb1621b5cd3b6eb38e2591)`() const` <a id="classNEventInterface_1a8452276ef3bb1621b5cd3b6eb38e2591"></a>
-
-The time relative to the timeline this event has been attached to + its start delay.
-
-#### `public float `[`GetDuration`](#classNEventInterface_1abb1b6c05e352b2dd0d8ad07401868851)`() const` <a id="classNEventInterface_1abb1b6c05e352b2dd0d8ad07401868851"></a>
-
-The duration this event should live
-
-#### `public float `[`GetDelay`](#classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086)`() const` <a id="classNEventInterface_1a05ad20b16c2c9a07c82821ba9424b086"></a>
-
-The delay before this event starts
-
-#### `public const FString `[`GetUID`](#classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d)`() const` <a id="classNEventInterface_1ac3e7f334edceaff2915dfc2b2b7be20d"></a>
-
-Retrieve the unique ID generated or given in ctor
-
-#### `public void `[`SetUID`](#classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8)`(FString _UId)` <a id="classNEventInterface_1ab631d00f7a9b39b51a38520c2456e6e8"></a>
-
-This should be used only on serialization process
-
-#### Parameters
-* `_UId` - Should be a unique FString, see ctor
-
-#### `public const FName `[`GetEventLabel`](#classNEventInterface_1ade495738a17e98e110742533aa1752be)`() const` <a id="classNEventInterface_1ade495738a17e98e110742533aa1752be"></a>
-
-Getter for Label
-
-#### `public void `[`SetLocalTime`](#classNEventInterface_1ac716c3624cae2ced48465c794cdb1032)`(float _LocalTime)` <a id="classNEventInterface_1ac716c3624cae2ced48465c794cdb1032"></a>
-
-This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNEventInterface_1adbb382a156b6da8d76c7bda9e3173b2e).
-
-#### Parameters
-* `_LocalTime` - Time in secs
-
-#### `public void `[`SetDuration`](#classNEventInterface_1a58ca8d033bf9c8e21f0efb7b003fefd2)`(float _Duration)` <a id="classNEventInterface_1a58ca8d033bf9c8e21f0efb7b003fefd2"></a>
-
-A setter for the duration.
-
-#### Parameters
-* `_Duration` - Time in secs
-
-#### `public void `[`SetDelay`](#classNEventInterface_1afbcb8c5728d4d4c9257e43f78684d8ea)`(float _Delay)` <a id="classNEventInterface_1afbcb8c5728d4d4c9257e43f78684d8ea"></a>
-
-A setter for the delay.
-
-#### Parameters
-* `_Delay` - Time in secs
-
-#### `public void `[`SetEventLabel`](#classNEventInterface_1ab2088d15c004fa01660411f87950cfa1)`(FName _EventLabel)` <a id="classNEventInterface_1ab2088d15c004fa01660411f87950cfa1"></a>
-
-A setter for the label.
-
-#### Parameters
-* `_EventLabel` - A name to identify easily the event
-
-#### `public void `[`Start`](#classNEventInterface_1ab1ab56c02ce79c35c0c3d0acdad4e95b)`(float StartTime)` <a id="classNEventInterface_1ab1ab56c02ce79c35c0c3d0acdad4e95b"></a>
-
-This should be used only by [NTimeline](#classNTimeline) or serialization.
-
-#### Parameters
-* `StartTime` - Time in secs
-
-#### `public void `[`Stop`](#classNEventInterface_1a6c83af198e905471876cb7c2e9fc1913)`()` <a id="classNEventInterface_1a6c83af198e905471876cb7c2e9fc1913"></a>
-
-This can stop the event and make it expires to its next tick.
-
-#### `public void `[`NotifyAddTime`](#classNEventInterface_1adbb382a156b6da8d76c7bda9e3173b2e)`(float NewTime)` <a id="classNEventInterface_1adbb382a156b6da8d76c7bda9e3173b2e"></a>
-
-Increments LocalTime 
-#### Parameters
-* `NewTime` - in Millisecs
-
-#### `public void `[`Clear`](#classNEventInterface_1a868685845638769e355b105eeefae196)`()` <a id="classNEventInterface_1a868685845638769e355b105eeefae196"></a>
-
-This should reset all data
-
-#### `public FNEventDelegate & `[`OnStart`](#classNEventInterface_1a3dacc71ad39305135b406eec39a41444)`()` <a id="classNEventInterface_1a3dacc71ad39305135b406eec39a41444"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-# class `NTimeline` <a id="classNTimeline"></a>
-
-```
-class NTimeline
-  : public NTimelineInterface
-```  
-
-**See also**: [NTimelineInterface](#classNTimelineInterface)
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public FNTimelineEventDelegate `[`EventExpired`](#classNTimeline_1a721aa7e672e1bf842cdfb2f9a64f01df) | **See also**: [OnExpired()](#classNTimeline_1a0d9dd0276af8afabfea4c049f4395b78)
-`public  `[`NTimeline`](#classNTimeline_1a0b11124c2e2f3776869bf5231c3a8f42)`(`[`NTimelineManager`](#classNTimelineManager)` * TimerManager,FName _Label)` | A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
-`public virtual  `[`~NTimeline`](#classNTimeline_1adffcefb7fc7f2768021994f8730eb356)`()` | Empty events array
-`public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classNTimeline_1ae3c7ff866ac29130894fb2e7ef3c3cc5)`()` | #### Returns
-`public virtual bool `[`Attached`](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1a4321b628067c1b3796b5a465d1ca0a8b) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a58a67d0b0d36e4bb8222b3ae10a2342b) for any custom usages
-`public virtual void `[`Attached`](#classNTimeline_1a3d090a5488bc0821a51c470613b1a370)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | Same as [Attached(TSharedPtr<NEventInterface> Event)](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1) but for a collection of objects.
-`public virtual void `[`SetTickInterval`](#classNTimeline_1a526040e6d6c3d70bf301ad9834b421f1)`(float _TickInterval)` | This should be called only by its friend [NTimelineManager](#classNTimelineManager) or a decorator to maintain consistency with its manager. Defined the tick interval for this timeline
-`public virtual void `[`SetCurrentTime`](#classNTimeline_1af956ff99638d833707bd62f61e07983c)`(float _CurrentTime)` | Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247)
-`public virtual float `[`GetCurrentTime`](#classNTimeline_1a717c02d02d052bec103fb8f11d12db33)`() const` | Retrieve the current time since this timeline exists and play
-`public const TArray< `[`NTimeline::FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5)` > `[`GetEvents`](#classNTimeline_1abf7ab8d1d90f06c80097ef760ed1d5b6)`() const` | Returns the FEventTuple collection
-`public virtual void `[`SetLabel`](#classNTimeline_1aa7979e247830ee13a84ef539a811f854)`(FName _Label)` | Give a name to this timeline
-`public virtual FName `[`GetLabel`](#classNTimeline_1a1d3eeddcb7b658d7c86f84eaa61d9069)`() const` | Return the actual name
-`public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5)` Tuple)` | This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1) methods to set data during runtime.
-`public virtual void `[`Clear`](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)`()` | This completely reset every events. It should be used with caution.
-`public virtual void `[`NotifyTick`](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247)`()` | This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
-`protected FName `[`Label`](#classNTimeline_1a008f3afba683e14f05887e4df108c260) | The name of this timeline
-`protected float `[`TickInterval`](#classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421) | Tick interval, should be set by its manager
-`protected float `[`CurrentTime`](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) | It is computed internally in the [NotifyTick()](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) return.
-`protected inline  `[`NTimeline`](#classNTimeline_1a6143741ff06add02f22ee82e5f1b6147)`()` | This to allow inherited adapters to have a default constructor
-`protected inline virtual bool `[`BeforeOnAttached`](#classNTimeline_1a4321b628067c1b3796b5a465d1ca0a8b)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float AttachedTime)` | In case of specialisation needs to avoid the attach process in some cases
-`protected inline virtual void `[`AfterOnAttached`](#classNTimeline_1a58a67d0b0d36e4bb8222b3ae10a2342b)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float AttachedTime)` | If needed to make some stats, analytics, trigger error,...
-`protected virtual const float `[`GetTickInterval`](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417)`() const` | This is the value required by a timer manager to know the tick frequency for this timeline (given by [NTimelineManager](#classNTimelineManager)). The NotifyTick use this method to add time on CurrentTime at each call.
-`protected virtual void `[`OnExpired`](#classNTimeline_1a0d9dd0276af8afabfea4c049f4395b78)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` | Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
-`typedef `[`FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) | An event tuple is an event representation, it allows to keep important details trace in memory. 0: Event object 1: attached time 2: delay 3: duration 4: label 5: expired time 6: UId
-
-## Members
-
-#### `public FNTimelineEventDelegate `[`EventExpired`](#classNTimeline_1a721aa7e672e1bf842cdfb2f9a64f01df) <a id="classNTimeline_1a721aa7e672e1bf842cdfb2f9a64f01df"></a>
-
-**See also**: [OnExpired()](#classNTimeline_1a0d9dd0276af8afabfea4c049f4395b78)
-
-#### `public  `[`NTimeline`](#classNTimeline_1a0b11124c2e2f3776869bf5231c3a8f42)`(`[`NTimelineManager`](#classNTimelineManager)` * TimerManager,FName _Label)` <a id="classNTimeline_1a0b11124c2e2f3776869bf5231c3a8f42"></a>
-
-A Timeline can't exists with a manager. This contructor garanties the necessary coupling & behavior consistancy.
-
-#### Parameters
-* `TimerManager` - Timer which manage all time behavior (tick, pause, stop, play,...) 
-
-* `_Label` - (optionnal) The name of this timeline. If not provided it creates a name with a static incremented value.
-
-#### `public virtual  `[`~NTimeline`](#classNTimeline_1adffcefb7fc7f2768021994f8730eb356)`()` <a id="classNTimeline_1adffcefb7fc7f2768021994f8730eb356"></a>
-
-Empty events array
-
-#### `public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classNTimeline_1ae3c7ff866ac29130894fb2e7ef3c3cc5)`()` <a id="classNTimeline_1ae3c7ff866ac29130894fb2e7ef3c3cc5"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-#### `public virtual bool `[`Attached`](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1"></a>
-
-It creates a FEventTuple and calls [BeforeOnAttached()](#classNTimeline_1a4321b628067c1b3796b5a465d1ca0a8b) to checks if it can be attached and [AfterOnAttached()](#classNTimeline_1a58a67d0b0d36e4bb8222b3ae10a2342b) for any custom usages
-
-#### Parameters
-* `Event` - The event you want to put in the timeline stream
-
-#### `public virtual void `[`Attached`](#classNTimeline_1a3d090a5488bc0821a51c470613b1a370)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classNTimeline_1a3d090a5488bc0821a51c470613b1a370"></a>
-
-Same as [Attached(TSharedPtr<NEventInterface> Event)](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1) but for a collection of objects.
-
-**See also**: [NTimeline::Attached(TSharedPtr<NEventInterface> Event)](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1)
-
-#### `public virtual void `[`SetTickInterval`](#classNTimeline_1a526040e6d6c3d70bf301ad9834b421f1)`(float _TickInterval)` <a id="classNTimeline_1a526040e6d6c3d70bf301ad9834b421f1"></a>
-
-This should be called only by its friend [NTimelineManager](#classNTimelineManager) or a decorator to maintain consistency with its manager. Defined the tick interval for this timeline
-
-#### Parameters
-* `_TickInterval` - Time in secs
-
-#### `public virtual void `[`SetCurrentTime`](#classNTimeline_1af956ff99638d833707bd62f61e07983c)`(float _CurrentTime)` <a id="classNTimeline_1af956ff99638d833707bd62f61e07983c"></a>
-
-Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247)
-
-#### Parameters
-* `_CurrentTime` - Time in secs
-
-#### `public virtual float `[`GetCurrentTime`](#classNTimeline_1a717c02d02d052bec103fb8f11d12db33)`() const` <a id="classNTimeline_1a717c02d02d052bec103fb8f11d12db33"></a>
-
-Retrieve the current time since this timeline exists and play
-
-#### `public const TArray< `[`NTimeline::FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5)` > `[`GetEvents`](#classNTimeline_1abf7ab8d1d90f06c80097ef760ed1d5b6)`() const` <a id="classNTimeline_1abf7ab8d1d90f06c80097ef760ed1d5b6"></a>
-
-Returns the FEventTuple collection
-
-#### `public virtual void `[`SetLabel`](#classNTimeline_1aa7979e247830ee13a84ef539a811f854)`(FName _Label)` <a id="classNTimeline_1aa7979e247830ee13a84ef539a811f854"></a>
-
-Give a name to this timeline
-
-#### Parameters
-* `_Label` - The name
-
-#### `public virtual FName `[`GetLabel`](#classNTimeline_1a1d3eeddcb7b658d7c86f84eaa61d9069)`() const` <a id="classNTimeline_1a1d3eeddcb7b658d7c86f84eaa61d9069"></a>
-
-Return the actual name
-
-#### `public void `[`SetTuple`](#classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec)`(`[`NTimeline::FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5)` Tuple)` <a id="classNTimeline_1aac29e19f74a9c983da3be8c9d68461ec"></a>
-
-This should be used only to set data from an archive (save game). Prefer [NTimeline::Attached()](#classNTimeline_1a06f9e912eb10269c9a1852fafac2dca1) methods to set data during runtime.
-
-#### Parameters
-* `Tuple` - Data which will be added to the Events TArray
-
-#### `public virtual void `[`Clear`](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)`()` <a id="classNTimeline_1a54129c39bf3c4233007f203c5ae16728"></a>
-
-This completely reset every events. It should be used with caution.
-
-#### `public virtual void `[`NotifyTick`](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247)`()` <a id="classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247"></a>
-
-This manages to notify every events saved in this timeline with the new time added. It uses internally [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) to increment time.
-
-#### `protected FName `[`Label`](#classNTimeline_1a008f3afba683e14f05887e4df108c260) <a id="classNTimeline_1a008f3afba683e14f05887e4df108c260"></a>
-
-The name of this timeline
-
-#### `protected float `[`TickInterval`](#classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421) <a id="classNTimeline_1a2d3ccd44aefb61bd3eb793d5d7c31421"></a>
-
-Tick interval, should be set by its manager
-
-#### `protected float `[`CurrentTime`](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) <a id="classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740"></a>
-
-It is computed internally in the [NotifyTick()](#classNTimeline_1ad35ffbc8dbe2252d9c7f39140fd08247) method. In every tick it adds [GetTickInterval()](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417) return.
-
-#### `protected inline  `[`NTimeline`](#classNTimeline_1a6143741ff06add02f22ee82e5f1b6147)`()` <a id="classNTimeline_1a6143741ff06add02f22ee82e5f1b6147"></a>
-
-This to allow inherited adapters to have a default constructor
-
-#### `protected inline virtual bool `[`BeforeOnAttached`](#classNTimeline_1a4321b628067c1b3796b5a465d1ca0a8b)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float AttachedTime)` <a id="classNTimeline_1a4321b628067c1b3796b5a465d1ca0a8b"></a>
-
-In case of specialisation needs to avoid the attach process in some cases
-
-#### `protected inline virtual void `[`AfterOnAttached`](#classNTimeline_1a58a67d0b0d36e4bb8222b3ae10a2342b)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float AttachedTime)` <a id="classNTimeline_1a58a67d0b0d36e4bb8222b3ae10a2342b"></a>
-
-If needed to make some stats, analytics, trigger error,...
-
-#### `protected virtual const float `[`GetTickInterval`](#classNTimeline_1a7c0dc7947a2f271fe68020d322fca417)`() const` <a id="classNTimeline_1a7c0dc7947a2f271fe68020d322fca417"></a>
-
-This is the value required by a timer manager to know the tick frequency for this timeline (given by [NTimelineManager](#classNTimelineManager)). The NotifyTick use this method to add time on CurrentTime at each call.
-
-#### `protected virtual void `[`OnExpired`](#classNTimeline_1a0d9dd0276af8afabfea4c049f4395b78)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` <a id="classNTimeline_1a0d9dd0276af8afabfea4c049f4395b78"></a>
-
-Use Event SharedPtr with caution, it's pointer is reset just after this method is called. the Event should be used internally only to avoid nullptr reference
-
-#### `typedef `[`FEventTuple`](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) <a id="classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5"></a>
-
-An event tuple is an event representation, it allows to keep important details trace in memory. 0: Event object 1: attached time 2: delay 3: duration 4: label 5: expired time 6: UId
-
-# class `NTimelineInterface` <a id="classNTimelineInterface"></a>
-
-Its goal is to saved events and place them in time. It works as a Time & Event container. The [NTimelineManager](#classNTimelineManager) class is dedicated to handle it.
-
-**See also**: ./TimelineManager.h
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public bool `[`Attached`](#classNTimelineInterface_1ae3db05abf80375c1e458958331fea033)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | Attached an event to this timeline
-`public void `[`Attached`](#classNTimelineInterface_1a3abcd5e2d2218a7269f6864aa8a7cb08)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | Attached a collection of events to this timeline
-`public void `[`SetTickInterval`](#classNTimelineInterface_1ad894c4e8cacecfe46c861afbb4579f0a)`(float _TickInterval)` | Defined the tick interval for this timeline
-`public void `[`SetCurrentTime`](#classNTimelineInterface_1ae3bcfd2792a53b0e254b32b857b9d404)`(float _CurrentTime)` | Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNTimelineInterface_1ab418ac5c001201d9868442f7773165c3)
-`public float `[`GetCurrentTime`](#classNTimelineInterface_1a9a821c703f10f5b2865bd7c5302c8661)`() const` | Retrieve the current time since this timeline exists and play
-`public void `[`SetLabel`](#classNTimelineInterface_1a88b958f47721634befa5a5118fa87a02)`(FName _Label)` | Give a name to this timeline
-`public FName `[`GetLabel`](#classNTimelineInterface_1a78a95ae2a1104409553fe3ed30a56e10)`() const` | Return the actual name
-`public void `[`Clear`](#classNTimelineInterface_1a5de152382b1e669f1a994e910c406643)`()` | Reset default data
-`public void `[`NotifyTick`](#classNTimelineInterface_1ab418ac5c001201d9868442f7773165c3)`()` | This manages to notify every events saved in this timeline with the new time added.
-`public FNTimelineEventDelegate & `[`OnEventExpired`](#classNTimelineInterface_1a5ffe42c9a7d91381abdb0de4385523e3)`()` | #### Returns
-
-## Members
-
-#### `public bool `[`Attached`](#classNTimelineInterface_1ae3db05abf80375c1e458958331fea033)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classNTimelineInterface_1ae3db05abf80375c1e458958331fea033"></a>
-
-Attached an event to this timeline
-
-#### `public void `[`Attached`](#classNTimelineInterface_1a3abcd5e2d2218a7269f6864aa8a7cb08)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classNTimelineInterface_1a3abcd5e2d2218a7269f6864aa8a7cb08"></a>
-
-Attached a collection of events to this timeline
-
-#### `public void `[`SetTickInterval`](#classNTimelineInterface_1ad894c4e8cacecfe46c861afbb4579f0a)`(float _TickInterval)` <a id="classNTimelineInterface_1ad894c4e8cacecfe46c861afbb4579f0a"></a>
-
-Defined the tick interval for this timeline
-
-#### Parameters
-* `_TickInterval` - Time in secs
-
-#### `public void `[`SetCurrentTime`](#classNTimelineInterface_1ae3bcfd2792a53b0e254b32b857b9d404)`(float _CurrentTime)` <a id="classNTimelineInterface_1ae3bcfd2792a53b0e254b32b857b9d404"></a>
-
-Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNTimelineInterface_1ab418ac5c001201d9868442f7773165c3)
-
-#### Parameters
-* `_CurrentTime` - Time in secs
-
-#### `public float `[`GetCurrentTime`](#classNTimelineInterface_1a9a821c703f10f5b2865bd7c5302c8661)`() const` <a id="classNTimelineInterface_1a9a821c703f10f5b2865bd7c5302c8661"></a>
-
-Retrieve the current time since this timeline exists and play
-
-#### `public void `[`SetLabel`](#classNTimelineInterface_1a88b958f47721634befa5a5118fa87a02)`(FName _Label)` <a id="classNTimelineInterface_1a88b958f47721634befa5a5118fa87a02"></a>
-
-Give a name to this timeline
-
-#### Parameters
-* `_Label` - The name
-
-#### `public FName `[`GetLabel`](#classNTimelineInterface_1a78a95ae2a1104409553fe3ed30a56e10)`() const` <a id="classNTimelineInterface_1a78a95ae2a1104409553fe3ed30a56e10"></a>
-
-Return the actual name
-
-#### `public void `[`Clear`](#classNTimelineInterface_1a5de152382b1e669f1a994e910c406643)`()` <a id="classNTimelineInterface_1a5de152382b1e669f1a994e910c406643"></a>
-
-Reset default data
-
-#### `public void `[`NotifyTick`](#classNTimelineInterface_1ab418ac5c001201d9868442f7773165c3)`()` <a id="classNTimelineInterface_1ab418ac5c001201d9868442f7773165c3"></a>
-
-This manages to notify every events saved in this timeline with the new time added.
-
-#### `public FNTimelineEventDelegate & `[`OnEventExpired`](#classNTimelineInterface_1a5ffe42c9a7d91381abdb0de4385523e3)`()` <a id="classNTimelineInterface_1a5ffe42c9a7d91381abdb0de4385523e3"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-# class `NTimelineManager` <a id="classNTimelineManager"></a>
-
-This class is the client for the [NTimelineInterface](#classNTimelineInterface) object. Its goal is to decoupled client interface with timeline management.
-
-* [NTimelineInterface](#classNTimelineInterface) manages time computation, notify events accordingly and save all states
-
-* [NTimelineManager](#classNTimelineManager) manages client controls.
-
-**See also**: [NTimelineInterface](#classNTimelineInterface)
-
-**See also**: [NTimeline](#classNTimeline)
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public  `[`NTimelineManager`](#classNTimelineManager_1a1b0c6dc4d6e281e5eb4d55f3ed88028c)`()` | Calls the [Init()](#classNTimelineManager_1abf6e226915c1234321491137ed3483dc) method.
-`public virtual  `[`~NTimelineManager`](#classNTimelineManager_1a4acef51e20d351fc1061007f764508c7)`()` | Calls [Clear()](#classNTimelineManager_1a337d18b7bd76ecefe59441f29f2553ab) and release Timeline TSharedPtr
-`public virtual void `[`Init`](#classNTimelineManager_1abf6e226915c1234321491137ed3483dc)`(float _TickInterval,FName _Label)` | Instanciate the embeded [NTimeline](#classNTimeline)
-`public virtual void `[`Pause`](#classNTimelineManager_1a8cb9ad0eb1b12858447cd044b9d409a4)`()` | This pause the timeline ticking
-`public virtual void `[`Play`](#classNTimelineManager_1ade9c8d1c0cef24f017bf2ca718f23ffe)`()` | This (re)start the timeline ticking
-`public virtual void `[`Stop`](#classNTimelineManager_1ad62ca7c3db61f67d85673f92f72e16bd)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
-`public virtual void `[`TimerTick`](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0)`()` | This checks the actual play state (ENTimelineTimerState) and tick the [NTimelineInterface](#classNTimelineInterface) accordingly.
-`public `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManager_1a629aa6973b822f9184051626a75922e8)`() const` | Get the actual state.
-`public float `[`GetTickInterval`](#classNTimelineManager_1a184b3479c2adfd6304b1106fc0a62c62)`() const` | Get the tick interval which a timermanager should use to process
-`public virtual void `[`SetTickInterval`](#classNTimelineManager_1abd98f6183114297171f49ec48b7624b1)`(float _TickInterval)` | Defined the desired ticking interval
-`public TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`GetTimeline`](#classNTimelineManager_1aded3b7d83a0789000027b3137439ab3a)`() const` | Get the coupled [NTimelineInterface](#classNTimelineInterface)
-`protected float `[`TickInterval`](#classNTimelineManager_1a7cfb02706580bc6947974d896a2458bc) | The interval retrieved from the timeline.
-`protected `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManager_1a061049bcb7424fcd2332081cb78b6e9e) | The actual state
-`protected TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`Timeline`](#classNTimelineManager_1af6a5d2b1c6c7acdfb6510acf53ed042e) | The coupled timeline
-`protected virtual void `[`Clear`](#classNTimelineManager_1a337d18b7bd76ecefe59441f29f2553ab)`()` | Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
-`protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManager_1a1f4e4f731583060d7d0f5750795b809a)`()` | This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
-`protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManager_1a4cfa006fae1385cce28cf61b674abe0d)`()` | This method is call immediately before ticking
-`protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManager_1a499e7d4d685b91d3697bac9953e88268)`()` | This method is call immediately after ticking
-
-## Members
-
-#### `public  `[`NTimelineManager`](#classNTimelineManager_1a1b0c6dc4d6e281e5eb4d55f3ed88028c)`()` <a id="classNTimelineManager_1a1b0c6dc4d6e281e5eb4d55f3ed88028c"></a>
-
-Calls the [Init()](#classNTimelineManager_1abf6e226915c1234321491137ed3483dc) method.
-
-#### `public virtual  `[`~NTimelineManager`](#classNTimelineManager_1a4acef51e20d351fc1061007f764508c7)`()` <a id="classNTimelineManager_1a4acef51e20d351fc1061007f764508c7"></a>
-
-Calls [Clear()](#classNTimelineManager_1a337d18b7bd76ecefe59441f29f2553ab) and release Timeline TSharedPtr
-
-#### `public virtual void `[`Init`](#classNTimelineManager_1abf6e226915c1234321491137ed3483dc)`(float _TickInterval,FName _Label)` <a id="classNTimelineManager_1abf6e226915c1234321491137ed3483dc"></a>
-
-Instanciate the embeded [NTimeline](#classNTimeline)
-
-#### Parameters
-* `_TickInterval` - Interval time between tick in sec 
-
-* `_Label` - Name of the Timeline.
-
-#### `public virtual void `[`Pause`](#classNTimelineManager_1a8cb9ad0eb1b12858447cd044b9d409a4)`()` <a id="classNTimelineManager_1a8cb9ad0eb1b12858447cd044b9d409a4"></a>
-
-This pause the timeline ticking
-
-#### `public virtual void `[`Play`](#classNTimelineManager_1ade9c8d1c0cef24f017bf2ca718f23ffe)`()` <a id="classNTimelineManager_1ade9c8d1c0cef24f017bf2ca718f23ffe"></a>
-
-This (re)start the timeline ticking
-
-#### `public virtual void `[`Stop`](#classNTimelineManager_1ad62ca7c3db61f67d85673f92f72e16bd)`()` <a id="classNTimelineManager_1ad62ca7c3db61f67d85673f92f72e16bd"></a>
-
-This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
-
-#### `public virtual void `[`TimerTick`](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0)`()` <a id="classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0"></a>
-
-This checks the actual play state (ENTimelineTimerState) and tick the [NTimelineInterface](#classNTimelineInterface) accordingly.
-
-#### `public `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`GetState`](#classNTimelineManager_1a629aa6973b822f9184051626a75922e8)`() const` <a id="classNTimelineManager_1a629aa6973b822f9184051626a75922e8"></a>
-
-Get the actual state.
-
-#### `public float `[`GetTickInterval`](#classNTimelineManager_1a184b3479c2adfd6304b1106fc0a62c62)`() const` <a id="classNTimelineManager_1a184b3479c2adfd6304b1106fc0a62c62"></a>
-
-Get the tick interval which a timermanager should use to process
-
-#### `public virtual void `[`SetTickInterval`](#classNTimelineManager_1abd98f6183114297171f49ec48b7624b1)`(float _TickInterval)` <a id="classNTimelineManager_1abd98f6183114297171f49ec48b7624b1"></a>
-
-Defined the desired ticking interval
-
-#### `public TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`GetTimeline`](#classNTimelineManager_1aded3b7d83a0789000027b3137439ab3a)`() const` <a id="classNTimelineManager_1aded3b7d83a0789000027b3137439ab3a"></a>
-
-Get the coupled [NTimelineInterface](#classNTimelineInterface)
-
-#### `protected float `[`TickInterval`](#classNTimelineManager_1a7cfb02706580bc6947974d896a2458bc) <a id="classNTimelineManager_1a7cfb02706580bc6947974d896a2458bc"></a>
-
-The interval retrieved from the timeline.
-
-#### `protected `[`ENTimelineTimerState`](#TimelineManager_8h_1aefac85f8316c882532fed2404c3f4de2)` `[`State`](#classNTimelineManager_1a061049bcb7424fcd2332081cb78b6e9e) <a id="classNTimelineManager_1a061049bcb7424fcd2332081cb78b6e9e"></a>
-
-The actual state
-
-#### `protected TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`Timeline`](#classNTimelineManager_1af6a5d2b1c6c7acdfb6510acf53ed042e) <a id="classNTimelineManager_1af6a5d2b1c6c7acdfb6510acf53ed042e"></a>
-
-The coupled timeline
-
-#### `protected virtual void `[`Clear`](#classNTimelineManager_1a337d18b7bd76ecefe59441f29f2553ab)`()` <a id="classNTimelineManager_1a337d18b7bd76ecefe59441f29f2553ab"></a>
-
-Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
-
-#### `protected inline virtual void `[`onValidateTimelineTick`](#classNTimelineManager_1a1f4e4f731583060d7d0f5750795b809a)`()` <a id="classNTimelineManager_1a1f4e4f731583060d7d0f5750795b809a"></a>
-
-This should be used to make some checks right before ticking. So here you can manipulate State property to (not)allow ticking.
-
-#### `protected inline virtual void `[`onNotifyTimelineTickBefore`](#classNTimelineManager_1a4cfa006fae1385cce28cf61b674abe0d)`()` <a id="classNTimelineManager_1a4cfa006fae1385cce28cf61b674abe0d"></a>
-
-This method is call immediately before ticking
-
-#### `protected inline virtual void `[`onNotifyTimelineTickAfter`](#classNTimelineManager_1a499e7d4d685b91d3697bac9953e88268)`()` <a id="classNTimelineManager_1a499e7d4d685b91d3697bac9953e88268"></a>
-
-This method is call immediately after ticking
-
-# class `NUnrealEventProxy` <a id="classNUnrealEventProxy"></a>
-
-```
-class NUnrealEventProxy
-  : public NEventInterface
-```  
-
-This class is just a pass-through to allows an [UNEventDecorator](#classUNEventDecorator) (a derived UObject) to be passed on the core system using TSharedPtr.
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532) | 
-`public inline  `[`NUnrealEventProxy`](#classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` | 
-`public virtual bool `[`IsExpired`](#classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157)`() const` | It indicates if the event expired.
-`public virtual const float `[`GetLocalTime`](#classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43)`() const` | Returns the localTime since the events has been attached (- delay) to a timeline
-`public virtual const float `[`GetStartedAt`](#classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89)`() const` | The time relative to the timeline this event has been attached to + its start delay.
-`public virtual float `[`GetDuration`](#classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187)`() const` | The duration this event should live
-`public virtual void `[`Start`](#classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d)`(float StartTime)` | This should be used only by [NTimeline](#classNTimeline) or serialization.
-`public virtual void `[`Stop`](#classNUnrealEventProxy_1a8439075a6c628d1a6bc2ea322fddb5e3)`()` | This can stop the event and make it expires to its next tick.
-`public virtual void `[`NotifyAddTime`](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345)`(float NewTime)` | Increments LocalTime 
-`public virtual float `[`GetDelay`](#classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab)`() const` | The delay before this event starts
-`public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` | Getter for Label
-`public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` | Retrieve the unique ID generated or given in ctor
-`public virtual void `[`SetUID`](#classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a)`(FString _UId)` | This should be used only on serialization process
-`public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` | This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345).
-`public virtual void `[`SetDuration`](#classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360)`(float _Duration)` | A setter for the duration.
-`public virtual void `[`SetDelay`](#classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85)`(float _Delay)` | A setter for the delay.
-`public virtual void `[`SetEventLabel`](#classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd)`(FName _EventLabel)` | A setter for the label.
-`public virtual void `[`Clear`](#classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a)`()` | This should reset all data
-`public virtual FNEventDelegate & `[`OnStart`](#classNUnrealEventProxy_1abd5e15acc3ab330dcccc5b1021a0661a)`()` | #### Returns
-`public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95)`()` | 
-
-## Members
-
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`Event`](#classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532) <a id="classNUnrealEventProxy_1ae30cbb7423f945c8078b83cb47709532"></a>
-
-#### `public inline  `[`NUnrealEventProxy`](#classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5)`(`[`UNEventDecorator`](#classUNEventDecorator)` & _Event)` <a id="classNUnrealEventProxy_1a7d30a9a2460faa07dda4237f18cbaee5"></a>
-
-#### `public virtual bool `[`IsExpired`](#classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157)`() const` <a id="classNUnrealEventProxy_1a2ab770fdaf8a2e66adf4128be813d157"></a>
-
-It indicates if the event expired.
-
-#### `public virtual const float `[`GetLocalTime`](#classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43)`() const` <a id="classNUnrealEventProxy_1aab01b11713feaadebf3b841254626e43"></a>
-
-Returns the localTime since the events has been attached (- delay) to a timeline
-
-#### `public virtual const float `[`GetStartedAt`](#classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89)`() const` <a id="classNUnrealEventProxy_1ada79157425ac4d78d3bae4823357ce89"></a>
-
-The time relative to the timeline this event has been attached to + its start delay.
-
-#### `public virtual float `[`GetDuration`](#classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187)`() const` <a id="classNUnrealEventProxy_1a7556392cdbdaf35ed0b09c9910b3a187"></a>
-
-The duration this event should live
-
-#### `public virtual void `[`Start`](#classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d)`(float StartTime)` <a id="classNUnrealEventProxy_1a03e4aa3c7b41f9d40d028215b25aa04d"></a>
-
-This should be used only by [NTimeline](#classNTimeline) or serialization.
-
-#### Parameters
-* `StartTime` - Time in secs
-
-#### `public virtual void `[`Stop`](#classNUnrealEventProxy_1a8439075a6c628d1a6bc2ea322fddb5e3)`()` <a id="classNUnrealEventProxy_1a8439075a6c628d1a6bc2ea322fddb5e3"></a>
-
-This can stop the event and make it expires to its next tick.
-
-#### `public virtual void `[`NotifyAddTime`](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345)`(float NewTime)` <a id="classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345"></a>
-
-Increments LocalTime 
-#### Parameters
-* `NewTime` - in Millisecs
-
-#### `public virtual float `[`GetDelay`](#classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab)`() const` <a id="classNUnrealEventProxy_1a2677f3f63bc2282827a226d7c7a840ab"></a>
-
-The delay before this event starts
-
-#### `public virtual const FName `[`GetEventLabel`](#classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b)`() const` <a id="classNUnrealEventProxy_1ac23e8b1279065e45016d8f5d6040a24b"></a>
-
-Getter for Label
-
-#### `public virtual const FString `[`GetUID`](#classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a)`() const` <a id="classNUnrealEventProxy_1a6a405f4dfcc52bcb41b46c127214083a"></a>
-
-Retrieve the unique ID generated or given in ctor
-
-#### `public virtual void `[`SetUID`](#classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a)`(FString _UId)` <a id="classNUnrealEventProxy_1a6633160494c430bb3d9ef357c4945f9a"></a>
-
-This should be used only on serialization process
-
-#### Parameters
-* `_UId` - Should be a unique FString, see ctor
-
-#### `public virtual void `[`SetLocalTime`](#classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259)`(float _LocalTime)` <a id="classNUnrealEventProxy_1a4592b1545ddc54090813287e78bf4259"></a>
-
-This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classNUnrealEventProxy_1aebef80d18a8920af0d766695e6276345).
-
-#### Parameters
-* `_LocalTime` - Time in secs
-
-#### `public virtual void `[`SetDuration`](#classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360)`(float _Duration)` <a id="classNUnrealEventProxy_1a2bf362638bc5bc1384e5d0c97a8ee360"></a>
-
-A setter for the duration.
-
-#### Parameters
-* `_Duration` - Time in secs
-
-#### `public virtual void `[`SetDelay`](#classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85)`(float _Delay)` <a id="classNUnrealEventProxy_1ab9f93904bc977d1ada3b5d4669857b85"></a>
-
-A setter for the delay.
-
-#### Parameters
-* `_Delay` - Time in secs
-
-#### `public virtual void `[`SetEventLabel`](#classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd)`(FName _EventLabel)` <a id="classNUnrealEventProxy_1abce884ce83319b3d6c323e363fe0b7cd"></a>
-
-A setter for the label.
-
-#### Parameters
-* `_EventLabel` - A name to identify easily the event
-
-#### `public virtual void `[`Clear`](#classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a)`()` <a id="classNUnrealEventProxy_1a9fa63a487060c3003355552552cb600a"></a>
-
-This should reset all data
-
-#### `public virtual FNEventDelegate & `[`OnStart`](#classNUnrealEventProxy_1abd5e15acc3ab330dcccc5b1021a0661a)`()` <a id="classNUnrealEventProxy_1abd5e15acc3ab330dcccc5b1021a0661a"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` & `[`GetUnrealObject`](#classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95)`()` <a id="classNUnrealEventProxy_1a195f7a860aceba0ae76c7866901b7e95"></a>
-
-# class `NUnrealTimelineProxy` <a id="classNUnrealTimelineProxy"></a>
-
-```
-class NUnrealTimelineProxy
-  : public NTimelineInterface
-```  
-
-This class is a pass-through to allows an [NUnrealTimelineProxy](#classNUnrealTimelineProxy) (a derived UObject) to be passed on the core system using TSharedPtr, and it manages [NUnrealEventProxy](#classNUnrealEventProxy) attachment .
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced) | 
-`public inline  `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` | 
-`public virtual bool `[`Attached`](#classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | Attached an event to this timeline
-`public virtual void `[`Attached`](#classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | Attached a collection of events to this timeline
-`public virtual void `[`SetTickInterval`](#classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295)`(float _TickInterval)` | Defined the tick interval for this timeline
-`public virtual void `[`SetCurrentTime`](#classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3)`(float _CurrentTime)` | Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)
-`public virtual float `[`GetCurrentTime`](#classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210)`() const` | Retrieve the current time since this timeline exists and play
-`public virtual void `[`SetLabel`](#classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1)`(FName _Label)` | Give a name to this timeline
-`public virtual FName `[`GetLabel`](#classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617)`() const` | Return the actual name
-`public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` | Reset default data
-`public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` | This manages to notify every events saved in this timeline with the new time added.
-`public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classNUnrealTimelineProxy_1a921d3f3649a0ac74c50d964de7d14d13)`()` | #### Returns
-`public virtual `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`GetUnrealObject`](#classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42)`()` | 
-
-## Members
-
-#### `public `[`UNTimelineDecorator`](#classUNTimelineDecorator)` & `[`Timeline`](#classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced) <a id="classNUnrealTimelineProxy_1a40f55d7cc326c9e6b663f6bbb1648ced"></a>
-
-#### `public inline  `[`NUnrealTimelineProxy`](#classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b)`(`[`UNTimelineDecorator`](#classUNTimelineDecorator)` & _Timeline)` <a id="classNUnrealTimelineProxy_1a7e885e1d821260b1da07b38ea5c2410b"></a>
-
-#### `public virtual bool `[`Attached`](#classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classNUnrealTimelineProxy_1a5f87631c37cdcba6b8bdc359b5f1a6b5"></a>
-
-Attached an event to this timeline
-
-#### `public virtual void `[`Attached`](#classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classNUnrealTimelineProxy_1aedddc222f0aef97ce80df43d295c67a7"></a>
-
-Attached a collection of events to this timeline
-
-#### `public virtual void `[`SetTickInterval`](#classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295)`(float _TickInterval)` <a id="classNUnrealTimelineProxy_1a34e36b80dbcdd43682447670c07df295"></a>
-
-Defined the tick interval for this timeline
-
-#### Parameters
-* `_TickInterval` - Time in secs
-
-#### `public virtual void `[`SetCurrentTime`](#classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3)`(float _CurrentTime)` <a id="classNUnrealTimelineProxy_1ab2659e648dc0c4411bb3a4a389081ed3"></a>
-
-Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)
-
-#### Parameters
-* `_CurrentTime` - Time in secs
-
-#### `public virtual float `[`GetCurrentTime`](#classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210)`() const` <a id="classNUnrealTimelineProxy_1ad9f56c6070ccaa4958dd5ea3289dc210"></a>
-
-Retrieve the current time since this timeline exists and play
-
-#### `public virtual void `[`SetLabel`](#classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1)`(FName _Label)` <a id="classNUnrealTimelineProxy_1adf1c8d680d112638c45b0f3476ca19c1"></a>
-
-Give a name to this timeline
-
-#### Parameters
-* `_Label` - The name
-
-#### `public virtual FName `[`GetLabel`](#classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617)`() const` <a id="classNUnrealTimelineProxy_1ae525709779b518b085a3dd77a0317617"></a>
-
-Return the actual name
-
-#### `public virtual void `[`Clear`](#classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be)`()` <a id="classNUnrealTimelineProxy_1a06aaedc689ba6d694900e7ee619b06be"></a>
-
-Reset default data
-
-#### `public virtual void `[`NotifyTick`](#classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be)`()` <a id="classNUnrealTimelineProxy_1ab6034f19bf6c86b206a60ff2bbbcf1be"></a>
-
-This manages to notify every events saved in this timeline with the new time added.
-
-#### `public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classNUnrealTimelineProxy_1a921d3f3649a0ac74c50d964de7d14d13)`()` <a id="classNUnrealTimelineProxy_1a921d3f3649a0ac74c50d964de7d14d13"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-#### `public virtual `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`GetUnrealObject`](#classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42)`()` <a id="classNUnrealTimelineProxy_1a0bc45d31e166453f65f8dc13ed206b42"></a>
 
 # class `SConfiguredTimelinePin` <a id="classSConfiguredTimelinePin"></a>
 
@@ -1081,164 +950,422 @@ It is called by [GetSelectedName()](#classSConfiguredTimelinePin_1a2f71066ddab87
 #### Parameters
 * `Name` - A FName reference which saved retrieved value.
 
-# class `UNEventDecorator` <a id="classUNEventDecorator"></a>
+# class `SNTimeline` <a id="classSNTimeline"></a>
 
 ```
-class UNEventDecorator
-  : public UObject
-  : public NEventInterface
+class SNTimeline
+  : public SLeafWidget
 ```  
 
-Base abstract class to create [NEventInterface](#classNEventInterface) decorators (Blueprint or c++).
-
-For a simple usage with blueprint: you can derived blueprint base on this. This way the [NEventInterface](#classNEventInterface) instance should only manage timeline behavior.
-
-For a more complex usage in c++: You should derive this and [NEventInterface](#classNEventInterface) too to fit on your needs.
-
-* This class should only manage specifics behaviors related to the engine (serialization, blueprint's specifics functionnalities, etc...)
-
-* [NEventInterface](#classNEventInterface)'s derivation: all your core functionnalities
+This widget will draw timeline and events thanks to its [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) passed in.
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public inline  `[`UNEventDecorator`](#classUNEventDecorator_1a863909d823063f8446d2dcf30fe8174c)`()` | 
-`public virtual bool `[`IsExpired`](#classUNEventDecorator_1ae69c1d2dc0bd6bbe4381e0387d96ed1e)`() const` | It indicates if the event expired.
-`public virtual const float `[`GetLocalTime`](#classUNEventDecorator_1aa20a4fea4a15bf4e2fa1a41f303fa52e)`() const` | Returns the localTime since the events has been attached (- delay) to a timeline
-`public virtual const float `[`GetStartedAt`](#classUNEventDecorator_1a8cf74bd6fbadd256e499e4ef9094ba79)`() const` | The time relative to the timeline this event has been attached to + its start delay.
-`public virtual float `[`GetDuration`](#classUNEventDecorator_1a678ba817c31779c5ae2d216995337078)`() const` | The duration this event should live
-`public virtual void `[`Start`](#classUNEventDecorator_1a7137c38ec0511ca1beabe2e4f83b641e)`(float StartTime)` | This should be used only by [NTimeline](#classNTimeline) or serialization.
-`public virtual void `[`Stop`](#classUNEventDecorator_1a9dcf17fc0df1d11e6e2f42225c4bf5ed)`()` | This can stop the event and make it expires to its next tick.
-`public virtual void `[`NotifyAddTime`](#classUNEventDecorator_1a2b36838efadbdf6b1bf77a0c2cf65e07)`(float NewTime)` | Increments LocalTime 
-`public virtual float `[`GetDelay`](#classUNEventDecorator_1a33715665287b45121f2ff25514c41ef1)`() const` | The delay before this event starts
-`public virtual const FName `[`GetEventLabel`](#classUNEventDecorator_1ad88e97e6031018c0f3de2ce245341dd6)`() const` | Getter for Label
-`public virtual void `[`SetEventLabel`](#classUNEventDecorator_1a0780498b4c684dea9487841549335167)`(FName _EventLabel)` | A setter for the label.
-`public virtual const FString `[`GetUID`](#classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f)`() const` | Retrieve the unique ID generated or given in ctor
-`public virtual void `[`SetUID`](#classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447)`(FString _UId)` | This should be used only on serialization process
-`public virtual void `[`SetLocalTime`](#classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b)`(float _LocalTime)` | This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classUNEventDecorator_1a2b36838efadbdf6b1bf77a0c2cf65e07).
-`public virtual void `[`SetDuration`](#classUNEventDecorator_1ade8dd2b05d490b5892aaf63991aa1e6d)`(float _Duration)` | A setter for the duration.
-`public virtual void `[`SetDelay`](#classUNEventDecorator_1a59b38b2293b9e6ac91fd1161821b8600)`(float _Delay)` | A setter for the delay.
-`public virtual void `[`Clear`](#classUNEventDecorator_1a6876f229d6f190d204abe89ba0847d1e)`()` | This should reset all data
-`public virtual FNEventDelegate & `[`OnStart`](#classUNEventDecorator_1af13744ea49840bc9a01d60518c1b92b8)`()` | #### Returns
-`public virtual void `[`BeginDestroy`](#classUNEventDecorator_1a75739f0f1ec3c9dcde05bddb93e00664)`()` | 
-`public virtual void `[`Serialize`](#classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7)`(FArchive & Ar)` | 
-`public void `[`OnInit`](#classUNEventDecorator_1aa79688c15f32adc31cd1e930fd6434ff)`()` | 
-`public virtual void `[`Init`](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562)`(FName _Label,FString UId)` | This is where the Core object is instanciated. You should override this to instanciate your derived core object.
-`public virtual TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`GetEvent`](#classUNEventDecorator_1a289aa0372ca4512839143e84617dec47)`() const` | This is used by other decorators which need to pass the core object to their own. 
-`protected TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`Event`](#classUNEventDecorator_1a0c2fe0db6d7d2eb0f837d3f5e79d875e) | The actual decorator is for this object. It shoulds be instanciate on a ctor or a dedicated init function
+`public inline  `[`SLATE_BEGIN_ARGS`](#classSNTimeline_1a07658b47fb4bc8a7c1266f0e62396b6e)`(`[`SNTimeline`](#classSNTimeline)`)` | 
+`public void `[`Construct`](#classSNTimeline_1aad83f702aa077f671eaad9fc037022fe)`(const FArguments & InArgs)` | Constructs this widget with InArgs and listen FWorldDelegates::OnWorldBeginTearDown + FWorldDelegates::OnStartGameInstance to change bShouldComputeSize values.
+`public virtual  `[`~SNTimeline`](#classSNTimeline_1ad5942bba32da43766e76c307ade28b3c)`()` | Clear TimelineRows if no other owners
+`public void `[`ChangeTimeline`](#classSNTimeline_1a7416dfce67d9cd609786601d93db174a)`(`[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * Timeline)` | Will change the current timeline
+`public virtual FVector2D `[`ComputeDesiredSize`](#classSNTimeline_1ad96a031c7e132735c2a491fd60402afc)`(float) const` | Compute the widget side depending on events and timeline data.
+`public virtual FReply `[`OnMouseMove`](#classSNTimeline_1a8c8350549f84e900d3ac17534a170268)`(const FGeometry & MyGeometry,const FPointerEvent & MouseEvent)` | Manage tooltip to display event data.
+`public void `[`CreateSlot`](#classSNTimeline_1a38a52283a713483e502bc974d2dd82ae)`(float EndPos,const `[`UNEventBase`](#classUNEventBase)` * Event) const` | Create a slot to draw (
+`public virtual int32 `[`OnPaint`](#classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50)`(const FPaintArgs & Args,const FGeometry & AllottedGeometry,const FSlateRect & MyCullingRect,FSlateWindowElementList & OutDrawElements,int32 LayerId,const FWidgetStyle & InWidgetStyle,bool bParentEnabled) const` | Will paint each event slots and timeline.
+`public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetCurrentTimeline`](#classSNTimeline_1a3bad60db585f9af5e40c060c95c0df18)`() const` | Get the current timeline, can returns nullptr.
 
 ## Members
 
-#### `public inline  `[`UNEventDecorator`](#classUNEventDecorator_1a863909d823063f8446d2dcf30fe8174c)`()` <a id="classUNEventDecorator_1a863909d823063f8446d2dcf30fe8174c"></a>
+#### `public inline  `[`SLATE_BEGIN_ARGS`](#classSNTimeline_1a07658b47fb4bc8a7c1266f0e62396b6e)`(`[`SNTimeline`](#classSNTimeline)`)` <a id="classSNTimeline_1a07658b47fb4bc8a7c1266f0e62396b6e"></a>
 
-#### `public virtual bool `[`IsExpired`](#classUNEventDecorator_1ae69c1d2dc0bd6bbe4381e0387d96ed1e)`() const` <a id="classUNEventDecorator_1ae69c1d2dc0bd6bbe4381e0387d96ed1e"></a>
+#### `public void `[`Construct`](#classSNTimeline_1aad83f702aa077f671eaad9fc037022fe)`(const FArguments & InArgs)` <a id="classSNTimeline_1aad83f702aa077f671eaad9fc037022fe"></a>
+
+Constructs this widget with InArgs and listen FWorldDelegates::OnWorldBeginTearDown + FWorldDelegates::OnStartGameInstance to change bShouldComputeSize values.
+
+#### `public virtual  `[`~SNTimeline`](#classSNTimeline_1ad5942bba32da43766e76c307ade28b3c)`()` <a id="classSNTimeline_1ad5942bba32da43766e76c307ade28b3c"></a>
+
+Clear TimelineRows if no other owners
+
+#### `public void `[`ChangeTimeline`](#classSNTimeline_1a7416dfce67d9cd609786601d93db174a)`(`[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * Timeline)` <a id="classSNTimeline_1a7416dfce67d9cd609786601d93db174a"></a>
+
+Will change the current timeline
+
+#### `public virtual FVector2D `[`ComputeDesiredSize`](#classSNTimeline_1ad96a031c7e132735c2a491fd60402afc)`(float) const` <a id="classSNTimeline_1ad96a031c7e132735c2a491fd60402afc"></a>
+
+Compute the widget side depending on events and timeline data.
+
+#### `public virtual FReply `[`OnMouseMove`](#classSNTimeline_1a8c8350549f84e900d3ac17534a170268)`(const FGeometry & MyGeometry,const FPointerEvent & MouseEvent)` <a id="classSNTimeline_1a8c8350549f84e900d3ac17534a170268"></a>
+
+Manage tooltip to display event data.
+
+#### `public void `[`CreateSlot`](#classSNTimeline_1a38a52283a713483e502bc974d2dd82ae)`(float EndPos,const `[`UNEventBase`](#classUNEventBase)` * Event) const` <a id="classSNTimeline_1a38a52283a713483e502bc974d2dd82ae"></a>
+
+Create a slot to draw (
+**See also**: [SNTimeline::OnPaint()](#classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50)) based on event data.
+
+#### `public virtual int32 `[`OnPaint`](#classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50)`(const FPaintArgs & Args,const FGeometry & AllottedGeometry,const FSlateRect & MyCullingRect,FSlateWindowElementList & OutDrawElements,int32 LayerId,const FWidgetStyle & InWidgetStyle,bool bParentEnabled) const` <a id="classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50"></a>
+
+Will paint each event slots and timeline.
+
+#### `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetCurrentTimeline`](#classSNTimeline_1a3bad60db585f9af5e40c060c95c0df18)`() const` <a id="classSNTimeline_1a3bad60db585f9af5e40c060c95c0df18"></a>
+
+Get the current timeline, can returns nullptr.
+
+# class `SWindowTimeline` <a id="classSWindowTimeline"></a>
+
+```
+class SWindowTimeline
+  : public SCompoundWidget
+```  
+
+The main window that embedded the timeline widget ([SNTimeline](#classSNTimeline)) and the timelines selector.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`SLATE_BEGIN_ARGS`](#classSWindowTimeline_1a8da5c967219ae9c1d1852fbb21d1bcfe)`(`[`SWindowTimeline`](#classSWindowTimeline)`)` | 
+`public virtual  `[`~SWindowTimeline`](#classSWindowTimeline_1a49b9eb57fc0b801d75a97744966df0aa)`()` | 
+`public void `[`Construct`](#classSWindowTimeline_1a829a1517d0087c4ae851b47c3c195e62)`(const FArguments & InArgs)` | Constructs this widget with InArgs
+`public FText `[`BuildText`](#classSWindowTimeline_1ae989ebd5490a98790ccfe07c89cc2d06)`() const` | Display text depending on the context.
+
+## Members
+
+#### `public inline  `[`SLATE_BEGIN_ARGS`](#classSWindowTimeline_1a8da5c967219ae9c1d1852fbb21d1bcfe)`(`[`SWindowTimeline`](#classSWindowTimeline)`)` <a id="classSWindowTimeline_1a8da5c967219ae9c1d1852fbb21d1bcfe"></a>
+
+#### `public virtual  `[`~SWindowTimeline`](#classSWindowTimeline_1a49b9eb57fc0b801d75a97744966df0aa)`()` <a id="classSWindowTimeline_1a49b9eb57fc0b801d75a97744966df0aa"></a>
+
+#### `public void `[`Construct`](#classSWindowTimeline_1a829a1517d0087c4ae851b47c3c195e62)`(const FArguments & InArgs)` <a id="classSWindowTimeline_1a829a1517d0087c4ae851b47c3c195e62"></a>
+
+Constructs this widget with InArgs
+
+#### `public FText `[`BuildText`](#classSWindowTimeline_1ae989ebd5490a98790ccfe07c89cc2d06)`() const` <a id="classSWindowTimeline_1ae989ebd5490a98790ccfe07c89cc2d06"></a>
+
+Display text depending on the context.
+
+# class `UNEventBase` <a id="classUNEventBase"></a>
+
+```
+class UNEventBase
+  : public UObject
+  : public INEvent
+```  
+
+This is only a view object used to retrieve events from blueprint.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`UNEventBase`](#classUNEventBase_1a455691505e86b5aa4894bcdcce0c5e2e)`()` | 
+`public void `[`Init`](#classUNEventBase_1a0af078c08b7a5302be91ed67e2b62b53)`(const TSharedPtr< `[`INEvent`](#classINEvent)` > & InEvent,const float & InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | 
+`public virtual bool `[`IsExpired`](#classUNEventBase_1ac2ab1939bb5dc91ebdda3191c652a379)`() const` | It indicates if the event expired.
+`public virtual float `[`GetLocalTime`](#classUNEventBase_1a62200a868420c01a4bc3d9adc7fc47f7)`() const` | Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
+`public virtual float `[`GetStartedAt`](#classUNEventBase_1a4d488e306ab130d28f1623725c158453)`() const` | The time relative to the timeline this event has been attached to + its start delay.
+`public virtual float `[`GetDuration`](#classUNEventBase_1a5ec86b163cea385dc9307bb7c88cc618)`() const` | The duration this event should live
+`public virtual float `[`GetDelay`](#classUNEventBase_1a7b90a9649e8279a9fb92fdec49abdc1a)`() const` | The delay before this event starts
+`public virtual FName `[`GetEventLabel`](#classUNEventBase_1a4c124661577ce3229b5706e308ee391a)`() const` | Getter for Label
+`public virtual void `[`SetEventLabel`](#classUNEventBase_1a6758698a83185bf08f225980f1050bf8)`(const FName & InEventLabel)` | A setter for the label. 
+`public virtual FString `[`GetUID`](#classUNEventBase_1a7a45a85355cc04702641dccf89f94d18)`() const` | Retrieve the unique ID generated or given in ctor
+`public virtual float `[`GetAttachedTime`](#classUNEventBase_1ae904ea0cacf1d5bdff57086c31ebe284)`() const` | The time relative to the timeline this event has been attached to.
+`public virtual bool `[`IsAttachable`](#classUNEventBase_1a9da5bc76cbd140a14c09eb8edd2febf4)`() const` | Timeline use this to know if this event can be attached on.
+`public virtual float `[`GetExpiredTime`](#classUNEventBase_1ab93b7c456139ec3bd41532cebe28e83b)`() const` | The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+`public virtual void `[`Stop`](#classUNEventBase_1a6f604ed7ed2092d37cffe8b04f3992af)`()` | This can stop the event and make it expires to its next tick.
+`public inline virtual void `[`SetAttachedTime`](#classUNEventBase_1a60a54be864ebf71576691d4e986a1d06)`(const float & InLocalTime)` | Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+`public inline virtual void `[`SetAttachable`](#classUNEventBase_1a04aba824d88d39ae40bcf31ef74c9cdd)`(const bool & bInIsAttachable)` | This can be useful to avoid an Event to be attached to a timeline. 
+`public inline virtual void `[`SetExpiredTime`](#classUNEventBase_1a99a16fa823326e5dc001722e2a3dc3bc)`(const float & InLocalTime)` | Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
+`public inline virtual void `[`SetDuration`](#classUNEventBase_1af820f8f0a72d9e02b1c5d9112b9ec46f)`(const float & InDuration)` | A setter for the duration.
+`public inline virtual void `[`SetDelay`](#classUNEventBase_1a07131c9b6140553ee135f6ed76e37aa7)`(const float & InDelay)` | A setter for the delay.
+`public inline virtual void `[`Start`](#classUNEventBase_1ad894725222f91a539c8ba1a6ed96190b)`(const float & StartTime)` | This should be used only by NTimeline or serialization.
+`public inline virtual void `[`AddTime`](#classUNEventBase_1a5a4036afe5bed080a7256dd883e2dae1)`(const float & NewTime)` | Increments LocalTime 
+`public inline virtual void `[`Clear`](#classUNEventBase_1a418810554527dcc9af674d6723675e60)`()` | This should reset all data
+`public inline virtual void `[`Archive`](#classUNEventBase_1a08d9469f3ddd1a0ddd8bc5f8bae0f86c)`(FArchive & Ar)` | 
+`public void `[`OnInit`](#classUNEventBase_1aa4f978c4bda7062ee7e11799ff3e3914)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnStart`](#classUNEventBase_1a7f90a5e005e12cac68c848b31f04027f)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnBeforeAttached`](#classUNEventBase_1a39cc025006ae72162b352d6a6d26b88f)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnAfterAttached`](#classUNEventBase_1a5c608c2661f3b4c08b425c7529c42ec6)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnExpired`](#classUNEventBase_1aaec81c0b5426582d53d4c1dfd615df48)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnTick`](#classUNEventBase_1ad5afbc2999dde8df5cbd2f5ba46dcff1)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public void `[`OnCleared`](#classUNEventBase_1a706dafe4dcc0585833d72fc7d5043edc)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` | #### Parameters
+`public virtual void `[`BeginDestroy`](#classUNEventBase_1a11f4eb30deadcee0cb891465f5882fe3)`()` | 
+`public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetEvent`](#classUNEventBase_1ae01d27c74fb277bff470ce26e2e10d27)`()` | 
+
+## Members
+
+#### `public inline  `[`UNEventBase`](#classUNEventBase_1a455691505e86b5aa4894bcdcce0c5e2e)`()` <a id="classUNEventBase_1a455691505e86b5aa4894bcdcce0c5e2e"></a>
+
+#### `public void `[`Init`](#classUNEventBase_1a0af078c08b7a5302be91ed67e2b62b53)`(const TSharedPtr< `[`INEvent`](#classINEvent)` > & InEvent,const float & InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1a0af078c08b7a5302be91ed67e2b62b53"></a>
+
+#### `public virtual bool `[`IsExpired`](#classUNEventBase_1ac2ab1939bb5dc91ebdda3191c652a379)`() const` <a id="classUNEventBase_1ac2ab1939bb5dc91ebdda3191c652a379"></a>
 
 It indicates if the event expired.
 
-#### `public virtual const float `[`GetLocalTime`](#classUNEventDecorator_1aa20a4fea4a15bf4e2fa1a41f303fa52e)`() const` <a id="classUNEventDecorator_1aa20a4fea4a15bf4e2fa1a41f303fa52e"></a>
+#### `public virtual float `[`GetLocalTime`](#classUNEventBase_1a62200a868420c01a4bc3d9adc7fc47f7)`() const` <a id="classUNEventBase_1a62200a868420c01a4bc3d9adc7fc47f7"></a>
 
-Returns the localTime since the events has been attached (- delay) to a timeline
+Returns the localTime since the events has been attached (+ delay if > 0) to a timeline
 
-#### `public virtual const float `[`GetStartedAt`](#classUNEventDecorator_1a8cf74bd6fbadd256e499e4ef9094ba79)`() const` <a id="classUNEventDecorator_1a8cf74bd6fbadd256e499e4ef9094ba79"></a>
+#### `public virtual float `[`GetStartedAt`](#classUNEventBase_1a4d488e306ab130d28f1623725c158453)`() const` <a id="classUNEventBase_1a4d488e306ab130d28f1623725c158453"></a>
 
 The time relative to the timeline this event has been attached to + its start delay.
 
-#### `public virtual float `[`GetDuration`](#classUNEventDecorator_1a678ba817c31779c5ae2d216995337078)`() const` <a id="classUNEventDecorator_1a678ba817c31779c5ae2d216995337078"></a>
+#### `public virtual float `[`GetDuration`](#classUNEventBase_1a5ec86b163cea385dc9307bb7c88cc618)`() const` <a id="classUNEventBase_1a5ec86b163cea385dc9307bb7c88cc618"></a>
 
 The duration this event should live
 
-#### `public virtual void `[`Start`](#classUNEventDecorator_1a7137c38ec0511ca1beabe2e4f83b641e)`(float StartTime)` <a id="classUNEventDecorator_1a7137c38ec0511ca1beabe2e4f83b641e"></a>
-
-This should be used only by [NTimeline](#classNTimeline) or serialization.
-
-#### Parameters
-* `StartTime` - Time in secs
-
-#### `public virtual void `[`Stop`](#classUNEventDecorator_1a9dcf17fc0df1d11e6e2f42225c4bf5ed)`()` <a id="classUNEventDecorator_1a9dcf17fc0df1d11e6e2f42225c4bf5ed"></a>
-
-This can stop the event and make it expires to its next tick.
-
-#### `public virtual void `[`NotifyAddTime`](#classUNEventDecorator_1a2b36838efadbdf6b1bf77a0c2cf65e07)`(float NewTime)` <a id="classUNEventDecorator_1a2b36838efadbdf6b1bf77a0c2cf65e07"></a>
-
-Increments LocalTime 
-#### Parameters
-* `NewTime` - in Millisecs
-
-#### `public virtual float `[`GetDelay`](#classUNEventDecorator_1a33715665287b45121f2ff25514c41ef1)`() const` <a id="classUNEventDecorator_1a33715665287b45121f2ff25514c41ef1"></a>
+#### `public virtual float `[`GetDelay`](#classUNEventBase_1a7b90a9649e8279a9fb92fdec49abdc1a)`() const` <a id="classUNEventBase_1a7b90a9649e8279a9fb92fdec49abdc1a"></a>
 
 The delay before this event starts
 
-#### `public virtual const FName `[`GetEventLabel`](#classUNEventDecorator_1ad88e97e6031018c0f3de2ce245341dd6)`() const` <a id="classUNEventDecorator_1ad88e97e6031018c0f3de2ce245341dd6"></a>
+#### `public virtual FName `[`GetEventLabel`](#classUNEventBase_1a4c124661577ce3229b5706e308ee391a)`() const` <a id="classUNEventBase_1a4c124661577ce3229b5706e308ee391a"></a>
 
 Getter for Label
 
-#### `public virtual void `[`SetEventLabel`](#classUNEventDecorator_1a0780498b4c684dea9487841549335167)`(FName _EventLabel)` <a id="classUNEventDecorator_1a0780498b4c684dea9487841549335167"></a>
+#### `public virtual void `[`SetEventLabel`](#classUNEventBase_1a6758698a83185bf08f225980f1050bf8)`(const FName & InEventLabel)` <a id="classUNEventBase_1a6758698a83185bf08f225980f1050bf8"></a>
 
-A setter for the label.
-
+A setter for the label. 
 #### Parameters
-* `_EventLabel` - A name to identify easily the event
+* `InEventLabel` - A name to identify easily the event
 
-#### `public virtual const FString `[`GetUID`](#classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f)`() const` <a id="classUNEventDecorator_1a4bddd3ceb943d396ee3d1b63e91fd08f"></a>
+#### `public virtual FString `[`GetUID`](#classUNEventBase_1a7a45a85355cc04702641dccf89f94d18)`() const` <a id="classUNEventBase_1a7a45a85355cc04702641dccf89f94d18"></a>
 
 Retrieve the unique ID generated or given in ctor
 
-#### `public virtual void `[`SetUID`](#classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447)`(FString _UId)` <a id="classUNEventDecorator_1aff38e8b516d0a030d2d3830023ab7447"></a>
+#### `public virtual float `[`GetAttachedTime`](#classUNEventBase_1ae904ea0cacf1d5bdff57086c31ebe284)`() const` <a id="classUNEventBase_1ae904ea0cacf1d5bdff57086c31ebe284"></a>
 
-This should be used only on serialization process
+The time relative to the timeline this event has been attached to.
+
+#### `public virtual bool `[`IsAttachable`](#classUNEventBase_1a9da5bc76cbd140a14c09eb8edd2febf4)`() const` <a id="classUNEventBase_1a9da5bc76cbd140a14c09eb8edd2febf4"></a>
+
+Timeline use this to know if this event can be attached on.
+
+#### `public virtual float `[`GetExpiredTime`](#classUNEventBase_1ab93b7c456139ec3bd41532cebe28e83b)`() const` <a id="classUNEventBase_1ab93b7c456139ec3bd41532cebe28e83b"></a>
+
+The time relative to the timeline this event has been expired, should return -1 if this event has no duration.
+
+#### `public virtual void `[`Stop`](#classUNEventBase_1a6f604ed7ed2092d37cffe8b04f3992af)`()` <a id="classUNEventBase_1a6f604ed7ed2092d37cffe8b04f3992af"></a>
+
+This can stop the event and make it expires to its next tick.
+
+#### `public inline virtual void `[`SetAttachedTime`](#classUNEventBase_1a60a54be864ebf71576691d4e986a1d06)`(const float & InLocalTime)` <a id="classUNEventBase_1a60a54be864ebf71576691d4e986a1d06"></a>
+
+Set the time this event is attached to timeline, should be used only by a [FNTimeline](#classFNTimeline).
+
+#### `public inline virtual void `[`SetAttachable`](#classUNEventBase_1a04aba824d88d39ae40bcf31ef74c9cdd)`(const bool & bInIsAttachable)` <a id="classUNEventBase_1a04aba824d88d39ae40bcf31ef74c9cdd"></a>
+
+This can be useful to avoid an Event to be attached to a timeline. 
+**See also**: [FNTimeline::Attached()](#classFNTimeline_1acac6e8fa7780e7d612e601cd0d479bf3)
+
+**See also**: [ENTimelineEvent::BeforeAttached](#Timeline_8h_1aca8212740df4678d46efc8cae12ab0c9ab0b87ce0c6e7571ffbd0f6408c4539be)
 
 #### Parameters
-* `_UId` - Should be a unique FString, see ctor
+* `bInIsAttachable` - boolean to defined is attachable capability
 
-#### `public virtual void `[`SetLocalTime`](#classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b)`(float _LocalTime)` <a id="classUNEventDecorator_1a1bd2690e366d7ad871e74007c15fe07b"></a>
+#### `public inline virtual void `[`SetExpiredTime`](#classUNEventBase_1a99a16fa823326e5dc001722e2a3dc3bc)`(const float & InLocalTime)` <a id="classUNEventBase_1a99a16fa823326e5dc001722e2a3dc3bc"></a>
 
-This setter should be carrefully used, all the computation time should be calculated internally with the [NotifyAddTime()](#classUNEventDecorator_1a2b36838efadbdf6b1bf77a0c2cf65e07).
-
+Set the expired time for this event. It is called by the [FNTimeline](#classFNTimeline). 
 #### Parameters
-* `_LocalTime` - Time in secs
+* `InLocalTime` - the time relative to the timeline
 
-#### `public virtual void `[`SetDuration`](#classUNEventDecorator_1ade8dd2b05d490b5892aaf63991aa1e6d)`(float _Duration)` <a id="classUNEventDecorator_1ade8dd2b05d490b5892aaf63991aa1e6d"></a>
+#### `public inline virtual void `[`SetDuration`](#classUNEventBase_1af820f8f0a72d9e02b1c5d9112b9ec46f)`(const float & InDuration)` <a id="classUNEventBase_1af820f8f0a72d9e02b1c5d9112b9ec46f"></a>
 
 A setter for the duration.
 
 #### Parameters
-* `_Duration` - Time in secs
+* `InDuration` - Time in secs
 
-#### `public virtual void `[`SetDelay`](#classUNEventDecorator_1a59b38b2293b9e6ac91fd1161821b8600)`(float _Delay)` <a id="classUNEventDecorator_1a59b38b2293b9e6ac91fd1161821b8600"></a>
+#### `public inline virtual void `[`SetDelay`](#classUNEventBase_1a07131c9b6140553ee135f6ed76e37aa7)`(const float & InDelay)` <a id="classUNEventBase_1a07131c9b6140553ee135f6ed76e37aa7"></a>
 
 A setter for the delay.
 
 #### Parameters
-* `_Delay` - Time in secs
+* `InDelay` - Time in secs
 
-#### `public virtual void `[`Clear`](#classUNEventDecorator_1a6876f229d6f190d204abe89ba0847d1e)`()` <a id="classUNEventDecorator_1a6876f229d6f190d204abe89ba0847d1e"></a>
+#### `public inline virtual void `[`Start`](#classUNEventBase_1ad894725222f91a539c8ba1a6ed96190b)`(const float & StartTime)` <a id="classUNEventBase_1ad894725222f91a539c8ba1a6ed96190b"></a>
+
+This should be used only by NTimeline or serialization.
+
+#### Parameters
+* `StartTime` - Time in secs
+
+#### `public inline virtual void `[`AddTime`](#classUNEventBase_1a5a4036afe5bed080a7256dd883e2dae1)`(const float & NewTime)` <a id="classUNEventBase_1a5a4036afe5bed080a7256dd883e2dae1"></a>
+
+Increments LocalTime 
+#### Parameters
+* `NewTime` - in Milliseconds
+
+#### `public inline virtual void `[`Clear`](#classUNEventBase_1a418810554527dcc9af674d6723675e60)`()` <a id="classUNEventBase_1a418810554527dcc9af674d6723675e60"></a>
 
 This should reset all data
 
-#### `public virtual FNEventDelegate & `[`OnStart`](#classUNEventDecorator_1af13744ea49840bc9a01d60518c1b92b8)`()` <a id="classUNEventDecorator_1af13744ea49840bc9a01d60518c1b92b8"></a>
+#### `public inline virtual void `[`Archive`](#classUNEventBase_1a08d9469f3ddd1a0ddd8bc5f8bae0f86c)`(FArchive & Ar)` <a id="classUNEventBase_1a08d9469f3ddd1a0ddd8bc5f8bae0f86c"></a>
 
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
+#### `public void `[`OnInit`](#classUNEventBase_1aa4f978c4bda7062ee7e11799ff3e3914)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1aa4f978c4bda7062ee7e11799ff3e3914"></a>
 
-#### `public virtual void `[`BeginDestroy`](#classUNEventDecorator_1a75739f0f1ec3c9dcde05bddb93e00664)`()` <a id="classUNEventDecorator_1a75739f0f1ec3c9dcde05bddb93e00664"></a>
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
 
-#### `public virtual void `[`Serialize`](#classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7)`(FArchive & Ar)` <a id="classUNEventDecorator_1ac1bbc6721835bf4aa992cc2e1e0ee9b7"></a>
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
 
-#### `public void `[`OnInit`](#classUNEventDecorator_1aa79688c15f32adc31cd1e930fd6434ff)`()` <a id="classUNEventDecorator_1aa79688c15f32adc31cd1e930fd6434ff"></a>
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
 
-#### `public virtual void `[`Init`](#classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562)`(FName _Label,FString UId)` <a id="classUNEventDecorator_1ad591c3d4e879b2423e5a61915599f562"></a>
+* `InPlayer` - The current player.
 
-This is where the Core object is instanciated. You should override this to instanciate your derived core object.
+#### `public void `[`OnStart`](#classUNEventBase_1a7f90a5e005e12cac68c848b31f04027f)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1a7f90a5e005e12cac68c848b31f04027f"></a>
 
-#### `public virtual TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`GetEvent`](#classUNEventDecorator_1a289aa0372ca4512839143e84617dec47)`() const` <a id="classUNEventDecorator_1a289aa0372ca4512839143e84617dec47"></a>
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
 
-This is used by other decorators which need to pass the core object to their own. 
-**See also**: [UNTimelineDecorator::Attached()](#classUNTimelineDecorator_1a5614115547ec6acd75dba7dfb2f0e57e)
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
 
-#### `protected TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > `[`Event`](#classUNEventDecorator_1a0c2fe0db6d7d2eb0f837d3f5e79d875e) <a id="classUNEventDecorator_1a0c2fe0db6d7d2eb0f837d3f5e79d875e"></a>
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
 
-The actual decorator is for this object. It shoulds be instanciate on a ctor or a dedicated init function
+* `InPlayer` - The current player.
+
+#### `public void `[`OnBeforeAttached`](#classUNEventBase_1a39cc025006ae72162b352d6a6d26b88f)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1a39cc025006ae72162b352d6a6d26b88f"></a>
+
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
+
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
+
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
+
+* `InPlayer` - The current player.
+
+#### `public void `[`OnAfterAttached`](#classUNEventBase_1a5c608c2661f3b4c08b425c7529c42ec6)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1a5c608c2661f3b4c08b425c7529c42ec6"></a>
+
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
+
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
+
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
+
+* `InPlayer` - The current player.
+
+#### `public void `[`OnExpired`](#classUNEventBase_1aaec81c0b5426582d53d4c1dfd615df48)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1aaec81c0b5426582d53d4c1dfd615df48"></a>
+
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
+
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
+
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
+
+* `InPlayer` - The current player.
+
+#### `public void `[`OnTick`](#classUNEventBase_1ad5afbc2999dde8df5cbd2f5ba46dcff1)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1ad5afbc2999dde8df5cbd2f5ba46dcff1"></a>
+
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
+
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
+
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
+
+* `InPlayer` - The current player.
+
+#### `public void `[`OnCleared`](#classUNEventBase_1a706dafe4dcc0585833d72fc7d5043edc)`(float InLocalTime,UWorld * InWorld,APlayerController * InPlayer)` <a id="classUNEventBase_1a706dafe4dcc0585833d72fc7d5043edc"></a>
+
+#### Parameters
+* `InLocalTime` - the time (in seconds) from the timeline start. /!\ It is also called when timeline is deserialize, it doesn't follow the chronological event life compare to other events. 
+
+**See also**: [UNTimelineManagerDecorator::Serialize()](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)
+
+#### Parameters
+* `InWorld` - the world of the timeline that trigger this event 
+
+* `InPlayer` - The current player.
+
+#### `public virtual void `[`BeginDestroy`](#classUNEventBase_1a11f4eb30deadcee0cb891465f5882fe3)`()` <a id="classUNEventBase_1a11f4eb30deadcee0cb891465f5882fe3"></a>
+
+#### `public TSharedPtr< `[`INEvent`](#classINEvent)` > `[`GetEvent`](#classUNEventBase_1ae01d27c74fb277bff470ce26e2e10d27)`()` <a id="classUNEventBase_1ae01d27c74fb277bff470ce26e2e10d27"></a>
+
+# class `UNEventBaseBlueprint` <a id="classUNEventBaseBlueprint"></a>
+
+```
+class UNEventBaseBlueprint
+  : public UBlueprint
+```  
+
+A [UNEventBaseBlueprint](#classUNEventBaseBlueprint) is essentially a specialized Blueprint whose graphs control an [UNEventBase](#classUNEventBase). The [UNEventBase](#classUNEventBase) factory should pick this for you automatically
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
+# class `UNEventFactory` <a id="classUNEventFactory"></a>
+
+```
+class UNEventFactory
+  : public UFactory
+```  
+
+Allows to create a blueprint asset in the editor with default event nodes.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TSubclassOf< class `[`UNEventBase`](#classUNEventBase)` > `[`ParentClass`](#classUNEventFactory_1ae910043e1dabd6512daec08a15b6ffe6) | The parent class of the created blueprint
+`public  `[`UNEventFactory`](#classUNEventFactory_1aefa05aa1d9f8e0e1c41c03e521950830)`()` | 
+`public virtual UObject * `[`FactoryCreateNew`](#classUNEventFactory_1aecec3a3ca69eaf279cdb5c214a589093)`(UClass * InClass,UObject * InParent,FName InName,EObjectFlags Flags,UObject * Context,FFeedbackContext * Warn)` | 
+`public virtual bool `[`ShouldShowInNewMenu`](#classUNEventFactory_1a3e0b5e81d454cb0d510dd4b1c042a8b5)`() const` | 
+`public virtual uint32 `[`GetMenuCategories`](#classUNEventFactory_1a0d0624b96c0426f3e15aa7d9fa514d4b)`() const` | 
+
+## Members
+
+#### `public TSubclassOf< class `[`UNEventBase`](#classUNEventBase)` > `[`ParentClass`](#classUNEventFactory_1ae910043e1dabd6512daec08a15b6ffe6) <a id="classUNEventFactory_1ae910043e1dabd6512daec08a15b6ffe6"></a>
+
+The parent class of the created blueprint
+
+#### `public  `[`UNEventFactory`](#classUNEventFactory_1aefa05aa1d9f8e0e1c41c03e521950830)`()` <a id="classUNEventFactory_1aefa05aa1d9f8e0e1c41c03e521950830"></a>
+
+#### `public virtual UObject * `[`FactoryCreateNew`](#classUNEventFactory_1aecec3a3ca69eaf279cdb5c214a589093)`(UClass * InClass,UObject * InParent,FName InName,EObjectFlags Flags,UObject * Context,FFeedbackContext * Warn)` <a id="classUNEventFactory_1aecec3a3ca69eaf279cdb5c214a589093"></a>
+
+#### `public virtual bool `[`ShouldShowInNewMenu`](#classUNEventFactory_1a3e0b5e81d454cb0d510dd4b1c042a8b5)`() const` <a id="classUNEventFactory_1a3e0b5e81d454cb0d510dd4b1c042a8b5"></a>
+
+#### `public virtual uint32 `[`GetMenuCategories`](#classUNEventFactory_1a0d0624b96c0426f3e15aa7d9fa514d4b)`() const` <a id="classUNEventFactory_1a0d0624b96c0426f3e15aa7d9fa514d4b"></a>
+
+# class `UNEventGraph` <a id="classUNEventGraph"></a>
+
+```
+class UNEventGraph
+  : public UEdGraph
+```  
+
+A dedicated graph for [UNEventBase](#classUNEventBase) used for [UNEventBaseBlueprint](#classUNEventBaseBlueprint) creation.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
+# class `UNEventGraphSchema` <a id="classUNEventGraphSchema"></a>
+
+```
+class UNEventGraphSchema
+  : public UEdGraphSchema_K2
+```  
+
+A dedicated graph schema for [UNEventBase](#classUNEventBase) used for [UNEventBaseBlueprint](#classUNEventBaseBlueprint) creation.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
 
 # class `UNGameLifeTimelineManager` <a id="classUNGameLifeTimelineManager"></a>
 
@@ -1258,9 +1385,9 @@ For example: Player makes a very benevolent actions which gives him a health bon
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public FTimerHandle `[`TimerHandle`](#classUNGameLifeTimelineManager_1ab3212791e62e45a2ae67a307007addab) | Created by the FTimerManager
-`public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) | Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0)
-`public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7)`(float _TickInterval,FName _Label)` | It creates the timer with a FTimerManager and attached TimerDelegate to it. 
-`public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` | clears timer + unbind delegate + invalidate handle. Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
+`public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) | Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315)
+`public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ae92d2bd1d429839b90220685bf68c4b1)`(const float & InTickInterval,const FName & InLabel)` | It creates the timer with a FTimerManager and attached TimerDelegate to it. 
+`public virtual void `[`BeginDestroy`](#classUNGameLifeTimelineManager_1a9d2352f07a0015a0afefb0606889abba)`()` | Clears timer + unbind delegate + invalidate handle.
 `protected float `[`SaveTime`](#classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4) | This is only used for savegame to keep time between sessions
 `protected  `[`UNGameLifeTimelineManager`](#classUNGameLifeTimelineManager_1abe6ebaa8f9f8601a5e97f6ae3c8a8f4b)`()` | A default ctor for engine system
 
@@ -1272,17 +1399,19 @@ Created by the FTimerManager
 
 #### `public FTimerDelegate `[`TimerDelegate`](#classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61) <a id="classUNGameLifeTimelineManager_1a1ca6a4c74cf6e66b807b6ec72f5d5c61"></a>
 
-Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0)
+Delegate required by the FTimerManager. It create a UObject delegate using [UNGameLifeTimelineManager::TimerTick()](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315)
 
-#### `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7)`(float _TickInterval,FName _Label)` <a id="classUNGameLifeTimelineManager_1ab2c4380eca466bf77534b3bfa05f4bb7"></a>
+#### `public virtual void `[`Init`](#classUNGameLifeTimelineManager_1ae92d2bd1d429839b90220685bf68c4b1)`(const float & InTickInterval,const FName & InLabel)` <a id="classUNGameLifeTimelineManager_1ae92d2bd1d429839b90220685bf68c4b1"></a>
 
 It creates the timer with a FTimerManager and attached TimerDelegate to it. 
 #### Parameters
-* `_Label` - Name of the timer
+* `InTickInterval` - The tick interval in seconds 
 
-#### `public virtual void `[`Clear`](#classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8)`()` <a id="classUNGameLifeTimelineManager_1a07f948da0bdc9c6196768e9f556763a8"></a>
+* `InLabel` - Name of the timer
 
-clears timer + unbind delegate + invalidate handle. Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
+#### `public virtual void `[`BeginDestroy`](#classUNGameLifeTimelineManager_1a9d2352f07a0015a0afefb0606889abba)`()` <a id="classUNGameLifeTimelineManager_1a9d2352f07a0015a0afefb0606889abba"></a>
+
+Clears timer + unbind delegate + invalidate handle.
 
 #### `protected float `[`SaveTime`](#classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4) <a id="classUNGameLifeTimelineManager_1a0d681eda0366cc78e75a8dbc3e49a1a4"></a>
 
@@ -1301,64 +1430,63 @@ class UNLevelLifeTimelineManager
 
 It tracks game session but refreshes when level changed.
 
-It could be usefull for level bonus/malus attribution during a level session, or create a sheduled event.
+It could be useful for level bonus/malus attribution during a level session, or create a scheduled event.
 
 For example:
 
 * a player character take drugs and his capacities are altered for an amount of time
 
-* player init a bomb and it should explosed in a determined time.
+* player init a bomb and it should explode in a determined time.
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b)`(float _TickInterval,FName _Label)` | Attaches event on level changes It creates the timer with a FTimerManager and attached TimerDelegate to it. 
+`public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1a410266cc414a950102c180b98eaf0e2f)`(const float & InTickInterval,const FName & InLabel)` | Attaches event on level changes The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 `public void `[`OnLevelRemoved`](#classUNLevelLifeTimelineManager_1a3c1cd7121203fc49d09d54dc73c86632)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
-`public void `[`OnLevelAdded`](#classUNLevelLifeTimelineManager_1a377ebe035faf84250cb3ac5416ae1fb7)`(ULevel * Level,UWorld * World)` | This method to clear and reload timeline when level changed
-`public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a5f3077625f452d2d0d0c58f436a36c75)`()` | This method to clear and reload timeline when level changed
-`public virtual void `[`Clear`](#classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897)`()` | Removes all attached events clears timer + unbind delegate + invalidate handle. Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
+`public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a3d76c38bc335f678c6a179ceaec03177)`(UWorld * LoadedWorld)` | This method to clear and reload timeline when level changed
 `public virtual void `[`Serialize`](#classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f)`(FArchive & Ar)` | This only saves level name and checks
-`protected FName `[`Label`](#classUNLevelLifeTimelineManager_1ab995fbe611974a32f0d09fcd2aec2513) | Used for savegame
-`protected FString `[`LevelName`](#classUNLevelLifeTimelineManager_1a8141bcb7087a653bf7fa32509d12eab2) | Used for savegame to make a sanity check (verify if current world is the same as the load game)
+`public virtual void `[`BeginDestroy`](#classUNLevelLifeTimelineManager_1aef9dac4ffdad51017a6a587295b769b4)`()` | Clears timer + unbind delegate + invalidate handle.
+`protected FName `[`Label`](#classUNLevelLifeTimelineManager_1ab995fbe611974a32f0d09fcd2aec2513) | Used for save game object
+`protected FString `[`LevelName`](#classUNLevelLifeTimelineManager_1a8141bcb7087a653bf7fa32509d12eab2) | Used for save game to make a sanity check (verify if current world is the same as the load game)
 `protected  `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager_1a59da215730db96d6bb7717b4a958b839)`()` | Default ctor
-`protected void `[`SaveDataAndClear`](#classUNLevelLifeTimelineManager_1a98cfc167f00c3fca48a9f7ab861842eb)`()` | WIP
+`protected void `[`SaveDataAndClear`](#classUNLevelLifeTimelineManager_1a98cfc167f00c3fca48a9f7ab861842eb)`()` | TODO WIP
 
 ## Members
 
-#### `public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b)`(float _TickInterval,FName _Label)` <a id="classUNLevelLifeTimelineManager_1aa964eabb3a251ff897114469ac55d60b"></a>
+#### `public virtual void `[`Init`](#classUNLevelLifeTimelineManager_1a410266cc414a950102c180b98eaf0e2f)`(const float & InTickInterval,const FName & InLabel)` <a id="classUNLevelLifeTimelineManager_1a410266cc414a950102c180b98eaf0e2f"></a>
 
-Attaches event on level changes It creates the timer with a FTimerManager and attached TimerDelegate to it. 
+Attaches event on level changes The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+**See also**: [UNTimelineManagerDecorator()](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)
+
 #### Parameters
-* `_Label` - Name of the timer
+* `InTickInterval` - Interval time between tick in sec 
+
+* `InLabel` - Name of the Timeline.
 
 #### `public void `[`OnLevelRemoved`](#classUNLevelLifeTimelineManager_1a3c1cd7121203fc49d09d54dc73c86632)`(ULevel * Level,UWorld * World)` <a id="classUNLevelLifeTimelineManager_1a3c1cd7121203fc49d09d54dc73c86632"></a>
 
 This method to clear and reload timeline when level changed
 
-#### `public void `[`OnLevelAdded`](#classUNLevelLifeTimelineManager_1a377ebe035faf84250cb3ac5416ae1fb7)`(ULevel * Level,UWorld * World)` <a id="classUNLevelLifeTimelineManager_1a377ebe035faf84250cb3ac5416ae1fb7"></a>
+#### `public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a3d76c38bc335f678c6a179ceaec03177)`(UWorld * LoadedWorld)` <a id="classUNLevelLifeTimelineManager_1a3d76c38bc335f678c6a179ceaec03177"></a>
 
 This method to clear and reload timeline when level changed
-
-#### `public void `[`OnLevelChanged`](#classUNLevelLifeTimelineManager_1a5f3077625f452d2d0d0c58f436a36c75)`()` <a id="classUNLevelLifeTimelineManager_1a5f3077625f452d2d0d0c58f436a36c75"></a>
-
-This method to clear and reload timeline when level changed
-
-#### `public virtual void `[`Clear`](#classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897)`()` <a id="classUNLevelLifeTimelineManager_1a464dbe9bdc4bd9380268f5cd71e2b897"></a>
-
-Removes all attached events clears timer + unbind delegate + invalidate handle. Calls [NTimeline::Clear()](#classNTimeline_1a54129c39bf3c4233007f203c5ae16728)
 
 #### `public virtual void `[`Serialize`](#classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f)`(FArchive & Ar)` <a id="classUNLevelLifeTimelineManager_1af8219c4c92afed8f7a45913235ef821f"></a>
 
 This only saves level name and checks
 
+#### `public virtual void `[`BeginDestroy`](#classUNLevelLifeTimelineManager_1aef9dac4ffdad51017a6a587295b769b4)`()` <a id="classUNLevelLifeTimelineManager_1aef9dac4ffdad51017a6a587295b769b4"></a>
+
+Clears timer + unbind delegate + invalidate handle.
+
 #### `protected FName `[`Label`](#classUNLevelLifeTimelineManager_1ab995fbe611974a32f0d09fcd2aec2513) <a id="classUNLevelLifeTimelineManager_1ab995fbe611974a32f0d09fcd2aec2513"></a>
 
-Used for savegame
+Used for save game object
 
 #### `protected FString `[`LevelName`](#classUNLevelLifeTimelineManager_1a8141bcb7087a653bf7fa32509d12eab2) <a id="classUNLevelLifeTimelineManager_1a8141bcb7087a653bf7fa32509d12eab2"></a>
 
-Used for savegame to make a sanity check (verify if current world is the same as the load game)
+Used for save game to make a sanity check (verify if current world is the same as the load game)
 
 #### `protected  `[`UNLevelLifeTimelineManager`](#classUNLevelLifeTimelineManager_1a59da215730db96d6bb7717b4a958b839)`()` <a id="classUNLevelLifeTimelineManager_1a59da215730db96d6bb7717b4a958b839"></a>
 
@@ -1366,7 +1494,7 @@ Default ctor
 
 #### `protected void `[`SaveDataAndClear`](#classUNLevelLifeTimelineManager_1a98cfc167f00c3fca48a9f7ab861842eb)`()` <a id="classUNLevelLifeTimelineManager_1a98cfc167f00c3fca48a9f7ab861842eb"></a>
 
-WIP
+TODO WIP
 
 # class `UNRealLifeTimelineManager` <a id="classUNRealLifeTimelineManager"></a>
 
@@ -1390,10 +1518,10 @@ For example: A promo code which gives a market discount for 2 days.
 `public inline virtual void `[`Pause`](#classUNRealLifeTimelineManager_1ac2ec8f296c32a540bd6f91f3ea5f69f3)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 `public inline virtual void `[`Play`](#classUNRealLifeTimelineManager_1a1a53b520ad6595e1314f044e6e59bc7d)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 `public inline virtual void `[`Stop`](#classUNRealLifeTimelineManager_1acc4a988642b5ab6fa912706710eac2c3)`()` | This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
-`public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8)`(float _TickInterval,FName _Label)` | This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
-`public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1)`() const` | Always returns true 'cause it can be paused or stopped
+`public virtual void `[`Init`](#classUNRealLifeTimelineManager_1acf5dca0110674180de936316bc9d69b1)`(const float & InTickInterval,const FName & InLabel)` | This just init State to "Play" and time variables. The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+`public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1a3b7412c8d62689c10f649740e37105e0)`() const` | Always returns true 'cause it can be paused or stopped
 `public virtual bool `[`IsTickable`](#classUNRealLifeTimelineManager_1aed1bad81ebfc134232dfc15757deae65)`() const` | Always returns true 'cause it can be paused or stopped
-`public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` | This override methods allows to tick [UNTimelineManagerDecorator::TimerTick()](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0) and to increment times vars.
+`public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` | This override methods allows to tick [UNTimelineManagerDecorator::TimerTick()](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315) and to increment times vars.
 `public inline virtual TStatId `[`GetStatId`](#classUNRealLifeTimelineManager_1aa1dff71195c394b61f7719770199ae25)`() const` | Required by FTickableGameObject.
 `public virtual UWorld * `[`GetTickableGameObjectWorld`](#classUNRealLifeTimelineManager_1ac053af39134594df8788cd546952c060)`() const` | 
 `public virtual void `[`Serialize`](#classUNRealLifeTimelineManager_1a530e89eb20a2a984e5d532c7532aae76)`(FArchive & Ar)` | Used for save to retrieve last datetime and save it, for load to compute missing time during last saves and ticks accordingly.
@@ -1420,17 +1548,17 @@ This do nothing. Excepts in our deepest dreams, we can't altered time in real li
 
 This do nothing. Excepts in our deepest dreams, we can't altered time in real life!!
 
-#### `public virtual void `[`Init`](#classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8)`(float _TickInterval,FName _Label)` <a id="classUNRealLifeTimelineManager_1a85eb6e42817fc2d3b4d4aaeab745f7f8"></a>
+#### `public virtual void `[`Init`](#classUNRealLifeTimelineManager_1acf5dca0110674180de936316bc9d69b1)`(const float & InTickInterval,const FName & InLabel)` <a id="classUNRealLifeTimelineManager_1acf5dca0110674180de936316bc9d69b1"></a>
 
-This just init State to "Play" and time variables. The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+This just init State to "Play" and time variables. The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 **See also**: [UNTimelineManagerDecorator()](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)
 
 #### Parameters
-* `_TickInterval` - Interval time between tick in sec 
+* `InTickInterval` - Interval time between tick in sec 
 
-* `_Label` - Name of the Timeline.
+* `InLabel` - Name of the Timeline.
 
-#### `public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1)`() const` <a id="classUNRealLifeTimelineManager_1ad7abddd3e05fd402eecd58210b17b1c1"></a>
+#### `public inline virtual bool `[`IsTickableWhenPaused`](#classUNRealLifeTimelineManager_1a3b7412c8d62689c10f649740e37105e0)`() const` <a id="classUNRealLifeTimelineManager_1a3b7412c8d62689c10f649740e37105e0"></a>
 
 Always returns true 'cause it can be paused or stopped
 
@@ -1440,7 +1568,7 @@ Always returns true 'cause it can be paused or stopped
 
 #### `public virtual void `[`Tick`](#classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e)`(float DeltaTime)` <a id="classUNRealLifeTimelineManager_1a28e255d79d9a7ddc11d2a686eba28a8e"></a>
 
-This override methods allows to tick [UNTimelineManagerDecorator::TimerTick()](#classNTimelineManager_1a50c800144ff6072bd95f68360cc071d0) and to increment times vars.
+This override methods allows to tick [UNTimelineManagerDecorator::TimerTick()](#classFNTimelineManager_1a7ab2d5e6a262ca85c968f077710c2315) and to increment times vars.
 
 #### Parameters
 * `DeltaTime` - It is not used here, it used FDateTime::Now() - LastPlayTime to compute the real life delta time
@@ -1502,7 +1630,7 @@ This class should be used by your GameInstance object. This object is the glue f
 
 This is the main client which instances timelines from your settings (using [UNTimelineConfig](#classUNTimelineConfig)) and uses by blueprint helpers lib [UNTimelineBlueprintHelpers](#classUNTimelineBlueprintHelpers).
 
-**See also**: [INTimelineGameInstance](#classINTimelineGameInstance). 
+**See also**: INTimelineGameInstance. 
 
 **See also**: [UNTimelineConfig](#classUNTimelineConfig) to get more details on the configuration. 
 
@@ -1513,12 +1641,11 @@ This is the main client which instances timelines from your settings (using [UNT
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public  `[`UNTimelineClient`](#classUNTimelineClient_1a5681002cd61186d942306798fd0140fa)`()` | 
-`public virtual void `[`Init`](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)`()` | This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+`public virtual void `[`Init`](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)`()` | This method allows to instantiate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
 `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1adef671dac978ef3a26eb7ec28b928c29)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Config) const` | A blueprint pass-through for GetTimeline(FName Name).
 `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUNTimelineClient_1a25d292f407cebcf4bf58fdbc130be874)`(FName Name) const` | Get the timeline from TimelinesCollection by its name.
 `public virtual void `[`Serialize`](#classUNTimelineClient_1aef09f534dcf7de683bfe5aea7b184e27)`(FArchive & Ar)` | It used to save all timelines in the TimelinesCollection, and reload them correctly.
-`protected TMap< FName, `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * > `[`TimelinesCollection`](#classUNTimelineClient_1af9b1553ab4dbf3246725aae6f379c9ae) | Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)
-`protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)`()` | 
+`protected TMap< FName, `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * > `[`TimelinesCollection`](#classUNTimelineClient_1af9b1553ab4dbf3246725aae6f379c9ae) | Collection of timelines instantiated in [Init()](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)
 
 ## Members
 
@@ -1526,7 +1653,7 @@ This is the main client which instances timelines from your settings (using [UNT
 
 #### `public virtual void `[`Init`](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)`()` <a id="classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615"></a>
 
-This method allows to instanciate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
+This method allows to instantiate all Timeline from the config: [FConfiguredTimeline](#structFConfiguredTimeline).
 
 **See also**: [FConfiguredTimeline](#structFConfiguredTimeline)
 
@@ -1553,9 +1680,7 @@ It used to save all timelines in the TimelinesCollection, and reload them correc
 
 #### `protected TMap< FName, `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * > `[`TimelinesCollection`](#classUNTimelineClient_1af9b1553ab4dbf3246725aae6f379c9ae) <a id="classUNTimelineClient_1af9b1553ab4dbf3246725aae6f379c9ae"></a>
 
-Collection of timelines instanciated by [InstanciateTimelinesFromConfig()](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)
-
-#### `protected void `[`InstanciateTimelinesFromConfig`](#classUNTimelineClient_1a975de7e3dace38650ce072a999f21866)`()` <a id="classUNTimelineClient_1a975de7e3dace38650ce072a999f21866"></a>
+Collection of timelines instantiated in [Init()](#classUNTimelineClient_1a99d4009604d9b8c4f3f58adb30e6d615)
 
 # class `UNTimelineConfig` <a id="classUNTimelineConfig"></a>
 
@@ -1564,7 +1689,7 @@ class UNTimelineConfig
   : public UDeveloperSettings
 ```  
 
-A simple configuration to ease timeline instanciation for developpers.
+A simple configuration to ease timeline instantiation for developpers.
 
 ## Summary
 
@@ -1576,229 +1701,60 @@ A simple configuration to ease timeline instanciation for developpers.
 
 #### `public TArray< `[`FConfiguredTimelineConf`](#structFConfiguredTimelineConf)` > `[`ConfiguredTimeline`](#classUNTimelineConfig_1a8e65c72e77d25e4787435f6cd8a6e23d) <a id="classUNTimelineConfig_1a8e65c72e77d25e4787435f6cd8a6e23d"></a>
 
-# class `UNTimelineDecorator` <a id="classUNTimelineDecorator"></a>
-
-```
-class UNTimelineDecorator
-  : public UObject
-  : public NTimelineInterface
-```  
-
-The decorator for [NTimelineInterface](#classNTimelineInterface) object.
-
-It manages:
-
-* serialization
-
-* attachment of [UNEventDecorator](#classUNEventDecorator) object to the embeded [NTimeline](#classNTimeline)
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public inline  `[`UNTimelineDecorator`](#classUNTimelineDecorator_1ac09cda631e61251a0bef283cea76d4e0)`()` | Just a default ctor for UObject paradigme
-`public virtual void `[`Init`](#classUNTimelineDecorator_1a5875e0cd5c876f0303be703bfb3f9d52)`(`[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * TimelineManager,FName _Label)` | this method is used to instanciate the embeded [NTimeline](#classNTimeline)
-`public virtual void `[`Clear`](#classUNTimelineDecorator_1a911af71c7621d03cfba0a59cd06d9305)`()` | Reset default data
-`public virtual void `[`SetTickInterval`](#classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d)`(float _TickInterval)` | Defined the tick interval for this timeline
-`public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce)`(float _CurrentTime)` | Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)
-`public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2)`() const` | Retrieve the current time since this timeline exists and play
-`public virtual void `[`SetLabel`](#classUNTimelineDecorator_1a3b4a02a04f013e165212abdee6ef3763)`(FName _Label)` | Give a name to this timeline
-`public virtual FName `[`GetLabel`](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)`() const` | Return the actual name
-`public virtual void `[`NotifyTick`](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)`()` | This manages to notify every events saved in this timeline with the new time added.
-`public inline virtual bool `[`Attached`](#classUNTimelineDecorator_1a5614115547ec6acd75dba7dfb2f0e57e)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` | This object should works only with Decorators. This method is reserved for core objects. 
-`public inline virtual void `[`Attached`](#classUNTimelineDecorator_1abcf856f19c3608357de804d15d0e2689)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` | This object should works only with Decorators. This method is reserved for core objects. 
-`public virtual void `[`BeginDestroy`](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3)`()` | 
-`public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` | It used to save all events state in the EventStore, and reload them correclty.
-`public TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`GetTimeline`](#classUNTimelineDecorator_1a18c2085acb175e91abfcebc41c706758)`() const` | 
-`public virtual void `[`AddEvent`](#classUNTimelineDecorator_1a39979ad6186e008643b2e6212bd87ae9)`(`[`UNEventDecorator`](#classUNEventDecorator)` * Event)` | This method is made to work with decorators object. It will save data in the EventStore array for serialization and save game. 
-`public const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetAdaptedEvents`](#classUNTimelineDecorator_1a332145e2dc18aa14f40781aa4c090b71)`() const` | This retrieve the EventStore
-`public `[`FNEventRecord`](#structFNEventRecord)` * `[`GetEventRecord`](#classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5)`(FString UId)` | Retrieve an event record by its Id
-`public void `[`OnTimelineEventExpired`](#classUNTimelineDecorator_1a9333ccf12bfeaf5513307bc77c7cfbd1)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` | A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a721aa7e672e1bf842cdfb2f9a64f01df). It controls the EventStore data refreshing.
-`public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classUNTimelineDecorator_1aeda133e24b140024c3aac51a56a217cf)`()` | #### Returns
-`public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Creates a new Event and use this timeline as the outer for this new object.
-`protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76) | The embeded object
-`protected virtual void `[`RefreshRecordData`](#classUNTimelineDecorator_1ae631f75cbddac322ed8e59dc730ce07a)`(const int32 & Index)` | This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) with is associated [FNEventRecord](#structFNEventRecord). It checks coherence with Tuple Event and Record Event before doing it.
-
-## Members
-
-#### `public inline  `[`UNTimelineDecorator`](#classUNTimelineDecorator_1ac09cda631e61251a0bef283cea76d4e0)`()` <a id="classUNTimelineDecorator_1ac09cda631e61251a0bef283cea76d4e0"></a>
-
-Just a default ctor for UObject paradigme
-
-#### `public virtual void `[`Init`](#classUNTimelineDecorator_1a5875e0cd5c876f0303be703bfb3f9d52)`(`[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * TimelineManager,FName _Label)` <a id="classUNTimelineDecorator_1a5875e0cd5c876f0303be703bfb3f9d52"></a>
-
-this method is used to instanciate the embeded [NTimeline](#classNTimeline)
-#### Parameters
-* `TimelineManager` - The Decorator which provide the [NTimelineManager](#classNTimelineManager) object.
-
-#### `public virtual void `[`Clear`](#classUNTimelineDecorator_1a911af71c7621d03cfba0a59cd06d9305)`()` <a id="classUNTimelineDecorator_1a911af71c7621d03cfba0a59cd06d9305"></a>
-
-Reset default data
-
-#### `public virtual void `[`SetTickInterval`](#classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d)`(float _TickInterval)` <a id="classUNTimelineDecorator_1aadb16c4b869dc4852c054534c687629d"></a>
-
-Defined the tick interval for this timeline
-
-#### Parameters
-* `_TickInterval` - Time in secs
-
-#### `public virtual void `[`SetCurrentTime`](#classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce)`(float _CurrentTime)` <a id="classUNTimelineDecorator_1a1a77fe79d0d597df2685acd072b0bcce"></a>
-
-Should be used only for serialization because it is internnaly computed with [NotifyTick()](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)
-
-#### Parameters
-* `_CurrentTime` - Time in secs
-
-#### `public virtual float `[`GetCurrentTime`](#classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2)`() const` <a id="classUNTimelineDecorator_1a988de26672d73d693757d0ed8238b9f2"></a>
-
-Retrieve the current time since this timeline exists and play
-
-#### `public virtual void `[`SetLabel`](#classUNTimelineDecorator_1a3b4a02a04f013e165212abdee6ef3763)`(FName _Label)` <a id="classUNTimelineDecorator_1a3b4a02a04f013e165212abdee6ef3763"></a>
-
-Give a name to this timeline
-
-#### Parameters
-* `_Label` - The name
-
-#### `public virtual FName `[`GetLabel`](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)`() const` <a id="classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04"></a>
-
-Return the actual name
-
-#### `public virtual void `[`NotifyTick`](#classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414)`()` <a id="classUNTimelineDecorator_1a3744e0f81cd35114ad68f31666c1e414"></a>
-
-This manages to notify every events saved in this timeline with the new time added.
-
-#### `public inline virtual bool `[`Attached`](#classUNTimelineDecorator_1a5614115547ec6acd75dba7dfb2f0e57e)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event)` <a id="classUNTimelineDecorator_1a5614115547ec6acd75dba7dfb2f0e57e"></a>
-
-This object should works only with Decorators. This method is reserved for core objects. 
-**See also**: UNTimelineDecorator::Attached(UNEventDecorator* Event)
-
-#### `public inline virtual void `[`Attached`](#classUNTimelineDecorator_1abcf856f19c3608357de804d15d0e2689)`(TArray< TSharedPtr< `[`NEventInterface`](#classNEventInterface)` >> EventsCollection)` <a id="classUNTimelineDecorator_1abcf856f19c3608357de804d15d0e2689"></a>
-
-This object should works only with Decorators. This method is reserved for core objects. 
-**See also**: UNTimelineDecorator::Attached(UNEventDecorator* Event)
-
-#### `public virtual void `[`BeginDestroy`](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3)`()` <a id="classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3"></a>
-
-#### `public virtual void `[`Serialize`](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9)`(FArchive & Ar)` <a id="classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9"></a>
-
-It used to save all events state in the EventStore, and reload them correclty.
-
-#### Parameters
-* `Ar` - Archive for save and load
-
-#### `public TSharedPtr< `[`NTimelineInterface`](#classNTimelineInterface)` > `[`GetTimeline`](#classUNTimelineDecorator_1a18c2085acb175e91abfcebc41c706758)`() const` <a id="classUNTimelineDecorator_1a18c2085acb175e91abfcebc41c706758"></a>
-
-#### `public virtual void `[`AddEvent`](#classUNTimelineDecorator_1a39979ad6186e008643b2e6212bd87ae9)`(`[`UNEventDecorator`](#classUNEventDecorator)` * Event)` <a id="classUNTimelineDecorator_1a39979ad6186e008643b2e6212bd87ae9"></a>
-
-This method is made to work with decorators object. It will save data in the EventStore array for serialization and save game. 
-#### Parameters
-* `Event` - The decorator event
-
-#### `public const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetAdaptedEvents`](#classUNTimelineDecorator_1a332145e2dc18aa14f40781aa4c090b71)`() const` <a id="classUNTimelineDecorator_1a332145e2dc18aa14f40781aa4c090b71"></a>
-
-This retrieve the EventStore
-
-#### `public `[`FNEventRecord`](#structFNEventRecord)` * `[`GetEventRecord`](#classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5)`(FString UId)` <a id="classUNTimelineDecorator_1ae3a50854058b0abf00fca41eb21f05b5"></a>
-
-Retrieve an event record by its Id
-
-#### `public void `[`OnTimelineEventExpired`](#classUNTimelineDecorator_1a9333ccf12bfeaf5513307bc77c7cfbd1)`(TSharedPtr< `[`NEventInterface`](#classNEventInterface)` > Event,const float & ExpiredTime,const int32 & Index)` <a id="classUNTimelineDecorator_1a9333ccf12bfeaf5513307bc77c7cfbd1"></a>
-
-A delegate attached to [NTimeline::EventExpired](#classNTimeline_1a721aa7e672e1bf842cdfb2f9a64f01df). It controls the EventStore data refreshing.
-
-#### Parameters
-* `Event` - The native Event which will be killed 
-
-* `ExpiredTime` - The time when this event expires 
-
-* `Index` - The index of the NTimeline::Events array
-
-#### `public virtual FNTimelineEventDelegate & `[`OnEventExpired`](#classUNTimelineDecorator_1aeda133e24b140024c3aac51a56a217cf)`()` <a id="classUNTimelineDecorator_1aeda133e24b140024c3aac51a56a217cf"></a>
-
-#### Returns
-a FNTimelineEventDelegate ref which is broadcasted when an event expires.
-
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` <a id="classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7"></a>
-
-Creates a new Event and use this timeline as the outer for this new object.
-
-#### Parameters
-* `Class` - The derived class of your choice 
-
-* `Name` - The label of the event, can be usefull for user stats & feedback 
-
-* `Duration` - The time this event is active, 0 to almost INFINI (0 means undeterminated time) 
-
-* `Delay` - The time before this event start being active, 0 to almost INFINI (0 means "right now")
-
-#### `protected TSharedPtr< `[`NTimeline`](#classNTimeline)` > `[`Timeline`](#classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76) <a id="classUNTimelineDecorator_1ae3a1e91c51313ad9fef6d787f2ee3b76"></a>
-
-The embeded object
-
-#### `protected virtual void `[`RefreshRecordData`](#classUNTimelineDecorator_1ae631f75cbddac322ed8e59dc730ce07a)`(const int32 & Index)` <a id="classUNTimelineDecorator_1ae631f75cbddac322ed8e59dc730ce07a"></a>
-
-This goal is to synchronize a [NTimeline::FEventTuple](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) with is associated [FNEventRecord](#structFNEventRecord). It checks coherence with Tuple Event and Record Event before doing it.
-
-#### Parameters
-* `Index` - The index of the NTimeline::Events array 
-
-* `Record` - The record you want to synchronize.
-
-# class `UNTimelineGameInstance` <a id="classUNTimelineGameInstance"></a>
-
-```
-class UNTimelineGameInstance
-  : public UInterface
-```  
-
-**See also**: [INTimelineGameInstance](#classINTimelineGameInstance)
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-
-## Members
-
 # class `UNTimelineManagerDecorator` <a id="classUNTimelineManagerDecorator"></a>
 
 ```
 class UNTimelineManagerDecorator
   : public UObject
-  : public NTimelineManager
+  : public FNTimelineManager
 ```  
 
-This is the abstract decorator that every Timeline manager shoulds override. It brings all core functionnalities for blueprint or UE4 c++ paradigm.
+This is the abstract decorator that every Timeline manager should override. It brings all core functionalities for blueprint or UE4 c++ paradigm.
 
-As the close relation between [NTimelineManager](#classNTimelineManager) and [NTimeline](#classNTimeline) classes (core lib), This class is coupled with [UNTimelineDecorator](#classUNTimelineDecorator). 
-**See also**: [UNTimelineDecorator](#classUNTimelineDecorator)
+As the close relation between NTimelineManager and NTimeline classes (core lib), This class is coupled with UNTimelineDecorator. 
+**See also**: UNTimelineDecorator
 
-To ease blueprint usages, most of the [UNTimelineDecorator](#classUNTimelineDecorator) public functionnalities are accessible here. This class works as a pass-through too for [UNTimelineDecorator](#classUNTimelineDecorator).
+To ease blueprint usages, most of the UNTimelineDecorator public functionalities are accessible here. This class works as a pass-through too for UNTimelineDecorator.
 
-**See also**: [AddEvent()](#classUNTimelineManagerDecorator_1a2b84bfc86395348ca4995b202b038238), [CreateNewEvent()](#classUNTimelineManagerDecorator_1a12df827b8172ba4e34bc163c2a9564de), [CreateAndAddNewEvent()](#classUNTimelineManagerDecorator_1a4029c1f60449033ca3dda2e28bdf7098)
+**See also**: AddEvent(), [CreateNewEvent()](#classFNTimelineManager_1a70061c46504ac123676913fe30568d49), [CreateAndAddNewEvent()](#classUNTimelineManagerDecorator_1ae170074f6d2b96af0b3163d42c942b9f)
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`public bool `[`bDebug`](#classUNTimelineManagerDecorator_1aadf990ac802d0ee7557ed2cb6d43da3d) | 
+`public float `[`TickInterval`](#classUNTimelineManagerDecorator_1ae56e54a0f08d994dcbf1e8dc2b301b0a) | The interval retrieved from the timeline.
+`public const float & `[`EventTime`](#classUNTimelineManagerDecorator_1a29e9a7c4d48d51d31f1df9e43c7ceab7) | 
 `public virtual void `[`Pause`](#classUNTimelineManagerDecorator_1a1b664da3c9dc614df40822ebce117cfb)`()` | This pause the timeline ticking
 `public virtual void `[`Play`](#classUNTimelineManagerDecorator_1a16f09380884450c7b220f1c78c336cf3)`()` | This (re)start the timeline ticking
-`public virtual void `[`Stop`](#classUNTimelineManagerDecorator_1abe640ee5d20aed0044f17b625c5923ed)`()` | This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
-`public virtual void `[`SetTickInterval`](#classUNTimelineManagerDecorator_1a6924490076a80b578220f0536184c06e)`(float _TickInterval)` | Defined the desired ticking interval
-`public virtual void `[`Init`](#classUNTimelineManagerDecorator_1afa01753617c42cf5c4a323b4e14c0c4d)`(float _TickInterval,FName _Label)` | The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
-`public virtual void `[`Serialize`](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)`(FArchive & Ar)` | It's the starting link of serialization chain for all embeded decorators. This calls [UNTimelineDecorator::Serialize()](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9).
-`public virtual void `[`BeginDestroy`](#classUNTimelineManagerDecorator_1ab6701a003cf2311d71890fa567089024)`()` | This call the [UNTimelineDecorator::BeginDestroy()](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3) too.
-`public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerDecorator_1a752b30671744f945a588d4c35adedd81)`() const` | Get the events list. TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
+`public virtual void `[`Stop`](#classUNTimelineManagerDecorator_1abe640ee5d20aed0044f17b625c5923ed)`()` | This pause the timeline ticking and reset the NTimeline::CurrentTime to 0
+`public void `[`OnEventChangedDelegate`](#classUNTimelineManagerDecorator_1aaecdbbc5de72c32131f7dcef19b0f153)`(TSharedPtr< `[`INEvent`](#classINEvent)` > Event,const `[`ENTimelineEvent`](#Timeline_8h_1aca8212740df4678d46efc8cae12ab0c9)` & EventName,const float & LocalTime,const int32 & Index)` | 
+`public virtual void `[`Init`](#classUNTimelineManagerDecorator_1a642cf6d81cf285ed4a79e2b98bc6484e)`(const float & InTickInterval,const FName & InLabel)` | The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+`public virtual void `[`Serialize`](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)`(FArchive & Ar)` | It's the starting link of serialization chain for all embedded decorators. This calls UNTimelineDecorator::Serialize().
+`public virtual void `[`BeginDestroy`](#classUNTimelineManagerDecorator_1ab6701a003cf2311d71890fa567089024)`()` | This calls [FNTimelineManager::Clear()](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9).
+`public TArray< `[`UNEventBase`](#classUNEventBase)` * > `[`GetEvents`](#classUNTimelineManagerDecorator_1a636a2d0ac5950e0aed653f378b04e3c5)`() const` | 
+`public TArray< `[`UNEventBase`](#classUNEventBase)` * > `[`GetExpiredEvents`](#classUNTimelineManagerDecorator_1a1139775a870015cd3042cca73e036bae)`() const` | 
+`public `[`UNEventBase`](#classUNEventBase)` * `[`GetEvent`](#classUNTimelineManagerDecorator_1aa975120fb17b3dc7c455c33e37cac952)`(const FString & InUID) const` | 
 `public float `[`GetCurrentTime`](#classUNTimelineManagerDecorator_1adc4d0b50faa76c955cb928750de41352)`() const` | 
-`public FName `[`GetLabel`](#classUNTimelineManagerDecorator_1aed6e9c7e069c9e7637076a7b235adf7f)`() const` | A pass-through for the embeded [UNTimelineDecorator::GetLabel()](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)
-`public virtual void `[`AddEvent`](#classUNTimelineManagerDecorator_1a2b84bfc86395348ca4995b202b038238)`(`[`UNEventDecorator`](#classUNEventDecorator)` * Event)` | Adds an event to the timeline object, it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
-`public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineManagerDecorator_1a12df827b8172ba4e34bc163c2a9564de)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
-`public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerDecorator_1a4029c1f60449033ca3dda2e28bdf7098)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` | Attaches the event to the timeline stream + A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
-`protected `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`MyTimeline`](#classUNTimelineManagerDecorator_1a5a5a6bff257a09d9146813eaeb53fe78) | the timeline associated to this manager.
-`protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` | Protected ctor to force instanciation with CreateObject() methods (factory methods).
+`public FName `[`GetLabel`](#classUNTimelineManagerDecorator_1aed6e9c7e069c9e7637076a7b235adf7f)`() const` | 
+`public void `[`SetLabel`](#classUNTimelineManagerDecorator_1ab37f83214580022621c695a7180a6b3c)`(const FName & Name)` | A pass-through for the embedded [FNTimeline::SetLabel()](#classFNTimeline_1a423302167b09a6aa88872110f46171e3)
+`public  `[`UFUNCTION`](#classUNTimelineManagerDecorator_1a99daa6cdb789cba6b723c5aed78f06e7)`(BlueprintCallable,BlueprintImplementableEvent,Category,meta) const` | 
+`public `[`UNEventBase`](#classUNEventBase)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerDecorator_1ae170074f6d2b96af0b3163d42c942b9f)`(FName InName,float InDuration,float InDelay,TSubclassOf< `[`UNEventBase`](#classUNEventBase)` > InClass)` | Attaches the event to the timeline stream Creates a new Event and use this timeline as the outer for this new object.
+`public virtual void `[`Clear`](#classUNTimelineManagerDecorator_1ab6802b439e1c5aa98b520700c8175de3)`()` | Remove all EventBases and ExpiredEventBases
+`protected FDateTime `[`StartedAt`](#classUNTimelineManagerDecorator_1a1453e9a6eb62bc4ca4d4a4578b54d8ad) | 
+`protected TMap< FString, `[`UNEventBase`](#classUNEventBase)` * > `[`EventBases`](#classUNTimelineManagerDecorator_1a86a56f7689205d237836ee78439dab5e) | 
+`protected TMap< FString, `[`UNEventBase`](#classUNEventBase)` * > `[`ExpiredEventBases`](#classUNTimelineManagerDecorator_1a250fcce6db6fada1f1d0a9f56b7b3073) | 
+`protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` | Protected ctor to force instantiation with CreateObject() methods (factory methods). It instantiates the embedded timeline with CreateDefaultSubobject().
 
 ## Members
+
+#### `public bool `[`bDebug`](#classUNTimelineManagerDecorator_1aadf990ac802d0ee7557ed2cb6d43da3d) <a id="classUNTimelineManagerDecorator_1aadf990ac802d0ee7557ed2cb6d43da3d"></a>
+
+#### `public float `[`TickInterval`](#classUNTimelineManagerDecorator_1ae56e54a0f08d994dcbf1e8dc2b301b0a) <a id="classUNTimelineManagerDecorator_1ae56e54a0f08d994dcbf1e8dc2b301b0a"></a>
+
+The interval retrieved from the timeline.
+
+#### `public const float & `[`EventTime`](#classUNTimelineManagerDecorator_1a29e9a7c4d48d51d31f1df9e43c7ceab7) <a id="classUNTimelineManagerDecorator_1a29e9a7c4d48d51d31f1df9e43c7ceab7"></a>
 
 #### `public virtual void `[`Pause`](#classUNTimelineManagerDecorator_1a1b664da3c9dc614df40822ebce117cfb)`()` <a id="classUNTimelineManagerDecorator_1a1b664da3c9dc614df40822ebce117cfb"></a>
 
@@ -1810,100 +1766,114 @@ This (re)start the timeline ticking
 
 #### `public virtual void `[`Stop`](#classUNTimelineManagerDecorator_1abe640ee5d20aed0044f17b625c5923ed)`()` <a id="classUNTimelineManagerDecorator_1abe640ee5d20aed0044f17b625c5923ed"></a>
 
-This pause the timeline ticking and reset the [NTimeline::CurrentTime](#classNTimeline_1aca3e3a5c49472abf26cc4a10da25e740) to 0
+This pause the timeline ticking and reset the NTimeline::CurrentTime to 0
 
-#### `public virtual void `[`SetTickInterval`](#classUNTimelineManagerDecorator_1a6924490076a80b578220f0536184c06e)`(float _TickInterval)` <a id="classUNTimelineManagerDecorator_1a6924490076a80b578220f0536184c06e"></a>
+#### `public void `[`OnEventChangedDelegate`](#classUNTimelineManagerDecorator_1aaecdbbc5de72c32131f7dcef19b0f153)`(TSharedPtr< `[`INEvent`](#classINEvent)` > Event,const `[`ENTimelineEvent`](#Timeline_8h_1aca8212740df4678d46efc8cae12ab0c9)` & EventName,const float & LocalTime,const int32 & Index)` <a id="classUNTimelineManagerDecorator_1aaecdbbc5de72c32131f7dcef19b0f153"></a>
 
-Defined the desired ticking interval
+#### `public virtual void `[`Init`](#classUNTimelineManagerDecorator_1a642cf6d81cf285ed4a79e2b98bc6484e)`(const float & InTickInterval,const FName & InLabel)` <a id="classUNTimelineManagerDecorator_1a642cf6d81cf285ed4a79e2b98bc6484e"></a>
 
-#### `public virtual void `[`Init`](#classUNTimelineManagerDecorator_1afa01753617c42cf5c4a323b4e14c0c4d)`(float _TickInterval,FName _Label)` <a id="classUNTimelineManagerDecorator_1afa01753617c42cf5c4a323b4e14c0c4d"></a>
-
-The embeded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
+The embedded timeline is created as subobject in the ctor. So this just gives the Label to the timeline. 
 **See also**: [UNTimelineManagerDecorator()](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)
 
 #### Parameters
-* `_TickInterval` - Interval time between tick in sec 
+* `InTickInterval` - Interval time between tick in sec 
 
-* `_Label` - Name of the Timeline.
+* `InLabel` - Name of the Timeline.
 
 #### `public virtual void `[`Serialize`](#classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831)`(FArchive & Ar)` <a id="classUNTimelineManagerDecorator_1a01229041da8701773130398dc2ce3831"></a>
 
-It's the starting link of serialization chain for all embeded decorators. This calls [UNTimelineDecorator::Serialize()](#classUNTimelineDecorator_1a80be4f38003a75be5296f1fae4720dd9).
+It's the starting link of serialization chain for all embedded decorators. This calls UNTimelineDecorator::Serialize().
 
 #### Parameters
 * `Ar` - the FArchive used for serialization as usual.
 
 #### `public virtual void `[`BeginDestroy`](#classUNTimelineManagerDecorator_1ab6701a003cf2311d71890fa567089024)`()` <a id="classUNTimelineManagerDecorator_1ab6701a003cf2311d71890fa567089024"></a>
 
-This call the [UNTimelineDecorator::BeginDestroy()](#classUNTimelineDecorator_1a239b786e67d44b466d1c1b7cb780c3b3) too.
+This calls [FNTimelineManager::Clear()](#classFNTimelineManager_1ae40ceb3847f6876ddfcd5ce74ba3f2d9).
 
-#### `public virtual const TArray< `[`FNEventRecord`](#structFNEventRecord)` > `[`GetEvents`](#classUNTimelineManagerDecorator_1a752b30671744f945a588d4c35adedd81)`() const` <a id="classUNTimelineManagerDecorator_1a752b30671744f945a588d4c35adedd81"></a>
+#### `public TArray< `[`UNEventBase`](#classUNEventBase)` * > `[`GetEvents`](#classUNTimelineManagerDecorator_1a636a2d0ac5950e0aed653f378b04e3c5)`() const` <a id="classUNTimelineManagerDecorator_1a636a2d0ac5950e0aed653f378b04e3c5"></a>
 
-Get the events list. TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
+#### `public TArray< `[`UNEventBase`](#classUNEventBase)` * > `[`GetExpiredEvents`](#classUNTimelineManagerDecorator_1a1139775a870015cd3042cca73e036bae)`() const` <a id="classUNTimelineManagerDecorator_1a1139775a870015cd3042cca73e036bae"></a>
+
+#### `public `[`UNEventBase`](#classUNEventBase)` * `[`GetEvent`](#classUNTimelineManagerDecorator_1aa975120fb17b3dc7c455c33e37cac952)`(const FString & InUID) const` <a id="classUNTimelineManagerDecorator_1aa975120fb17b3dc7c455c33e37cac952"></a>
 
 #### `public float `[`GetCurrentTime`](#classUNTimelineManagerDecorator_1adc4d0b50faa76c955cb928750de41352)`() const` <a id="classUNTimelineManagerDecorator_1adc4d0b50faa76c955cb928750de41352"></a>
 
 #### `public FName `[`GetLabel`](#classUNTimelineManagerDecorator_1aed6e9c7e069c9e7637076a7b235adf7f)`() const` <a id="classUNTimelineManagerDecorator_1aed6e9c7e069c9e7637076a7b235adf7f"></a>
 
-A pass-through for the embeded [UNTimelineDecorator::GetLabel()](#classUNTimelineDecorator_1ac1f503e58bb4cf170ce1051e303a7f04)
+#### `public void `[`SetLabel`](#classUNTimelineManagerDecorator_1ab37f83214580022621c695a7180a6b3c)`(const FName & Name)` <a id="classUNTimelineManagerDecorator_1ab37f83214580022621c695a7180a6b3c"></a>
 
-#### `public virtual void `[`AddEvent`](#classUNTimelineManagerDecorator_1a2b84bfc86395348ca4995b202b038238)`(`[`UNEventDecorator`](#classUNEventDecorator)` * Event)` <a id="classUNTimelineManagerDecorator_1a2b84bfc86395348ca4995b202b038238"></a>
+A pass-through for the embedded [FNTimeline::SetLabel()](#classFNTimeline_1a423302167b09a6aa88872110f46171e3)
 
-Adds an event to the timeline object, it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
+#### `public  `[`UFUNCTION`](#classUNTimelineManagerDecorator_1a99daa6cdb789cba6b723c5aed78f06e7)`(BlueprintCallable,BlueprintImplementableEvent,Category,meta) const` <a id="classUNTimelineManagerDecorator_1a99daa6cdb789cba6b723c5aed78f06e7"></a>
 
-#### Parameters
-* `Event` - An Event object you want to saved to the associated timeline.
+#### `public `[`UNEventBase`](#classUNEventBase)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerDecorator_1ae170074f6d2b96af0b3163d42c942b9f)`(FName InName,float InDuration,float InDelay,TSubclassOf< `[`UNEventBase`](#classUNEventBase)` > InClass)` <a id="classUNTimelineManagerDecorator_1ae170074f6d2b96af0b3163d42c942b9f"></a>
 
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateNewEvent`](#classUNTimelineManagerDecorator_1a12df827b8172ba4e34bc163c2a9564de)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` <a id="classUNTimelineManagerDecorator_1a12df827b8172ba4e34bc163c2a9564de"></a>
-
-A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
+Attaches the event to the timeline stream Creates a new Event and use this timeline as the outer for this new object.
 
 #### Parameters
-* `Class` - The derived class of your choice 
+* `Name` - The label of the event, can be useful for user stats & feedback 
 
-* `Name` - The label of the event, can be usefull for user stats & feedback 
-
-* `Duration` - The time this event is active, 0 to almost INFINI (0 means undeterminated time) 
+* `Duration` - The time this event is active, 0 to almost INFINI (0 means undetermined time) 
 
 * `Delay` - The time before this event start being active, 0 to almost INFINI (0 means "right now")
 
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`CreateAndAddNewEvent`](#classUNTimelineManagerDecorator_1a4029c1f60449033ca3dda2e28bdf7098)`(TSubclassOf< `[`UNEventDecorator`](#classUNEventDecorator)` > Class,FName Name,float Duration,float Delay)` <a id="classUNTimelineManagerDecorator_1a4029c1f60449033ca3dda2e28bdf7098"></a>
+#### `public virtual void `[`Clear`](#classUNTimelineManagerDecorator_1ab6802b439e1c5aa98b520700c8175de3)`()` <a id="classUNTimelineManagerDecorator_1ab6802b439e1c5aa98b520700c8175de3"></a>
 
-Attaches the event to the timeline stream + A pass-through for [UNTimelineDecorator::CreateNewEvent()](#classUNTimelineDecorator_1aab2ab273fc40a076e51ef306b60fcdc7): Creates a new Event and use this timeline as the outer for this new object.
+Remove all EventBases and ExpiredEventBases
 
-#### Parameters
-* `Class` - The derived class of your choice 
+#### `protected FDateTime `[`StartedAt`](#classUNTimelineManagerDecorator_1a1453e9a6eb62bc4ca4d4a4578b54d8ad) <a id="classUNTimelineManagerDecorator_1a1453e9a6eb62bc4ca4d4a4578b54d8ad"></a>
 
-* `Name` - The label of the event, can be usefull for user stats & feedback 
+#### `protected TMap< FString, `[`UNEventBase`](#classUNEventBase)` * > `[`EventBases`](#classUNTimelineManagerDecorator_1a86a56f7689205d237836ee78439dab5e) <a id="classUNTimelineManagerDecorator_1a86a56f7689205d237836ee78439dab5e"></a>
 
-* `Duration` - The time this event is active, 0 to almost INFINI (0 means undeterminated time) 
-
-* `Delay` - The time before this event start being active, 0 to almost INFINI (0 means "right now")
-
-#### `protected `[`UNTimelineDecorator`](#classUNTimelineDecorator)` * `[`MyTimeline`](#classUNTimelineManagerDecorator_1a5a5a6bff257a09d9146813eaeb53fe78) <a id="classUNTimelineManagerDecorator_1a5a5a6bff257a09d9146813eaeb53fe78"></a>
-
-the timeline associated to this manager.
+#### `protected TMap< FString, `[`UNEventBase`](#classUNEventBase)` * > `[`ExpiredEventBases`](#classUNTimelineManagerDecorator_1a250fcce6db6fada1f1d0a9f56b7b3073) <a id="classUNTimelineManagerDecorator_1a250fcce6db6fada1f1d0a9f56b7b3073"></a>
 
 #### `protected  `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd)`()` <a id="classUNTimelineManagerDecorator_1a4d5f21dca88b5a9bbe5a66b1e15659fd"></a>
 
-Protected ctor to force instanciation with CreateObject() methods (factory methods).
+Protected ctor to force instantiation with CreateObject() methods (factory methods). It instantiates the embedded timeline with CreateDefaultSubobject().
 
-It instanciates the embeded timeline with CreateDefaultSubobject().
+# class `UTimelineGameSubsystem` <a id="classUTimelineGameSubsystem"></a>
 
-# class `UNTimelineManagerDecoratorFactory` <a id="classUNTimelineManagerDecoratorFactory"></a>
-
-This class is a factory to managed properly [UNTimelineManagerDecorator](#classUNTimelineManagerDecorator) instanciation.
+```
+class UTimelineGameSubsystem
+  : public UGameInstanceSubsystem
+```  
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`public virtual void `[`Initialize`](#classUTimelineGameSubsystem_1a14a7c2ad73486dfa511b212e26e25d0e)`(FSubsystemCollectionBase & Collection)` | 
+`public virtual void `[`Deinitialize`](#classUTimelineGameSubsystem_1a40c6ba9388694f39779cba1b99814a49)`()` | 
+`public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUTimelineGameSubsystem_1a0b2cf740bc7e967b4a2a1807482b9cf1)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+`public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUTimelineGameSubsystem_1a4e027e6c612da55bca481f6308cacab5)`(FName Timeline) const` | A blueprint pass-through for UNTimelineClient::GetTimeline(FName Config).
+`public `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetTimelineClient`](#classUTimelineGameSubsystem_1ab728f8a05298af785c36b3c2a2a1d812)`() const` | 
 
 ## Members
 
+#### `public virtual void `[`Initialize`](#classUTimelineGameSubsystem_1a14a7c2ad73486dfa511b212e26e25d0e)`(FSubsystemCollectionBase & Collection)` <a id="classUTimelineGameSubsystem_1a14a7c2ad73486dfa511b212e26e25d0e"></a>
+
+#### `public virtual void `[`Deinitialize`](#classUTimelineGameSubsystem_1a40c6ba9388694f39779cba1b99814a49)`()` <a id="classUTimelineGameSubsystem_1a40c6ba9388694f39779cba1b99814a49"></a>
+
+#### `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUTimelineGameSubsystem_1a0b2cf740bc7e967b4a2a1807482b9cf1)`(`[`FConfiguredTimeline`](#structFConfiguredTimeline)` Timeline) const` <a id="classUTimelineGameSubsystem_1a0b2cf740bc7e967b4a2a1807482b9cf1"></a>
+
+A blueprint pass-through for UNTimelineClient::GetTimeline(FConfiguredTimeline Config).
+
+#### Parameters
+* `Timeline` - To allow having a combobox of configured timelines
+
+#### `public `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` * `[`GetTimeline`](#classUTimelineGameSubsystem_1a4e027e6c612da55bca481f6308cacab5)`(FName Timeline) const` <a id="classUTimelineGameSubsystem_1a4e027e6c612da55bca481f6308cacab5"></a>
+
+A blueprint pass-through for UNTimelineClient::GetTimeline(FName Config).
+
+#### Parameters
+* `Timeline` - name of the timeline
+
+#### `public `[`UNTimelineClient`](#classUNTimelineClient)` * `[`GetTimelineClient`](#classUTimelineGameSubsystem_1ab728f8a05298af785c36b3c2a2a1d812)`() const` <a id="classUTimelineGameSubsystem_1ab728f8a05298af785c36b3c2a2a1d812"></a>
+
 # struct `FConfiguredTimeline` <a id="structFConfiguredTimeline"></a>
 
-This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
+This struct to create Configured Timeline and ease Timeline instantiation. This allows to associated a Timeline Name to a class.
 
 ## Summary
 
@@ -1911,6 +1881,8 @@ This struct to create Configured Timeline and ease Timeline instanciation. This 
 --------------------------------|---------------------------------------------
 `public FName `[`Name`](#structFConfiguredTimeline_1a47f13a6768b6cf144550a0a3cfb1e6b6) | This allows to retrieve easily a timeline. This is used by the [SConfiguredTimelinePin](#classSConfiguredTimelinePin) as a combobox.
 `public TSubclassOf< `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` > `[`TimelineClass`](#structFConfiguredTimeline_1aa0763505594b494c99c1e616ce95533b) | The Configured Timeline class
+`public inline FORCEINLINE void `[`Serialize`](#structFConfiguredTimeline_1a9da6d535a5251f9ca64f0187205d7959)`(FArchive & Ar)` | 
+`public inline FORCEINLINE uint32 `[`GetTypeHash`](#structFConfiguredTimeline_1a01d0e1fcd4c07f74d1ac7c37aea4798e)`() const` | 
 
 ## Members
 
@@ -1922,9 +1894,13 @@ This allows to retrieve easily a timeline. This is used by the [SConfiguredTimel
 
 The Configured Timeline class
 
+#### `public inline FORCEINLINE void `[`Serialize`](#structFConfiguredTimeline_1a9da6d535a5251f9ca64f0187205d7959)`(FArchive & Ar)` <a id="structFConfiguredTimeline_1a9da6d535a5251f9ca64f0187205d7959"></a>
+
+#### `public inline FORCEINLINE uint32 `[`GetTypeHash`](#structFConfiguredTimeline_1a01d0e1fcd4c07f74d1ac7c37aea4798e)`() const` <a id="structFConfiguredTimeline_1a01d0e1fcd4c07f74d1ac7c37aea4798e"></a>
+
 # struct `FConfiguredTimelineConf` <a id="structFConfiguredTimelineConf"></a>
 
-This struct to create Configured Timeline and ease Timeline instanciation. This allows to associated a Timeline Name to a class.
+This struct to create Configured Timeline and ease Timeline instantiation. This allows to associated a Timeline Name to a class.
 
 ## Summary
 
@@ -1933,6 +1909,7 @@ This struct to create Configured Timeline and ease Timeline instanciation. This 
 `public FName `[`Name`](#structFConfiguredTimelineConf_1a50b49283e97d44dba511bfe696c818bc) | This allows to retrieve easily a timeline. This is used by the [SConfiguredTimelinePin](#classSConfiguredTimelinePin) as a combobox.
 `public TSubclassOf< `[`UNTimelineManagerDecorator`](#classUNTimelineManagerDecorator)` > `[`TimelineClass`](#structFConfiguredTimelineConf_1adc85551cc214da691536b3ca60045896) | The Configured Timeline class
 `public float `[`TickInterval`](#structFConfiguredTimelineConf_1a237b9ef8f53f8d1dd4072a6befffbf76) | You can use this to add more or less frequency between each tick.
+`public bool `[`bDebug`](#structFConfiguredTimelineConf_1a6ea42d3fb2649166a981232d0e139d01) | Will debug this timeline
 
 ## Members
 
@@ -1948,63 +1925,141 @@ The Configured Timeline class
 
 You can use this to add more or less frequency between each tick.
 
-# struct `FNEventRecord` <a id="structFNEventRecord"></a>
+#### `public bool `[`bDebug`](#structFConfiguredTimelineConf_1a6ea42d3fb2649166a981232d0e139d01) <a id="structFConfiguredTimelineConf_1a6ea42d3fb2649166a981232d0e139d01"></a>
 
-This struct is both a pass-through for [NTimeline::FEventTuple](#classNTimeline_1a3343fdc03d8785b874d6c9c00590f1b5) and a record object used for savegame.
+Will debug this timeline
+
+# struct `FEventSlot` <a id="structFEventSlot"></a>
+
+All details about an event to draw
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`Event`](#structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6) | The [UNEventDecorator](#classUNEventDecorator) object
-`public FString `[`UId`](#structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e) | The [UNEventDecorator](#classUNEventDecorator) UId, it can be used to create consistant link to an object that envelops and EventDecorator
-`public float `[`AttachedTime`](#structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d) | The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt)
-`public float `[`Delay`](#structFNEventRecord_1a93060a69818f28c533e913e0f6f6c6dc) | The delay before starting in secs
-`public float `[`Duration`](#structFNEventRecord_1a1678e0c5820aff90fc32e45bad7a2afe) | The duration this event lives in secs (0 means inderterminate)
-`public FName `[`Label`](#structFNEventRecord_1a87eae2eb09b8c2163a8394431ed2abf5) | The name of the event
-`public float `[`ExpiredTime`](#structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d) | Expiration time of this event in secs (0 means can't expired))
-`public FString `[`EventClassName`](#structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93) | This is used only for serialization, it allow to re-instance the object on load
-`public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` | 
-`public void `[`Serialize`](#structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4)`(FArchive & Ar,`[`UNTimelineDecorator`](#classUNTimelineDecorator)` * Timeline)` | It manages Event object saving and loading
+`public float `[`PreOffset`](#structFEventSlot_1abaf36b6ee734c1659b16aba9317bf314) | Represents the moment this event has been attached if it has a delay.
+`public float `[`PreSize`](#structFEventSlot_1a203f2f9e045aae992c374f1cb3f30bcf) | If there is, the size of the delay.
+`public FColor `[`PreColor`](#structFEventSlot_1aa764d4eaa71e5a7ab74e57455f7f1a74) | Color of the delay.
+`public float `[`Offset`](#structFEventSlot_1a7e0b414b2548872657e271f37ca9f134) | Represents the moment this event start to play.
+`public float `[`Size`](#structFEventSlot_1a676d69f33c99dfdde563e4cd6e2eb784) | Represents the event duration.
+`public FColor `[`Color`](#structFEventSlot_1ab5279f3f640d369c4d2bfb7406ecebb2) | Color of the event.
+`public const `[`UNEventBase`](#classUNEventBase)` * `[`Event`](#structFEventSlot_1a987afd5388cd7f887b8dca21264354ae) | Event associated to this slot.
+`public inline  `[`FEventSlot`](#structFEventSlot_1aa302f91f55b7a5dda20b15efdcb21897)`(const `[`UNEventBase`](#classUNEventBase)` * InEvent)` | 
 
 ## Members
 
-#### `public `[`UNEventDecorator`](#classUNEventDecorator)` * `[`Event`](#structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6) <a id="structFNEventRecord_1a26e0a371b63a69727963bae05415c4b6"></a>
+#### `public float `[`PreOffset`](#structFEventSlot_1abaf36b6ee734c1659b16aba9317bf314) <a id="structFEventSlot_1abaf36b6ee734c1659b16aba9317bf314"></a>
 
-The [UNEventDecorator](#classUNEventDecorator) object
+Represents the moment this event has been attached if it has a delay.
 
-#### `public FString `[`UId`](#structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e) <a id="structFNEventRecord_1a7f2897d3d4d99b00731ab28a8453a18e"></a>
+#### `public float `[`PreSize`](#structFEventSlot_1a203f2f9e045aae992c374f1cb3f30bcf) <a id="structFEventSlot_1a203f2f9e045aae992c374f1cb3f30bcf"></a>
 
-The [UNEventDecorator](#classUNEventDecorator) UId, it can be used to create consistant link to an object that envelops and EventDecorator
+If there is, the size of the delay.
 
-#### `public float `[`AttachedTime`](#structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d) <a id="structFNEventRecord_1aa0ee04d0933a7f61e76f65097e03a63d"></a>
+#### `public FColor `[`PreColor`](#structFEventSlot_1aa764d4eaa71e5a7ab74e57455f7f1a74) <a id="structFEventSlot_1aa764d4eaa71e5a7ab74e57455f7f1a74"></a>
 
-The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt)
+Color of the delay.
 
-#### `public float `[`Delay`](#structFNEventRecord_1a93060a69818f28c533e913e0f6f6c6dc) <a id="structFNEventRecord_1a93060a69818f28c533e913e0f6f6c6dc"></a>
+#### `public float `[`Offset`](#structFEventSlot_1a7e0b414b2548872657e271f37ca9f134) <a id="structFEventSlot_1a7e0b414b2548872657e271f37ca9f134"></a>
 
-The delay before starting in secs
+Represents the moment this event start to play.
 
-#### `public float `[`Duration`](#structFNEventRecord_1a1678e0c5820aff90fc32e45bad7a2afe) <a id="structFNEventRecord_1a1678e0c5820aff90fc32e45bad7a2afe"></a>
+#### `public float `[`Size`](#structFEventSlot_1a676d69f33c99dfdde563e4cd6e2eb784) <a id="structFEventSlot_1a676d69f33c99dfdde563e4cd6e2eb784"></a>
 
-The duration this event lives in secs (0 means inderterminate)
+Represents the event duration.
 
-#### `public FName `[`Label`](#structFNEventRecord_1a87eae2eb09b8c2163a8394431ed2abf5) <a id="structFNEventRecord_1a87eae2eb09b8c2163a8394431ed2abf5"></a>
+#### `public FColor `[`Color`](#structFEventSlot_1ab5279f3f640d369c4d2bfb7406ecebb2) <a id="structFEventSlot_1ab5279f3f640d369c4d2bfb7406ecebb2"></a>
 
-The name of the event
+Color of the event.
 
-#### `public float `[`ExpiredTime`](#structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d) <a id="structFNEventRecord_1a86eb7e67a45918b2da35f1a44c24815d"></a>
+#### `public const `[`UNEventBase`](#classUNEventBase)` * `[`Event`](#structFEventSlot_1a987afd5388cd7f887b8dca21264354ae) <a id="structFEventSlot_1a987afd5388cd7f887b8dca21264354ae"></a>
 
-Expiration time of this event in secs (0 means can't expired))
+Event associated to this slot.
 
-#### `public FString `[`EventClassName`](#structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93) <a id="structFNEventRecord_1a5ebb6654bd18ffe427e104f74fd9ba93"></a>
+#### `public inline  `[`FEventSlot`](#structFEventSlot_1aa302f91f55b7a5dda20b15efdcb21897)`(const `[`UNEventBase`](#classUNEventBase)` * InEvent)` <a id="structFEventSlot_1aa302f91f55b7a5dda20b15efdcb21897"></a>
 
-This is used only for serialization, it allow to re-instance the object on load
+# struct `FEventsRow` <a id="structFEventsRow"></a>
 
-#### `public inline  `[`FNEventRecord`](#structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d)`()` <a id="structFNEventRecord_1a910e08d553b4f854ba60458cfd14064d"></a>
+Saved data when timeline are paint. 
+**See also**: [SNTimeline::OnPaint()](#classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50)
 
-#### `public void `[`Serialize`](#structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4)`(FArchive & Ar,`[`UNTimelineDecorator`](#classUNTimelineDecorator)` * Timeline)` <a id="structFNEventRecord_1a5f0d5e581132f6e94b1c1dca10e486f4"></a>
+## Summary
 
-It manages Event object saving and loading
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TArray< `[`FEventSlot`](#structFEventSlot)` > `[`Slots`](#structFEventsRow_1a1d2ca14268d1dbafa8733ea635f18513) | The slots saved in this row.
+`public bool `[`AddSlot`](#structFEventsRow_1a3dbd8e7fa9f695a47b249cfbedf651ef)`(`[`FEventSlot`](#structFEventSlot)` && InSlot)` | Try to add the slot. 
+`public `[`FEventSlot`](#structFEventSlot)` * `[`IsEventAdded`](#structFEventsRow_1affb97d5c7b837bef40714c18a6fe5eae)`(const `[`UNEventBase`](#classUNEventBase)` * Event)` | Checks if this event has been already added in any slot.
+
+## Members
+
+#### `public TArray< `[`FEventSlot`](#structFEventSlot)` > `[`Slots`](#structFEventsRow_1a1d2ca14268d1dbafa8733ea635f18513) <a id="structFEventsRow_1a1d2ca14268d1dbafa8733ea635f18513"></a>
+
+The slots saved in this row.
+
+#### `public bool `[`AddSlot`](#structFEventsRow_1a3dbd8e7fa9f695a47b249cfbedf651ef)`(`[`FEventSlot`](#structFEventSlot)` && InSlot)` <a id="structFEventsRow_1a3dbd8e7fa9f695a47b249cfbedf651ef"></a>
+
+Try to add the slot. 
+#### Returns
+true if added or false if 1. , 2. no places available for it
+
+#### `public `[`FEventSlot`](#structFEventSlot)` * `[`IsEventAdded`](#structFEventsRow_1affb97d5c7b837bef40714c18a6fe5eae)`(const `[`UNEventBase`](#classUNEventBase)` * Event)` <a id="structFEventsRow_1affb97d5c7b837bef40714c18a6fe5eae"></a>
+
+Checks if this event has been already added in any slot.
+
+# struct `FParamsEventChanged` <a id="structFParamsEventChanged"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public float `[`InLocalTime`](#structFParamsEventChanged_1a29559444953df366c6dc8f91ab390ab6) | 
+`public UWorld * `[`InWorld`](#structFParamsEventChanged_1a267049147edc19505815e88a04c4f570) | 
+`public APlayerController * `[`InPlayer`](#structFParamsEventChanged_1a0a701230b8a0ce82cbc6dbb7b90e5ed2) | 
+
+## Members
+
+#### `public float `[`InLocalTime`](#structFParamsEventChanged_1a29559444953df366c6dc8f91ab390ab6) <a id="structFParamsEventChanged_1a29559444953df366c6dc8f91ab390ab6"></a>
+
+#### `public UWorld * `[`InWorld`](#structFParamsEventChanged_1a267049147edc19505815e88a04c4f570) <a id="structFParamsEventChanged_1a267049147edc19505815e88a04c4f570"></a>
+
+#### `public APlayerController * `[`InPlayer`](#structFParamsEventChanged_1a0a701230b8a0ce82cbc6dbb7b90e5ed2) <a id="structFParamsEventChanged_1a0a701230b8a0ce82cbc6dbb7b90e5ed2"></a>
+
+# struct `FTimelineData` <a id="structFTimelineData"></a>
+
+Saved data when timeline are paint. 
+**See also**: [SNTimeline::OnPaint()](#classSNTimeline_1ac55ba4f82b5f5cc290751e3a83442b50)
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TArray< `[`FEventsRow`](#structFEventsRow)` > `[`Rows`](#structFTimelineData_1a7dde1d040c858b9c8ab2bf212be0d368) | The rows where event's slot ([FEventSlot](#structFEventSlot)) are saved.
+`public float `[`MaxTime`](#structFTimelineData_1aca228abf5a2644ddd44f6a6cb80acd1d) | The current timeline time + events in the future.
+`public int32 `[`Owners`](#structFTimelineData_1a2cbb1da2b758d940ca8c8a7e3d8f748a) | Used to know if it can be destroyed.
+`public `[`FEventSlot`](#structFEventSlot)` * `[`IsEventAdded`](#structFTimelineData_1aec6fcfc94a52447af00f66b8303abbe2)`(const `[`UNEventBase`](#classUNEventBase)` * Event)` | Checks if this event has been already added in any row's slot.
+`public void `[`AddSlot`](#structFTimelineData_1ae2ba91f3be42dca735fef752d761ccf3)`(`[`FEventSlot`](#structFEventSlot)` && Slot)` | Try to put this slot in an available row ([FEventsRow](#structFEventsRow)) or create a new one if not already added in a row.
+
+## Members
+
+#### `public TArray< `[`FEventsRow`](#structFEventsRow)` > `[`Rows`](#structFTimelineData_1a7dde1d040c858b9c8ab2bf212be0d368) <a id="structFTimelineData_1a7dde1d040c858b9c8ab2bf212be0d368"></a>
+
+The rows where event's slot ([FEventSlot](#structFEventSlot)) are saved.
+
+#### `public float `[`MaxTime`](#structFTimelineData_1aca228abf5a2644ddd44f6a6cb80acd1d) <a id="structFTimelineData_1aca228abf5a2644ddd44f6a6cb80acd1d"></a>
+
+The current timeline time + events in the future.
+
+#### `public int32 `[`Owners`](#structFTimelineData_1a2cbb1da2b758d940ca8c8a7e3d8f748a) <a id="structFTimelineData_1a2cbb1da2b758d940ca8c8a7e3d8f748a"></a>
+
+Used to know if it can be destroyed.
+
+#### `public `[`FEventSlot`](#structFEventSlot)` * `[`IsEventAdded`](#structFTimelineData_1aec6fcfc94a52447af00f66b8303abbe2)`(const `[`UNEventBase`](#classUNEventBase)` * Event)` <a id="structFTimelineData_1aec6fcfc94a52447af00f66b8303abbe2"></a>
+
+Checks if this event has been already added in any row's slot.
+
+#### `public void `[`AddSlot`](#structFTimelineData_1ae2ba91f3be42dca735fef752d761ccf3)`(`[`FEventSlot`](#structFEventSlot)` && Slot)` <a id="structFTimelineData_1ae2ba91f3be42dca735fef752d761ccf3"></a>
+
+Try to put this slot in an available row ([FEventsRow](#structFEventsRow)) or create a new one if not already added in a row.
 
 Generated by [Moxygen](https://sourcey.com/moxygen)

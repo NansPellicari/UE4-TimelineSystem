@@ -15,84 +15,95 @@
 #include "TimelineManager.h"
 
 #include "Timeline.h"
+#include "Math/UnitConversion.h"
 
-NTimelineManager::NTimelineManager()
+FNTimelineManager::FNTimelineManager() : Timeline(MakeShared<FNTimeline>()) {}
+
+FNTimelineManager::~FNTimelineManager() {}
+
+void FNTimelineManager::TimerTick(const float& InDeltaTime)
 {
-	Init();
-}
-
-NTimelineManager::~NTimelineManager()
-{
-	Timeline.Reset();
-}
-
-void NTimelineManager::TimerTick()
-{
-	// No reason for a timer to tick without a timeline created
-	check(Timeline.IsValid());
-
-	onValidateTimelineTick();
+	OnValidateTimelineTick(InDeltaTime);
 	if (State == ENTimelineTimerState::Played)
 	{
-		onNotifyTimelineTickBefore();
-		Timeline->NotifyTick();
-		onNotifyTimelineTickAfter();
+		OnNotifyTimelineTickBefore(InDeltaTime);
+		Timeline->NotifyTick(InDeltaTime);
+		OnNotifyTimelineTickAfter(InDeltaTime);
 	}
 }
 
-TSharedPtr<NTimelineInterface> NTimelineManager::GetTimeline() const
+TSharedPtr<FNTimeline> FNTimelineManager::GetTimeline() const
 {
 	return Timeline;
 }
 
-ENTimelineTimerState NTimelineManager::GetState() const
+ENTimelineTimerState FNTimelineManager::GetState() const
 {
 	return State;
 }
 
-float NTimelineManager::GetTickInterval() const
+void FNTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
-	return TickInterval;
-}
-
-void NTimelineManager::SetTickInterval(float _TickInterval)
-{
-	TickInterval = _TickInterval;
-	if (Timeline != nullptr)
+	Timeline->SetTickInterval(InTickInterval);
+	if (InLabel != NAME_None)
 	{
-		Timeline->SetTickInterval(_TickInterval);
+		Timeline->SetLabel(InLabel);
 	}
 }
 
-void NTimelineManager::Init(float _TickInterval, FName _Label)
+void FNTimelineManager::Play()
 {
-	Timeline = MakeShareable(new NTimeline(this, _Label));
-	TickInterval = _TickInterval;
-	Timeline->SetTickInterval(TickInterval);
-}
-
-void NTimelineManager::Play()
-{
-	// No reason for a timer to play without a timeline created
-	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Played;
 }
-void NTimelineManager::Pause()
+
+void FNTimelineManager::Pause()
 {
-	// No reason for a timer to pause without a timeline created
-	check(Timeline.IsValid());
 	State = ENTimelineTimerState::Paused;
 }
-void NTimelineManager::Stop()
+
+void FNTimelineManager::Stop()
 {
-	Clear();
+	Timeline->Clear();
 	State = ENTimelineTimerState::Stopped;
 }
 
-void NTimelineManager::Clear()
+TSharedPtr<INEvent> FNTimelineManager::CreateNewEvent(const FName& Name, const float& Duration,
+	const float& Delay) const
 {
-	if (Timeline.IsValid())
+	FName NewName = Name;
+
+	if (NewName == NAME_None)
 	{
-		Timeline->Clear();
+		static int32 Counter;
+		const FString EvtLabel = FString::Format(TEXT("EventBase_{0}"), {++Counter});
+		NewName = FName(*EvtLabel);
 	}
+
+	TSharedPtr<INEvent> Object = MakeShared<FNEvent>(NewName);
+	if (Duration > 0)
+	{
+		Object->SetDuration(Duration);
+	}
+	if (Delay > 0)
+	{
+		Object->SetDelay(Delay);
+	}
+
+	return Object;
+}
+
+void FNTimelineManager::Clear()
+{
+	Timeline->Clear();
+}
+
+FNTimelineEventDelegate& FNTimelineManager::OnEventChanged() const
+{
+	return Timeline->EventChanged;
+}
+
+void FNTimelineManager::Archive(FArchive& Ar)
+{
+	Timeline->Archive(Ar);
+	Ar << State;
 }

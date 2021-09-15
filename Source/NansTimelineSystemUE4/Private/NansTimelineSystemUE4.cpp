@@ -14,23 +14,11 @@
 
 #include "NansTimelineSystemUE4.h"
 
-#include "PropertyEditorModule.h"
-#include "TimelinePinFactory.h"
+DEFINE_LOG_CATEGORY(LogTimelineSystem);
 
 #define LOCTEXT_NAMESPACE "FNansTimelineSystemUE4Module"
 
-void FNansTimelineSystemUE4Module::StartupModule()
-{
-	// create your factory and shared pointer to it.
-	TSharedPtr<FTimelinePinFactory> Factory = MakeShareable(new FTimelinePinFactory());
-	// and now register it.
-	FEdGraphUtilities::RegisterVisualPinFactory(Factory);
-
-	// =====================================================================================
-	// TODO Search how to create custom field (config panel) from here
-	// https://docs.unrealengine.com/en-US/Programming/Slate/DetailsCustomization/index.html
-	// =====================================================================================
-}
+void FNansTimelineSystemUE4Module::StartupModule() {}
 
 void FNansTimelineSystemUE4Module::ShutdownModule() {}
 

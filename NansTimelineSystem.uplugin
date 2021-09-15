@@ -25,12 +25,18 @@
 			"Name": "NansTimelineSystemUE4",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansTimelineSystemEd",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	],
 	"Plugins": [
 		{
 			"Name": "NansUE4TestsHelpers",
-			"Enabled": true
+			"Enabled": true,
+			"Optional": true
 		},
 		{
 			"Name": "NansCoreHelpers",

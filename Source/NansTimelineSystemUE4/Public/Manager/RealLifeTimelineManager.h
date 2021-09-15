@@ -28,12 +28,12 @@
  * For example: A promo code which gives a market discount for 2 days.
  */
 UCLASS(Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNRealLifeTimelineManager : public UNTimelineManagerDecorator, public FTickableGameObject
+class NANSTIMELINESYSTEMUE4_API UNRealLifeTimelineManager final : public UNTimelineManagerDecorator, public FTickableGameObject
 {
 	GENERATED_BODY()
 public:
 	/** This do nothing. Excepts in our deepest dreams, we can't altered time in real life!! */
-	virtual void Pause() override{};
+	virtual void Pause() override{}
 
 	/** @copydoc Pause() */
 	virtual void Play() override{};
@@ -45,11 +45,11 @@ public:
 	 * This just init State to "Play" and time variables.
 	 * @copydoc UNTimelineManagerDecorator::Init()
 	 */
-	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
+	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 
 	// BEGIN FTickableGameObject override
 	/** Always returns true 'cause it can be paused or stopped */
-	virtual bool IsTickableWhenPaused() const
+	virtual bool IsTickableWhenPaused() const override
 	{
 		return true;
 	}
@@ -93,12 +93,6 @@ protected:
 	float TotalLifeTime = 0;
 	/** It tracks time (FDateTime) since it has been created */
 	FDateTime LastPlayTime;
-
-	/**
-	 * It tracks time (FDateTime) since timeline has been ticked
-	 * @see Tick() for usage.
-	 */
-	float LastTimeTick = 0;
 
 	/** Default ctor */
 	UNRealLifeTimelineManager();

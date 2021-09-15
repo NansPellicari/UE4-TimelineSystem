@@ -14,7 +14,7 @@
 
 #include "Event.h"
 
-NEvent::NEvent()
+FNEvent::FNEvent()
 {
 	if (UId.IsEmpty())
 	{
@@ -22,12 +22,12 @@ NEvent::NEvent()
 	}
 }
 
-NEvent::NEvent(FName _Label, FString _UId)
+FNEvent::FNEvent(const FName& InLabel, const FString& InUId)
 {
-	Label = _Label;
-	if (!_UId.IsEmpty())
+	Label = InLabel;
+	if (!InUId.IsEmpty())
 	{
-		UId = _UId;
+		UId = InUId;
 	}
 	else
 	{
@@ -35,92 +35,120 @@ NEvent::NEvent(FName _Label, FString _UId)
 	}
 }
 
-bool NEvent::IsExpired() const
+bool FNEvent::IsExpired() const
 {
-	return !bActivated || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
+	return (!bActivated && GetStartedAt() > -1.f) || (GetDuration() > 0 && GetLocalTime() >= GetDuration());
 };
 
-const float NEvent::GetLocalTime() const
+float FNEvent::GetLocalTime() const
 {
 	return LocalTime;
 }
 
-const float NEvent::GetStartedAt() const
+float FNEvent::GetAttachedTime() const
+{
+	return AttachedTime;
+}
+
+void FNEvent::SetAttachedTime(const float& InLocalTime)
+{
+	AttachedTime = InLocalTime;
+}
+
+void FNEvent::SetAttachable(const bool& bInIsAttachable)
+{
+	bIsAttachable = bInIsAttachable;
+}
+
+bool FNEvent::IsAttachable() const
+{
+	return bIsAttachable;
+}
+
+float FNEvent::GetStartedAt() const
 {
 	return StartedAt;
 }
 
-float NEvent::GetDuration() const
+float FNEvent::GetDuration() const
 {
 	return Duration;
 }
-float NEvent::GetDelay() const
+
+float FNEvent::GetDelay() const
 {
 	return Delay;
 }
 
-const FName NEvent::GetEventLabel() const
+FName FNEvent::GetEventLabel() const
 {
 	return Label;
 }
 
-const FString NEvent::GetUID() const
+FString FNEvent::GetUID() const
 {
 	return UId;
 }
 
-void NEvent::SetUID(FString _UId)
+float FNEvent::GetExpiredTime() const
 {
-	UId = _UId;
+	return ExpiredTime;
 }
 
-void NEvent::SetLocalTime(float _LocalTime)
+void FNEvent::SetDuration(const float& InDuration)
 {
-	LocalTime = _LocalTime;
+	Duration = InDuration;
 }
 
-void NEvent::SetDuration(float _Duration)
+void FNEvent::SetDelay(const float& InDelay)
 {
-	Duration = _Duration;
+	Delay = InDelay;
 }
 
-void NEvent::SetDelay(float _Delay)
+void FNEvent::SetEventLabel(const FName& InEventLabel)
 {
-	Delay = _Delay;
+	Label = InEventLabel;
 }
 
-void NEvent::SetEventLabel(FName _EventLabel)
+void FNEvent::SetExpiredTime(const float& InLocalTime)
 {
-	Label = _EventLabel;
+	ExpiredTime = InLocalTime;
 }
 
-void NEvent::Start(float StartTime)
+void FNEvent::Start(const float& StartTime)
 {
 	StartedAt = StartTime;
 	bActivated = true;
-	EventStart.Broadcast(this, StartedAt);
 }
 
-void NEvent::Stop()
+void FNEvent::Stop()
 {
 	bActivated = false;
 }
 
-void NEvent::NotifyAddTime(float NewTime)
+void FNEvent::AddTime(const float& NewTime)
 {
 	LocalTime += NewTime;
 }
 
-FNEventDelegate& NEvent::OnStart()
-{
-	return EventStart;
-}
-
-void NEvent::Clear()
+void FNEvent::Clear()
 {
 	Label = NAME_None;
 	LocalTime = 0.f;
 	StartedAt = -1.f;
 	Duration = 0.f;
 	Delay = 0.f;
+}
+
+void FNEvent::Archive(FArchive& Ar)
+{
+	Ar << UId;
+	Ar << AttachedTime;
+	Ar << Delay;
+	Ar << Duration;
+	Ar << LocalTime;
+	Ar << StartedAt;
+	Ar << Label;
+	Ar << ExpiredTime;
+	Ar << bActivated;
 }

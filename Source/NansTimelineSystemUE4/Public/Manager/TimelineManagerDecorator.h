@@ -15,38 +15,41 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
-#include "NansTimelineSystemCore/Public/TimelineManager.h"
-#include "TimelineDecorator.h"
+
+#include "Misc/NansAssertionMacros.h"
+#include "TimelineManager.h"
 
 #include "TimelineManagerDecorator.generated.h"
 
-class NEventDecorator;
+class UNEventBase;
+
+FString EnumToString(const ENTimelineEvent& Value);
 
 /**
- * This class is a factory to managed properly UNTimelineManagerDecorator instanciation.
+ * This class is a factory to managed properly UNTimelineManagerDecorator instantiation.
  */
-class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecoratorFactory
+namespace FNTimelineManagerDecoratorFactory
 {
-public:
 	/**
 	 * Method to create a derived UNTimelineManagerDecorator.
 	 *
 	 * @param Outer - The outer of the new object.
 	 * @param TickInterval - The interval between tick in sec
-	 * @param _Label - The name of this new Timeline
+	 * @param InLabel - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>
 	static T* CreateObject(
-		UObject* Outer, float TickInterval = 1.f, FName _Label = NAME_None, EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+		UObject* Outer, const float& TickInterval = 1.f, const FName& InLabel = NAME_None,
+		const EObjectFlags& Flags = RF_NoFlags)
 	{
 		T* Obj = NewObject<T>(Outer, NAME_None, Flags);
 
-		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
-			TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!"));
-		Obj->Init(TickInterval, _Label);
+		mycheckf(
+			Cast<class UNTimelineManagerDecorator>(Obj) != nullptr,
+			TEXT("Your TimelineManager class should dervived from UNTimelineManagerDecorator!")
+		);
+		Obj->Init(TickInterval, InLabel);
 		return Obj;
 	}
 
@@ -56,47 +59,46 @@ public:
 	 * @param Outer - The outer of the new object.
 	 * @param Class - The specific class we want our object will be.
 	 * @param TickInterval - The interval between tick in sec
-	 * @param _Label - The name of this new Timeline
+	 * @param InLabel - The name of this new Timeline
 	 * @param Flags - The EObjectFlags for NewObject().
 	 */
 	template <typename T>
 	static T* CreateObject(UObject* Outer,
 		const UClass* Class,
-		float TickInterval = 1.f,
-		FName _Label = NAME_None,
-		EObjectFlags Flags = EObjectFlags::RF_NoFlags)
+		const float& TickInterval = 1.f,
+		const FName& InLabel = NAME_None,
+		const EObjectFlags& Flags = EObjectFlags::RF_NoFlags)
 	{
 		T* Obj = NewObject<T>(Outer, Class, NAME_None, Flags);
-		mycheckf(Cast<UNTimelineManagerDecorator>(Obj) != nullptr,
+		mycheckf(
+			Cast<class UNTimelineManagerDecorator>(Obj) != nullptr,
 			TEXT("Your TimelineManager class %s should dervived from UNTimelineManagerDecorator!"),
-			*Class->GetFullName());
-		Obj->Init(TickInterval, _Label);
+			*Class->GetFullName()
+		);
+		Obj->Init(TickInterval, InLabel);
 		return Obj;
 	}
 };
 
 /**
- * This is the abstract decorator that every Timeline manager shoulds override.
- * It brings all core functionnalities for blueprint or UE4 c++ paradigm.
+ * This is the abstract decorator that every Timeline manager should override.
+ * It brings all core functionalities for blueprint or UE4 c++ paradigm.
  *
- * As the close relation between NTimelineManager and NTimeline classes (core lib),
- * This class is coupled with UNTimelineDecorator.
- * @see UNTimelineDecorator
+ * As the close relation between FNTimelineManager and FNTimeline classes (core lib),
+ * This class is coupled with FNTimeline.
  *
- * To ease blueprint usages, most of the UNTimelineDecorator public functionnalities
- * are accessible here. This class works as a pass-through too for UNTimelineDecorator.
+ * To ease blueprint usages, most of the FNTimeline public functionalities
+ * are accessible here. This class works as a pass-through too for FNTimeline.
  *
  * @see AddEvent(), CreateNewEvent(), CreateAndAddNewEvent()
  */
 UCLASS(Abstract, ConversionRoot, Blueprintable)
-class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, public NTimelineManager
+class NANSTIMELINESYSTEMUE4_API UNTimelineManagerDecorator : public UObject, public FNTimelineManager
 {
 	GENERATED_BODY()
 public:
-#if WITH_EDITOR
 	UPROPERTY(BlueprintReadWrite, Category = "NansTimeline|Manager")
 	bool bDebug = false;
-#endif
 
 	// BEGIN NTimelineManager overrides
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
@@ -108,87 +110,95 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	virtual void Stop() override;
 
-	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	virtual void SetTickInterval(float _TickInterval) override;
-
+	void OnEventChangedDelegate(TSharedPtr<INEvent> Event, const ENTimelineEvent& EventName,
+		const float& LocalTime, const int32& Index);
 	/**
-	 * The embeded timeline is created as subobject in the ctor.
-	 * So this just gives the Label to the timeline.
-	 * @see UNTimelineManagerDecorator()
+	 * The embedded timeline is created as subobject in the ctor.
+	 * So this just to register the listener for FNTimelineManager::OnEventChange()
+	 * and checks if GetWorld() is available. 
+	 * @see FNTimelineManager()
 	 *
-	 * @param _TickInterval - Interval time between tick in sec
-	 * @param _Label - Name of the Timeline.
+	 * @param InTickInterval - Interval time between tick in sec
+	 * @param InLabel - Name of the Timeline.
 	 */
-	virtual void Init(float _TickInterval = 1.f, FName _Label = NAME_None) override;
+	virtual void Init(const float& InTickInterval = 1.f, const FName& InLabel = NAME_None) override;
 	// END NTimelineManager overrides
 
 	// BEGIN UObject overrides
 	/**
-	 * It's the starting link of serialization chain for all embeded decorators.
-	 * This calls UNTimelineDecorator::Serialize().
+	 * This will trigger the FNTimelineManager::Archive() chain
+	 * + save specific data from all EventBases & ExpiredEventBases's UObject or Blueprint.
 	 *
 	 * @param Ar - the FArchive used for serialization as usual.
 	 */
 	virtual void Serialize(FArchive& Ar) override;
 
-	/** This call the UNTimelineDecorator::BeginDestroy() too. */
+	/** This calls FNTimelineManager::Clear() + release FNTimelineManager::OnEventChanged() listener. */
 	virtual void BeginDestroy() override;
 	// END UObject overrides
 
-	/**
-	 * Get the events list.
-	 * TODO should be great to have a type filter possibility with a TSubclassOf<UNEventDecorator> parameter
-	 */
+	/** Get an array from the EventBases Map */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
-	virtual const TArray<FNEventRecord> GetEvents() const;
+	TArray<UNEventBase*> GetEvents() const;
 
+	/** Get an array from the ExpiredEventBases Map */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	TArray<UNEventBase*> GetExpiredEvents() const;
+
+	/** Get one event from EventBases by its UUID, nullptr if not found */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	UNEventBase* GetEvent(const FString& InUID) const;
+
+	/** Get one expired event from ExpiredEventBases by its UUID, nullptr if not found */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	UNEventBase* GetExpiredEvent(const FString& InUID) const;
+
+	/** A pass-through for the embedded FNTimeline::GetCurrentTime() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	float GetCurrentTime() const;
 
-	/** A pass-through for the embeded UNTimelineDecorator::GetLabel() */
+	/** A pass-through for the embedded FNTimeline::GetLabel() */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	FName GetLabel() const;
 
+	/** A pass-through for the embedded FNTimeline::SetLabel() */
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
+	void SetLabel(const FName& Name);
+
+	// @formatter:off
 	/**
-	 * Adds an event to the timeline object,
-	 * it works as a pass-through for UNTimelineDecorator::Attached(UNEventDecorator* Event)
-	 *
-	 * @param Event - An Event object you want to saved to the associated timeline.
+	 * If you want to override this class in Blueprint you can access any event changes here.
+	 * @see UNTimelineManagerDecorator::OnEventChangedDelegate()
 	 */
-	// clang-format off
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add an Event to the NansTimeline", Keywords = "Event add"), Category = "NansTimeline|Manager")
-	virtual void AddEvent(UNEventDecorator* Event);
-	// clang-format on
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "NansTimeline|Event", meta = (DisplayName = "On Event Changed"))
+	void OnBPEventChanged(const UNEventBase* StartedEvent, const float& EventTime);
 
 	/**
-	 * A pass-through for UNTimelineDecorator::CreateNewEvent():
-	 * @copydoc UNTimelineDecorator::CreateNewEvent()
-	 */
-	// clang-format off
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create a New Event for the NansTimeline", Keywords = "Event create"), Category = "NansTimeline|Manager")
-	UNEventDecorator* CreateNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
-	// clang-format on
-
-	/**
-	 * Attaches the event to the timeline stream +
+	 * Attaches the event to the timeline stream
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
-	// clang-format off
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNEventDecorator* CreateAndAddNewEvent(TSubclassOf<UNEventDecorator> Class, FName Name, float Duration = 0, float Delay = 0);
-	// clang-format on
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager", meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"))
+	UNEventBase* CreateAndAddNewEvent(FName InName, TSubclassOf<UNEventBase> InClass, float InDuration = 0, float InDelay = 0);
+	// @formatter:on
+
+	/** Remove all EventBases and ExpiredEventBases */
+	virtual void Clear() override;
 
 protected:
-	/** the timeline associated to this manager. */
-	UPROPERTY(SkipSerialization)
-	UNTimelineDecorator* MyTimeline;
-
 	/**
-	 * Protected ctor to force instanciation with CreateObject() methods (factory methods).
-	 *
-	 * It instanciates the embeded timeline with CreateDefaultSubobject().
+	 * Protected ctor to force instantiation with CreateObject() methods (factory methods).
+	 * It instantiates the embedded timeline with CreateDefaultSubobject().
 	 */
 	UNTimelineManagerDecorator();
 
-private:
+	UPROPERTY(BlueprintReadOnly, Category= "NansTimeline|Manager")
+	FDateTime StartedAt = -1.f;
+
+	/** This is the decorated list of FNTimeline::Events */
+	UPROPERTY(SkipSerialization)
+	TMap<FString, UNEventBase*> EventBases;
+
+	/** This is the decorated list of FNTimeline::ExpiredEvents */
+	UPROPERTY(SkipSerialization)
+	TMap<FString, UNEventBase*> ExpiredEventBases;
 };

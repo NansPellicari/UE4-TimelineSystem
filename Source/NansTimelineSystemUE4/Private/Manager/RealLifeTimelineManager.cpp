@@ -14,35 +14,30 @@
 
 #include "Manager/RealLifeTimelineManager.h"
 
-#include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"
-#include "TimerManager.h"
-
 UNRealLifeTimelineManager::UNRealLifeTimelineManager() {}
 
-void UNRealLifeTimelineManager::Init(float _TickInterval, FName _Label)
+void UNRealLifeTimelineManager::Init(const float& InTickInterval, const FName& InLabel)
 {
-	Super::Init(_TickInterval, _Label);
+	Super::Init(InTickInterval, InLabel);
 	// Real life timer should be always in play state.
 	State = ENTimelineTimerState::Played;
 	if (CreationTime == 0)
 	{
 		CreationTime = FDateTime::Now();
 	}
-	LastTimeTick = TotalLifeTime;
 	LastPlayTime = FDateTime::Now();
 }
 
 void UNRealLifeTimelineManager::Tick(float DeltaTime)
 {
 	// this ensure to always get the real time delta (in case of slowmo).
-	float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
-	TotalLifeTime += RealDelta;
-	if (TotalLifeTime - LastTimeTick >= GetTickInterval())
+	const float RealDelta = (FDateTime::Now() - LastPlayTime).GetTotalMilliseconds() / 1000;
+	if (RealDelta >= GetTimeline()->GetTickInterval())
 	{
-		LastTimeTick += GetTickInterval();
-		TimerTick();
+		TotalLifeTime += RealDelta;
+		TimerTick(RealDelta);
+		LastPlayTime = FDateTime::Now();
 	}
-	LastPlayTime = FDateTime::Now();
 }
 
 bool UNRealLifeTimelineManager::IsTickable() const
@@ -75,16 +70,16 @@ void UNRealLifeTimelineManager::Serialize(FArchive& Ar)
 	{
 		// Recover time between creation and last save game
 		TotalLifeTime = (LastPlayTime - CreationTime).GetTotalSeconds();
-		LastTimeTick = TotalLifeTime;
 		// Recover lost time since last save game
-		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds() / GetTickInterval();
-		const float SliceTime = GetTickInterval() / 10;
+		float MissingLifeTime = (FDateTime::Now() - LastPlayTime).GetTotalSeconds();
 
 		// Tick to notify timeline until it reaches the actual time.
 		while (MissingLifeTime > 0)
 		{
-			Tick(SliceTime);
-			MissingLifeTime -= SliceTime;
+			TimerTick(GetTimeline()->GetTickInterval());
+			MissingLifeTime -= GetTimeline()->GetTickInterval();
 		}
+		TotalLifeTime += (FDateTime::Now() - LastPlayTime).GetTotalSeconds();
+		LastPlayTime = FDateTime::Now();
 	}
 }
