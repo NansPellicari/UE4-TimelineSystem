@@ -14,6 +14,7 @@
 
 #include "TimelineClient.h"
 
+#include "Config/TimelineConfig.h"
 #include "Manager/TimelineManagerDecorator.h"
 #include "NansTimelineSystemUE4.h"
 
@@ -46,7 +47,10 @@ UNTimelineManagerDecorator* UNTimelineClient::GetTimeline(FName Name) const
 {
 	if (!TimelinesCollection.Contains(Name))
 	{
-		UE_LOG(LogTimelineSystem, Error, TEXT("\"%s\" not exists in UNTimelineClient::TimelinesCollection"), *Name.ToString());
+		UE_LOG(
+			LogTimelineSystem, Error, TEXT("\"%s\" not exists in UNTimelineClient::TimelinesCollection"),
+			*Name.ToString()
+		);
 		return nullptr;
 	}
 

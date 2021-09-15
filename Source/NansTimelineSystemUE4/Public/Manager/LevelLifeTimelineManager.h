@@ -15,8 +15,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameLifeTimelineManager.h"
-#include "TimelineManagerDecorator.h"
 
 #include "LevelLifeTimelineManager.generated.h"
 

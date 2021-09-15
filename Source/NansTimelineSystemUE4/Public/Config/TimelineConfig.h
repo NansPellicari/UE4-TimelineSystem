@@ -14,9 +14,10 @@
 
 #pragma once
 
-#include "Attribute/ConfiguredTimeline.h"
 #include "CoreMinimal.h"
+
 #include "Engine/DeveloperSettings.h"
+#include "Manager/TimelineManagerDecorator.h"
 
 #include "TimelineConfig.generated.h"
 
@@ -50,7 +51,7 @@ struct NANSTIMELINESYSTEMUE4_API FConfiguredTimelineConf
 };
 
 /**
- * A simple configuration to ease timeline instantiation for developpers.
+ * A simple configuration to ease timeline instantiation for developers.
  */
 UCLASS(config = Game, defaultconfig, meta = (DisplayName = "Nans Timeline"))
 class NANSTIMELINESYSTEMUE4_API UNTimelineConfig : public UDeveloperSettings

@@ -14,14 +14,15 @@
 
 #pragma once
 
-#include "Attribute/ConfiguredTimeline.h"
 #include "CoreMinimal.h"
+
+#include "Attribute/ConfiguredTimeline.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "TimelineBlueprintHelpers.generated.h"
 
-class UNTimelineManagerDecorator;
 class UNEventBase;
+class UNTimelineManagerDecorator;
 
 /**
  * A simple Blueprint Library class to manage Timeline creation.

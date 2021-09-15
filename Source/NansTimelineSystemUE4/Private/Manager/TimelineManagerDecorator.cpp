@@ -15,6 +15,8 @@
 #include "Manager/TimelineManagerDecorator.h"
 
 #include "Event/EventBase.h"
+#include "GameFramework/PlayerController.h"
+#include "UObject/ConstructorHelpers.h"
 #include "NansTimelineSystemUE4.h"
 
 FString EnumToString(const ENTimelineEvent& Value)
@@ -140,8 +142,8 @@ void UNTimelineManagerDecorator::SetLabel(const FName& Name)
 	GetTimeline()->SetLabel(Name);
 }
 
-UNEventBase* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, float InDuration, float InDelay,
-	TSubclassOf<UNEventBase> InClass)
+UNEventBase* UNTimelineManagerDecorator::CreateAndAddNewEvent(FName InName, TSubclassOf<UNEventBase> InClass,
+	float InDuration, float InDelay)
 {
 	UClass* ChildClass;
 	if (InClass)
@@ -168,9 +170,10 @@ void UNTimelineManagerDecorator::Clear()
 {
 	for (const TTuple<FString, UNEventBase*>& Event : EventBases)
 	{
-		if (IsValid(GetWorld()) && IsValid(GetWorld()->GetFirstPlayerController()))
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		if (IsValid(GetWorld()) && IsValid(PlayerController))
 		{
-			Event.Value->OnCleared(GetCurrentTime(), GetWorld(), GetWorld()->GetFirstPlayerController());
+			Event.Value->OnCleared(GetCurrentTime(), GetWorld(), PlayerController);
 		}
 	}
 	EventBases.Empty();

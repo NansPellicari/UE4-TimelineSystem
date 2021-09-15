@@ -1,15 +1,13 @@
 
 #include "Customization/ConfiguredTimelineCustomization.h"
 
+#include "SlateBasics.h"
+#include "SNameComboBox.h"
+#include "Attribute/ConfiguredTimeline.h"
 #include "Config/TimelineConfig.h"
-#include "PropertyEditor/Public/DetailLayoutBuilder.h"
 #include "PropertyEditor/Public/DetailWidgetRow.h"
 #include "PropertyEditor/Public/PropertyHandle.h"
-#include "SGraphPin.h"
-#include "SNameComboBox.h"
-#include "SlateBasics.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
-#include "Widgets/SWidget.h"
 
 #define LOCTEXT_NAMESPACE "FactorsFactoryEd"
 

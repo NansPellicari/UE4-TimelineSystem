@@ -18,7 +18,7 @@
 #include "TimelineGameSubsystem.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
-#include "Manager/TimelineManagerDecorator.h"
+#include "Attribute/ConfiguredTimeline.h"
 
 UNTimelineManagerDecorator* UNTimelineBlueprintHelpers::GetTimeline(UObject* WorldContextObject, FConfiguredTimeline Timeline)
 {

@@ -52,9 +52,15 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"), FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 1.f, 0.2f));
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 1"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 1.f, 0.2f)
+		);
 		NTestWorld::Tick(World);
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f));
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
+		);
 		TimelineManager->Pause();
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World);
@@ -80,7 +86,10 @@ bool FLevelLifeTimelineManagerTest::RunTest(const FString& Parameters)
 			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f)
 		);
 		NTestWorld::CreateAndOpenNewLevel(World);
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("Timeline manager has been reset"), FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 0.f, 0.001f));
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been reset"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 0.f, 0.001f)
+		);
 	}
 	// End test
 
@@ -117,7 +126,10 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		NTestWorld::Tick(World);
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"), FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f));
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 2"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 2.f, 0.2f)
+		);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -125,7 +137,10 @@ bool FLevelLifeTimelineManagerSerializationSameObjTest::RunTest(const FString& P
 		NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 		NTestWorld::Tick(World);
 		TimelineManager->SetLabel(FName("ChangedLabel")); // try to change label to checks if rewrite with the archive
-		TEST_TRUE(TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"), FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f));
+		TEST_TRUE(
+			TEST_TEXT_FN_DETAILS("Timeline manager has been called 3"),
+			FMath::IsNearlyEqual(TimelineManager->GetCurrentTime(), 3.f, 0.2f)
+		);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("Timeline manager label changed"),
 			TimelineManager->GetLabel(),
@@ -176,10 +191,13 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(), 3);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
+		TEST_EQ(
+			TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(),
+			3
+		);
 
 		// Save in memory
 		FBufferArchive ToBinary;
@@ -207,7 +225,10 @@ bool FLevelLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString
 		FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
 		FromBinary.Seek(0);
 		NewTimelineManager->Serialize(FromBinary);
-		TEST_LE(TEST_TEXT_FN_DETAILS("There is 0 Events in collection"), NewTimelineManager->GetTimeline()->GetEvents().Num(), 0);
+		TEST_LE(
+			TEST_TEXT_FN_DETAILS("There is 0 Events in collection"),
+			NewTimelineManager->GetTimeline()->GetEvents().Num(), 0
+		);
 	}
 	// End test
 

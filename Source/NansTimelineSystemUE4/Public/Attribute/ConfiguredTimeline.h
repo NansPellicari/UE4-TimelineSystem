@@ -15,9 +15,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Manager/TimelineManagerDecorator.h"
+
+#include "Templates/SubclassOf.h"
 
 #include "ConfiguredTimeline.generated.h"
+
+class UNTimelineManagerDecorator;
 
 /**
  * This struct to create Configured Timeline and ease Timeline instantiation.
@@ -35,7 +38,7 @@ struct NANSTIMELINESYSTEMUE4_API FConfiguredTimeline
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
 	FName Name;
 
-	/** The Configured Timeline class */
+	/** The Configured timeline class */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NansTimeline")
 	TSubclassOf<UNTimelineManagerDecorator> TimelineClass;
 

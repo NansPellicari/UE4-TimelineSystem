@@ -148,7 +148,7 @@ public:
 	/** Get one event from EventBases by its UUID, nullptr if not found */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	UNEventBase* GetEvent(const FString& InUID) const;
-	
+
 	/** Get one expired event from ExpiredEventBases by its UUID, nullptr if not found */
 	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager")
 	UNEventBase* GetExpiredEvent(const FString& InUID) const;
@@ -177,27 +177,27 @@ public:
 	 * Attaches the event to the timeline stream
 	 * @copydoc UNTimelineManagerDecorator::CreateNewEvent()
 	 */
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"), Category = "NansTimeline|Manager")
-	UNEventBase* CreateAndAddNewEvent(FName InName, float InDuration = 0, float InDelay = 0, TSubclassOf<UNEventBase> InClass = nullptr);
+	UFUNCTION(BlueprintCallable, Category = "NansTimeline|Manager", meta = (DisplayName = "Create and add new Event for the NansTimeline", Keywords = "Event create add"))
+	UNEventBase* CreateAndAddNewEvent(FName InName, TSubclassOf<UNEventBase> InClass, float InDuration = 0, float InDelay = 0);
 	// @formatter:on
 
 	/** Remove all EventBases and ExpiredEventBases */
 	virtual void Clear() override;
-	
+
 protected:
 	/**
 	 * Protected ctor to force instantiation with CreateObject() methods (factory methods).
 	 * It instantiates the embedded timeline with CreateDefaultSubobject().
 	 */
 	UNTimelineManagerDecorator();
-	
+
 	UPROPERTY(BlueprintReadOnly, Category= "NansTimeline|Manager")
 	FDateTime StartedAt = -1.f;
 
 	/** This is the decorated list of FNTimeline::Events */
 	UPROPERTY(SkipSerialization)
 	TMap<FString, UNEventBase*> EventBases;
-	
+
 	/** This is the decorated list of FNTimeline::ExpiredEvents */
 	UPROPERTY(SkipSerialization)
 	TMap<FString, UNEventBase*> ExpiredEventBases;

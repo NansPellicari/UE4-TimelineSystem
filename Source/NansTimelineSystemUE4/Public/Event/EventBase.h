@@ -15,8 +15,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Event.h"
 
+#include "Event.h"
+#include "Engine/Blueprint.h"
 #include "EventBase.generated.h"
 
 /**

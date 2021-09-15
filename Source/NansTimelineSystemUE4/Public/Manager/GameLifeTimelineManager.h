@@ -15,7 +15,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "TimelineManagerDecorator.h"
+#include "Engine/EngineTypes.h"
+#include "TimerManager.h"
 
 #include "GameLifeTimelineManager.generated.h"
 
@@ -23,7 +26,7 @@
  * This decorator is fitted to track time when player plays since the game is launched.
  *
  * It used internally an FTimerManager to tick and to works accordingly with all time alterations (game pause, slowmo, ...).
- * It could be usefull for bonus/malus attribution which works during the full game session.
+ * It could be useful for bonus/malus attribution which works during the full game session.
  *
  * For example: Player makes a very benevolent actions which gives him a health bonus for 10 minutes in game.
  */

@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include "Config/TimelineConfig.h"
 #include "CoreMinimal.h"
+
+#include "Attribute/ConfiguredTimeline.h"
 
 #include "TimelineClient.generated.h"
 

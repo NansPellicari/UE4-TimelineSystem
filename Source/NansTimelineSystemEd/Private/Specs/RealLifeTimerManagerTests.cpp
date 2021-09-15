@@ -247,7 +247,7 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
 		TEST_TRUE(
@@ -255,10 +255,10 @@ bool FRealLifeTimelineManagerEventTest::RunTest(const FString& Parameters)
 			FMath::IsNearlyEqual(TimelineManager->GetEvents()[0]->GetLocalTime(), 1.f, 0.2f)
 		);
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 1 Event in collection"), TimelineManager->GetEvents().Num(), 1);
-		TimelineManager->CreateAndAddNewEvent(FName("Ev2"));
+		TimelineManager->CreateAndAddNewEvent(FName("Ev2"), nullptr);
 		FPlatformProcess::Sleep(1.1f);
 		NTestWorld::Tick(World);
-		TimelineManager->CreateAndAddNewEvent(FName("Ev3"), 1.f);
+		TimelineManager->CreateAndAddNewEvent(FName("Ev3"), nullptr, 1.f);
 		NTestWorld::Tick(World);
 		// @formatter:off
 		TEST_EQ(TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetEvents().Num(), 3);

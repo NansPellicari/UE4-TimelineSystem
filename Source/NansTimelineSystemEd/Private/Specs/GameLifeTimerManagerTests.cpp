@@ -179,9 +179,9 @@ bool FGameLifeTimelineManagerSerializationWithEventsTest::RunTest(const FString&
 
 	// Begin test
 	{
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
-		TimelineManager->CreateAndAddNewEvent(NAME_None);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
+		TimelineManager->CreateAndAddNewEvent(NAME_None, nullptr);
 		TEST_EQ(
 			TEST_TEXT_FN_DETAILS("There is 3 Events in collection"), TimelineManager->GetTimeline()->GetEvents().Num(),
 			3
