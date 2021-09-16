@@ -170,10 +170,13 @@ void UNTimelineManagerDecorator::Clear()
 {
 	for (const TTuple<FString, UNEventBase*>& Event : EventBases)
 	{
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		if (IsValid(GetWorld()) && IsValid(PlayerController))
+		if (IsValid(GetWorld()))
 		{
-			Event.Value->OnCleared(GetCurrentTime(), GetWorld(), PlayerController);
+			APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+			if (IsValid(PlayerController))
+			{
+				Event.Value->OnCleared(GetCurrentTime(), GetWorld(), PlayerController);
+			}
 		}
 	}
 	EventBases.Empty();

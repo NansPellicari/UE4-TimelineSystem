@@ -17,10 +17,12 @@
 #include "CoreMinimal.h"
 
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Manager/TimelineManagerDecorator.h"
+
 #include "TimelineGameSubsystem.generated.h"
 
 struct FConfiguredTimeline;
-class UNTimelineManagerDecorator;
+
 class UNTimelineClient;
 
 UCLASS()

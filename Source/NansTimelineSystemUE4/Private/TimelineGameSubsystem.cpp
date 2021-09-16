@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansTimelineSystemUE4/Public/TimelineGameSubsystem.h"
+#include "TimelineGameSubsystem.h"
 
-#include "NansTimelineSystemUE4/Public/TimelineClient.h"
-#include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
+#include "TimelineClient.h"
+#include "Attribute/ConfiguredTimeline.h"
+
 
 void UTimelineGameSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
