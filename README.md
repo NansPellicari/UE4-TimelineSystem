@@ -36,6 +36,7 @@ This plugins allows to keep tracks of time for different timeline paradigm<sup>(
     - [3.4. Event](#34-event)
 - [4. Getting started - a step by step guide](#4-getting-started---a-step-by-step-guide)
 - [5. Contributing and Supporting](#5-contributing-and-supporting)
+- [6. License](#6-license)
 
 <!-- /TOC -->
 
@@ -146,3 +147,9 @@ I'll be very glad if you decided to help me to follow my dream.
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | **Donating**<br> Because I'm an independent developer/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                        | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
 | **Contributing**<br> You are very welcome if you want to contribute. I explain [here](./CONTRIBUTING.md) in details what<br> is the most comfortable way to me you can contribute. |                                                                         [CONTRIBUTING.md](./CONTRIBUTING.md)                                                                         |
+
+## 6. License
+<a id="markdown-license" name="license"></a>
+
+* You have to accept the UE4 license before using this
+* You are free to share, modify and use the plugin as you wish (even commercially)
