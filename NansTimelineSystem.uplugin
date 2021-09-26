@@ -2,6 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
+	"EngineVersion": "4.27.0",
 	"FriendlyName": "NansTimelineSystem",
 	"Description": "This plugins allows to keep tracks of time for different timeline paradigm, attached events to them and managed serialization for Save and Load game.",
 	"Category": "Other",
