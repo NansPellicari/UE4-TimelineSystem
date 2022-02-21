@@ -2,6 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
+	"EngineVersion": "4.27.0",
 	"FriendlyName": "NansTimelineSystem",
 	"Description": "This plugins allows to keep tracks of time for different timeline paradigm, attached events to them and managed serialization for Save and Load game.",
 	"Category": "Other",
@@ -19,28 +20,47 @@
 		{
 			"Name": "NansTimelineSystemCore",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
 		},
 		{
 			"Name": "NansTimelineSystemUE4",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
 		},
 		{
 			"Name": "NansTimelineSystemEd",
 			"Type": "Editor",
-			"LoadingPhase": "PostEngineInit"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "NansUE4TestsHelpers",
-			"Enabled": true,
-			"Optional": true
+			"LoadingPhase": "PostEngineInit",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
 		},
 		{
 			"Name": "NansCoreHelpers",
-			"Enabled": true
+			"Type": "DeveloperTool",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
+		},
+		{
+			"Name": "NansUE4TestsHelpers",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
 		}
 	]
 }
